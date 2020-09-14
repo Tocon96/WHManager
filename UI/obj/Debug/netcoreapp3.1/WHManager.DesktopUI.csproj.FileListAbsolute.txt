@@ -1,0 +1,15 @@
+E:\visualstudio\WHManager\UI\bin\Debug\netcoreapp3.1\WHManager.DesktopUI.exe
+E:\visualstudio\WHManager\UI\bin\Debug\netcoreapp3.1\WHManager.DesktopUI.deps.json
+E:\visualstudio\WHManager\UI\bin\Debug\netcoreapp3.1\WHManager.DesktopUI.runtimeconfig.json
+E:\visualstudio\WHManager\UI\bin\Debug\netcoreapp3.1\WHManager.DesktopUI.runtimeconfig.dev.json
+E:\visualstudio\WHManager\UI\bin\Debug\netcoreapp3.1\WHManager.DesktopUI.dll
+E:\visualstudio\WHManager\UI\bin\Debug\netcoreapp3.1\WHManager.DesktopUI.pdb
+E:\visualstudio\WHManager\UI\obj\Debug\netcoreapp3.1\WHManager.DesktopUI.csprojAssemblyReference.cache
+E:\visualstudio\WHManager\UI\obj\Debug\netcoreapp3.1\App.g.cs
+E:\visualstudio\WHManager\UI\obj\Debug\netcoreapp3.1\WHManager.DesktopUI_MarkupCompile.cache
+E:\visualstudio\WHManager\UI\obj\Debug\netcoreapp3.1\WHManager.DesktopUI.AssemblyInfoInputs.cache
+E:\visualstudio\WHManager\UI\obj\Debug\netcoreapp3.1\WHManager.DesktopUI.AssemblyInfo.cs
+E:\visualstudio\WHManager\UI\obj\Debug\netcoreapp3.1\WHManager.DesktopUI.csproj.CoreCompileInputs.cache
+E:\visualstudio\WHManager\UI\obj\Debug\netcoreapp3.1\WHManager.DesktopUI.dll
+E:\visualstudio\WHManager\UI\obj\Debug\netcoreapp3.1\WHManager.DesktopUI.pdb
+E:\visualstudio\WHManager\UI\obj\Debug\netcoreapp3.1\WHManager.DesktopUI.genruntimeconfig.cache
