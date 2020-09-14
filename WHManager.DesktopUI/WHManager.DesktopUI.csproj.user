@@ -5,7 +5,25 @@
     <Compile Update="MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\ButtonViews\ProductButtonsViews\AddProductButton.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ButtonViews\ProductButtonsViews\UpdateProductButton.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ContractorsViews\ManufacturerView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\WarehouseViews\ItemView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\WarehouseViews\ProductTypeView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\WarehouseViews\ProductView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\WarehouseViews\TaxView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -13,7 +31,25 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\ButtonViews\ProductButtonsViews\AddProductButton.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ButtonViews\ProductButtonsViews\UpdateProductButton.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ContractorsViews\ManufacturerView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\WarehouseViews\ItemView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\WarehouseViews\ProductTypeView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\WarehouseViews\ProductView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\WarehouseViews\TaxView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
