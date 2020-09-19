@@ -10,14 +10,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace WHManager.DesktopUI.Views.ButtonViews.ProductButtonsViews
+namespace WHManager.DesktopUI.Views.FormViews
 {
     /// <summary>
-    /// Interaction logic for Window1.xaml
+    /// Interaction logic for AddProductFormView.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class AddProductFormView : Window
     {
-        public Window1()
+        public AddProductFormView()
         {
             InitializeComponent();
         }

@@ -15,61 +15,98 @@ namespace WHManager.BusinessLogic.Services
 
         public async Task CreateNewProduct(Product product)
         {
-            int id = product.Id;
-            string name = product.Name;
-            int productType = product.Type.Id;
-			int tax = product.Tax.Id;
-			int manufacturer = product.Manufacturer.Id;
-            await _productRepository.AddProductAsync(id, name, productType, tax, manufacturer);
+            try
+            {
+                int id = product.Id;
+                string name = product.Name;
+                int productType = product.Type.Id;
+                int tax = product.Tax.Id;
+                int manufacturer = product.Manufacturer.Id;
+                await _productRepository.AddProductAsync(id, name, productType, tax, manufacturer);
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
         }
 
-        public List<Product> GetProducts()
+        public IList<Product> GetProducts()
         {
-            List<Product> productsList = new List<Product>();
-            var products = _productRepository.GetAllProducts();
-            foreach(var product in products)
+            try
             {
+                IList<Product> productsList = new List<Product>();
+                var products = _productRepository.GetAllProducts();
+                foreach (var product in products)
+                {
+                    Product currentProduct = new Product
+                    {
+                        Id = product.Id,
+                        Name = product.Name,
+                    };
+                    currentProduct.Type.Id = product.Type.Id;
+                    currentProduct.Tax.Id = product.Tax.Id;
+                    currentProduct.Manufacturer.Id = product.Manufacturer.Id;
+                    productsList.Add(currentProduct);
+                }
+                return productsList;
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+            
+        }
+		
+		public async Task<Product> GetProduct(int id)
+		{
+            try
+            {
+                var product = await _productRepository.GetProductAsync(id);
                 Product currentProduct = new Product
                 {
                     Id = product.Id,
                     Name = product.Name,
                 };
                 currentProduct.Type.Id = product.Type.Id;
-				currentProduct.Tax.Id = product.Tax.Id;
+                currentProduct.Tax.Id = product.Tax.Id;
                 currentProduct.Manufacturer.Id = product.Manufacturer.Id;
-                productsList.Add(currentProduct);
-            }
-            return productsList;
-        }
-		
-		public async Task<Product> GetProduct(int id)
-		{
-			var product = await _productRepository.GetProductAsync(id);
-            Product currentProduct = new Product
-            {
-                Id = product.Id,
-                Name = product.Name,
-            };
-            currentProduct.Type.Id = product.Type.Id;
-            currentProduct.Tax.Id = product.Tax.Id;
-            currentProduct.Manufacturer.Id = product.Manufacturer.Id;
 
-            return currentProduct;
+                return currentProduct;
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
 		}
 		
 		public async Task UpdateProduct(Product product)
 		{
-			int id = product.Id;
-            string name = product.Name;
-            int productType = product.Type.Id;
-			int tax = product.Tax.Id;
-			int manufacturer = product.Manufacturer.Id;
-            await _productRepository.UpdateProductAsync(id, name, productType, tax, manufacturer);
+            try
+            {
+                int id = product.Id;
+                string name = product.Name;
+                int productType = product.Type.Id;
+                int tax = product.Tax.Id;
+                int manufacturer = product.Manufacturer.Id;
+                await _productRepository.UpdateProductAsync(id, name, productType, tax, manufacturer);
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+			
 		}
 		public async Task DeleteProduct(int id)
 		{
-			await _productRepository.DeleteProductAsync(id);
-		}
+            try 
+            { 
+                await _productRepository.DeleteProductAsync(id); 
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
 		
     }
-}
+}   

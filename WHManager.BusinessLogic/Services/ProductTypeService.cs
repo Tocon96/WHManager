@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services.Interfaces;
@@ -15,49 +17,105 @@ namespace WHManager.BusinessLogic.Services
 
         public async Task CreateNewProductType(ProductType productType)
         {
-            int id = productType.Id;
-            string name = productType.Name;
-            await _productTypeRepository.AddProductTypeAsync(id, name);
+            try
+            {
+                string name = productType.Name;
+                await _productTypeRepository.AddProductTypeAsync(name);
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
         }
 
-        public List<ProductType> GetProductTypes()
+        public IList<ProductType> GetProductTypes()
         {
-            List<ProductType> productTypesList = new List<ProductType>();
-            var productTypes = _productTypeRepository.GetAllProductTypes();
-            foreach(var productType in productTypes)
+            try
             {
+                IList<ProductType> productTypesList = new List<ProductType>();
+                var productTypes = _productTypeRepository.GetAllProductTypes().ToList();
+                foreach (var productType in productTypes)
+                {
+                    ProductType currentProductType = new ProductType
+                    {
+                        Id = productType.Id,
+                        Name = productType.Name,
+                    };
+                    productTypesList.Add(currentProductType);
+                }
+                return productTypesList;
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+        }
+		
+		public async Task<ProductType> GetProductType(int id)
+		{
+            try
+            {
+                var productType = await _productTypeRepository.GetProductTypeAsync(id);
                 ProductType currentProductType = new ProductType
                 {
                     Id = productType.Id,
                     Name = productType.Name,
                 };
-                productTypesList.Add(currentProductType);
-            }
-            return productTypesList;
-        }
-		
-		public async Task<ProductType> GetProductType(int id)
-		{
-			var productType = await _productTypeRepository.GetProductTypeAsync(id);
-            ProductType currentProductType = new ProductType
+                return currentProductType;
+            }   
+            catch(Exception e)
             {
-                Id = productType.Id,
-                Name = productType.Name,
-            };
-			return currentProductType;
+                throw e;
+            }
 		}
 		
 		public async Task UpdateProductType(ProductType productType)
 		{
-			int id = productType.Id;
-            string name = productType.Name;
-            await _productTypeRepository.UpdateProductTypeAsync(id, name);
+            try
+            {
+                int id = productType.Id;
+                string name = productType.Name;
+                await _productTypeRepository.UpdateProductTypeAsync(id, name);
+            }
+			catch(Exception e)
+            {
+                throw e;
+            }
 		}
 		
-		public async Task DeleteManufacturer(int id)
+		public async Task DeleteProductType(int id)
 		{
-			await _productTypeRepository.DeleteProductTypeAsync(id);
+            try
+            {
+                await _productTypeRepository.DeleteProductTypeAsync(id);
+            }
+			catch(Exception e)
+            {
+                throw e;
+            }
 		}
 		
+        public IList<ProductType> GetProductTypesByName(string name)
+        {
+            try
+            {
+                IList<ProductType> productTypesList = new List<ProductType>();
+                var productTypes = _productTypeRepository.GetProductTypesByName(name);
+                foreach (var productType in productTypes)
+                {
+                    ProductType currentProductType = new ProductType
+                    {
+                        Id = productType.Id,
+                        Name = productType.Name,
+                    };
+                    productTypesList.Add(currentProductType);
+                }
+                return productTypesList;
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }

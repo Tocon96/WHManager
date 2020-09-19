@@ -9,7 +9,7 @@ namespace WHManager.BusinessLogic.Services.Interfaces
     public interface ITaxService
     {
         Task CreateNewTax(Tax tax);
-        List<Tax> GetTaxes();
+        IList<Tax> GetTaxes();
         Task<Item> GetTax(int id);
         Task DeleteTax(int id);
         Task UpdateTax(Tax tax);

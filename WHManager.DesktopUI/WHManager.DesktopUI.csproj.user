@@ -5,22 +5,16 @@
     <Compile Update="MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\ButtonViews\ProductButtonsViews\AddProductButton.xaml.cs">
+    <Compile Update="Views\ContractorView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\ButtonViews\ProductButtonsViews\UpdateProductButton.xaml.cs">
+    <Compile Update="Views\FormViews\ManageProductTypeFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\ContractorsViews\ManufacturerView.xaml.cs">
+    <Compile Update="Views\FormViews\ManageTaxFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\WarehouseViews\ItemView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\WarehouseViews\ProductTypeView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\WarehouseViews\ProductView.xaml.cs">
+    <Compile Update="Views\WarehouseView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\WarehouseViews\TaxView.xaml.cs">
@@ -31,22 +25,16 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\ButtonViews\ProductButtonsViews\AddProductButton.xaml">
+    <Page Update="Views\ContractorView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\ButtonViews\ProductButtonsViews\UpdateProductButton.xaml">
+    <Page Update="Views\FormViews\ManageProductTypeFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\ContractorsViews\ManufacturerView.xaml">
+    <Page Update="Views\FormViews\ManageTaxFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\WarehouseViews\ItemView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\WarehouseViews\ProductTypeView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\WarehouseViews\ProductView.xaml">
+    <Page Update="Views\WarehouseView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\WarehouseViews\TaxView.xaml">

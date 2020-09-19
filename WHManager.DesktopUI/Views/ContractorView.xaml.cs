@@ -8,16 +8,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WHManager.DesktopUI.Views.ButtonViews.ProductButtonsViews
+namespace WHManager.DesktopUI.Views
 {
     /// <summary>
-    /// Interaction logic for AddProductButton.xaml
+    /// Interaction logic for ContractorView.xaml
     /// </summary>
-    public partial class AddProductButton : Window
+    public partial class ContractorView : UserControl
     {
-        public AddProductButton()
+        public ContractorView()
         {
             InitializeComponent();
         }

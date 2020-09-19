@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WHManager.BusinessLogic.Models;
@@ -15,56 +16,92 @@ namespace WHManager.BusinessLogic.Services
 
         public async Task CreateNewItem(Item item)
         {
-            int id = item.Id;
-            int product = item.Product.Id;
-			DateTime dateofpurchase = item.DateOfPurchase;
-            DateTime dateofsale = item.DateOfSale;
-            await _itemRepository.AddItemAsync(id, product, dateofpurchase, dateofsale);
+            try
+            {
+                int id = item.Id;
+                int product = item.Product.Id;
+                DateTime dateofpurchase = item.DateOfPurchase;
+                DateTime dateofsale = item.DateOfSale;
+                await _itemRepository.AddItemAsync(id, product, dateofpurchase, dateofsale);
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }      
         }
 
-        public List<Item> GetItems()
+        public IList<Item> GetItems()
         {
-            List<Item> itemsList = new List<Item>();
-            var items = _itemRepository.GetItems();
-            foreach(var item in items)
+            try
             {
-                Item currentItem = new Item
+                IList<Item> itemsList = new List<Item>();
+                var items = _itemRepository.GetItems().ToList();
+                foreach (var item in items)
                 {
-                    Id = item.Id,
-					DateOfPurchase = item.DateOfPurchase,
-					DateOfSale = item.DateOfSale
-                };
-                currentItem.Product.Id = item.Product.Id;
-                itemsList.Add(currentItem);
+                    Item currentItem = new Item
+                    {
+                        Id = item.Id,
+                        DateOfPurchase = item.DateOfPurchase,
+                        DateOfSale = item.DateOfSale
+                    };
+                    currentItem.Product.Id = item.Product.Id;
+                    itemsList.Add(currentItem);
+                }
+                return itemsList;
             }
-            return itemsList;
+            catch(Exception e)
+            {
+                throw e;
+            }
         }
 		
 		public async Task<Item> GetItem(int id)
 		{
-			var item = await _itemRepository.GetItemAsync(id);
-			Item currentItem = new Item
+            try
             {
+                var item = await _itemRepository.GetItemAsync(id);
+                Item currentItem = new Item
+                {
                     Id = item.Id,
-                    
-					DateOfPurchase = item.DateOfPurchase,
-					DateOfSale = item.DateOfSale
-            };
-            currentItem.Product.Id = item.Product.Id;
-			return currentItem;
+
+                    DateOfPurchase = item.DateOfPurchase,
+                    DateOfSale = item.DateOfSale
+                };
+                currentItem.Product.Id = item.Product.Id;
+                return currentItem;
+            }
+			catch(Exception e)
+            {
+                throw e;
+            }
 		}
 		
 		public async Task UpdateItem(Item item)
 		{
-			int id = item.Id;
-            int product = item.Product.Id;
-			DateTime dateofpurchase = item.DateOfPurchase;
-            DateTime dateofsale = item.DateOfSale;
-            await _itemRepository.UpdateItemAsync(id, product, dateofpurchase, dateofsale);
+            try
+            {
+                int id = item.Id;
+                int product = item.Product.Id;
+                DateTime dateofpurchase = item.DateOfPurchase;
+                DateTime dateofsale = item.DateOfSale;
+                await _itemRepository.UpdateItemAsync(id, product, dateofpurchase, dateofsale);
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+			
 		}
 		public async Task DeleteItem(int id)
 		{
-			await _itemRepository.DeleteItemAsync(id);
+            try
+            {
+                await _itemRepository.DeleteItemAsync(id);
+            }
+			catch(Exception e)
+            {
+                throw e;
+            }
 		}
 		
     }

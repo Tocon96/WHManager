@@ -9,7 +9,7 @@ namespace WHManager.BusinessLogic.Services.Interfaces
     public interface IItemService
     {
         Task CreateNewItem(Item item);
-        List<Item> GetItems();
+        IList<Item> GetItems();
         Task<Item> GetItem(int id);
         Task UpdateItem(Item item);
         Task DeleteItem(int id);

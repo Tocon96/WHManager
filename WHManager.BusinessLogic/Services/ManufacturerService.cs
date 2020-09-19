@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WHManager.BusinessLogic.Models;
@@ -15,52 +16,92 @@ namespace WHManager.BusinessLogic.Services
 
         public async Task CreateNewManufacturer(Manufacturer manufacturer)
         {
-            int id = manufacturer.Id;
-            string name = manufacturer.Name;
-            int nip = manufacturer.Nip;
-            await _manufacturerRepository.AddManufacturerAsync(id, name, nip);
+            try
+            {
+                int id = manufacturer.Id;
+                string name = manufacturer.Name;
+                int nip = manufacturer.Nip;
+                await _manufacturerRepository.AddManufacturerAsync(id, name, nip);
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+            
         }
 
-        public List<Manufacturer> GetManufacturers()
+        public IList<Manufacturer> GetManufacturers()
         {
-            List<Manufacturer> manufacturersList = new List<Manufacturer>();
-            var manufacturers = _manufacturerRepository.GetManufacturers();
-            foreach(var manufacturer in manufacturers)
+            try
             {
+                IList<Manufacturer> manufacturersList = new List<Manufacturer>();
+                var manufacturers = _manufacturerRepository.GetManufacturers().ToList();
+                foreach (var manufacturer in manufacturers)
+                {
+                    Manufacturer currentManufacturer = new Manufacturer
+                    {
+                        Id = manufacturer.Id,
+                        Name = manufacturer.Name,
+                        Nip = manufacturer.Nip
+                    };
+                    manufacturersList.Add(currentManufacturer);
+                }
+                return manufacturersList;
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+            
+        }
+		
+		public async Task<Manufacturer> GetManufacturer(int id)
+		{
+            try
+            {
+                var manufacturer = await _manufacturerRepository.GetManufacturerAsync(id);
                 Manufacturer currentManufacturer = new Manufacturer
                 {
                     Id = manufacturer.Id,
                     Name = manufacturer.Name,
                     Nip = manufacturer.Nip
                 };
-                manufacturersList.Add(currentManufacturer);
+                return currentManufacturer;
             }
-            return manufacturersList;
-        }
-		
-		public async Task<Manufacturer> GetManufacturer(int id)
-		{
-			var manufacturer = await _manufacturerRepository.GetManufacturerAsync(id);
-            Manufacturer currentManufacturer = new Manufacturer
+            catch (Exception e)
             {
-                Id = manufacturer.Id,
-                Name = manufacturer.Name,
-                Nip = manufacturer.Nip
-            };
-			return currentManufacturer;
+                throw e;
+            }
+			
 		}
 		
 		public async Task UpdateManufacturer(Manufacturer manufacturer)
 		{
-			int id = manufacturer.Id;
-            string name = manufacturer.Name;
-            int nip = manufacturer.Nip;
-            await _manufacturerRepository.UpdateManufacturerAsync(id, name, nip);
+            try
+            {
+                int id = manufacturer.Id;
+                string name = manufacturer.Name;
+                int nip = manufacturer.Nip;
+                await _manufacturerRepository.UpdateManufacturerAsync(id, name, nip);
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+			
 		}
 		
 		public async Task DeleteManufacturer(int id)
 		{
-			await _manufacturerRepository.DeleteManufacturerAsync(id);
+            try
+            {
+                await _manufacturerRepository.DeleteManufacturerAsync(id);
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+			
 		}
 		
     }

@@ -26,16 +26,16 @@ namespace WHManager.BusinessLogic.ViewModels
             LoadData();
         }
 
-        private List<Tax> GetAll()
+        private IList<Tax> GetAll()
         {
             ITaxService taxService = new TaxService();
-            List<Tax> taxes = taxService.GetTaxes();
+            IList<Tax> taxes = taxService.GetTaxes();
             return taxes;
         }
-        private ObservableCollection<Tax> LoadData()
+        private ICollection<Tax> LoadData()
         {
-            List<Tax> taxesList = GetAll();
-            Taxes = new ObservableCollection<Tax>(taxesList);
+            IList<Tax> taxesList = GetAll();
+            Taxes = new ObservableCollection<Tax>(taxesList.ToList());
             return Taxes;
         }
     }

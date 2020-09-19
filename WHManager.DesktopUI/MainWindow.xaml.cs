@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.DirectoryServices.ActiveDirectory;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WHManager.BusinessLogic.ViewModels;
 
 namespace WHManager.DesktopUI
 {
@@ -20,6 +22,17 @@ namespace WHManager.DesktopUI
         public MainWindow()
         {
             InitializeComponent();
+            mainContent.Content = new WarehouseViewModel();
+        }
+
+        private void WarehouseViewClick(object sender, RoutedEventArgs e)
+        {
+            mainContent.Content = new WarehouseViewModel();
+        }
+
+        private void ContrahentViewClick(object sender, RoutedEventArgs e)
+        {
+            mainContent.Content = new ContractorsViewModel();
         }
     }
 }

@@ -4,12 +4,8 @@
              xmlns:local="clr-namespace:WHManager.DesktopUI"
              xmlns:viewmodels="clr-namespace:WHManager.BusinessLogic.ViewModels;assembly=WHManager.BusinessLogic"
              xmlns:warehouseviews="clr-namespace:WHManager.DesktopUI.Views.WarehouseViews"
-             StartupUri="AddProductButton.xaml">
+             StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <ResourceDictionary>
-            <DataTemplate DataType="{x:Type viewmodels:ProductViewModel}">
-                <warehouseviews:ProductView/>
-            </DataTemplate>
-        </ResourceDictionary>
+       
     </Application.Resources>
 </Application>

@@ -9,7 +9,7 @@ namespace WHManager.BusinessLogic.Services.Interfaces
     public interface IProductService
     {
         Task CreateNewProduct(Product product);
-        List<Product> GetProducts();
+        IList<Product> GetProducts();
         Task<Product> GetProduct(int id);
         Task UpdateProduct(Product product);
         Task DeleteProduct(int id);

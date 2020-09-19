@@ -31,9 +31,9 @@ namespace WHManager.BusinessLogic.Services
             throw new NotImplementedException();
         }
 
-        public List<Tax> GetTaxes()
+        public IList<Tax> GetTaxes()
         {
-            List<Tax> taxesList = new List<Tax>();
+            IList<Tax> taxesList = new List<Tax>();
             var taxes = _taxRepository.GetAllTaxes();
             foreach(var tax in taxes)
             {

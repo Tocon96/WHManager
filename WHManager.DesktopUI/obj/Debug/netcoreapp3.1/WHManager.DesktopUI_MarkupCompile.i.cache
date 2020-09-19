@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1
 E:\visualstudio\WHManager\WHManager.DesktopUI\App.xaml
-8328735763
+11-892827315
 
-12256129012
-216559291748
-MainWindow.xaml;Views\ButtonViews\ProductButtonsViews\AddProductButton.xaml;Views\ButtonViews\ProductButtonsViews\UpdateProductButton.xaml;Views\ContractorsViews\ManufacturerView.xaml;Views\WarehouseViews\ItemView.xaml;Views\WarehouseViews\ProductTypeView.xaml;Views\WarehouseViews\ProductView.xaml;Views\WarehouseViews\TaxView.xaml;
+151836998146
+222-244241383
+MainWindow.xaml;Views\ContractorsViews\ManufacturerView.xaml;Views\ContractorView.xaml;Views\FormViews\AddProductFormView.xaml;Views\FormViews\ManageProductTypeFormView.xaml;Views\FormViews\ManageTaxFormView.xaml;Views\WarehouseView.xaml;Views\WarehouseViews\ItemView.xaml;Views\WarehouseViews\ProductTypeView.xaml;Views\WarehouseViews\ProductView.xaml;Views\WarehouseViews\TaxView.xaml;
 
-False
+True
 

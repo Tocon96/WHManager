@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
@@ -26,7 +27,7 @@ namespace WHManager.BusinessLogic.ViewModels
         private List<Product> GetAll()
         {
             IProductService productService = new ProductService();
-            List<Product> products = productService.GetProducts();
+            List<Product> products = productService.GetProducts().ToList();
             return products;
         }
 

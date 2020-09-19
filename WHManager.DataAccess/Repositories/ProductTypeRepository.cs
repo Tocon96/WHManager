@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using WHManager.DataAccess.Models;
@@ -18,13 +19,11 @@ namespace WHManager.DataAccess.Repositories
 			_contextFactory = contextFactory;
 		}
 
-		public async Task<ProductType> AddProductTypeAsync(int id, string name)
+		public async Task<ProductType> AddProductTypeAsync(string name)
 		{
 			ProductType newProductType = new ProductType
 			{
-				Id = id,
 				Name = name,
-
 			};
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
@@ -44,10 +43,18 @@ namespace WHManager.DataAccess.Repositories
 		}
 		public async Task<ProductType> GetProductTypeAsync(int id)
 		{
-			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
-			{
-				return await context.ProductTypes.SingleOrDefaultAsync(x => x.Id == id);
+            try
+            {
+				using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+				{
+					return await context.ProductTypes.SingleOrDefaultAsync(x => x.Id == id);
+				}
 			}
+			catch(Exception e)
+            {
+				throw e;
+            }
+			
 		}
 		public async Task DeleteProductTypeAsync(int id)
 		{
@@ -65,6 +72,22 @@ namespace WHManager.DataAccess.Repositories
 				updatedProductType.Name = name;
 				await context.SaveChangesAsync();
 			}
+		}
+
+		public IEnumerable<ProductType> GetProductTypesByName(string name)
+        {
+            try
+            {
+				using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+				{
+					IEnumerable<ProductType> productTypes = context.ProductTypes.ToList().FindAll(x => x.Name.StartsWith(name));
+					return productTypes;
+				}
+			}
+			catch(Exception e)
+            {
+				throw e;
+            }
 		}
 	}
 }

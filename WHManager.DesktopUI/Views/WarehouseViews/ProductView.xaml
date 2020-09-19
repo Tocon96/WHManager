@@ -20,11 +20,9 @@
         </Grid.ColumnDefinitions>
 
         <Button Grid.Column="0" Grid.Row="0">Wyszukaj</Button>
-        <Button Grid.Column="0" Grid.Row="1">Dodaj</Button>
-        <Button Grid.Column="0" Grid.Row="2">Edytuj</Button>
-        <Button Grid.Column="0" Grid.Row="3">Usuń</Button>
+        <Button Grid.Column="0" Grid.Row="1" Height="20" Grid.RowSpan="4" VerticalAlignment="Top" Click="AddProductClick">Dodaj</Button>
         <TextBox Grid.Column="1" Grid.Row="0"></TextBox>
-        <DataGrid Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" ItemsSource="{Binding Products}">
+        <DataGrid Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" x:Name="ProductGrid">
         </DataGrid>
     </Grid>
 </UserControl>

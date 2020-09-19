@@ -53,8 +53,8 @@ namespace WHManager.DesktopUI.Views.ButtonViews.ProductButtonsViews {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;V1.0.0.0;component/views/buttonviews/productbuttonsviews/upd" +
-                    "ateproductbutton.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;component/views/buttonviews/productbuttonsviews/updateproduc" +
+                    "tbutton.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Views\ButtonViews\ProductButtonsViews\UpdateProductButton.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
