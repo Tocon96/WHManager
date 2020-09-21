@@ -55,11 +55,11 @@ namespace WHManager.BusinessLogic.Services
             
         }
 		
-		public async Task<Manufacturer> GetManufacturer(int id)
+		public Manufacturer GetManufacturer(int id)
 		{
             try
             {
-                var manufacturer = await _manufacturerRepository.GetManufacturerAsync(id);
+                var manufacturer = _manufacturerRepository.GetManufacturer(id);
                 Manufacturer currentManufacturer = new Manufacturer
                 {
                     Id = manufacturer.Id,
@@ -103,6 +103,49 @@ namespace WHManager.BusinessLogic.Services
             }
 			
 		}
-		
+
+        public IList<Manufacturer> GetManufacturersByName(string name)
+        {
+            try
+            {
+                IList<Manufacturer> manufacturersList = new List<Manufacturer>();
+                var manufacturers = _manufacturerRepository.GetManufacturersByName(name);
+                foreach (var manufacturer in manufacturers)
+                {
+                    Manufacturer currentManufacturer = new Manufacturer
+                    {
+                        Id = manufacturer.Id,
+                        Name = manufacturer.Name,
+                        Nip = manufacturer.Nip
+                    };
+                    manufacturersList.Add(currentManufacturer);
+                }
+                return manufacturersList;
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public Manufacturer GetManufacturerByNip(int nip)
+        {
+            try
+            {
+                var manufacturer = _manufacturerRepository.GetManufacturerByNip(nip);
+                Manufacturer currentManufacturer = new Manufacturer
+                {
+                    Id = manufacturer.Id,
+                    Name = manufacturer.Name,
+                    Nip = manufacturer.Nip
+                };
+                return currentManufacturer;
+
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }

@@ -23,7 +23,7 @@
         </Grid.ColumnDefinitions>
         
         <RadioButton Grid.Row="0" Grid.Column="2" GroupName="Filters" x:Name="IdRadioButton">ID</RadioButton>
-        <RadioButton Grid.Row="0" Grid.Column="3" GroupName="Filters" x:Name="NameRadioButton" IsChecked="True">Name</RadioButton>
+        <RadioButton Grid.Row="0" Grid.Column="3" GroupName="Filters" x:Name="NameRadioButton" IsChecked="True">Nazwa</RadioButton>
         <Button Grid.Column="0" Grid.Row="0" Click="SearchProductTypeClick">Wyszukaj</Button>
         <Button Grid.Column="0" Grid.Row="1" Click="ClearSearchClick">Wyczyść</Button>
         <Button Grid.Column="0" Grid.Row="2" Click="AddProductTypeClick">Dodaj</Button>
@@ -31,7 +31,7 @@
         <DataGrid Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="4" x:Name="gridProductTypes" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Nazwa" Binding="{Binding Name}"></DataGridTextColumn>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

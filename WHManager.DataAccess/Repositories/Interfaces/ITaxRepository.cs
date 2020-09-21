@@ -10,8 +10,10 @@ namespace WHManager.DataAccess.Repositories.Interfaces
     {
         Task<Tax> AddTaxAsync(int id, string name, int value);
         IEnumerable<Tax> GetAllTaxes();
-        Task<Tax> GetTaxAsync(int id);
+        Tax GetTax(int id);
         Task UpdateTaxAsync(int id, string name, int value);
         Task DeleteTaxAsync(int id);
+        IEnumerable<Tax> GetTaxesByName(string name);
+        IEnumerable<Tax> GetTaxesByValue(int value);
     }
 }

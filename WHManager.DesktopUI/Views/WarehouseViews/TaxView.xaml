@@ -24,16 +24,16 @@
         </Grid.ColumnDefinitions>
         <RadioButton Grid.Row="0" Grid.Column="2" GroupName="Filters" x:Name="IdRadioButton">ID</RadioButton>
         <RadioButton Grid.Row="0" Grid.Column="3" GroupName="Filters" x:Name="NameRadioButton" IsChecked="True">Name</RadioButton>
-        <RadioButton Grid.Row="0" Grid.Column="4" GroupName="Filters" x:Name="ValueRadioButton">Value</RadioButton>
-        <Button Grid.Column="0" Grid.Row="0">Wyszukaj</Button>
-        <Button Grid.Column="0" Grid.Row="1">Wyczyść</Button>
-        <Button Grid.Column="0" Grid.Row="2">Dodaj</Button>
-        <TextBox Grid.Column="1" Grid.Row="0" Width="200"></TextBox>
+        <RadioButton Grid.Row="0" Grid.Column="4" GroupName="Filters" x:Name="ValueRadioButton">Wartość</RadioButton>
+        <Button Grid.Column="0" Grid.Row="0" Click="SearchClick">Wyszukaj</Button>
+        <Button Grid.Column="0" Grid.Row="1" Click="SearchClearClick">Wyczyść</Button>
+        <Button Grid.Column="0" Grid.Row="2" Click="AddTaxClick">Dodaj</Button>
+        <TextBox Grid.Column="1" Grid.Row="0" Width="200" x:Name="SearchTextBox"></TextBox>
         <DataGrid Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="6" x:Name="gridTaxes" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Value" Binding="{Binding Value}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Nazwa" Binding="{Binding Name}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Wartość" Binding="{Binding Value}"></DataGridTextColumn>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

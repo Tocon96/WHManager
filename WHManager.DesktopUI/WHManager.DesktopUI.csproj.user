@@ -8,6 +8,9 @@
     <Compile Update="Views\ContractorView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\FormViews\ManageManufacturerFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\FormViews\ManageProductTypeFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -26,6 +29,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\ContractorView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\FormViews\ManageManufacturerFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\FormViews\ManageProductTypeFormView.xaml">

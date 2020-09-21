@@ -52,11 +52,11 @@ namespace WHManager.DataAccess.Repositories
             } 
         }
 
-        public async Task<Tax> GetTaxAsync(int id)
+        public Tax GetTax(int id)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                return await context.Taxes.SingleOrDefaultAsync(x => x.Id == id);
+                return context.Taxes.SingleOrDefault(x => x.Id == id);
             }
         }
 
@@ -68,6 +68,38 @@ namespace WHManager.DataAccess.Repositories
                 updatedTax.Name = name;
                 updatedTax.Value = value;
                 await context.SaveChangesAsync();
+            }
+        }
+
+        public IEnumerable<Tax> GetTaxesByName(string name)
+        {
+            try
+            {
+                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                {
+                    IEnumerable<Tax> taxes = context.Taxes.ToList().FindAll(x => x.Name.StartsWith(name));
+                    return taxes;
+                }
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public IEnumerable<Tax> GetTaxesByValue(int value)
+        {
+            try
+            {
+                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                {
+                    IEnumerable<Tax> taxes = context.Taxes.ToList().FindAll(x => x.Value == value);
+                    return taxes;
+                }
+            }
+            catch(Exception e)
+            {
+                throw e;
             }
         }
     }

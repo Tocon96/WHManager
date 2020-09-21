@@ -15,9 +15,9 @@ namespace WHManager.DesktopUI.Views.FormViews
     /// <summary>
     /// Interaction logic for AddProductFormView.xaml
     /// </summary>
-    public partial class AddProductFormView : Window
+    public partial class ManageProductFormView : Window
     {
-        public AddProductFormView()
+        public ManageProductFormView()
         {
             InitializeComponent();
         }

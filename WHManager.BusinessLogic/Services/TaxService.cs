@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services.Interfaces;
@@ -26,9 +27,17 @@ namespace WHManager.BusinessLogic.Services
             await _taxRepository.DeleteTaxAsync(id);
         }
 
-        public Task<Item> GetTax(int id)
+        public Tax GetTax(int id)
         {
-            throw new NotImplementedException();
+            var tax = _taxRepository.GetTax(id);
+            Tax currentTax = new Tax
+            {
+                Id = tax.Id,
+                Name = tax.Name,
+                Value = tax.Value
+            };
+            return currentTax;
+
         }
 
         public IList<Tax> GetTaxes()
@@ -54,6 +63,54 @@ namespace WHManager.BusinessLogic.Services
             string name = tax.Name;
             int value = tax.Value;
             await _taxRepository.UpdateTaxAsync(id, name, value);
+        }
+
+        public IList<Tax> GetTaxesByName(string name)
+        {
+            try
+            {
+                IList<Tax> taxesList = new List<Tax>();
+                var taxes = _taxRepository.GetTaxesByName(name);
+                foreach (var tax in taxes)
+                {
+                    Tax currentTax = new Tax
+                    {
+                        Id = tax.Id,
+                        Name = tax.Name,
+                        Value = tax.Value
+                    };
+                    taxesList.Add(currentTax);
+                }
+                return taxesList;
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public IList<Tax> GetTaxesByValue(int value)
+        {
+            try
+            {
+                IList<Tax> taxesList = new List<Tax>();
+                var taxes = _taxRepository.GetTaxesByValue(value);
+                foreach(var tax in taxes)
+                {
+                    Tax currentTax = new Tax
+                    {
+                        Id = tax.Id,
+                        Name = tax.Name,
+                        Value = tax.Value
+                    };
+                    taxesList.Add(currentTax);
+                }
+                return taxesList;
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
         }
     }
 }

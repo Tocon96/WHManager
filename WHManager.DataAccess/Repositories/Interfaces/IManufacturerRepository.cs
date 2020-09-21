@@ -8,8 +8,10 @@ namespace WHManager.DataAccess.Repositories
     {
         Task<Manufacturer> AddManufacturerAsync(int id, string name, int nip);
         IEnumerable<Manufacturer> GetManufacturers();
-        Task<Manufacturer> GetManufacturerAsync(int id);
+        Manufacturer GetManufacturer(int id);
         Task DeleteManufacturerAsync(int id);
         Task UpdateManufacturerAsync(int id, string name, int nip);
+        Manufacturer GetManufacturerByNip(int nip);
+        IEnumerable<Manufacturer> GetManufacturersByName(string name);
     }
 }

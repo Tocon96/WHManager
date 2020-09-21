@@ -61,6 +61,7 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
             {
                 ManageProductTypeFormView manageProductTypeFormView = new ManageProductTypeFormView();
                 manageProductTypeFormView.Show();
+                gridProductTypes.ItemsSource = LoadData();
             }
             catch(Exception x)
             {
@@ -75,6 +76,7 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 IProductTypeService productTypeService = new ProductTypeService();
                 ProductType productType = gridProductTypes.SelectedItem as ProductType;
                 productTypeService.DeleteProductType(productType.Id);
+                gridProductTypes.ItemsSource = LoadData();
             }
             catch(Exception x)
             {
@@ -117,6 +119,7 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 ProductType productType = gridProductTypes.SelectedItem as ProductType;
                 ManageProductTypeFormView manageProductTypeFormView = new ManageProductTypeFormView(productType);
                 manageProductTypeFormView.Show();
+                gridProductTypes.ItemsSource = LoadData();
             }
             catch(Exception x)
             {

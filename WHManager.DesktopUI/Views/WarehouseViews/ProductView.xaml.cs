@@ -42,8 +42,8 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
 
         private void AddProductClick(object sender, RoutedEventArgs e)
         {
-            AddProductFormView addProductForm = new AddProductFormView();
-            addProductForm.Show();
+            ManageProductFormView manageProductForm = new ManageProductFormView();
+            manageProductForm.Show();
         }
 
         private List<Product> GetAll()

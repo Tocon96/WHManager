@@ -19,12 +19,33 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Column="0" Grid.Row="0">Wyszukaj</Button>
-        <Button Grid.Column="0" Grid.Row="1">Dodaj</Button>
-        <Button Grid.Column="0" Grid.Row="2">Edytuj</Button>
-        <Button Grid.Column="0" Grid.Row="3">Usuń</Button>
-        <TextBox Grid.Column="1" Grid.Row="0"></TextBox>
-        <DataGrid Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" ItemsSource="{Binding Manufacturers}">
+        <RadioButton Grid.Row="0" Grid.Column="2" GroupName="Filters" x:Name="IdRadioButton">ID</RadioButton>
+        <RadioButton Grid.Row="0" Grid.Column="3" GroupName="Filters" x:Name="NameRadioButton" IsChecked="True">Name</RadioButton>
+        <RadioButton Grid.Row="0" Grid.Column="4" GroupName="Filters" x:Name="NipRadioButton">NIP</RadioButton>
+        <Button Grid.Column="0" Grid.Row="0" Click="SearchManufacturerClick">Wyszukaj</Button>
+        <Button Grid.Column="0" Grid.Row="1" Click="SearchClearClick">Wyczyść</Button>
+        <Button Grid.Column="0" Grid.Row="2" Click="AddManufacturerClick">Dodaj</Button>
+        <TextBox Grid.Column="1" Grid.Row="0" x:Name="textSearchManufacturer"></TextBox>
+        <DataGrid Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" x:Name="gridManufacturers" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}"></DataGridTextColumn>
+                <DataGridTextColumn Header="NIP" Binding="{Binding Nip}"></DataGridTextColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="UpdateManufacturerClick">Edytuj</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="DeleteManufacturerClick">Usuń</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
         </DataGrid>
     </Grid>
 </UserControl>

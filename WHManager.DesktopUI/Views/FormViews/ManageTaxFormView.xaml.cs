@@ -27,6 +27,7 @@ namespace WHManager.DesktopUI.Views.FormViews
 
         public ManageTaxFormView(Tax tax)
         {
+            InitializeComponent();
             Id.Visibility = Visibility.Visible;
             Id.Content = tax.Id;
             textBoxTaxName.Text = tax.Name;

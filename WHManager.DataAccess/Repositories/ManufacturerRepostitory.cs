@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using WHManager.DataAccess.Models;
@@ -42,13 +43,15 @@ namespace WHManager.DataAccess.Repositories
 				return manufacturers;	
 			}
 		}
-		public async Task<Manufacturer> GetManufacturerAsync(int id)
+		public Manufacturer GetManufacturer(int id)
 		{
 			using(WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				return await context.Manufacturers.SingleOrDefaultAsync(x => x.Id == id);	
+				return context.Manufacturers.SingleOrDefault(x => x.Id == id);	
 			}
 		}
+
+		
 		public async Task DeleteManufacturerAsync(int id)
 		{
 			using(WHManagerDBContext context = _contextFactory.CreateDbContext())
@@ -67,5 +70,36 @@ namespace WHManager.DataAccess.Repositories
 				await context.SaveChangesAsync();
 			}
 		}
-	}	
+
+        public Manufacturer GetManufacturerByNip(int nip)
+        {
+            try
+            {
+				using(WHManagerDBContext context = _contextFactory.CreateDbContext())
+                {
+					return context.Manufacturers.SingleOrDefault(x => x.Nip == nip);
+                }
+            }
+			catch(Exception e)
+            {
+				throw e;
+            }
+        }
+
+        public IEnumerable<Manufacturer> GetManufacturersByName(string name)
+        {
+            try
+            {
+				using(WHManagerDBContext context = _contextFactory.CreateDbContext())
+                {
+					IEnumerable<Manufacturer> manufacturers = context.Manufacturers.ToList().FindAll(x => x.Name.StartsWith(name));
+					return manufacturers;
+				}
+            }
+			catch(Exception e)
+            {
+				throw e;
+            }
+        }
+    }	
 }
