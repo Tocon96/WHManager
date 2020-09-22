@@ -20,7 +20,7 @@ namespace WHManager.BusinessLogic.Services
             {
                 int id = manufacturer.Id;
                 string name = manufacturer.Name;
-                int nip = manufacturer.Nip;
+                double nip = manufacturer.Nip;
                 await _manufacturerRepository.AddManufacturerAsync(id, name, nip);
             }
             catch(Exception e)
@@ -81,7 +81,7 @@ namespace WHManager.BusinessLogic.Services
             {
                 int id = manufacturer.Id;
                 string name = manufacturer.Name;
-                int nip = manufacturer.Nip;
+                double nip = manufacturer.Nip;
                 await _manufacturerRepository.UpdateManufacturerAsync(id, name, nip);
             }
             catch(Exception e)
@@ -128,7 +128,7 @@ namespace WHManager.BusinessLogic.Services
             }
         }
 
-        public Manufacturer GetManufacturerByNip(int nip)
+        public Manufacturer GetManufacturerByNip(double nip)
         {
             try
             {

@@ -41,7 +41,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 Manufacturer manufacturer = new Manufacturer
                 {
                     Name = textManufacturerName.Text,
-                    Nip = int.Parse(textManufacturerNip.Text)
+                    Nip = double.Parse(textManufacturerNip.Text)
                 };
                 manufacturerService.CreateNewManufacturer(manufacturer);
             }
@@ -60,7 +60,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 {
                     Id = (int)Id.Content,
                     Name = textManufacturerName.Text,
-                    Nip = int.Parse(textManufacturerNip.Text)
+                    Nip = double.Parse(textManufacturerNip.Text)
                 };
                 manufacturerService.UpdateManufacturer(manufacturer);
             }

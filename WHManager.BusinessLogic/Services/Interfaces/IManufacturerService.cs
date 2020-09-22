@@ -12,7 +12,7 @@ namespace WHManager.BusinessLogic.Services
         Task UpdateManufacturer(Manufacturer manufacturer);
         Task DeleteManufacturer(int id);
         IList<Manufacturer> GetManufacturersByName(string name);
-        Manufacturer GetManufacturerByNip(int nip);
+        Manufacturer GetManufacturerByNip(double nip);
 
     }
 }

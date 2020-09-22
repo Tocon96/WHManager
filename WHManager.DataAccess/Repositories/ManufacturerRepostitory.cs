@@ -19,7 +19,7 @@ namespace WHManager.DataAccess.Repositories
 			_contextFactory = contextFactory;
 		}
 
-		public async Task<Manufacturer> AddManufacturerAsync(int id, string name, int nip)
+		public async Task<Manufacturer> AddManufacturerAsync(int id, string name, double nip)
 		{
 			Manufacturer newManufacturer = new Manufacturer
 			{
@@ -60,7 +60,7 @@ namespace WHManager.DataAccess.Repositories
 				await context.SaveChangesAsync();
 			}
 		}
-		public async Task UpdateManufacturerAsync(int id, string name, int nip)
+		public async Task UpdateManufacturerAsync(int id, string name, double nip)
 		{
 			using(WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
@@ -71,7 +71,7 @@ namespace WHManager.DataAccess.Repositories
 			}
 		}
 
-        public Manufacturer GetManufacturerByNip(int nip)
+        public Manufacturer GetManufacturerByNip(double nip)
         {
             try
             {

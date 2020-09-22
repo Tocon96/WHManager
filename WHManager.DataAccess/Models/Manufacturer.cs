@@ -9,6 +9,6 @@ namespace WHManager.DataAccess.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int Nip { get; set; }
+        public double Nip { get; set; }
     }
 }

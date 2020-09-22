@@ -16,6 +16,10 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
@@ -25,8 +29,8 @@
         <Button Grid.Column="0" Grid.Row="0" Click="SearchManufacturerClick">Wyszukaj</Button>
         <Button Grid.Column="0" Grid.Row="1" Click="SearchClearClick">Wyczyść</Button>
         <Button Grid.Column="0" Grid.Row="2" Click="AddManufacturerClick">Dodaj</Button>
-        <TextBox Grid.Column="1" Grid.Row="0" x:Name="textSearchManufacturer"></TextBox>
-        <DataGrid Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" x:Name="gridManufacturers" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+        <TextBox Grid.Column="1" Grid.Row="0" x:Name="textSearchManufacturer" Width="200"></TextBox>
+        <DataGrid Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="6" x:Name="gridManufacturers" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}"></DataGridTextColumn>

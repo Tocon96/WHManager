@@ -167,7 +167,6 @@ namespace WHManager.DesktopUI.Views.ContractorsView
         {
             ManageManufacturerFormView manageManufacturerFormView = new ManageManufacturerFormView();
             manageManufacturerFormView.Show();
-            gridManufacturers.ItemsSource = LoadData();
         }
 
         private void UpdateManufacturerClick(object sender, RoutedEventArgs e)
@@ -175,7 +174,6 @@ namespace WHManager.DesktopUI.Views.ContractorsView
             Manufacturer manufacturer = gridManufacturers.SelectedItem as Manufacturer;
             ManageManufacturerFormView manageManufacturerFormView = new ManageManufacturerFormView(manufacturer);
             manageManufacturerFormView.Show();
-            gridManufacturers.ItemsSource = LoadData();
         }
 
         private void DeleteManufacturerClick(object sender, RoutedEventArgs e)
@@ -183,7 +181,6 @@ namespace WHManager.DesktopUI.Views.ContractorsView
             IManufacturerService manufacturerService = new ManufacturerService();
             Manufacturer manufacturer = gridManufacturers.SelectedItem as Manufacturer;
             manufacturerService.DeleteManufacturer(manufacturer.Id);
-            gridManufacturers.ItemsSource = LoadData();
         }
     }
 }

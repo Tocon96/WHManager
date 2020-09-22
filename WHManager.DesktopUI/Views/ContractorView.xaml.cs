@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WHManager.DesktopUI.Views.ContractorsView;
 
 namespace WHManager.DesktopUI.Views
 {
@@ -21,6 +22,17 @@ namespace WHManager.DesktopUI.Views
         public ContractorView()
         {
             InitializeComponent();
+            contractorsContent.Content = new ManufacturerView();
+        }
+
+        private void ManufacturersViewClick(object sender, RoutedEventArgs e)
+        {
+            contractorsContent.Content = new ManufacturerView();
+        }
+
+        private void ClientsTypeViewClick(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
