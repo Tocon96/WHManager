@@ -20,6 +20,11 @@ namespace WHManager.DataAccess
            
         public DbSet<Tax> Taxes { get; set; }
 
+        public DbSet<Client> Clients { get; set; }
+
+        public DbSet<Invoice> Invoices { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
         public WHManagerDBContext(DbContextOptions options) : base(options) { }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)

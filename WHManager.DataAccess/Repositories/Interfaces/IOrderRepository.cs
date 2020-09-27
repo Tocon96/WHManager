@@ -8,12 +8,12 @@ namespace WHManager.DataAccess.Repositories.Interfaces
 {
     public interface IOrderRepository
     {
-        Task<Order> AddOrderAsync(int id, DateTime dateOrdered, ICollection<Item> items);
-        Task UpdateOrderAsync(int id, DateTime dateOrdered, ICollection<Item> items, decimal price, Invoice involce = null);
+        Task<Order> AddOrderAsync(int id, decimal price, DateTime dateOrdered, IList<int> items, int clientId);
+        Task UpdateOrderAsync(int id, DateTime dateOrdered, IList<int> items, decimal price, int clientId, int? invoiceId = null);
         Task DeleteOrderAsync(int id);
         IEnumerable<Order> GetAllOrders();
         Order GetOrderById(int id);
         Order GetOrderByInvoice(int invoiceId);
-        Order GetOrderByClient(int? cliendId = null, string clientName = null, double? clientNip = null);
+        IEnumerable<Order> GetOrdersByClient(int? clientId = null, string clientName = null, double? clientNip = null);
     }
 }
