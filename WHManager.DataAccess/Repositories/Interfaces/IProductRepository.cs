@@ -9,11 +9,11 @@ namespace WHManager.DataAccess.Repositories.Interfaces
 {
     public interface IProductRepository
     {
-        Task<Product> AddProductAsync(int id, string name, int producttype, int tax, int manufacturer);
+        Task<Product> AddProductAsync(string name, int producttype, int tax, int manufacturer, decimal pricebuy, decimal pricesell);
         IEnumerable<Product> GetAllProducts();
         Product GetProduct(int id);
         Task DeleteProductAsync(int id);
-        Task UpdateProductAsync(int id, string name, int producttype, int tax, int manufacturer);
+        Task UpdateProductAsync(int id, string name, int producttype, int tax, int manufacturer, decimal pricesell, decimal pricebuy);
         IEnumerable<Product> GetProductsByManufacturer(string manufacturerName = null, int? manufacturerId = null, double? manufacturerNip = null);
         IEnumerable<Product> GetProductsByTax(int? taxValue = null, string taxName = null, int? taxId = null);
         IEnumerable<Product> GetProductsByName(string name);

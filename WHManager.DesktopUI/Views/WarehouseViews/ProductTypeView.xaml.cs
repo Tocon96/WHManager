@@ -63,9 +63,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 manageProductTypeFormView.Show();
                 gridProductTypes.ItemsSource = LoadData();
             }
-            catch(Exception x)
+            catch(Exception)
             {
-                throw x;
+                throw;
             }
         }
 
@@ -76,11 +76,10 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 IProductTypeService productTypeService = new ProductTypeService();
                 ProductType productType = gridProductTypes.SelectedItem as ProductType;
                 productTypeService.DeleteProductType(productType.Id);
-                gridProductTypes.ItemsSource = LoadData();
             }
-            catch(Exception x)
+            catch(Exception)
             {
-                throw x;
+                throw;
             }
         }
 
@@ -92,9 +91,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 List<ProductType> productTypes = productTypeService.GetProductTypes().ToList();
                 return productTypes;
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -106,9 +105,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 ProductTypes = new ObservableCollection<ProductType>(productTypesList);
                 return ProductTypes;
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -121,9 +120,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 manageProductTypeFormView.Show();
                 gridProductTypes.ItemsSource = LoadData();
             }
-            catch(Exception x)
+            catch(Exception)
             {
-                throw x;
+                throw;
             }
         }
 
@@ -137,9 +136,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                     ProductTypes = new ObservableCollection<ProductType>(productTypes);
                     gridProductTypes.ItemsSource = ProductTypes;
                 }
-                catch(Exception x)
+                catch(Exception)
                 {
-                    throw x;
+                    throw;
                 }
             }
             else if (IdRadioButton.IsChecked == true)
@@ -150,9 +149,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                     ProductTypes = new ObservableCollection<ProductType>(productTypes);
                     gridProductTypes.ItemsSource = ProductTypes;
                 }
-                catch (Exception x)
+                catch (Exception)
                 {
-                    throw x;
+                    throw;
                 }
             }
         }
@@ -164,9 +163,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 SearchTextBox.Text = null;
                 gridProductTypes.ItemsSource = LoadData();
             }
-            catch(Exception x)
+            catch(Exception)
             {
-                throw x;
+                throw;
             }
         }
 
@@ -178,9 +177,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 List<ProductType> productTypes = productTypeService.GetProductTypesByName(name).ToList();
                 return productTypes;
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -190,13 +189,13 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
             {
                 IProductTypeService productTypeService = new ProductTypeService();
                 List<ProductType> productTypes = new List<ProductType>();
-                ProductType productType = productTypeService.GetProductType(id).Result;
+                ProductType productType = productTypeService.GetProductType(id);
                 productTypes.Add(productType);
                 return productTypes;
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
     }

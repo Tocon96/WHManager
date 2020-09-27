@@ -81,9 +81,9 @@ namespace WHManager.DataAccess.Repositories
                     return taxes;
                 }
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -97,9 +97,9 @@ namespace WHManager.DataAccess.Repositories
                     return taxes;
                 }
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
     }

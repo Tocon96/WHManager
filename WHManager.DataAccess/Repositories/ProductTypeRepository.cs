@@ -41,18 +41,18 @@ namespace WHManager.DataAccess.Repositories
 				return productTypes;
 			}
 		}
-		public async Task<ProductType> GetProductTypeAsync(int id)
+		public ProductType GetProductType(int id)
 		{
             try
             {
 				using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 				{
-					return await context.ProductTypes.SingleOrDefaultAsync(x => x.Id == id);
+					return context.ProductTypes.SingleOrDefault(x => x.Id == id);
 				}
 			}
-			catch(Exception e)
+			catch(Exception)
             {
-				throw e;
+				throw;
             }
 			
 		}
@@ -84,9 +84,9 @@ namespace WHManager.DataAccess.Repositories
 					return productTypes;
 				}
 			}
-			catch(Exception e)
+			catch(Exception)
             {
-				throw e;
+				throw;
             }
 		}
 	}

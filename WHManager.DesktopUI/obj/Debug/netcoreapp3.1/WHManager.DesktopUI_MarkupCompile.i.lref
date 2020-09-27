@@ -1,6 +1,22 @@
-﻿
+﻿E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\GeneratedInternalTypeHelper.g.i.cs
 
+FE:\visualstudio\WHManager\WHManager.DesktopUI\MainWindow.xaml;;
 FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\ContractorsViews\ManufacturerView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\ContractorView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\FormViews\AdvancedSearchProductFormView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\FormViews\ManageItemFormView.xaml;;
 FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\FormViews\ManageManufacturerFormView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\FormViews\ManageProductFormView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\FormViews\ManageProductTypeFormView.xaml;;
 FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\FormViews\ManageTaxFormView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\FormViews\SearchFormViews\SearchoProductsByTypeFormView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\FormViews\SearchFormViews\SearchProductByManufacturerFormView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\FormViews\SearchFormViews\SearchProductsByPricesFormView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\FormViews\SearchFormViews\SearchProductsByTaxFormView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\WarehouseView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\WarehouseViews\EmittedItemsView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\WarehouseViews\ItemView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\WarehouseViews\ProductTypeView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\WarehouseViews\ProductView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\WarehouseViews\TaxView.xaml;;
 

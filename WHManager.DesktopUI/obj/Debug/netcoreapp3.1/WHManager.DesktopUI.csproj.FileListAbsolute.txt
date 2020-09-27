@@ -93,3 +93,17 @@ E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\Form
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ManageProductFormView.baml
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\WHManager.DesktopUI.Properties.Resources.resources
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\WHManager.DesktopUI.csproj.GenerateResource.cache
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\AdvancedSearchProductFormView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\AdvancedSearchProductFormView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\SearchFormViews\SearchProductByManufacturerFormView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\SearchFormViews\SearchProductsByTaxFormView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\SearchFormViews\SearchProductByManufacturerFormView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\SearchFormViews\SearchProductsByTaxFormView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\SearchFormViews\SearchoProductsByTypeFormView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\SearchFormViews\SearchProductsByPricesFormView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\SearchFormViews\SearchoProductsByTypeFormView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\SearchFormViews\SearchProductsByPricesFormView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ManageItemFormView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ManageItemFormView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\WarehouseViews\EmittedItemsView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\WarehouseViews\EmittedItemsView.baml

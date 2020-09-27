@@ -23,9 +23,9 @@ namespace WHManager.BusinessLogic.Services
                 double nip = manufacturer.Nip;
                 await _manufacturerRepository.AddManufacturerAsync(id, name, nip);
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
             
         }
@@ -48,9 +48,9 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return manufacturersList;
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
             
         }
@@ -68,9 +68,9 @@ namespace WHManager.BusinessLogic.Services
                 };
                 return currentManufacturer;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
 			
 		}
@@ -84,9 +84,9 @@ namespace WHManager.BusinessLogic.Services
                 double nip = manufacturer.Nip;
                 await _manufacturerRepository.UpdateManufacturerAsync(id, name, nip);
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
 			
 		}
@@ -97,9 +97,9 @@ namespace WHManager.BusinessLogic.Services
             {
                 await _manufacturerRepository.DeleteManufacturerAsync(id);
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
 			
 		}
@@ -122,9 +122,9 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return manufacturersList;
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -142,9 +142,9 @@ namespace WHManager.BusinessLogic.Services
                 return currentManufacturer;
 
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
     }

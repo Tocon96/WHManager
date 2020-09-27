@@ -43,9 +43,9 @@ namespace WHManager.DesktopUI.Views.FormViews
                     AddTax();
                     this.Close();
                 }
-                catch(Exception x)
+                catch(Exception)
                 {
-                    throw x;
+                    throw;
                 }
                     
             }
@@ -56,9 +56,9 @@ namespace WHManager.DesktopUI.Views.FormViews
                     UpdateTax();
                     this.Close();
                 }
-                catch(Exception x)
+                catch(Exception)
                 {
-                    throw x;
+                    throw;
                 }    
             }
         }
@@ -75,9 +75,9 @@ namespace WHManager.DesktopUI.Views.FormViews
                 };
                 taxService.CreateNewTax(tax);
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -94,9 +94,9 @@ namespace WHManager.DesktopUI.Views.FormViews
                 };
                 taxService.UpdateTax(tax);
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
     }

@@ -1,0 +1,39 @@
+﻿<Window x:Class="WHManager.DesktopUI.Views.FormViews.ManageItemFormView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WHManager.DesktopUI.Views.FormViews"
+        mc:Ignorable="d"
+        Title="ManageItemFormView" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <!--Add values-->
+        <TextBlock>Ilość egzemplarzy</TextBlock>
+        <TextBox Grid.Row="1" x:Name="textboxNumberOfItems"></TextBox>
+        <TextBlock Grid.Row="2">Data zakupu</TextBlock>
+        <DatePicker Grid.Row="3" x:Name="datepickerDateOfAdmission"></DatePicker>
+        <!--Update hidden values-->
+        <TextBlock Grid.Row="2" Visibility="Hidden" Grid.Column="1" x:Name="textBlockDateOfEmission">Data sprzedaży</TextBlock>
+        <DatePicker Grid.Row="3" Visibility="Hidden" Grid.Column="1" x:Name="datepickerDateOfEmission"></DatePicker>
+        <Label Content="Id" Visibility="Hidden" Name="labelId" Grid.Row="0" Grid.Column="1"></Label>
+        <CheckBox Content="Dostępność" Visibility="Hidden" IsChecked="true" Grid.Row="1" Grid.Column="1" x:Name="checkboxAvalaibility"></CheckBox>
+        <!--Button-->
+        <Button Grid.Row="4" Click="buttonAddItems">Zatwierdź</Button>
+    </Grid>
+</Window>

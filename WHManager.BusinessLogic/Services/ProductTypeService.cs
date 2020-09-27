@@ -22,9 +22,9 @@ namespace WHManager.BusinessLogic.Services
                 string name = productType.Name;
                 await _productTypeRepository.AddProductTypeAsync(name);
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -45,17 +45,17 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return productTypesList;
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
 		
-		public async Task<ProductType> GetProductType(int id)
+		public ProductType GetProductType(int id)
 		{
             try
             {
-                var productType = await _productTypeRepository.GetProductTypeAsync(id);
+                var productType =  _productTypeRepository.GetProductType(id);
                 ProductType currentProductType = new ProductType
                 {
                     Id = productType.Id,
@@ -63,9 +63,9 @@ namespace WHManager.BusinessLogic.Services
                 };
                 return currentProductType;
             }   
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
 		}
 		
@@ -77,9 +77,9 @@ namespace WHManager.BusinessLogic.Services
                 string name = productType.Name;
                 await _productTypeRepository.UpdateProductTypeAsync(id, name);
             }
-			catch(Exception e)
+			catch(Exception)
             {
-                throw e;
+                throw;
             }
 		}
 		
@@ -89,9 +89,9 @@ namespace WHManager.BusinessLogic.Services
             {
                 await _productTypeRepository.DeleteProductTypeAsync(id);
             }
-			catch(Exception e)
+			catch(Exception)
             {
-                throw e;
+                throw;
             }
 		}
 		
@@ -112,9 +112,9 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return productTypesList;
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
     }

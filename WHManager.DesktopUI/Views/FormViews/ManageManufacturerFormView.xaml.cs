@@ -19,6 +19,7 @@ namespace WHManager.DesktopUI.Views.FormViews
     /// </summary>
     public partial class ManageManufacturerFormView : Window
     {
+        IManufacturerService manufacturerService = new ManufacturerService();
         public ManageManufacturerFormView()
         {
             InitializeComponent();
@@ -37,7 +38,6 @@ namespace WHManager.DesktopUI.Views.FormViews
         {
             try
             {
-                IManufacturerService manufacturerService = new ManufacturerService();
                 Manufacturer manufacturer = new Manufacturer
                 {
                     Name = textManufacturerName.Text,
@@ -47,7 +47,7 @@ namespace WHManager.DesktopUI.Views.FormViews
             }
             catch (Exception e)
             {
-                throw e;
+                MessageBox.Show("Błąd dodawania: " + e);
             }
         }
 
@@ -55,7 +55,6 @@ namespace WHManager.DesktopUI.Views.FormViews
         {
             try
             {
-                IManufacturerService manufacturerService = new ManufacturerService();
                 Manufacturer manufacturer = new Manufacturer
                 {
                     Id = (int)Id.Content,
@@ -64,9 +63,9 @@ namespace WHManager.DesktopUI.Views.FormViews
                 };
                 manufacturerService.UpdateManufacturer(manufacturer);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                throw e;
+                MessageBox.Show("Błąd aktualizacji: " + e);
             }
         }
 
@@ -79,9 +78,9 @@ namespace WHManager.DesktopUI.Views.FormViews
                     AddManufacturer();
                     this.Close();
                 }
-                catch(Exception x)
+                catch (Exception x)
                 {
-                    throw x;
+                    MessageBox.Show("Błąd dodawania: " + x);
                 }
             }
             else if(Id.Visibility == Visibility.Visible)
@@ -91,9 +90,9 @@ namespace WHManager.DesktopUI.Views.FormViews
                     UpdateManufacturer();
                     this.Close();
                 }
-                catch(Exception x)
+                catch (Exception x)
                 {
-                    throw x;
+                    MessageBox.Show("Błąd aktualizacji: " + x);
                 }
             }
         }

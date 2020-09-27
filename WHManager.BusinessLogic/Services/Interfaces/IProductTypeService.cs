@@ -10,7 +10,7 @@ namespace WHManager.BusinessLogic.Services.Interfaces
     {
         Task CreateNewProductType(ProductType productType);
         IList<ProductType> GetProductTypes();
-        Task<ProductType> GetProductType(int id);
+        ProductType GetProductType(int id);
         Task UpdateProductType(ProductType productType);
         Task DeleteProductType(int id);
         IList<ProductType> GetProductTypesByName(string name);

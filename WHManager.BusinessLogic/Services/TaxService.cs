@@ -83,9 +83,9 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return taxesList;
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -107,9 +107,9 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return taxesList;
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
     }

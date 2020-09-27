@@ -8,7 +8,8 @@ namespace WHManager.BusinessLogic.Models
     {
         public int Id { get; set; }
         public Product Product { get; set; }
-        public DateTime DateOfPurchase { get; set; }
-        public DateTime DateOfSale { get; set; }
+        public DateTime DateOfAdmission { get; set; }
+        public DateTime? DateOfEmission { get; set; }
+        public bool IsInStock { get; set; }
     }
 }

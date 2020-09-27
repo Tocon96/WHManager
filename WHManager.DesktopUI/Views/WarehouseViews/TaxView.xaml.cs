@@ -50,9 +50,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 Tax tax = gridTaxes.SelectedItem as Tax;
                 taxService.DeleteTax(tax.Id);
             }
-            catch(Exception x)
+            catch(Exception)
             {
-                throw x;
+                throw;
             }
         }
 
@@ -64,9 +64,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 ManageTaxFormView manageTaxFormView = new ManageTaxFormView(tax);
                 manageTaxFormView.Show();
             }
-            catch (Exception x)
+            catch (Exception)
             {
-                throw x;
+                throw;
             }
         }
 
@@ -83,9 +83,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 SearchTextBox.Text = null;
                 gridTaxes.ItemsSource = LoadData();
             }
-            catch (Exception x)
+            catch (Exception)
             {
-                throw x;
+                throw;
             }
         }
 
@@ -99,9 +99,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                     Taxes = new ObservableCollection<Tax>(taxes);
                     gridTaxes.ItemsSource = Taxes;
                 }
-                catch (Exception x)
+                catch (Exception)
                 {
-                    throw x;
+                    throw;
                 }
             }
             else if(NameRadioButton.IsChecked == true)
@@ -112,9 +112,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                     Taxes = new ObservableCollection<Tax>(taxes);
                     gridTaxes.ItemsSource = Taxes;
                 }
-                catch (Exception x)
+                catch (Exception)
                 {
-                    throw x;
+                    throw;
                 }
             }
             else if(ValueRadioButton.IsChecked == true)
@@ -125,9 +125,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                     Taxes = new ObservableCollection<Tax>(taxes);
                     gridTaxes.ItemsSource = Taxes;
                 }
-                catch( Exception x)
+                catch(Exception)
                 {
-                    throw x;
+                    throw;
                 }
             }
         }
@@ -140,9 +140,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 Taxes = new ObservableCollection<Tax>(taxes.ToList());
                 return Taxes;
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -154,9 +154,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 IList<Tax> taxes = taxService.GetTaxes();
                 return taxes;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -168,9 +168,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 IList<Tax> taxes = taxService.GetTaxesByName(name).ToList();
                 return taxes;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -182,9 +182,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 IList<Tax> taxes = taxService.GetTaxesByValue(value).ToList();
                 return taxes;
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -199,9 +199,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 return taxes;
 
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
     }

@@ -8,10 +8,14 @@ namespace WHManager.DataAccess.Repositories.Interfaces
 {
     public interface IItemRepository
     {
-        Task<Item> AddItemAsync(int id, int product, DateTime dateofpurchase, DateTime dateofsale);
+        Task<Item> AddItemAsync(int id, int product, DateTime dateofadmission, DateTime? dateofemission, bool isinstock);
         IEnumerable<Item> GetItems();
-        Task<Item> GetItemAsync(int id);
+        Item GetItem(int id);
         Task DeleteItemAsync(int id);
-        Task UpdateItemAsync(int id, int product, DateTime dateofpurchase, DateTime dateofsale);
+        Task UpdateItemAsync(int id, int product, DateTime dateofadmission, DateTime? dateofemission, bool isinstock);
+        IEnumerable<Item> GetItemsByProducts(int? productId = null, string productName = null);
+        IEnumerable<Item> GetItemsByDate(DateTime? earlierDate, DateTime? laterDate);
+        IEnumerable<Item> GetEmittedItemsByDate(DateTime? earlierDate, DateTime? laterDate);
+        IEnumerable<Item> GetEmittedItemsByProducts(int? productId = null, string productName = null);
     }
 }

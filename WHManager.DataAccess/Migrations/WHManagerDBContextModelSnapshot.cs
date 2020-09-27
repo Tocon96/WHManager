@@ -26,13 +26,16 @@ namespace WHManager.DataAccess.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<DateTime>("DateOfPurchase")
+                    b.Property<DateTime>("DateOfAdmission")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateOfSale")
+                    b.Property<DateTime?>("DateOfEmission")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<bool>("IsInStock")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -50,9 +53,12 @@ namespace WHManager.DataAccess.Migrations
                         .UseIdentityColumn();
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<double>("Nip")
+                        .HasMaxLength(20)
                         .HasColumnType("float");
 
                     b.HasKey("Id");
@@ -70,11 +76,13 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<bool>("InStock")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ManufacturerId")
+                    b.Property<int>("ManufacturerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("PriceBuy")
                         .HasColumnType("decimal(18,2)");
@@ -82,10 +90,10 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<decimal>("PriceSell")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("TaxId")
+                    b.Property<int>("TaxId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TypeId")
+                    b.Property<int>("TypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -107,7 +115,9 @@ namespace WHManager.DataAccess.Migrations
                         .UseIdentityColumn();
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
@@ -122,9 +132,12 @@ namespace WHManager.DataAccess.Migrations
                         .UseIdentityColumn();
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Value")
+                        .HasMaxLength(3)
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -135,23 +148,31 @@ namespace WHManager.DataAccess.Migrations
             modelBuilder.Entity("WHManager.DataAccess.Models.Item", b =>
                 {
                     b.HasOne("WHManager.DataAccess.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId");
+                        .WithMany("Items")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WHManager.DataAccess.Models.Product", b =>
                 {
                     b.HasOne("WHManager.DataAccess.Models.Manufacturer", "Manufacturer")
-                        .WithMany()
-                        .HasForeignKey("ManufacturerId");
+                        .WithMany("Products")
+                        .HasForeignKey("ManufacturerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WHManager.DataAccess.Models.Tax", "Tax")
-                        .WithMany()
-                        .HasForeignKey("TaxId");
+                        .WithMany("Products")
+                        .HasForeignKey("TaxId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("WHManager.DataAccess.Models.ProductType", "Type")
-                        .WithMany()
-                        .HasForeignKey("TypeId");
+                        .WithMany("Products")
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

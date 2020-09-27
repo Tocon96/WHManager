@@ -8,6 +8,12 @@
     <Compile Update="Views\ContractorView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\FormViews\AdvancedSearchProductFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\FormViews\ManageItemFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\FormViews\ManageManufacturerFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -17,7 +23,25 @@
     <Compile Update="Views\FormViews\ManageTaxFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\FormViews\SearchFormViews\SearchoProductsByTypeFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\FormViews\SearchFormViews\SearchProductByManufacturerFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\FormViews\SearchFormViews\SearchProductsByPricesFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\FormViews\SearchFormViews\SearchProductsByTaxFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\WarehouseView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\WarehouseViews\EmittedItemsView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\WarehouseViews\ItemView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\WarehouseViews\TaxView.xaml.cs">
@@ -31,6 +55,12 @@
     <Page Update="Views\ContractorView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\FormViews\AdvancedSearchProductFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\FormViews\ManageItemFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\FormViews\ManageManufacturerFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -40,7 +70,25 @@
     <Page Update="Views\FormViews\ManageTaxFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\FormViews\SearchFormViews\SearchoProductsByTypeFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\FormViews\SearchFormViews\SearchProductByManufacturerFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\FormViews\SearchFormViews\SearchProductsByPricesFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\FormViews\SearchFormViews\SearchProductsByTaxFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\WarehouseView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\WarehouseViews\EmittedItemsView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\WarehouseViews\ItemView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\WarehouseViews\TaxView.xaml">

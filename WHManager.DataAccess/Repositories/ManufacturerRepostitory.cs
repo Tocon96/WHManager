@@ -80,9 +80,9 @@ namespace WHManager.DataAccess.Repositories
 					return context.Manufacturers.SingleOrDefault(x => x.Nip == nip);
                 }
             }
-			catch(Exception e)
+			catch(Exception)
             {
-				throw e;
+				throw;
             }
         }
 
@@ -96,9 +96,9 @@ namespace WHManager.DataAccess.Repositories
 					return manufacturers;
 				}
             }
-			catch(Exception e)
+			catch(Exception)
             {
-				throw e;
+				throw;
             }
         }
     }	

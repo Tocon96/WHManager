@@ -10,7 +10,7 @@ namespace WHManager.DataAccess.Repositories.Interfaces
     {
         Task<ProductType> AddProductTypeAsync(string name);
         IEnumerable<ProductType> GetAllProductTypes();
-        Task<ProductType> GetProductTypeAsync(int id);
+        ProductType GetProductType(int id);
         Task DeleteProductTypeAsync(int id);
         Task UpdateProductTypeAsync(int id, string name);
         IEnumerable<ProductType> GetProductTypesByName(string name);

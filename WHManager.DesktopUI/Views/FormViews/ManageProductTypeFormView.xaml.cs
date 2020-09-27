@@ -44,9 +44,9 @@ namespace WHManager.DesktopUI.Views.FormViews
                     AddProductType();
                     this.Close();
                 }
-                catch (Exception x)
+                catch (Exception)
                 {
-                    throw x;
+                    throw;
                 }
             }
             else
@@ -56,9 +56,9 @@ namespace WHManager.DesktopUI.Views.FormViews
                     UpdateProductType();
                     this.Close();
                 }
-                catch (Exception x)
+                catch (Exception)
                 {
-                    throw x;
+                    throw;
                 }
             }
            

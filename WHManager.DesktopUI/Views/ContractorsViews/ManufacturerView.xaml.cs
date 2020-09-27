@@ -47,9 +47,9 @@ namespace WHManager.DesktopUI.Views.ContractorsView
                 IList<Manufacturer> manufacturers = manufacturerService.GetManufacturers().ToList();
                 return manufacturers;
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -61,9 +61,9 @@ namespace WHManager.DesktopUI.Views.ContractorsView
                 Manufacturers = new ObservableCollection<Manufacturer>(manufacturers);
                 return Manufacturers;
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
             
         }
@@ -76,9 +76,9 @@ namespace WHManager.DesktopUI.Views.ContractorsView
                 IList<Manufacturer> manufacturers = manufacturerService.GetManufacturersByName(name).ToList();
                 return manufacturers;
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -92,9 +92,9 @@ namespace WHManager.DesktopUI.Views.ContractorsView
                 manufacturers.Add(manufacturer);
                 return manufacturers;
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -108,9 +108,9 @@ namespace WHManager.DesktopUI.Views.ContractorsView
                 manufacturers.Add(manufacturer);
                 return manufacturers;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -121,9 +121,9 @@ namespace WHManager.DesktopUI.Views.ContractorsView
                 textSearchManufacturer.Text = null;
                 gridManufacturers.ItemsSource = Manufacturers;
             }
-            catch(Exception x)
+            catch(Exception)
             {
-                throw x;
+                throw;
             }
         }
 
@@ -137,9 +137,9 @@ namespace WHManager.DesktopUI.Views.ContractorsView
                     Manufacturers = new ObservableCollection<Manufacturer>(manufacturers);
                     gridManufacturers.ItemsSource = Manufacturers;
                 }
-                catch (Exception x)
+                catch (Exception)
                 {
-                    throw x;
+                    throw;
                 }
             }
             else if(NameRadioButton.IsChecked == true)
@@ -150,9 +150,9 @@ namespace WHManager.DesktopUI.Views.ContractorsView
                     Manufacturers = new ObservableCollection<Manufacturer>(manufacturers);
                     gridManufacturers.ItemsSource = Manufacturers;
                 }
-                catch( Exception x)
+                catch( Exception)
                 {
-                    throw x;
+                    throw;
                 }
             }
             else if(NipRadioButton.IsChecked == true)

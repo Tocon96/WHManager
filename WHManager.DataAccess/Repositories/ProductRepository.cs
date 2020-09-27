@@ -13,34 +13,49 @@ namespace WHManager.DataAccess.Repositories
 	public class ProductRepository: IProductRepository
 	{
 		private readonly WHManagerDBContextFactory _contextFactory;
-		
+
 		public ProductRepository(WHManagerDBContextFactory contextFactory)
         {
             _contextFactory = contextFactory;
         }
 		
-		public async Task<Product> AddProductAsync(int id, string name, int producttype, int tax, int manufacturer)
+		public async Task<Product> AddProductAsync(string name, int producttype, int tax, int manufacturer, decimal pricebuy, decimal pricesell)
 		{
-            Product newProduct = new Product
-            {
-                Id = id,
-                Name = name
-            };
-            newProduct.Type.Id = producttype;
-			newProduct.Tax.Id = tax;
-			newProduct.Manufacturer.Id = manufacturer;
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				await context.Products.AddAsync(newProduct);
-				await context.SaveChangesAsync();
+				Product newProduct = new Product
+				{
+					Name = name,
+					PriceBuy = pricebuy,
+					PriceSell = pricesell,
+					InStock = false,
+					Type = context.ProductTypes.SingleOrDefault(x => x.Id == producttype),
+					Tax = context.Taxes.SingleOrDefault(x => x.Id == tax),
+					Manufacturer = context.Manufacturers.SingleOrDefault(x => x.Id == manufacturer)
+				};
+			
+                try
+                {
+					await context.Products.AddAsync(newProduct);
+					await context.SaveChangesAsync();
+				}
+				catch(Exception)
+                {
+					throw;
+                }
+				return newProduct;
 			}
-			return newProduct;
+			
 		}
 		public IEnumerable<Product> GetAllProducts()
 		{
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				IEnumerable<Product> products = context.Products.ToList();
+				IEnumerable<Product> products = context.Products
+														.Include(x => x.Manufacturer)
+														.Include(x => x.Tax)
+														.Include(x => x.Type)
+														.ToList();
 				return products;	
 			}
 		}
@@ -49,7 +64,11 @@ namespace WHManager.DataAccess.Repositories
 		{
 			using(WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				return context.Products.SingleOrDefault(x => x.Id == id);	
+				return context.Products
+								.Include(x => x.Manufacturer)
+								.Include(x => x.Tax)
+								.Include(x => x.Type)
+								.SingleOrDefault(x => x.Id == id);	
 			}
 		}
 		
@@ -61,15 +80,17 @@ namespace WHManager.DataAccess.Repositories
 				await context.SaveChangesAsync();
 			}
 		}
-		public async Task UpdateProductAsync(int id, string name, int producttype, int tax, int manufacturer)
+		public async Task UpdateProductAsync(int id, string name, int producttype, int tax, int manufacturer, decimal pricesell, decimal pricebuy)
 		{
 			using(WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
 				Product updatedProduct = context.Products.SingleOrDefault(x => x.Id == id);
 				updatedProduct.Name = name;
-				updatedProduct.Type.Id = producttype;
-				updatedProduct.Tax.Id = tax;
-				updatedProduct.Manufacturer.Id = manufacturer;
+				updatedProduct.Type = context.ProductTypes.SingleOrDefault(x => x.Id == producttype);
+				updatedProduct.Tax = context.Taxes.SingleOrDefault(x => x.Id == tax);
+				updatedProduct.Manufacturer = context.Manufacturers.SingleOrDefault(x => x.Id == manufacturer);
+				updatedProduct.PriceBuy = pricebuy;
+				updatedProduct.PriceSell = pricesell;
 				await context.SaveChangesAsync();
 			}
 		}
@@ -82,13 +103,18 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Product> products = context.Products.ToList().FindAll(x => x.Manufacturer.Name.StartsWith(manufacturerName));
+						IEnumerable<Product> products = context.Products
+																.Include(x => x.Manufacturer)
+																.Include(x => x.Tax)
+																.Include(x => x.Type)
+																.ToList()
+																.FindAll(x => x.Manufacturer.Name.StartsWith(manufacturerName));
 						return products;
 					}
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
-					throw e;
+					throw;
 				}
 			}
 			else if(manufacturerId != null)
@@ -97,13 +123,18 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Product> products = context.Products.ToList().FindAll(x => x.Manufacturer.Id == manufacturerId);
+						IEnumerable<Product> products = context.Products
+																.Include(x => x.Manufacturer)
+																.Include(x => x.Tax)
+																.Include(x => x.Type)
+																.ToList()
+																.FindAll(x => x.Manufacturer.Id == manufacturerId);
 						return products;
 					}
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
-					throw e;
+					throw;
 				}
 			}
 			else if(manufacturerNip != null)
@@ -112,13 +143,18 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Product> products = context.Products.ToList().FindAll(x => x.Manufacturer.Nip == manufacturerNip);
+						IEnumerable<Product> products = context.Products
+																.Include(x => x.Manufacturer)
+																.Include(x => x.Tax)
+																.Include(x => x.Type)
+																.ToList()
+																.FindAll(x => x.Manufacturer.Nip == manufacturerNip);
 						return products;
 					}
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
-					throw e;
+					throw;
 				}
 			}
             else
@@ -135,13 +171,18 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Product> products = context.Products.ToList().FindAll(x => x.Tax.Value == taxValue);
+						IEnumerable<Product> products = context.Products
+																.Include(x => x.Manufacturer)
+																.Include(x => x.Tax)
+																.Include(x => x.Type)
+																.ToList()
+																.FindAll(x => x.Tax.Value == taxValue);
 						return products;
 					}
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
-					throw e;
+					throw;
 				}
 			}
 			else if(taxName != null)
@@ -150,13 +191,18 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Product> products = context.Products.ToList().FindAll(x => x.Tax.Name.StartsWith(taxName));
+						IEnumerable<Product> products = context.Products
+																.Include(x => x.Manufacturer)
+																.Include(x => x.Tax)
+																.Include(x => x.Type)
+																.ToList()
+																.FindAll(x => x.Tax.Name.StartsWith(taxName));
 						return products;
 					}
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
-					throw e;
+					throw;
 				}
 			}
 			else if(taxId != null)
@@ -165,13 +211,18 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Product> products = context.Products.ToList().FindAll(x => x.Tax.Id == taxId);
+						IEnumerable<Product> products = context.Products
+																.Include(x => x.Manufacturer)
+																.Include(x => x.Tax)
+																.Include(x => x.Type)
+																.ToList()
+																.FindAll(x => x.Tax.Id == taxId);
 						return products;
 					}
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
-					throw e;
+					throw;
 				}
 			}
             else
@@ -188,13 +239,18 @@ namespace WHManager.DataAccess.Repositories
 			{
 				using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 				{
-					IEnumerable<Product> products = context.Products.ToList().FindAll(x => x.Name.StartsWith(name));
+					IEnumerable<Product> products = context.Products
+																.Include(x => x.Manufacturer)
+																.Include(x => x.Tax)
+																.Include(x => x.Type)
+																.ToList()
+																.FindAll(x => x.Name.StartsWith(name));
 					return products;
 				}
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
-				throw e;
+				throw;
 			}
 		}
 
@@ -206,14 +262,19 @@ namespace WHManager.DataAccess.Repositories
                 {
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
                     {
-						IEnumerable<Product> products = context.Products.ToList().FindAll(x => x.Type.Name.StartsWith(productTypeName));
+						IEnumerable<Product> products = context.Products
+																.Include(x => x.Manufacturer)
+																.Include(x => x.Tax)
+																.Include(x => x.Type)
+																.ToList()
+																.FindAll(x => x.Type.Name.StartsWith(productTypeName));
 						return products;
 					}
 						
                 }
-				catch(Exception e)
+				catch(Exception)
                 {
-					throw e;
+					throw;
                 }
             }
 			else if(productTypeId != null)
@@ -222,14 +283,19 @@ namespace WHManager.DataAccess.Repositories
                 {
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
                     {
-						IEnumerable<Product> products = context.Products.ToList().FindAll(x => x.Type.Id == productTypeId);
+						IEnumerable<Product> products = context.Products
+																.Include(x => x.Manufacturer)
+																.Include(x => x.Tax)
+																.Include(x => x.Type)
+																.ToList()
+																.FindAll(x => x.Type.Id == productTypeId);
 						return products;
 					}
 
 				}
-				catch(Exception e)
+				catch(Exception)
                 {
-					throw e;
+					throw;
                 }
             }
             else
@@ -246,14 +312,19 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Product> products = context.Products.ToList().FindAll(x => x.PriceSell >= priceMin && x.PriceSell <= priceMin);
+						IEnumerable<Product> products = context.Products
+																	.Include(x => x.Manufacturer)
+																	.Include(x => x.Tax)
+																	.Include(x => x.Type)
+																	.ToList()
+																	.FindAll(x => x.PriceSell >= priceMin && x.PriceSell <= priceMin);
 						return products;
 					}
 
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
-					throw e;
+					throw;
 				}
 			}
 			else if(priceMin != null && priceMax == null)
@@ -262,14 +333,19 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Product> products = context.Products.ToList().FindAll(x => x.PriceSell >= priceMin);
+						IEnumerable<Product> products = context.Products
+																.Include(x => x.Manufacturer)
+																.Include(x => x.Tax)
+																.Include(x => x.Type)
+																.ToList()
+																.FindAll(x => x.PriceSell >= priceMin);
 						return products;
 					}
 
 				}
-				catch (Exception e)
-				{
-					throw e;
+				catch (Exception)
+				{	
+					throw;
 				}
 			}
 			else if(priceMin == null && priceMax != null)
@@ -278,14 +354,19 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Product> products = context.Products.ToList().FindAll(x => x.PriceSell <= priceMin);
+						IEnumerable<Product> products = context.Products
+																.Include(x => x.Manufacturer)
+																.Include(x => x.Tax)
+																.Include(x => x.Type)
+																.ToList()
+																.FindAll(x => x.PriceSell <= priceMax);
 						return products;
 					}
 
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
-					throw e;
+					throw;
 				}
 			}
             else
@@ -302,14 +383,19 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Product> products = context.Products.ToList().FindAll(x => x.PriceBuy >= priceMin && x.PriceBuy <= priceMin);
+						IEnumerable<Product> products = context.Products
+																.Include(x => x.Manufacturer)
+																.Include(x => x.Tax)
+																.Include(x => x.Type)
+																.ToList()
+																.FindAll(x => x.PriceBuy <= priceMax && x.PriceBuy >= priceMin);
 						return products;
 					}
 
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
-					throw e;
+					throw;
 				}
 			}
 			else if (priceMin != null && priceMax == null)
@@ -318,14 +404,19 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Product> products = context.Products.ToList().FindAll(x => x.PriceBuy >= priceMin);
+						IEnumerable<Product> products = context.Products
+																.Include(x => x.Manufacturer)
+																.Include(x => x.Tax)
+																.Include(x => x.Type)
+																.ToList()
+																.FindAll(x => x.PriceBuy >= priceMin);
 						return products;
 					}
 
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
-					throw e;
+					throw;
 				}
 			}
 			else if (priceMin == null && priceMax != null)
@@ -334,14 +425,19 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Product> products = context.Products.ToList().FindAll(x => x.PriceBuy <= priceMin);
+						IEnumerable<Product> products = context.Products
+																.Include(x => x.Manufacturer)
+																.Include(x => x.Tax)
+																.Include(x => x.Type)
+																.ToList()
+																.FindAll(x => x.PriceBuy <= priceMax);
 						return products;
 					}
 
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
-					throw e;
+					throw;
 				}
 			}
 			else
@@ -356,13 +452,18 @@ namespace WHManager.DataAccess.Repositories
             {
 				using(WHManagerDBContext context = _contextFactory.CreateDbContext())
                 {
-					IEnumerable<Product> products = context.Products.ToList().FindAll(x => x.InStock == true);
+					IEnumerable<Product> products = context.Products
+																.Include(x => x.Manufacturer)
+																.Include(x => x.Tax)
+																.Include(x => x.Type)
+																.ToList()
+																.FindAll(x => x.InStock == true);
 					return products;
                 }
             }
-			catch(Exception e)
+			catch(Exception)
             {
-				throw e;
+				throw;
             }
         }
     }	

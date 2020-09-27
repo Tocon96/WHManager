@@ -12,21 +12,25 @@ namespace WHManager.BusinessLogic.Services
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository = new ProductRepository(new DataAccess.WHManagerDBContextFactory());
+        private IProductTypeService productTypeService = new ProductTypeService();
+        private IManufacturerService manufacturerService = new ManufacturerService();
+        private ITaxService taxService = new TaxService();
 
         public async Task CreateNewProduct(Product product)
         {
             try
             {
-                int id = product.Id;
                 string name = product.Name;
                 int productType = product.Type.Id;
                 int tax = product.Tax.Id;
                 int manufacturer = product.Manufacturer.Id;
-                await _productRepository.AddProductAsync(id, name, productType, tax, manufacturer);
+                decimal pricebuy = product.PriceBuy;
+                decimal pricesell = product.PriceSell;
+                await _productRepository.AddProductAsync(name, productType, tax, manufacturer, pricebuy, pricesell);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
         public IList<Product> GetProducts()
@@ -41,17 +45,19 @@ namespace WHManager.BusinessLogic.Services
                     {
                         Id = product.Id,
                         Name = product.Name,
+                        Type = productTypeService.GetProductType(product.Type.Id),
+                        Tax = taxService.GetTax(product.Tax.Id),
+                        Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                        PriceBuy = product.PriceBuy,
+                        PriceSell = product.PriceSell
                     };
-                    currentProduct.Type.Id = product.Type.Id;
-                    currentProduct.Tax.Id = product.Tax.Id;
-                    currentProduct.Manufacturer.Id = product.Manufacturer.Id;
                     productsList.Add(currentProduct);
                 }
                 return productsList;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
 
         }
@@ -64,16 +70,18 @@ namespace WHManager.BusinessLogic.Services
                 {
                     Id = product.Id,
                     Name = product.Name,
+                    Type = productTypeService.GetProductType(product.Type.Id),
+                    Tax = taxService.GetTax(product.Tax.Id),
+                    Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                    PriceBuy = product.PriceBuy,
+                    PriceSell = product.PriceSell
                 };
-                currentProduct.Type.Id = product.Type.Id;
-                currentProduct.Tax.Id = product.Tax.Id;
-                currentProduct.Manufacturer.Id = product.Manufacturer.Id;
 
                 return currentProduct;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
         public async Task UpdateProduct(Product product)
@@ -85,11 +93,13 @@ namespace WHManager.BusinessLogic.Services
                 int productType = product.Type.Id;
                 int tax = product.Tax.Id;
                 int manufacturer = product.Manufacturer.Id;
-                await _productRepository.UpdateProductAsync(id, name, productType, tax, manufacturer);
+                decimal pricesell = product.PriceSell;
+                decimal pricebuy = product.PriceBuy;
+                await _productRepository.UpdateProductAsync(id, name, productType, tax, manufacturer, pricesell, pricebuy);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
 
         }
@@ -99,9 +109,9 @@ namespace WHManager.BusinessLogic.Services
             {
                 await _productRepository.DeleteProductAsync(id);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
         public IList<Product> GetProductsByManufacturer(string manufacturerName = null, int? manufacturerId = null, double? manufacturerNip = null)
@@ -118,17 +128,19 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = product.Id,
                             Name = product.Name,
+                            Type = productTypeService.GetProductType(product.Type.Id),
+                            Tax = taxService.GetTax(product.Tax.Id),
+                            Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                            PriceBuy = product.PriceBuy,
+                            PriceSell = product.PriceSell
                         };
-                        currentProduct.Type.Id = product.Type.Id;
-                        currentProduct.Tax.Id = product.Tax.Id;
-                        currentProduct.Manufacturer.Id = product.Manufacturer.Id;
                         productsList.Add(currentProduct);
                     }
                     return productsList;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw e;
+                    throw;
                 }
             }
             else if (manufacturerId != null)
@@ -143,17 +155,19 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = product.Id,
                             Name = product.Name,
+                            Type = productTypeService.GetProductType(product.Type.Id),
+                            Tax = taxService.GetTax(product.Tax.Id),
+                            Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                            PriceBuy = product.PriceBuy,
+                            PriceSell = product.PriceSell
                         };
-                        currentProduct.Type.Id = product.Type.Id;
-                        currentProduct.Tax.Id = product.Tax.Id;
-                        currentProduct.Manufacturer.Id = product.Manufacturer.Id;
                         productsList.Add(currentProduct);
                     }
                     return productsList;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw e;
+                    throw;
                 }
             }
             else if (manufacturerNip != null)
@@ -168,17 +182,19 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = product.Id,
                             Name = product.Name,
+                            Type = productTypeService.GetProductType(product.Type.Id),
+                            Tax = taxService.GetTax(product.Tax.Id),
+                            Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                            PriceBuy = product.PriceBuy,
+                            PriceSell = product.PriceSell
                         };
-                        currentProduct.Type.Id = product.Type.Id;
-                        currentProduct.Tax.Id = product.Tax.Id;
-                        currentProduct.Manufacturer.Id = product.Manufacturer.Id;
                         productsList.Add(currentProduct);
                     }
                     return productsList;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw e;
+                    throw;
                 }
             }
             else
@@ -201,17 +217,19 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = product.Id,
                             Name = product.Name,
+                            Type = productTypeService.GetProductType(product.Type.Id),
+                            Tax = taxService.GetTax(product.Tax.Id),
+                            Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                            PriceBuy = product.PriceBuy,
+                            PriceSell = product.PriceSell
                         };
-                        currentProduct.Type.Id = product.Type.Id;
-                        currentProduct.Tax.Id = product.Tax.Id;
-                        currentProduct.Manufacturer.Id = product.Manufacturer.Id;
                         productsList.Add(currentProduct);
                     }
                     return productsList;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw e;
+                    throw;
                 }
             }
             else if (taxName != null)
@@ -226,17 +244,19 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = product.Id,
                             Name = product.Name,
+                            Type = productTypeService.GetProductType(product.Type.Id),
+                            Tax = taxService.GetTax(product.Tax.Id),
+                            Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                            PriceBuy = product.PriceBuy,
+                            PriceSell = product.PriceSell
                         };
-                        currentProduct.Type.Id = product.Type.Id;
-                        currentProduct.Tax.Id = product.Tax.Id;
-                        currentProduct.Manufacturer.Id = product.Manufacturer.Id;
                         productsList.Add(currentProduct);
                     }
                     return productsList;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw e;
+                    throw;
                 }
             }
             else if (taxId != null)
@@ -251,17 +271,19 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = product.Id,
                             Name = product.Name,
+                            Type = productTypeService.GetProductType(product.Type.Id),
+                            Tax = taxService.GetTax(product.Tax.Id),
+                            Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                            PriceBuy = product.PriceBuy,
+                            PriceSell = product.PriceSell
                         };
-                        currentProduct.Type.Id = product.Type.Id;
-                        currentProduct.Tax.Id = product.Tax.Id;
-                        currentProduct.Manufacturer.Id = product.Manufacturer.Id;
                         productsList.Add(currentProduct);
                     }
                     return productsList;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw e;
+                    throw;
                 }
             }
             else
@@ -281,17 +303,19 @@ namespace WHManager.BusinessLogic.Services
                     {
                         Id = product.Id,
                         Name = product.Name,
+                        Type = productTypeService.GetProductType(product.Type.Id),
+                        Tax = taxService.GetTax(product.Tax.Id),
+                        Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                        PriceBuy = product.PriceBuy,
+                        PriceSell = product.PriceSell
                     };
-                    currentProduct.Type.Id = product.Type.Id;
-                    currentProduct.Tax.Id = product.Tax.Id;
-                    currentProduct.Manufacturer.Id = product.Manufacturer.Id;
                     productsList.Add(currentProduct);
                 }
                 return productsList;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
         public IList<Product> GetProductsByType(string productTypeName = null, int? productTypeId = null)
@@ -308,17 +332,19 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = product.Id,
                             Name = product.Name,
+                            Type = productTypeService.GetProductType(product.Type.Id),
+                            Tax = taxService.GetTax(product.Tax.Id),
+                            Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                            PriceBuy = product.PriceBuy,
+                            PriceSell = product.PriceSell
                         };
-                        currentProduct.Type.Id = product.Type.Id;
-                        currentProduct.Tax.Id = product.Tax.Id;
-                        currentProduct.Manufacturer.Id = product.Manufacturer.Id;
                         productsList.Add(currentProduct);
                     }
                     return productsList;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw e;
+                    throw;
                 }
             }
             else if (productTypeId != null)
@@ -333,17 +359,19 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = product.Id,
                             Name = product.Name,
+                            Type = productTypeService.GetProductType(product.Type.Id),
+                            Tax = taxService.GetTax(product.Tax.Id),
+                            Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                            PriceBuy = product.PriceBuy,
+                            PriceSell = product.PriceSell
                         };
-                        currentProduct.Type.Id = product.Type.Id;
-                        currentProduct.Tax.Id = product.Tax.Id;
-                        currentProduct.Manufacturer.Id = product.Manufacturer.Id;
                         productsList.Add(currentProduct);
                     }
                     return productsList;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw e;
+                    throw;
                 }
             }
             else
@@ -365,17 +393,19 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = product.Id,
                             Name = product.Name,
+                            Type = productTypeService.GetProductType(product.Type.Id),
+                            Tax = taxService.GetTax(product.Tax.Id),
+                            Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                            PriceBuy = product.PriceBuy,
+                            PriceSell = product.PriceSell
                         };
-                        currentProduct.Type.Id = product.Type.Id;
-                        currentProduct.Tax.Id = product.Tax.Id;
-                        currentProduct.Manufacturer.Id = product.Manufacturer.Id;
                         productsList.Add(currentProduct);
                     }
                     return productsList;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw e;
+                    throw;
                 }
             }
             else if (priceMin != null && priceMax == null)
@@ -390,18 +420,20 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = product.Id,
                             Name = product.Name,
+                            Type = productTypeService.GetProductType(product.Type.Id),
+                            Tax = taxService.GetTax(product.Tax.Id),
+                            Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                            PriceBuy = product.PriceBuy,
+                            PriceSell = product.PriceSell
                         };
-                        currentProduct.Type.Id = product.Type.Id;
-                        currentProduct.Tax.Id = product.Tax.Id;
-                        currentProduct.Manufacturer.Id = product.Manufacturer.Id;
                         productsList.Add(currentProduct);
                     }
                     return productsList;
 
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw e;
+                    throw;
                 }
             }
             else if (priceMin == null && priceMax != null)
@@ -416,17 +448,19 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = product.Id,
                             Name = product.Name,
+                            Type = productTypeService.GetProductType(product.Type.Id),
+                            Tax = taxService.GetTax(product.Tax.Id),
+                            Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                            PriceBuy = product.PriceBuy,
+                            PriceSell = product.PriceSell
                         };
-                        currentProduct.Type.Id = product.Type.Id;
-                        currentProduct.Tax.Id = product.Tax.Id;
-                        currentProduct.Manufacturer.Id = product.Manufacturer.Id;
                         productsList.Add(currentProduct);
                     }
                     return productsList;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw e;
+                    throw;
                 }
             }
             else
@@ -448,17 +482,19 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = product.Id,
                             Name = product.Name,
+                            Type = productTypeService.GetProductType(product.Type.Id),
+                            Tax = taxService.GetTax(product.Tax.Id),
+                            Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                            PriceBuy = product.PriceBuy,
+                            PriceSell = product.PriceSell
                         };
-                        currentProduct.Type.Id = product.Type.Id;
-                        currentProduct.Tax.Id = product.Tax.Id;
-                        currentProduct.Manufacturer.Id = product.Manufacturer.Id;
                         productsList.Add(currentProduct);
                     }
                     return productsList;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw e;
+                    throw;
                 }
             }
             else if (priceMin != null && priceMax == null)
@@ -473,18 +509,20 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = product.Id,
                             Name = product.Name,
+                            Type = productTypeService.GetProductType(product.Type.Id),
+                            Tax = taxService.GetTax(product.Tax.Id),
+                            Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                            PriceBuy = product.PriceBuy,
+                            PriceSell = product.PriceSell
                         };
-                        currentProduct.Type.Id = product.Type.Id;
-                        currentProduct.Tax.Id = product.Tax.Id;
-                        currentProduct.Manufacturer.Id = product.Manufacturer.Id;
                         productsList.Add(currentProduct);
                     }
                     return productsList;
 
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw e;
+                    throw;
                 }
             }
             else if (priceMin == null && priceMax != null)
@@ -499,17 +537,19 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = product.Id,
                             Name = product.Name,
+                            Type = productTypeService.GetProductType(product.Type.Id),
+                            Tax = taxService.GetTax(product.Tax.Id),
+                            Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                            PriceBuy = product.PriceBuy,
+                            PriceSell = product.PriceSell
                         };
-                        currentProduct.Type.Id = product.Type.Id;
-                        currentProduct.Tax.Id = product.Tax.Id;
-                        currentProduct.Manufacturer.Id = product.Manufacturer.Id;
                         productsList.Add(currentProduct);
                     }
                     return productsList;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw e;
+                    throw;
                 }
             }
             else
@@ -529,18 +569,20 @@ namespace WHManager.BusinessLogic.Services
                     {
                         Id = product.Id,
                         Name = product.Name,
+                        Type = productTypeService.GetProductType(product.Type.Id),
+                        Tax = taxService.GetTax(product.Tax.Id),
+                        Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                        PriceBuy = product.PriceBuy,
+                        PriceSell = product.PriceSell
                     };
-                    currentProduct.Type.Id = product.Type.Id;
-                    currentProduct.Tax.Id = product.Tax.Id;
-                    currentProduct.Manufacturer.Id = product.Manufacturer.Id;
                     productsList.Add(currentProduct);
                 }
                 return productsList;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
     }
-}   
+}
