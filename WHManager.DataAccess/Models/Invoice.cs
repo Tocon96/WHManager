@@ -13,6 +13,7 @@ namespace WHManager.DataAccess.Models
         public DateTime DateIssued { get; set; }
         [Required]
         public Client Client { get; set; }
+        public int OrderId { get; set; }
         [Required]
         public Order Order { get; set; }
     }

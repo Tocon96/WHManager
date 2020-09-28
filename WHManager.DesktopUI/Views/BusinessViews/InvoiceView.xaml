@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="WHManager.DesktopUI.Views.BusinessViews.InvoiceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WHManager.DesktopUI.Views.BusinessViews"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <DataGrid Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="6" x:Name="gridInvoices" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Nazwa klienta" Binding="{Binding Client.Name}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Data złożenia" Binding="{Binding DateIssued}"></DataGridTextColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="buttonUpdateInvoiceClick">Edytuj</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="buttonDeleteInvoiceClick">Usuń</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        
+        <!--Buttons-->
+        <Button Grid.Row="0" Click="buttonSearchClick">Wyszukaj</Button>
+        <Button Grid.Row="1" Click="buttonClearClick">Wyczyść</Button>
+        <Button Grid.Row="2" Click="buttonAddInvoiceClick">Dodaj</Button>
+        <!--Textbox-->
+        <TextBox Grid.Row="0" Grid.Column="1" Width="200" x:Name="textBoxInvoicesSearch"></TextBox>
+        <!--Radiobuttons-->
+        <RadioButton Grid.Row="0" Grid.Column="2" GroupName="Filters" x:Name="radioButtonId" Click="radioButtonIdClick" IsChecked="true">Id</RadioButton>
+        <RadioButton Grid.Row="0" Grid.Column="3" GroupName="Filters" x:Name="radioButtonClient" Click="radioButtonClientClick">Klient</RadioButton>
+        <RadioButton Grid.Row="0" Grid.Column="4" GroupName="Filters" x:Name="radioButtonDate" Click="radioButtonDateClick">Data złożenia</RadioButton>
+        <!--DatePickers-->
+        <DatePicker Grid.Column="1" Grid.Row="0" Width="100" HorizontalAlignment="Left" x:Name="datePickerEarlierDate" Visibility="Hidden"></DatePicker>
+        <DatePicker Grid.Column="1" Grid.Row="0" Width="100" HorizontalAlignment="Right" x:Name="datePickerLaterDate" Visibility="Hidden"></DatePicker>
+    </Grid>
+</UserControl>

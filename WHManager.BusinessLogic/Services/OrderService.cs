@@ -14,7 +14,6 @@ namespace WHManager.BusinessLogic.Services
         private readonly IOrderRepository _orderRepository = new OrderRepository(new DataAccess.WHManagerDBContextFactory());
         private IItemService itemService = new ItemService();
         private IClientService clientService = new ClientService();
-        private IInvoiceService invoiceService = new InvoiceService();
 
         public async Task AddOrder(Order order)
         {
@@ -89,6 +88,8 @@ namespace WHManager.BusinessLogic.Services
                 var orders = _orderRepository.GetAllOrders();
                 foreach(var order in orders)
                 {
+                    IList<Client> clients = clientService.GetClient(order.Client.Id);
+                    Client client = clients[0];
                     IList<Item> itemsList = new List<Item>();
                     foreach (var item in order.Items)
                     {
@@ -99,8 +100,8 @@ namespace WHManager.BusinessLogic.Services
                         Id = order.Id,
                         Items = itemsList,
                         DateOrdered = order.DateOrdered,
-                        Client = clientService.GetClient(order.Client.Id, null, null),
-                        Invoice = invoiceService.GetInvoiceById(order.Invoice.Id)
+                        Client = client,
+                        Price = order.Price
                     };
                     ordersList.Add(currentOrder);
                 }
@@ -118,6 +119,8 @@ namespace WHManager.BusinessLogic.Services
             {
                 var order = _orderRepository.GetOrderById(id);
                 IList<Item> itemsList = new List<Item>();
+                IList<Client> clients = clientService.GetClient(order.Client.Id);
+                Client client = clients[0];
                 foreach (var item in order.Items)
                 {
                     itemsList.Add(itemService.GetItem(item.Id));
@@ -127,8 +130,7 @@ namespace WHManager.BusinessLogic.Services
                     Id = order.Id,
                     Items = itemsList,
                     DateOrdered = order.DateOrdered,
-                    Client = clientService.GetClient(order.Client.Id, null, null),
-                    Invoice = invoiceService.GetInvoiceById(order.Invoice.Id)
+                    Client = client,
                 };
                 return currentOrder;
             }
@@ -142,6 +144,8 @@ namespace WHManager.BusinessLogic.Services
         {
             var order = _orderRepository.GetOrderByInvoice(invoiceId);
             IList<Item> itemsList = new List<Item>();
+            IList<Client> clients = clientService.GetClient(order.Client.Id);
+            Client client = clients[0];
             foreach (var item in order.Items)
             {
                 itemsList.Add(itemService.GetItem(item.Id));
@@ -151,8 +155,7 @@ namespace WHManager.BusinessLogic.Services
                 Id = order.Id,
                 Items = itemsList,
                 DateOrdered = order.DateOrdered,
-                Client = clientService.GetClient(order.Client.Id, null, null),
-                Invoice = invoiceService.GetInvoiceById(order.Invoice.Id)
+                Client = client
             };
             return currentOrder;
         }
@@ -167,6 +170,8 @@ namespace WHManager.BusinessLogic.Services
                     var orders = _orderRepository.GetOrdersByClient(clientId);
                     foreach (var order in orders)
                     {
+                        IList<Client> clients = clientService.GetClient(order.Client.Id);
+                        Client client = clients[0];
                         IList<Item> itemsList = new List<Item>();
                         foreach (var item in order.Items)
                         {
@@ -177,8 +182,7 @@ namespace WHManager.BusinessLogic.Services
                             Id = order.Id,
                             Items = itemsList,
                             DateOrdered = order.DateOrdered,
-                            Client = clientService.GetClient(order.Client.Id, null, null),
-                            Invoice = invoiceService.GetInvoiceById(order.Invoice.Id)
+                            Client = client
                         };
                         ordersList.Add(currentOrder);
                     }
@@ -197,6 +201,8 @@ namespace WHManager.BusinessLogic.Services
                     var orders = _orderRepository.GetOrdersByClient(null, clientName);
                     foreach (var order in orders)
                     {
+                        IList<Client> clients = clientService.GetClient(order.Client.Id);
+                        Client client = clients[0];
                         IList<Item> itemsList = new List<Item>();
                         foreach (var item in order.Items)
                         {
@@ -207,8 +213,7 @@ namespace WHManager.BusinessLogic.Services
                             Id = order.Id,
                             Items = itemsList,
                             DateOrdered = order.DateOrdered,
-                            Client = clientService.GetClient(order.Client.Id, null, null),
-                            Invoice = invoiceService.GetInvoiceById(order.Invoice.Id)
+                            Client = client,
                         };
                         ordersList.Add(currentOrder);
                     }
@@ -227,6 +232,8 @@ namespace WHManager.BusinessLogic.Services
                     var orders = _orderRepository.GetOrdersByClient(null, null, clientNip);
                     foreach (var order in orders)
                     {
+                        IList<Client> clients = clientService.GetClient(order.Client.Id);
+                        Client client = clients[0];
                         IList<Item> itemsList = new List<Item>();
                         foreach (var item in order.Items)
                         {
@@ -237,8 +244,7 @@ namespace WHManager.BusinessLogic.Services
                             Id = order.Id,
                             Items = itemsList,
                             DateOrdered = order.DateOrdered,
-                            Client = clientService.GetClient(order.Client.Id, null, null),
-                            Invoice = invoiceService.GetInvoiceById(order.Invoice.Id)
+                            Client = client,
                         };
                         ordersList.Add(currentOrder);
                     }
@@ -252,6 +258,134 @@ namespace WHManager.BusinessLogic.Services
             else
             {
                 return null;
+            }
+        }
+
+        public IList<Order> GetOrdersByDate(DateTime? earlierDate, DateTime? laterDate)
+        {
+            if (earlierDate != null && laterDate != null)
+            {
+                try
+                {
+                    IList<Order> ordersList = new List<Order>();
+                    var orders = _orderRepository.GetInvoicesByDate(earlierDate, laterDate);
+                    foreach (var order in orders)
+                    {
+                        IList<Client> clients = clientService.GetClient(order.Client.Id);
+                        Client client = clients[0];
+                        IList<Item> itemsList = new List<Item>();
+                        foreach (var item in order.Items)
+                        {
+                            itemsList.Add(itemService.GetItem(item.Id));
+                        }
+                        Order currentOrder = new Order
+                        {
+                            Id = order.Id,
+                            Items = itemsList,
+                            DateOrdered = order.DateOrdered,
+                            Client = client,
+                        };
+                        ordersList.Add(currentOrder);
+                    }
+                    return ordersList;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else if (earlierDate != null && laterDate == null)
+            {
+                try
+                {
+                    IList<Order> ordersList = new List<Order>();
+                    var orders = _orderRepository.GetInvoicesByDate(earlierDate, null);
+                    foreach (var order in orders)
+                    {
+                        IList<Client> clients = clientService.GetClient(order.Client.Id);
+                        Client client = clients[0];
+                        IList<Item> itemsList = new List<Item>();
+                        foreach (var item in order.Items)
+                        {
+                            itemsList.Add(itemService.GetItem(item.Id));
+                        }
+                        Order currentOrder = new Order
+                        {
+                            Id = order.Id,
+                            Items = itemsList,
+                            DateOrdered = order.DateOrdered,
+                            Client = client,
+                        };
+                        ordersList.Add(currentOrder);
+                    }
+                    return ordersList;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else if (earlierDate == null && laterDate != null)
+            {
+                try
+                {
+                    IList<Order> ordersList = new List<Order>();
+                    var orders = _orderRepository.GetInvoicesByDate(null, laterDate);
+                    foreach (var order in orders)
+                    {
+                        IList<Client> clients = clientService.GetClient(order.Client.Id);
+                        Client client = clients[0];
+                        IList<Item> itemsList = new List<Item>();
+                        foreach (var item in order.Items)
+                        {
+                            itemsList.Add(itemService.GetItem(item.Id));
+                        }
+                        Order currentOrder = new Order
+                        {
+                            Id = order.Id,
+                            Items = itemsList,
+                            DateOrdered = order.DateOrdered,
+                            Client = client,
+                        };
+                        ordersList.Add(currentOrder);
+                    }
+                    return ordersList;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                try
+                {
+                    IList<Order> ordersList = new List<Order>();
+                    var orders = _orderRepository.GetInvoicesByDate(null, null);
+                    foreach (var order in orders)
+                    {
+                        IList<Client> clients = clientService.GetClient(order.Client.Id);
+                        Client client = clients[0];
+                        IList<Item> itemsList = new List<Item>();
+                        foreach (var item in order.Items)
+                        {
+                            itemsList.Add(itemService.GetItem(item.Id));
+                        }
+                        Order currentOrder = new Order
+                        {
+                            Id = order.Id,
+                            Items = itemsList,
+                            DateOrdered = order.DateOrdered,
+                            Client = client,
+                        };
+                        ordersList.Add(currentOrder);
+                    }
+                    return ordersList;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
         }
     }

@@ -15,6 +15,7 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         Invoice GetInvoiceByOrder(int orderId);
         IList<Invoice> GetInvoicesByClient(int? clientId = null, string clientName = null, double? clientNip = null);
         IList<Invoice> GetInvoices();
+        IList<Invoice> GetInvoicesByDate(DateTime? earlierDate, DateTime? laterDate);
 
 
     }

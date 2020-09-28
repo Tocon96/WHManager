@@ -15,6 +15,9 @@
         <DataTemplate x:Name="ContractorsTemplate" DataType="{x:Type viewmodels:ContractorsViewModel}">
             <views:ContractorView DataContext="{Binding}"/>
         </DataTemplate>
+        <DataTemplate x:Name="BusinessTemplate" DataType="{x:Type viewmodels:BusinessViewModel}">
+            <views:BusinessView DataContext="{Binding}"/>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -30,6 +33,7 @@
 
         <Button Grid.Column="0" Click="WarehouseViewClick">Magazyn</Button>
         <Button Grid.Column="1" Click="ContrahentViewClick">Kontrahenci</Button>
+        <Button Grid.Column="2" Click="BusinessViewClick">Biznes</Button>
         <ContentControl Grid.Row="1" Grid.ColumnSpan="4" x:Name="mainContent"></ContentControl>
 
     </Grid>

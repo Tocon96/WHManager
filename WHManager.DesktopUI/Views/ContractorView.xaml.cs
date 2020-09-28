@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WHManager.DesktopUI.Views.ContractorsView;
+using WHManager.DesktopUI.Views.ContractorsViews;
 
 namespace WHManager.DesktopUI.Views
 {
@@ -32,7 +33,7 @@ namespace WHManager.DesktopUI.Views
 
         private void ClientsTypeViewClick(object sender, RoutedEventArgs e)
         {
-
+            contractorsContent.Content = new ClientView();
         }
     }
 }

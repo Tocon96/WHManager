@@ -1,0 +1,39 @@
+﻿<Window x:Class="WHManager.DesktopUI.Views.FormViews.ManageInvoiceFormView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WHManager.DesktopUI.Views.FormViews"
+        mc:Ignorable="d"
+        Title="ManageInvoiceFormView" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <!--TextBlocks-->
+        <TextBlock>Data wystawienia:</TextBlock>
+        <TextBlock Grid.Row="1">Klient:</TextBlock>
+        <TextBlock Grid.Row="2">ID Zamówienia: </TextBlock>
+        <!--DatePickers-->
+        <DatePicker x:Name="datepickerInvoicesDateIssued" Grid.Column="1"></DatePicker>
+        <!--ComboBoxes-->
+        <ComboBox x:Name="comboBoxInvoicesClients" Grid.Column="1" Grid.Row="1" DisplayMemberPath="Name"></ComboBox>
+        <!--TextBoxes-->
+        <TextBox Grid.Row="2" Grid.Column="1" x:Name="textBoxInvoicesOrderId"></TextBox>
+        <!--Buttons-->
+        <Button Grid.Column="1" Grid.Row="3" Click="buttonInvoicesConfirm">Zatwierdź</Button>
+        <!--Label-->
+        <Label Content="Id" Visibility="Hidden" Grid.Row="3" x:Name="labelId"></Label>
+    </Grid>
+</Window>

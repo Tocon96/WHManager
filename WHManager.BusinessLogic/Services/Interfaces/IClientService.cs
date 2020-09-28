@@ -11,7 +11,7 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         Task CreateNewClient(Client client);
         Task UpdateClient(Client client);
         Task DeleteClient(int id);
-        Client GetClient(int? id = null, string name = null, double? nip = null);
+        IList<Client> GetClient(int? id = null, string name = null, double? nip = null);
         IList<Client> GetAllClients();
     }
 }

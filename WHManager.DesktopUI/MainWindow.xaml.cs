@@ -34,5 +34,10 @@ namespace WHManager.DesktopUI
         {
             mainContent.Content = new ContractorsViewModel();
         }
+
+        private void BusinessViewClick(object sender, RoutedEventArgs e)
+        {
+            mainContent.Content = new BusinessViewModel();
+        }
     }
 }

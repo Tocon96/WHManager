@@ -51,6 +51,7 @@ namespace WHManager.DataAccess.Repositories
                     updatedClient.Name = name;
                     updatedClient.Nip = nip;
                     updatedClient.PhoneNumber = phonenumber;
+                    await context.SaveChangesAsync();
 
                 }
                 catch (Exception)
@@ -76,7 +77,7 @@ namespace WHManager.DataAccess.Repositories
             }
         }
 
-        public Client GetClient(int? id = null, string name = null, double? nip = null)
+        public IEnumerable<Client> GetClient(int? id = null, string name = null, double? nip = null)
         {
             if (id != null)
             {
@@ -84,8 +85,8 @@ namespace WHManager.DataAccess.Repositories
                 {
                     try
                     {
-                        Client client = context.Clients.SingleOrDefault(x => x.Id == id);
-                        return client;
+                        IEnumerable<Client> clients = context.Clients.ToList().FindAll(x => x.Id == id);
+                        return clients;
                     }
                     catch (Exception)
                     {
@@ -99,8 +100,8 @@ namespace WHManager.DataAccess.Repositories
                 {
                     try
                     {
-                        Client client = context.Clients.SingleOrDefault(x => x.Name.StartsWith(name));
-                        return client;
+                        IEnumerable<Client> clients = context.Clients.ToList().FindAll(x => x.Name.StartsWith(name));
+                        return clients;
                     }
                     catch (Exception)
                     {
@@ -114,8 +115,8 @@ namespace WHManager.DataAccess.Repositories
                 {
                     try
                     {
-                        Client client = context.Clients.SingleOrDefault(x => x.Nip == nip);
-                        return client;
+                        IEnumerable<Client> clients = context.Clients.ToList().FindAll(x => x.Nip == nip);
+                        return clients;
                     }
                     catch (Exception)
                     {

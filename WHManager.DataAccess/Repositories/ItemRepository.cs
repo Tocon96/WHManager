@@ -12,7 +12,6 @@ namespace WHManager.DataAccess.Repositories
 	public class ItemRepository : IItemRepository
 	{
 		private readonly WHManagerDBContextFactory _contextFactory;
-		private IProductRepository _productRepository = new ProductRepository(new WHManagerDBContextFactory());
 
 		public ItemRepository(WHManagerDBContextFactory contextFactory)
 		{

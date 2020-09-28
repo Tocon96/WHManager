@@ -24,11 +24,13 @@ namespace WHManager.DataAccess.Repositories
             {
                 try
                 {
+                    Order order = context.Orders.SingleOrDefault(x => x.Id == orderId);
                     Invoice invoice = new Invoice
                     {
                         DateIssued = dateIssued,
                         Client = context.Clients.SingleOrDefault(x => x.Id == clientId),
-                        Order = context.Orders.SingleOrDefault(x => x.Id == orderId)
+                        Order = context.Orders.SingleOrDefault(x => x.Id == orderId),
+                        OrderId = order.Id
                     };
                     await context.Invoices.AddAsync(invoice);
                     await context.SaveChangesAsync();
@@ -46,10 +48,12 @@ namespace WHManager.DataAccess.Repositories
             {
                 try
                 {
+                    Order order = context.Orders.SingleOrDefault(x => x.Id == orderId);
                     Invoice updatedInvoice = context.Invoices.SingleOrDefault(x => x.Id == id);
                     updatedInvoice.DateIssued = dateIssued;
                     updatedInvoice.Client = context.Clients.SingleOrDefault(x => x.Id == clientId);
                     updatedInvoice.Order = context.Orders.SingleOrDefault(x => x.Id == orderId);
+                    updatedInvoice.OrderId = order.Id;
                     await context.SaveChangesAsync();
                 }
                 catch (Exception)
@@ -191,6 +195,83 @@ namespace WHManager.DataAccess.Repositories
             }
         }
 
-        
+        public IEnumerable<Invoice> GetInvoicesByDate(DateTime? earlierDate, DateTime? laterDate)
+        {
+            if (earlierDate != null && laterDate != null)
+            {
+                try
+                {
+                    using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                    {
+                        IEnumerable<Invoice> invoices = context.Invoices.Include(o => o.Order)
+                                                                        .Include(c => c.Client)
+                                                                        .ToList().FindAll(x => x.DateIssued >= earlierDate && x.DateIssued <= laterDate);
+                        return invoices;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else if (earlierDate != null && laterDate == null)
+            {
+                try
+                {
+                    using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                    {
+                        IEnumerable<Invoice> invoices = context.Invoices.Include(o => o.Order)
+                                                                        .Include(c => c.Client)
+                                                                        .ToList()
+                                                                        .FindAll(x => x.DateIssued >= earlierDate);
+                        return invoices;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else if (earlierDate == null && laterDate != null)
+            {
+                try
+                {
+                    using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                    {
+                        IEnumerable<Invoice> invoices = context.Invoices.Include(c => c.Client)
+                                                                        .Include(o => o.Order)
+                                                                        .ToList()
+                                                                        .FindAll(x => x.DateIssued <= laterDate);
+                        return invoices;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else if (earlierDate == null && laterDate == null)
+            {
+                try
+                {
+                    using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                    {
+                        IEnumerable<Invoice> invoices = context.Invoices.Include(c => c.Client)
+                                                                        .Include(o => o.Order)
+                                                                        .ToList()
+                                                                        .FindAll(x => x.DateIssued <= laterDate);
+                        return invoices;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

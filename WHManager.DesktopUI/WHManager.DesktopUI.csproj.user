@@ -5,16 +5,37 @@
     <Compile Update="MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\BusinessView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\BusinessViews\InvoiceView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\BusinessViews\OrderView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ContractorsViews\ClientView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\ContractorView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\FormViews\AdvancedSearchProductFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\FormViews\ManageClientFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\FormViews\ManageInvoiceFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\FormViews\ManageItemFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\FormViews\ManageManufacturerFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\FormViews\ManageOrderFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\FormViews\ManageProductTypeFormView.xaml.cs">
@@ -52,16 +73,37 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\BusinessView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\BusinessViews\InvoiceView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\BusinessViews\OrderView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ContractorsViews\ClientView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\ContractorView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\FormViews\AdvancedSearchProductFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\FormViews\ManageClientFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\FormViews\ManageInvoiceFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\FormViews\ManageItemFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\FormViews\ManageManufacturerFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\FormViews\ManageOrderFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\FormViews\ManageProductTypeFormView.xaml">

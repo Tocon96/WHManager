@@ -35,7 +35,7 @@ namespace WHManager.DataAccess
             modelBuilder.Entity<Item>().HasOne(p => p.Product).WithMany(i => i.Items).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Invoice>().HasOne(o => o.Order).WithOne(i => i.Invoice).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Invoice>().HasOne(c => c.Client).WithMany(i => i.Invoices).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Order>().HasOne(i => i.Invoice).WithOne(o => o.Order).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Order>().HasOne(i => i.Invoice).WithOne(o => o.Order).OnDelete(DeleteBehavior.Cascade).HasForeignKey<Invoice>(i => i.OrderId);
             modelBuilder.Entity<Order>().HasMany(i => i.Items).WithOne(o => o.Order).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Order>().HasOne(c => c.Client).WithMany(o => o.Orders).OnDelete(DeleteBehavior.Restrict);
         }

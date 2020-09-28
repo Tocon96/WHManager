@@ -12,8 +12,6 @@ namespace WHManager.BusinessLogic.Services
     public class ClientService : IClientService
     {
         private readonly IClientRepository _clientRepository = new ClientRepository(new DataAccess.WHManagerDBContextFactory());
-        private IOrderService orderService = new OrderService();
-        private IInvoiceService invoiceService = new InvoiceService();
 
         public async Task CreateNewClient(Client client)
         {
@@ -68,23 +66,26 @@ namespace WHManager.BusinessLogic.Services
             }
         }
 
-        public Client GetClient(int? id = null, string name = null, double? nip = null)
+        public IList<Client> GetClient(int? id = null, string name = null, double? nip = null)
         {
             if(id != null)
             {
                 try
                 {
-                    var client = _clientRepository.GetClient(id, null, null);
-                    Client currentClient = new Client
+                    IList<Client> clientsList = new List<Client>();
+                    var clients = _clientRepository.GetClient(id, null, null);
+                    foreach(var client in clients)
                     {
-                        Id = client.Id,
-                        Name = client.Name,
-                        Nip = client.Nip,
-                        PhoneNumber = client.PhoneNumber,
-                        Orders = orderService.GetOrdersByClient(id, null, null),
-                        Invoices = invoiceService.GetInvoicesByClient(id)
-                    };
-                    return currentClient;
+                        Client currentClient = new Client
+                        {
+                            Id = client.Id,
+                            Name = client.Name,
+                            Nip = client.Nip,
+                            PhoneNumber = client.PhoneNumber,
+                        };
+                        clientsList.Add(currentClient);
+                    }
+                    return clientsList;
                 }
                 catch (Exception)
                 {
@@ -95,17 +96,21 @@ namespace WHManager.BusinessLogic.Services
             {
                 try
                 {
-                    var client = _clientRepository.GetClient(null, name, null);
-                    Client currentClient = new Client
+                    IList<Client> clientsList = new List<Client>();
+                    var clients = _clientRepository.GetClient(null, name, null);
+                    foreach(var client in clients)
                     {
-                        Id = client.Id,
-                        Name = client.Name,
-                        Nip = client.Nip,
-                        PhoneNumber = client.PhoneNumber,
-                        Orders = orderService.GetOrdersByClient(id),
-                        Invoices = invoiceService.GetInvoicesByClient(id)
-                    };
-                    return currentClient;
+                        Client currentClient = new Client
+                        {
+                            Id = client.Id,
+                            Name = client.Name,
+                            Nip = client.Nip,
+                            PhoneNumber = client.PhoneNumber,
+                        };
+                        clientsList.Add(currentClient);
+                    }
+
+                    return clientsList;
                 }
                 catch (Exception)
                 {
@@ -116,17 +121,20 @@ namespace WHManager.BusinessLogic.Services
             {
                 try
                 {
-                    var client = _clientRepository.GetClient(null, null, nip);
-                    Client currentClient = new Client
+                    IList<Client> clientsList = new List<Client>();
+                    var clients = _clientRepository.GetClient(null, null, nip);
+                    foreach(var client in clients)
                     {
-                        Id = client.Id,
-                        Name = client.Name,
-                        Nip = client.Nip,
-                        PhoneNumber = client.PhoneNumber,
-                        Orders = orderService.GetOrdersByClient(id),
-                        Invoices = invoiceService.GetInvoicesByClient(id)
-                    };
-                    return currentClient;
+                        Client currentClient = new Client
+                        {
+                            Id = client.Id,
+                            Name = client.Name,
+                            Nip = client.Nip,
+                            PhoneNumber = client.PhoneNumber,
+                        };
+                        clientsList.Add(currentClient);
+                    }
+                    return clientsList;
                 }
                 catch (Exception)
                 {

@@ -106,9 +106,10 @@ namespace WHManager.DataAccess.Repositories
             {
                 try
                 {
-                    IEnumerable<Order> orders = context.Orders
-                                                            .Include(c => c.Client)
-                                                            .ToList();
+                    IEnumerable<Order> orders = context.Orders.Include(c => c.Client)
+                                                                .Include(i => i.Items)
+                                                                .ToList();
+
                     return orders;
                 }
                 catch(Exception)
@@ -127,6 +128,7 @@ namespace WHManager.DataAccess.Repositories
                     try
                     {
                         IEnumerable<Order> orders = context.Orders.Include(c => c.Client)
+                                                                    .Include(i => i.Items)
                                                                     .ToList()
                                                                     .FindAll(c => c.Client.Id == clientId);
                         return orders;
@@ -144,8 +146,9 @@ namespace WHManager.DataAccess.Repositories
                     try
                     {
                         IEnumerable<Order> orders = context.Orders.Include(c => c.Client)
-                                                                    .ToList()
-                                                                    .FindAll(c => c.Client.Name.StartsWith(clientName));
+                                                                  .Include(i => i.Items)
+                                                                  .ToList()
+                                                                  .FindAll(c => c.Client.Name.StartsWith(clientName));
                         return orders;
                     }
                     catch (Exception)
@@ -161,8 +164,9 @@ namespace WHManager.DataAccess.Repositories
                     try
                     {
                         IEnumerable<Order> orders = context.Orders.Include(c => c.Client)
-                                                                    .ToList()
-                                                                    .FindAll(c => c.Client.Nip == clientNip);
+                                                                  .Include(i => i.Items)
+                                                                  .ToList()
+                                                                  .FindAll(c => c.Client.Nip == clientNip);
                         return orders;
                     }
                     catch (Exception)
@@ -184,8 +188,9 @@ namespace WHManager.DataAccess.Repositories
                 try
                 {
                     Order order = context.Orders.Include(c => c.Client)
-                                                                .ToList()
-                                                                .SingleOrDefault(c => c.Id == id);
+                                                .Include(i => i.Items)  
+                                                .ToList()
+                                                .SingleOrDefault(c => c.Id == id);
                     return order;
                 }
                 catch (Exception)
@@ -202,14 +207,99 @@ namespace WHManager.DataAccess.Repositories
                 try
                 {
                     Order order = context.Orders.Include(c => c.Client)
-                                                                .ToList()
-                                                                .SingleOrDefault(c => c.Invoice.Id == invoiceId);
+                                                .Include(i => i.Items)
+                                                .ToList()
+                                                .SingleOrDefault(c => c.Invoice.Id == invoiceId);
                     return order;
                 }
                 catch (Exception)
                 {
                     throw;
                 }
+            }
+        }
+        public IEnumerable<Order> GetInvoicesByDate(DateTime? earlierDate, DateTime? laterDate)
+        {
+            if (earlierDate != null && laterDate != null)
+            {
+                try
+                {
+                    using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                    {
+                        IEnumerable<Order> orders = context.Orders.Include(c => c.Client)
+                                                                  .Include(i => i.Items)
+                                                                  .ToList()
+                                                                  .FindAll(x => x.DateOrdered >= earlierDate && x.DateOrdered <= laterDate);
+
+                        return orders;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else if (earlierDate != null && laterDate == null)
+            {
+                try
+                {
+                    using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                    {
+                        IEnumerable<Order> orders = context.Orders.Include(c => c.Client)
+                                                                  .Include(i => i.Items)
+                                                                  .ToList()
+                                                                  .FindAll(x => x.DateOrdered >= earlierDate);
+
+                        return orders;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else if (earlierDate == null && laterDate != null)
+            {
+                try
+                {
+                    using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                    {
+                        IEnumerable<Order> orders = context.Orders.Include(c => c.Client)
+                                                                   .Include(i => i.Items)
+                                                                   .ToList()
+                                                                   .FindAll(x => x.DateOrdered <= laterDate);
+
+                        return orders;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else if (earlierDate == null && laterDate == null)
+            {
+                try
+                {
+                    using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                    {
+                        IEnumerable<Order> orders = context.Orders.Include(c => c.Client)
+                                                                        .Include(i => i.Items)
+                                                                        .ToList()
+                                                                        .FindAll(x => x.DateOrdered <= laterDate);
+
+
+                        return orders;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                return null;
             }
         }
     }

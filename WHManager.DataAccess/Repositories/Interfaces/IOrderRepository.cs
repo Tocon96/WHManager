@@ -15,5 +15,6 @@ namespace WHManager.DataAccess.Repositories.Interfaces
         Order GetOrderById(int id);
         Order GetOrderByInvoice(int invoiceId);
         IEnumerable<Order> GetOrdersByClient(int? clientId = null, string clientName = null, double? clientNip = null);
+        IEnumerable<Order> GetInvoicesByDate(DateTime? earlierDate, DateTime? laterDate);
     }
 }
