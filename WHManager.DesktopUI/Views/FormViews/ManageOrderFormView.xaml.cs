@@ -142,7 +142,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 decimal price = 0;
                 foreach(var item in ItemsList)
                 {
-                    price = +item.Product.PriceSell;
+                    price = price+item.Product.PriceSell;
                     item.IsInStock = false;
                     itemService.UpdateItem(item);
                 }

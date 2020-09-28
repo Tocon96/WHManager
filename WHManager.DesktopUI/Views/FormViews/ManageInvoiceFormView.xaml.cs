@@ -99,16 +99,18 @@ namespace WHManager.DesktopUI.Views.FormViews
                 return null;
             }
         }
-        private void GetOrder()
+        private Order GetOrder()
         {
             try
             {
                 IOrderService orderService = new OrderService();
                 Order = orderService.GetOrderById(int.Parse(textBoxInvoicesOrderId.Text));
+                return Order;
             }
             catch(Exception e)
             {
                 MessageBox.Show("Błąd pobierania zamówienia: " + e);
+                return null;
             }
         }
 
@@ -121,7 +123,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 {
                     DateIssued = (DateTime)datepickerInvoicesDateIssued.SelectedDate,
                     Client = comboBoxInvoicesClients.SelectedItem as Client,
-                    Order = Order
+                    Order = GetOrder()
                 };
                 invoiceService.CreateNewInvoice(invoice);
             }
@@ -140,7 +142,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 {
                     DateIssued = (DateTime)datepickerInvoicesDateIssued.SelectedDate,
                     Client = comboBoxInvoicesClients.SelectedItem as Client,
-                    Order = Order
+                    Order = GetOrder()
                 };
                 invoiceService.UpdateInvoice(invoice);
             }
