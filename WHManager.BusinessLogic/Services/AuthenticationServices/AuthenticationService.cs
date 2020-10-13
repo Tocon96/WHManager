@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using WHManager.BusinessLogic.Models;
@@ -24,7 +25,7 @@ namespace WHManager.BusinessLogic.Services.AuthenticationServices
             }
             else
             {
-                throw new Exception();
+                return null;
             }
         }
     }

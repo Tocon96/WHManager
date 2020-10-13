@@ -55,7 +55,7 @@ namespace WHManager.DesktopUI
 
         private void CheckRole()
         {
-            if(User.Role.Name != "Administracja")
+            if(User.Role.IsAdmin == false )
             {
                 buttonAdministration.Visibility = Visibility.Hidden;
             }

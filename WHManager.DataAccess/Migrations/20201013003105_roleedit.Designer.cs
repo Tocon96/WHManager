@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WHManager.DataAccess;
 
 namespace WHManager.DataAccess.Migrations
 {
     [DbContext(typeof(WHManagerDBContext))]
-    partial class WHManagerDBContextModelSnapshot : ModelSnapshot
+    [Migration("20201013003105_roleedit")]
+    partial class roleedit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

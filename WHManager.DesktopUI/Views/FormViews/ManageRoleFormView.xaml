@@ -22,11 +22,14 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <!--TextBlock-->
-        <TextBlock>Nazwa</TextBlock>
+        <TextBlock>Nazwa: </TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="0">Administracja: </TextBlock>
         <Label Visibility="Hidden" Grid.Column="0" Grid.Row="1" Name="labelId"></Label>
         <!--TextBox-->
         <TextBox Grid.Column="1" Name="textBoxName"></TextBox>
         <!--Button-->
-        <Button Grid.Column="1" Grid.Row="1" Name="buttonAddRole" Click="ButtonAddRoleClick">Zatwierdź</Button>
+        <Button Grid.Column="1" Grid.Row="2" Name="buttonAddRole" Click="ButtonAddRoleClick">Zatwierdź</Button>
+        <!--CheckBox-->
+        <CheckBox Grid.Row="1" Grid.Column="1" Name="checkboxAdmin"></CheckBox>
     </Grid>
 </Window>

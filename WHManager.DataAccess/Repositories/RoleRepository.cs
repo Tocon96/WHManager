@@ -19,7 +19,7 @@ namespace WHManager.DataAccess.Repositories
             _contextFactory = contextFactory;
         }
 
-        public async Task CreateNewRole(string name)
+        public async Task CreateNewRole(string name, bool isadmin)
         {
             try
             {
@@ -27,7 +27,8 @@ namespace WHManager.DataAccess.Repositories
                 {
                     Role role = new Role
                     {
-                        Name = name
+                        Name = name,
+                        IsAdmin = isadmin
                     };
                     await context.Roles.AddAsync(role);
                     await context.SaveChangesAsync();
@@ -103,7 +104,7 @@ namespace WHManager.DataAccess.Repositories
             }
         }
 
-        public async Task UpdateRole(int id, string name)
+        public async Task UpdateRole(int id, string name, bool isadmin)
         {
             try
             {
@@ -111,6 +112,7 @@ namespace WHManager.DataAccess.Repositories
                 {
                     Role updatedRole = context.Roles.SingleOrDefault(x => x.Id == id);
                     updatedRole.Name = name;
+                    updatedRole.IsAdmin = isadmin;
                     await context.SaveChangesAsync();
                 }
             }

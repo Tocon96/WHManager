@@ -55,10 +55,16 @@ namespace WHManager.DesktopUI.Views.FormViews
         {
             try
             {
+                bool admin = false;
+                if(checkboxAdmin.IsChecked == true)
+                {
+                    admin = true;
+                }
                 IRoleService roleService = new RoleService();
                 Role role = new Role
                 {
-                    Name = textBoxName.Text
+                    Name = textBoxName.Text,
+                    IsAdmin = admin
                 };
                 roleService.AddRole(role);
             }
@@ -71,11 +77,17 @@ namespace WHManager.DesktopUI.Views.FormViews
         {
             try
             {
+                bool admin = false;
+                if (checkboxAdmin.IsChecked == true)
+                {
+                    admin = true;
+                }
                 IRoleService roleService = new RoleService();
                 Role role = new Role
                 {
                     Id = Role.Id,
-                    Name = textBoxName.Text
+                    Name = textBoxName.Text,
+                    IsAdmin = admin
                 };
                 roleService.UpdateRole(role);
             }
