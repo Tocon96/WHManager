@@ -79,17 +79,25 @@ namespace WHManager.DesktopUI.Views.FormViews
 
         private void AddItems()
         {
-            int a = int.Parse(textboxNumberOfItems.Text);
-            for(int i=1; i<=a; i++)
+            try
             {
-                Item item = new Item
+                int a = int.Parse(textboxNumberOfItems.Text);
+                for (int i = 1; i <= a; i++)
                 {
-                    DateOfAdmission = (DateTime)datepickerDateOfAdmission.SelectedDate,
-                    IsInStock = true,
-                    Product = Product
-                };
-                itemService.CreateNewItem(item);
+                    Item item = new Item
+                    {
+                        DateOfAdmission = (DateTime)datepickerDateOfAdmission.SelectedDate,
+                        IsInStock = true,
+                        Product = Product
+                    };
+                    itemService.CreateNewItem(item);
+                }
             }
+            catch (Exception e)
+            {
+                MessageBox.Show("Błąd dodawania: " + e);
+            }
+            
         }
 
         private void UpdateItems()
@@ -113,12 +121,19 @@ namespace WHManager.DesktopUI.Views.FormViews
         }
         private void UpdateWindow()
         {
-            labelId.Visibility = Visibility.Visible;
-            datepickerDateOfEmission.Visibility = Visibility.Visible;
-            textBlockDateOfEmission.Visibility = Visibility.Visible;
-            checkboxAvalaibility.Visibility = Visibility.Visible;
+            try
+            {
+                labelId.Visibility = Visibility.Visible;
+                datepickerDateOfEmission.Visibility = Visibility.Visible;
+                textBlockDateOfEmission.Visibility = Visibility.Visible;
+                checkboxAvalaibility.Visibility = Visibility.Visible;
 
-            datepickerDateOfAdmission.SelectedDate = Item.DateOfAdmission;
+                datepickerDateOfAdmission.SelectedDate = Item.DateOfAdmission;
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show("Błąd wyświetlania: " + e);
+            }
         }
     }
 }

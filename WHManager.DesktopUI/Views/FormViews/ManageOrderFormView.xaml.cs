@@ -64,6 +64,7 @@ namespace WHManager.DesktopUI.Views.FormViews
             Order = order;
             FillData();
             labelId.Visibility = Visibility.Visible;
+            labelId.Content = Order.Id;
         }
 
         private void buttonOrdersConfirm(object sender, RoutedEventArgs e)
@@ -178,6 +179,7 @@ namespace WHManager.DesktopUI.Views.FormViews
 
                 Order order = new Order
                 {
+                    Id = Order.Id,
                     Client = comboBoxOrdersClients.SelectedItem as Client,
                     Items = ItemsList,
                     DateOrdered = (DateTime)datepickerOrdersDate.SelectedDate,

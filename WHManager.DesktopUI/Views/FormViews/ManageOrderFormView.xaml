@@ -36,7 +36,7 @@
         <!--Label-->
         <Label Content="Id" Visibility="Hidden" Grid.Row="3" x:Name="labelId"></Label>
         <!--Datagrid-->
-        <DataGrid x:Name="gridItems" Grid.Row="0" Grid.RowSpan="5" Grid.Column="4" SelectionMode="Single" MouseDoubleClick="gridItems_MouseDoubleClick" AutoGenerateColumns="False">
+        <DataGrid IsReadOnly="True" x:Name="gridItems" Grid.Row="0" Grid.RowSpan="5" Grid.Column="4" SelectionMode="Single" MouseDoubleClick="gridItems_MouseDoubleClick" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Produkt" Binding="{Binding Product.Name}"></DataGridTextColumn>

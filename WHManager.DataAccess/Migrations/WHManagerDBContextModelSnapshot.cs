@@ -203,6 +203,21 @@ namespace WHManager.DataAccess.Migrations
                     b.ToTable("ProductTypes");
                 });
 
+            modelBuilder.Entity("WHManager.DataAccess.Models.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("WHManager.DataAccess.Models.Tax", b =>
                 {
                     b.Property<int>("Id")
@@ -222,6 +237,29 @@ namespace WHManager.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Taxes");
+                });
+
+            modelBuilder.Entity("WHManager.DataAccess.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("WHManager.DataAccess.Models.Invoice", b =>
@@ -280,6 +318,14 @@ namespace WHManager.DataAccess.Migrations
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WHManager.DataAccess.Models.User", b =>
+                {
+                    b.HasOne("WHManager.DataAccess.Models.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

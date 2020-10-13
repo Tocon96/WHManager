@@ -44,9 +44,9 @@ namespace WHManager.DesktopUI.Views.FormViews
                     AddProductType();
                     this.Close();
                 }
-                catch (Exception)
+                catch (Exception x)
                 {
-                    throw;
+                    MessageBox.Show("Błąd dodawania: AddProductTypeButton" + x);
                 }
             }
             else
@@ -56,9 +56,9 @@ namespace WHManager.DesktopUI.Views.FormViews
                     UpdateProductType();
                     this.Close();
                 }
-                catch (Exception)
+                catch (Exception x)
                 {
-                    throw;
+                    MessageBox.Show("Błąd aktualizacji: AddProductTypeButton" + x);
                 }
             }
            
@@ -66,21 +66,35 @@ namespace WHManager.DesktopUI.Views.FormViews
 
         public void AddProductType()
         {
-            ProductType productType = new ProductType
+            try
             {
-                Name = textBoxProductTypeName.Text
-            };
-            productTypeService.CreateNewProductType(productType);
+                ProductType productType = new ProductType
+                {
+                    Name = textBoxProductTypeName.Text
+                };
+                productTypeService.CreateNewProductType(productType);
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show("Błąd dodawania: AddProductType" + x);
+            }
         }
 
         public void UpdateProductType()
         {
-            ProductType productType = new ProductType
+            try
             {
-                Id = (int)Id.Content,
-                Name = textBoxProductTypeName.Text
-            };
-            productTypeService.UpdateProductType(productType);
+                ProductType productType = new ProductType
+                {
+                    Id = (int)Id.Content,
+                    Name = textBoxProductTypeName.Text
+                };
+                productTypeService.UpdateProductType(productType);
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show("Błąd dodawania: UpdateProductType" + x);
+            }
         }
     }
 }

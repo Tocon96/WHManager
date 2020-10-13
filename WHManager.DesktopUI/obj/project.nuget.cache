@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "r5+vvmCqXvtqSVIPYa/0+i6+08wcsYZnzVZSg5aPEhdeIdDI47wBQ+KnJDD5KY0N6nEY1E1wTl/6RvtB99mCXg==",
+  "dgSpecHash": "E5PS0sj4Th0q6aBs4VTziACybwD7bJ5rRNiqSd9rqAWApKZICDToVhnJchfRa1D1khO6dc9OixVKvP92EUfC5A==",
   "success": true,
   "projectFilePath": "E:\\visualstudio\\WHManager\\WHManager.DesktopUI\\WHManager.DesktopUI.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Tocon\\.nuget\\packages\\microsoft.aspnet.identity.core\\2.2.3\\microsoft.aspnet.identity.core.2.2.3.nupkg.sha512",
     "C:\\Users\\Tocon\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\Tocon\\.nuget\\packages\\microsoft.data.sqlclient\\2.0.0\\microsoft.data.sqlclient.2.0.0.nupkg.sha512",
     "C:\\Users\\Tocon\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\2.0.0\\microsoft.data.sqlclient.sni.runtime.2.0.0.nupkg.sha512",
@@ -108,5 +109,16 @@
     "C:\\Users\\Tocon\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
     "C:\\Users\\Tocon\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Microsoft.AspNet.Identity.Core 2.2.3' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
+      "libraryId": "Microsoft.AspNet.Identity.Core",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    }
+  ]
 }

@@ -2,15 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading.Tasks;
 using WHManager.DataAccess.Models;
 using WHManager.DataAccess.Repositories.Interfaces;
 
 namespace WHManager.DataAccess.Repositories
 {
-	public class ProductRepository: IProductRepository
+    public class ProductRepository: IProductRepository
 	{
 		private readonly WHManagerDBContextFactory _contextFactory;
 

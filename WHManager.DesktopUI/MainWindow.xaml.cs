@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.ViewModels;
 
 namespace WHManager.DesktopUI
@@ -19,9 +20,17 @@ namespace WHManager.DesktopUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public User User
+        {
+            get;
+            set;
+        }
+        public MainWindow(User user)
         {
             InitializeComponent();
+            User = user;
+            CheckRole();
+            labelName.Content = user.UserName;
             mainContent.Content = new WarehouseViewModel();
         }
 
@@ -38,6 +47,18 @@ namespace WHManager.DesktopUI
         private void BusinessViewClick(object sender, RoutedEventArgs e)
         {
             mainContent.Content = new BusinessViewModel();
+        }
+        private void AdministrationViewClick(object sender, RoutedEventArgs e)
+        {
+            mainContent.Content = new AdministrationViewModel();
+        }
+
+        private void CheckRole()
+        {
+            if(User.Role.Name != "Administracja")
+            {
+                buttonAdministration.Visibility = Visibility.Hidden;
+            }
         }
     }
 }

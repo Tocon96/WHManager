@@ -105,46 +105,96 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
         }
         private void ClearSearchClick(object sender, RoutedEventArgs e)
         {
-            SearchTextBox.Text = null;
-            gridItems.ItemsSource = LoadData();
+            try
+            {
+                SearchTextBox.Text = null;
+                gridItems.ItemsSource = LoadData();
+            }
+            catch(Exception x)
+            {
+                MessageBox.Show("Błąd wyczyszczenia: " + x);
+            }
         }
         private void AddItemClick(object sender, RoutedEventArgs e)
         {
-            ManageItemFormView manageItemFormView = new ManageItemFormView(Product);
-            manageItemFormView.Show();
+            try
+            {
+                ManageItemFormView manageItemFormView = new ManageItemFormView(Product);
+                manageItemFormView.Show();
+            }
+            catch(Exception x)
+            {
+                MessageBox.Show("Błąd dodawania: " + x);
+            }
         }
         private void UpdateItemClick(object sender, RoutedEventArgs e)
         {
-            Item item = gridItems.SelectedItem as Item;
-            ManageItemFormView manageItemFormView = new ManageItemFormView(Product, item);
-            manageItemFormView.Show();
+            try
+            {
+                Item item = gridItems.SelectedItem as Item;
+                ManageItemFormView manageItemFormView = new ManageItemFormView(Product, item);
+                manageItemFormView.Show();
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show("Błąd aktualizacji: " + x);
+            }
         }
         private void DeleteItemClick(object sender, RoutedEventArgs e)
         {
-            IItemService itemService = new ItemService();
-            Item item = gridItems.SelectedItem as Item;
-            itemService.DeleteItem(item.Id);
+            try
+            {
+                IItemService itemService = new ItemService();
+                Item item = gridItems.SelectedItem as Item;
+                itemService.DeleteItem(item.Id);
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show("Błąd usuwania: " + x);
+            }
         }
         private List<Item> GetItemById(int id)
         {
-            IItemService itemService = new ItemService();
-            List<Item> items = new List<Item>();
-            Item item = itemService.GetItem(id);
-            items.Add(item);
-            return items;
+            try
+            {
+                IItemService itemService = new ItemService();
+                List<Item> items = new List<Item>();
+                Item item = itemService.GetItem(id);
+                items.Add(item);
+                return items;
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show("Błąd wyświetlania: " + x);
+                return null;
+            }
         }
         private void radioButtonIdClick(object sender, RoutedEventArgs e)
         {
-            SearchTextBox.Visibility = Visibility.Visible;
-            datePickerEarlierDate.Visibility = Visibility.Hidden;
-            datePickerLaterDate.Visibility = Visibility.Hidden;
+            try
+            {
+                SearchTextBox.Visibility = Visibility.Visible;
+                datePickerEarlierDate.Visibility = Visibility.Hidden;
+                datePickerLaterDate.Visibility = Visibility.Hidden;
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show("Błąd zmiany wyświetlania: " + x);
+            }
         }
 
         private void radioButtonDateOfPurchaseClick(object sender, RoutedEventArgs e)
         {
-            SearchTextBox.Visibility = Visibility.Hidden;
-            datePickerEarlierDate.Visibility = Visibility.Visible;
-            datePickerLaterDate.Visibility = Visibility.Visible;
+            try
+            {
+                SearchTextBox.Visibility = Visibility.Hidden;
+                datePickerEarlierDate.Visibility = Visibility.Visible;
+                datePickerLaterDate.Visibility = Visibility.Visible;
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show("Błąd zmiany wyświetlania: " + x);
+            }
         }
 
         private List<Item> GetItemByDate(DateTime? earlierDate, DateTime? laterDate)
@@ -153,23 +203,57 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
             List<Item> itemsList = new List<Item>();
             if(datePickerEarlierDate.SelectedDate != null && datePickerLaterDate.SelectedDate != null)
             {
-                itemsList = itemService.GetEmittedItemsByDate(earlierDate, laterDate).ToList();
-                return itemsList;
+                try
+                {
+                    itemsList = itemService.GetEmittedItemsByDate(earlierDate, laterDate).ToList();
+                    return itemsList;
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Błąd zmiany wyświetlania: " + e);
+                    return null;
+                }
             }
             else if(datePickerEarlierDate.SelectedDate != null && datePickerLaterDate.SelectedDate == null)
             {
-                itemsList = itemService.GetEmittedItemsByDate(earlierDate, null).ToList();
-                return itemsList;
+                try
+                {
+                    itemsList = itemService.GetEmittedItemsByDate(earlierDate, null).ToList();
+                    return itemsList;
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Błąd zmiany wyświetlania: " + e);
+                    return null;
+                }
+
             }
             else if(datePickerEarlierDate.SelectedDate == null && datePickerLaterDate.SelectedDate != null)
             {
-                itemsList = itemService.GetEmittedItemsByDate(null, laterDate).ToList();
-                return itemsList;
+                try
+                {
+                    itemsList = itemService.GetEmittedItemsByDate(null, laterDate).ToList();
+                    return itemsList;
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Błąd zmiany wyświetlania: " + e);
+                    return null;
+                }
+
             }
             else
             {
-                itemsList = itemService.GetEmittedItemsByDate(null, null).ToList();
-                return itemsList;
+                try
+                {
+                    itemsList = itemService.GetEmittedItemsByDate(null, null).ToList();
+                    return itemsList;
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Błąd zmiany wyświetlania: " + e);
+                    return null;
+                }
             }
         }
     }

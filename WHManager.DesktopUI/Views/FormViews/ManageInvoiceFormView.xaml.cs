@@ -51,10 +51,9 @@ namespace WHManager.DesktopUI.Views.FormViews
             FillComboBox();
             Invoice = invoice;
             labelId.Visibility = Visibility.Visible;
-            labelId.Content = Invoice.Id;
+            labelId.Content = invoice.Id;
             datepickerInvoicesDateIssued.SelectedDate = Invoice.DateIssued;
             textBoxInvoicesOrderId.Text = Invoice.Order.Id.ToString();
-            
         }
 
         private void buttonInvoicesConfirm(object sender, RoutedEventArgs e)
@@ -140,6 +139,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 IInvoiceService invoiceService = new InvoiceService();
                 Invoice invoice = new Invoice
                 {
+                    Id = (int)labelId.Content,
                     DateIssued = (DateTime)datepickerInvoicesDateIssued.SelectedDate,
                     Client = comboBoxInvoicesClients.SelectedItem as Client,
                     Order = GetOrder()

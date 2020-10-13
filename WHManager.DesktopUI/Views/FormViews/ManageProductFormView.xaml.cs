@@ -67,79 +67,143 @@ namespace WHManager.DesktopUI.Views.FormViews
 
         private List<Manufacturer> GetManufacturers()
         {
-            IManufacturerService manufacturerService = new ManufacturerService();
-            List<Manufacturer> manufacturers = manufacturerService.GetManufacturers().ToList();
-            return manufacturers;
+            try
+            {
+                IManufacturerService manufacturerService = new ManufacturerService();
+                List<Manufacturer> manufacturers = manufacturerService.GetManufacturers().ToList();
+                return manufacturers;
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show("Błąd wyświetlania: GetManufacturers: " + e);
+                return null;
+            }
         }
         private List<Tax> GetTaxes()
         {
-            ITaxService taxService = new TaxService();
-            List<Tax> taxes = taxService.GetTaxes().ToList();
-            return taxes;
+            try
+            {
+                ITaxService taxService = new TaxService();
+                List<Tax> taxes = taxService.GetTaxes().ToList();
+                return taxes;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Błąd wyświetlania: GetTaxes: " + e);
+                return null;
+            }
         }
         private List<ProductType> GetProductTypes()
         {
-            IProductTypeService productTypeService = new ProductTypeService();
-            List<ProductType> productTypes = productTypeService.GetProductTypes().ToList();
-            return productTypes;
+            try
+            {
+                IProductTypeService productTypeService = new ProductTypeService();
+                List<ProductType> productTypes = productTypeService.GetProductTypes().ToList();
+                return productTypes;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Błąd wyświetlania: GetProductTypes: " + e);
+                return null;
+            }
         }
         private void FillComboBoxes()
         {
-            List<Manufacturer> manufacturers = GetManufacturers();
-            List<Tax> taxes = GetTaxes();
-            List<ProductType> productTypes = GetProductTypes();
-            Manufacturers = new ObservableCollection<Manufacturer>(manufacturers);
-            Taxes = new ObservableCollection<Tax>(taxes);
-            ProductTypes = new ObservableCollection<ProductType>(productTypes);
+            try
+            {
+                List<Manufacturer> manufacturers = GetManufacturers();
+                List<Tax> taxes = GetTaxes();
+                List<ProductType> productTypes = GetProductTypes();
+                Manufacturers = new ObservableCollection<Manufacturer>(manufacturers);
+                Taxes = new ObservableCollection<Tax>(taxes);
+                ProductTypes = new ObservableCollection<ProductType>(productTypes);
 
-            comboBoxProductManufacturer.ItemsSource = Manufacturers;
-            comboBoxProductTax.ItemsSource = Taxes;
-            comboBoxProductType.ItemsSource = ProductTypes;
-            
+                comboBoxProductManufacturer.ItemsSource = Manufacturers;
+                comboBoxProductTax.ItemsSource = Taxes;
+                comboBoxProductType.ItemsSource = ProductTypes;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Błąd wyświetlania: FillComboBoxes: " + e);
+                
+            }
+
         }
         private void AddProduct()
         {
-            IProductService productService = new ProductService();
-            Product product = new Product
-            {
-                Name = textBoxProductName.Text,
-                Type = comboBoxProductType.SelectedItem as ProductType,
-                Tax = comboBoxProductTax.SelectedItem as Tax,
-                Manufacturer = comboBoxProductManufacturer.SelectedItem as Manufacturer,
-                PriceBuy = int.Parse(textBoxProductPriceBuy.Text),
-                PriceSell = int.Parse(textBoxProductPriceSell.Text)
-            };
-            test.Content = product.Type.Id;
-            productService.CreateNewProduct(product);
-        }
-        private void UpdateProduct()
-        {
+            try
             {
                 IProductService productService = new ProductService();
                 Product product = new Product
                 {
-                    Id = (int)IdLabel.Content,
                     Name = textBoxProductName.Text,
                     Type = comboBoxProductType.SelectedItem as ProductType,
                     Tax = comboBoxProductTax.SelectedItem as Tax,
                     Manufacturer = comboBoxProductManufacturer.SelectedItem as Manufacturer,
-                    PriceBuy = decimal.Parse(textBoxProductPriceBuy.Text),
-                    PriceSell = decimal.Parse(textBoxProductPriceSell.Text)
+                    PriceBuy = int.Parse(textBoxProductPriceBuy.Text),
+                    PriceSell = int.Parse(textBoxProductPriceSell.Text)
                 };
-                productService.UpdateProduct(product);
+                test.Content = product.Type.Id;
+                productService.CreateNewProduct(product);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Błąd wyświetlania: FillComboBoxes: " + e);
+
+            }
+
+        }
+        private void UpdateProduct()
+        {
+            {
+                try
+                {
+                    IProductService productService = new ProductService();
+                    Product product = new Product
+                    {
+                        Id = (int)IdLabel.Content,
+                        Name = textBoxProductName.Text,
+                        Type = comboBoxProductType.SelectedItem as ProductType,
+                        Tax = comboBoxProductTax.SelectedItem as Tax,
+                        Manufacturer = comboBoxProductManufacturer.SelectedItem as Manufacturer,
+                        PriceBuy = decimal.Parse(textBoxProductPriceBuy.Text),
+                        PriceSell = decimal.Parse(textBoxProductPriceSell.Text)
+                    };
+                    productService.UpdateProduct(product);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Błąd wyświetlania: FillComboBoxes: " + e);
+
+                }
             }
         }
         private void AddProductClick(object sender, RoutedEventArgs e)
         {
+
             if(IdLabel.Visibility == Visibility.Visible)
             {
-                UpdateProduct();
-                this.Close();
+                try
+                {
+                    UpdateProduct();
+                    this.Close();
+                }
+                catch(Exception x)
+                {
+                    MessageBox.Show("Błąd aktualizacji: AddProductClick: " + x);
+                }
             }
             else if(IdLabel.Visibility == Visibility.Hidden)
             {
-                AddProduct();
-                this.Close();
+                try
+                {
+                    AddProduct();
+                    this.Close();
+                }
+                catch (Exception x)
+                {
+                    MessageBox.Show("Błąd dodawania: AddProductClick: " + x);
+                }
             }
         }
     }

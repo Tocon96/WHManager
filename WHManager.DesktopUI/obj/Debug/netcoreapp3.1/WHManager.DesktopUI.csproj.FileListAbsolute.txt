@@ -121,3 +121,16 @@ E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\Cont
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ManageClientFormView.baml
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ManageInvoiceFormView.baml
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ManageOrderFormView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\AdministrationView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\AdministrationView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\AdministrationViews\RoleView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\AdministrationViews\UserView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ManageRoleFormView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ManageUserFormView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\AdministrationViews\RoleView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\AdministrationViews\UserView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ManageRoleFormView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ManageUserFormView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\LoginForm\LoginFormView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\LoginForm\LoginFormView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\Microsoft.AspNet.Identity.Core.dll

@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="WHManager.DesktopUI.Views.AdministrationViews.RoleView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WHManager.DesktopUI.Views.AdministrationViews"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <DataGrid Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="6" x:Name="gridRoles" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Nazwa" Binding="{Binding Name}"></DataGridTextColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="buttonUpdateRoleClick">Edytuj</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="buttonDeleteRoleClick">Usuń</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <!--Buttons-->
+        <Button Grid.Row="2" Click="buttonAddRoleClick" Name="buttonAddRole">Dodaj</Button>
+        <Button Grid.Row="0" Click="buttonSearchRoleClick" Name="buttonSearchRole">Wyszukaj</Button>
+        <Button Grid.Row="1" Click="buttonClearSearchRoleClick" Name="buttonClearSearchRole">Wyczyść</Button>
+        <!--Textbox-->
+        <TextBox Grid.Column="1" Width="200" Name="textboxSearchRole"></TextBox>
+        <!--RadioButtons-->
+        <RadioButton Grid.Column="2" GroupName="Filters" IsChecked="True" Name="radiobuttonId">ID</RadioButton>
+        <RadioButton Grid.Column="3" GroupName="Filters" IsChecked="False" Name="radiobuttonName">Nazwa</RadioButton>
+    </Grid>
+</UserControl>
