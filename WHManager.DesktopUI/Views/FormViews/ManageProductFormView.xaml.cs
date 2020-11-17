@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
+using WHManager.DesktopUI.WindowSetting;
+using WHManager.DesktopUI.WindowSetting.Interfaces;
 
 namespace WHManager.DesktopUI.Views.FormViews
 {
@@ -44,15 +46,17 @@ namespace WHManager.DesktopUI.Views.FormViews
             get { return _taxes; }
             set { _taxes = value; }
         }
-
+        private readonly IDisplaySetting displaySetting = new DisplaySetting();
         public ManageProductFormView()
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
             FillComboBoxes();
         }
         public ManageProductFormView(Product product)
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
             FillComboBoxes();
             IdLabel.Visibility = Visibility.Visible;
             IdLabel.Content = product.Id;
@@ -143,7 +147,6 @@ namespace WHManager.DesktopUI.Views.FormViews
                     PriceBuy = int.Parse(textBoxProductPriceBuy.Text),
                     PriceSell = int.Parse(textBoxProductPriceSell.Text)
                 };
-                test.Content = product.Type.Id;
                 productService.CreateNewProduct(product);
             }
             catch (Exception e)

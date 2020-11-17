@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -16,6 +17,10 @@ using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
 using WHManager.DesktopUI.Views.FormViews;
+using System.ComponentModel;
+using WHManager.BusinessLogic.Services.DocumentServices;
+using WHManager.BusinessLogic.Services.DocumentServices.Interfaces;
+using WHManager.DesktopUI.Views.BusinessViews.BusinessFormViews;
 
 namespace WHManager.DesktopUI.Views.BusinessViews
 {
@@ -25,6 +30,12 @@ namespace WHManager.DesktopUI.Views.BusinessViews
     public partial class InvoiceView : UserControl
     {
         public ObservableCollection<Invoice> Invoices
+        {
+            get;
+            set;
+        }
+
+        public Invoice Invoice
         {
             get;
             set;
@@ -44,12 +55,12 @@ namespace WHManager.DesktopUI.Views.BusinessViews
                 IList<Invoice> invoices = invoiceService.GetInvoices();
                 return invoices;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 MessageBox.Show("Błąd wyświetlania: " + e);
                 return null;
             }
-            
+
         }
 
         private ObservableCollection<Invoice> LoadData()
@@ -69,7 +80,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
 
         private void buttonSearchClick(object sender, RoutedEventArgs e)
         {
-            if(radioButtonId.IsChecked == true)
+            if (radioButtonId.IsChecked == true)
             {
                 try
                 {
@@ -77,12 +88,12 @@ namespace WHManager.DesktopUI.Views.BusinessViews
                     Invoices = new ObservableCollection<Invoice>(invoices);
                     gridInvoices.ItemsSource = Invoices;
                 }
-                catch(Exception x)
+                catch (Exception x)
                 {
                     MessageBox.Show("Błąd wyszukiwania: " + x);
                 }
             }
-            else if(radioButtonClient.IsChecked == true)
+            else if (radioButtonClient.IsChecked == true)
             {
                 try
                 {
@@ -95,7 +106,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
                     MessageBox.Show("Błąd wyszukiwania: " + x);
                 }
             }
-            else if(radioButtonDate.IsChecked == true)
+            else if (radioButtonDate.IsChecked == true)
             {
                 try
                 {
@@ -103,7 +114,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
                     Invoices = new ObservableCollection<Invoice>(invoices);
                     gridInvoices.ItemsSource = Invoices;
                 }
-                catch(Exception x)
+                catch (Exception x)
                 {
                     MessageBox.Show("Błąd wyszukiwania: " + x);
                 }
@@ -118,7 +129,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
                 textBoxInvoicesSearch.Text = null;
                 gridInvoices.ItemsSource = LoadData();
             }
-            catch(Exception x)
+            catch (Exception x)
             {
                 MessageBox.Show("Błąd czyszczenia: " + x);
             }
@@ -141,7 +152,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
         {
             try
             {
-                if(gridInvoices.SelectedItem != null)
+                if (gridInvoices.SelectedItem != null)
                 {
                     Invoice invoice = gridInvoices.SelectedItem as Invoice;
                     ManageInvoiceFormView manageInvoiceFormView = new ManageInvoiceFormView(invoice);
@@ -158,7 +169,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
         {
             try
             {
-                if(gridInvoices.SelectedItem != null)
+                if (gridInvoices.SelectedItem != null)
                 {
                     IInvoiceService invoiceService = new InvoiceService();
                     Invoice invoice = gridInvoices.SelectedItem as Invoice;
@@ -240,6 +251,20 @@ namespace WHManager.DesktopUI.Views.BusinessViews
                 datePickerEarlierDate.Visibility = Visibility.Visible;
                 datePickerLaterDate.Visibility = Visibility.Visible;
             }
+        }
+        private void gridProductGeneratePdf(object sender, RoutedEventArgs e)
+        {
+            GeneratePdf();
+        }
+
+        private void GeneratePdf()
+        {
+            if(gridInvoices.SelectedItem != null)
+            {
+                Invoice = gridInvoices.SelectedItem as Invoice;
+            }
+            InvoiceFormView invoice = new InvoiceFormView(Invoice);
+            invoice.Show();
         }
     }
 }

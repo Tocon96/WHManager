@@ -22,7 +22,7 @@ namespace WHManager.DesktopUI.Views
         public WarehouseView()
         {
             InitializeComponent();
-            warehouseContent.Content = new ProductTypeView();
+            warehouseContent.Content = new ProductView();
         }
 
         private void ProductViewClick(object sender, RoutedEventArgs e)

@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WHManager.DesktopUI.Views.FormViews.SearchFormViews;
+using WHManager.DesktopUI.WindowSetting;
+using WHManager.DesktopUI.WindowSetting.Interfaces;
 
 namespace WHManager.DesktopUI.Views.FormViews
 {
@@ -29,10 +31,11 @@ namespace WHManager.DesktopUI.Views.FormViews
             set { _categories = value; }
         }
 
-
+        private readonly IDisplaySetting displaySetting = new DisplaySetting();
         public AdvancedSearchProductFormView()
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
             FillComboBox();
         }
 

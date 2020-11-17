@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using WHManager.BusinessLogic.Models;
@@ -583,6 +584,14 @@ namespace WHManager.BusinessLogic.Services
             {
                 throw;
             }
+        }
+
+        public decimal CalculatePrice(Product product)
+        {
+
+            decimal tax = (Convert.ToDecimal(product.Tax.Value) / 100);
+            decimal finalPrice = Math.Round(product.PriceSell + (product.PriceSell * tax), 2);
+            return finalPrice;
         }
     }
 }

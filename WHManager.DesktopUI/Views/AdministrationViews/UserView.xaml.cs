@@ -54,9 +54,16 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
         }
         private void buttonSearchUserClick(object sender, RoutedEventArgs e)
         {
-            if(radiobuttonId.IsChecked == true)
+            if (radiobuttonId.IsChecked == true)
             {
-                gridUsers.ItemsSource = LoadUsersById(int.Parse(textboxSearchUnit.Text));
+                if (textboxSearchUnit.Text == "")
+                {
+                    gridUsers.ItemsSource = LoadUsers();
+                }
+                else
+                {
+                    gridUsers.ItemsSource = LoadUsersById(int.Parse(textboxSearchUnit.Text));
+                }
             }
             else if(radiobuttonName.IsChecked == true)
             {
@@ -64,8 +71,16 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
             }
             else if(radiobuttonRole.IsChecked == true)
             {
-                Role role = comboBoxSearchUnit.SelectedItem as Role;
-                gridUsers.ItemsSource = LoadUsersByRole(role.Id);
+                if (textboxSearchUnit.Text == "")
+                {
+                    gridUsers.ItemsSource = LoadUsers();
+                }
+                else
+                {
+                    Role role = comboBoxSearchUnit.SelectedItem as Role;
+                    gridUsers.ItemsSource = LoadUsersByRole(role.Id);
+                }
+                
             }
         }
         private void buttonClearSearchUserClick(object sender, RoutedEventArgs e)

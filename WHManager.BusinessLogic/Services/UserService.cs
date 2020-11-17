@@ -145,17 +145,23 @@ namespace WHManager.BusinessLogic.Services
         public User GetUserByName(string name)
         {
             var user = userRepository.GetUserByName(name);
-            IList<Role> roles = roleService.GetRoleById(user.Role.Id);
-            Role role = roles[0];
-            User newUser = new User
+            if(user != null)
             {
-                Id = user.Id,
-                UserName = user.UserName,
-                PasswordHash = user.PasswordHash,
-                Role = role
-            };
-            return newUser;
-
+                IList<Role> roles = roleService.GetRoleById(user.Role.Id);
+                Role role = roles[0];
+                User newUser = new User
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    PasswordHash = user.PasswordHash,
+                    Role = role
+                };
+                return newUser;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

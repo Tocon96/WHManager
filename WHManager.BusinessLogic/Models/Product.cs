@@ -13,6 +13,8 @@ namespace WHManager.BusinessLogic.Models
         public Manufacturer Manufacturer { get; set; }
         public decimal PriceBuy { get; set; }
         public decimal PriceSell { get; set; }
+        public decimal PriceBrutto { get; set; }
+        public int CountOf { get; set; }
         public bool InStock { get; set; }
     }
 }

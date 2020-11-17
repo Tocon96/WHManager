@@ -149,9 +149,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                     ProductTypes = new ObservableCollection<ProductType>(productTypes);
                     gridProductTypes.ItemsSource = ProductTypes;
                 }
-                catch (Exception)
+                catch (Exception x)
                 {
-                    throw;
+                    MessageBox.Show("Błąd wyszukiwania: " + x);
                 }
             }
         }
@@ -190,12 +190,20 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 IProductTypeService productTypeService = new ProductTypeService();
                 List<ProductType> productTypes = new List<ProductType>();
                 ProductType productType = productTypeService.GetProductType(id);
-                productTypes.Add(productType);
-                return productTypes;
+                if(productType != null)
+                {
+                    productTypes.Add(productType);
+                    return productTypes;
+                }
+                else
+                {
+                    return null;
+                }
             }
-            catch(Exception)
+            catch(Exception e)
             {
-                throw;
+                MessageBox.Show("Błąd wyszukiwania: " + e);
+                return null;
             }
         }
     }

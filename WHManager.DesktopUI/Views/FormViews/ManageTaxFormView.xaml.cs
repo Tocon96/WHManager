@@ -12,6 +12,8 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
+using WHManager.DesktopUI.WindowSetting;
+using WHManager.DesktopUI.WindowSetting.Interfaces;
 
 namespace WHManager.DesktopUI.Views.FormViews
 {
@@ -20,14 +22,17 @@ namespace WHManager.DesktopUI.Views.FormViews
     /// </summary>
     public partial class ManageTaxFormView : Window
     {
+        private readonly IDisplaySetting displaySetting = new DisplaySetting();
         public ManageTaxFormView()
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
         }
 
         public ManageTaxFormView(Tax tax)
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
             Id.Visibility = Visibility.Visible;
             Id.Content = tax.Id;
             textBoxTaxName.Text = tax.Name;

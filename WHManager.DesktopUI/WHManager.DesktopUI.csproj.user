@@ -17,6 +17,9 @@
     <Compile Update="Views\BusinessView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\BusinessViews\BusinessFormViews\InvoiceFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\BusinessViews\InvoiceView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -88,6 +91,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="css\LogButton.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="css\MenuBtn.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -101,6 +110,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\BusinessView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\BusinessViews\BusinessFormViews\InvoiceFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\BusinessViews\InvoiceView.xaml">

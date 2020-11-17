@@ -13,6 +13,8 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
+using WHManager.DesktopUI.WindowSetting;
+using WHManager.DesktopUI.WindowSetting.Interfaces;
 
 namespace WHManager.DesktopUI.Views.FormViews
 {
@@ -38,16 +40,18 @@ namespace WHManager.DesktopUI.Views.FormViews
             get;
             set;
         }
-
+        private readonly IDisplaySetting displaySetting = new DisplaySetting();
         public ManageInvoiceFormView()
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
             FillComboBox();
         }
 
         public ManageInvoiceFormView(Invoice invoice)
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
             FillComboBox();
             Invoice = invoice;
             labelId.Visibility = Visibility.Visible;

@@ -93,7 +93,8 @@ namespace WHManager.DesktopUI.Views.ContractorsView {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;component/views/contractorsviews/manufacturerview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;V1.0.0.0;component/views/contractorsviews/manufacturerview.x" +
+                    "aml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\ContractorsViews\ManufacturerView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

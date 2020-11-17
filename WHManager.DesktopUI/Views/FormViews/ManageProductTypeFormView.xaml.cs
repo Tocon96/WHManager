@@ -12,6 +12,8 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
+using WHManager.DesktopUI.WindowSetting;
+using WHManager.DesktopUI.WindowSetting.Interfaces;
 
 namespace WHManager.DesktopUI.Views.FormViews
 {
@@ -21,15 +23,17 @@ namespace WHManager.DesktopUI.Views.FormViews
     public partial class ManageProductTypeFormView : Window
     {
         IProductTypeService productTypeService = new ProductTypeService();
-
+        private readonly IDisplaySetting displaySetting = new DisplaySetting();
         public ManageProductTypeFormView()
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
         }
 
         public ManageProductTypeFormView(ProductType productType)
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
             Id.Visibility = Visibility.Visible;
             Id.Content = productType.Id;
             textBoxProductTypeName.Text = productType.Name;

@@ -93,16 +93,24 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
         {
             if (IdRadioButton.IsChecked == true)
             {
-                try
+                if(SearchTextBox.Text == "")
                 {
-                    List<Tax> taxes = GetTaxesById(int.Parse(SearchTextBox.Text)).ToList();
-                    Taxes = new ObservableCollection<Tax>(taxes);
-                    gridTaxes.ItemsSource = Taxes;
+                    gridTaxes.ItemsSource = LoadData();
                 }
-                catch (Exception)
+                else
                 {
-                    throw;
+                    try
+                    {
+                        List<Tax> taxes = GetTaxesById(int.Parse(SearchTextBox.Text)).ToList();
+                        Taxes = new ObservableCollection<Tax>(taxes);
+                        gridTaxes.ItemsSource = Taxes;
+                    }
+                    catch (Exception x)
+                    {
+                        MessageBox.Show("Błąd wyszukiwania: " + x);
+                    }
                 }
+                
             }
             else if(NameRadioButton.IsChecked == true)
             {
@@ -119,15 +127,22 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
             }
             else if(ValueRadioButton.IsChecked == true)
             {
-                try
+                if (SearchTextBox.Text == "")
                 {
-                    List<Tax> taxes = GetTaxesByValue(int.Parse(SearchTextBox.Text)).ToList();
-                    Taxes = new ObservableCollection<Tax>(taxes);
-                    gridTaxes.ItemsSource = Taxes;
+                    gridTaxes.ItemsSource = LoadData();
                 }
-                catch(Exception)
+                else
                 {
-                    throw;
+                    try
+                    {
+                        List<Tax> taxes = GetTaxesByValue(int.Parse(SearchTextBox.Text)).ToList();
+                        Taxes = new ObservableCollection<Tax>(taxes);
+                        gridTaxes.ItemsSource = Taxes;
+                    }
+                    catch (Exception x)
+                    {
+                        MessageBox.Show("Błąd wyszukiwania: " + x);
+                    }
                 }
             }
         }

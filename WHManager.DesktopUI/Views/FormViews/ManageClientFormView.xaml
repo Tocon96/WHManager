@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WHManager.DesktopUI.Views.FormViews"
         mc:Ignorable="d"
-        Title="ManageClientFormView" Height="450" Width="800">
+        Title="ManageClientFormView" Height="200" Width="200" MaxHeight="200" MaxWidth="200" MinHeight="200" MinWidth="200">
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -15,24 +17,30 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         
         <!--Textblocks-->
-        <TextBlock>Nazwa</TextBlock>
-        <TextBlock Grid.Row="1">Nip</TextBlock>
-        <TextBlock Grid.Row="2">Numer telefonu</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="1" Width="85">Nazwa</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="1" Width="85">Nip</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="1" Width="85">Numer telefonu</TextBlock>
         <!--Textboxes-->
-        <TextBox x:Name="textBoxName" Grid.Row="0" Grid.Column="1"></TextBox>
-        <TextBox x:Name="textBoxNip" Grid.Row="1" Grid.Column="1"></TextBox>
-        <TextBox x:Name="textBoxPhoneNumber" Grid.Row="2" Grid.Column="1"></TextBox>
+        <TextBox x:Name="textBoxName" Grid.Row="2" Grid.Column="2" Width="85"></TextBox>
+        <TextBox x:Name="textBoxNip" Grid.Row="3" Grid.Column="2" Width="85"></TextBox>
+        <TextBox x:Name="textBoxPhoneNumber" Grid.Row="4" Grid.Column="2" Width="85"></TextBox>
         <!--Labels-->
-        <Label Content="Id" Grid.Row="3" Visibility="Hidden" x:Name="labelId"></Label>
+        <WrapPanel Grid.Row="1" Grid.Column="1" x:Name="wrpPanelId" Visibility="Hidden">
+            <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center">ID:</TextBlock>
+            <Label Content="Id" x:Name="labelId" HorizontalAlignment="Right" VerticalAlignment="Top" VerticalContentAlignment="Center"></Label>
+        </WrapPanel>
         <!--Buttons-->
-        <Button x:Name="buttonConfirm" Click="buttonConfirmClick" Grid.Column="1" Grid.Row="3">Zatwierdź</Button>
+        <Button x:Name="buttonConfirm" Click="buttonConfirmClick" Grid.Column="2" Grid.Row="6" Width="85">Zatwierdź</Button>
     </Grid>
 </Window>

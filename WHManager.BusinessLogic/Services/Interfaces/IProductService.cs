@@ -20,5 +20,6 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         IList<Product> GetProductsByPriceSell(decimal? priceMin = null, decimal? priceMax = null);
         IList<Product> GetProductsByPriceBuy(decimal? priceMin = null, decimal? priceMax = null);
         IList<Product> GetProductsInStock();
+        decimal CalculatePrice(Product product);
     }
 }

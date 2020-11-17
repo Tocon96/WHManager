@@ -11,6 +11,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
+using WHManager.DesktopUI.WindowSetting;
+using WHManager.DesktopUI.WindowSetting.Interfaces;
 
 namespace WHManager.DesktopUI.Views.FormViews
 {
@@ -20,14 +22,17 @@ namespace WHManager.DesktopUI.Views.FormViews
     public partial class ManageManufacturerFormView : Window
     {
         IManufacturerService manufacturerService = new ManufacturerService();
+        private readonly IDisplaySetting displaySetting = new DisplaySetting();
         public ManageManufacturerFormView()
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
         }
-
+        
         public ManageManufacturerFormView(Manufacturer manufacturer)
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
             Id.Visibility = Visibility.Visible;
             Id.Content = manufacturer.Id;
             textManufacturerName.Text = manufacturer.Name;

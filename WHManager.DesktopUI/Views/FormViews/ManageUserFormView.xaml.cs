@@ -13,6 +13,8 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
+using WHManager.DesktopUI.WindowSetting.Interfaces;
+using WHManager.DesktopUI.WindowSetting;
 
 namespace WHManager.DesktopUI.Views.FormViews
 {
@@ -31,14 +33,17 @@ namespace WHManager.DesktopUI.Views.FormViews
             get;
             set;
         }
+        private readonly IDisplaySetting displaySetting = new DisplaySetting();
         public ManageUserFormView()
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
             comboboxRoles.ItemsSource = GetRoles();
         }
         public ManageUserFormView(User user)
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
             User = user;
             comboboxRoles.ItemsSource = GetRoles();
             labelId.Content = user.Id;

@@ -16,5 +16,7 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         Order GetOrderByInvoice(int invoiceId);
         IList<Order> GetOrdersByClient(int? clientId = null, string clientName = null, double? clientNip = null);
         IList<Order> GetOrdersByDate(DateTime? earlierDate, DateTime? laterDate);
+        decimal CalculateFinalPrice(Order order);
+        IList<Product> GetSortedProducts(Order order);
     }
 }

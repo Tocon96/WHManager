@@ -13,6 +13,8 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
+using WHManager.DesktopUI.WindowSetting;
+using WHManager.DesktopUI.WindowSetting.Interfaces;
 
 namespace WHManager.DesktopUI.Views.FormViews
 {
@@ -34,15 +36,17 @@ namespace WHManager.DesktopUI.Views.FormViews
             get { return _item; }
             set { _item = value; }
         }
-
+        private readonly IDisplaySetting displaySetting = new DisplaySetting();
         public ManageItemFormView(Product product)
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
             Product = product;
         }
         public ManageItemFormView(Product product, Item item)
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
             Product = product;
             Item = item;
             UpdateWindow();

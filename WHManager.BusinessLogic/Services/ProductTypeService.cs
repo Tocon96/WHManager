@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,18 +51,25 @@ namespace WHManager.BusinessLogic.Services
                 throw;
             }
         }
-		
-		public ProductType GetProductType(int id)
+
+        public ProductType GetProductType(int id)
 		{
             try
             {
                 var productType =  _productTypeRepository.GetProductType(id);
-                ProductType currentProductType = new ProductType
+                if(productType != null)
                 {
-                    Id = productType.Id,
-                    Name = productType.Name,
-                };
-                return currentProductType;
+                    ProductType currentProductType = new ProductType
+                    {
+                        Id = productType.Id,
+                        Name = productType.Name,
+                    };
+                    return currentProductType;
+                }
+                else
+                {
+                    return null;
+                }
             }   
             catch(Exception)
             {

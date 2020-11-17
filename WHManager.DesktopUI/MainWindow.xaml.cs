@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.ViewModels;
+using WHManager.DesktopUI.Views.FormViews.LoginForm;
 
 namespace WHManager.DesktopUI
 {
@@ -30,7 +31,7 @@ namespace WHManager.DesktopUI
             InitializeComponent();
             User = user;
             CheckRole();
-            labelName.Content = user.UserName;
+            labelName.Content = ("Zalogowano jako: " + user.UserName);
             mainContent.Content = new WarehouseViewModel();
         }
 
@@ -59,6 +60,13 @@ namespace WHManager.DesktopUI
             {
                 buttonAdministration.Visibility = Visibility.Hidden;
             }
+        }
+
+        private void buttonLogout(object sender, RoutedEventArgs e)
+        {
+            LoginFormView loginFormView = new LoginFormView();
+            loginFormView.Show();
+            this.Close();
         }
     }
 }

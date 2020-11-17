@@ -15,6 +15,8 @@ using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
 using WHManager.DesktopUI.Views.FormViews;
+using WHManager.DesktopUI.WindowSetting;
+using WHManager.DesktopUI.WindowSetting.Interfaces;
 
 namespace WHManager.DesktopUI.Views.WarehouseViews
 {
@@ -23,6 +25,7 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
     /// </summary>
     public partial class ItemView : Window
     {
+        private readonly IDisplaySetting displaySetting = new DisplaySetting();
         private Product _product;
         public Product Product
         {
@@ -38,6 +41,7 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
         public ItemView(Product product)
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
             Product = product;
             gridItems.ItemsSource = LoadData();
         }

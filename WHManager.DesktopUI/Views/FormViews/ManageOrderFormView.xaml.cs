@@ -14,6 +14,8 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
+using WHManager.DesktopUI.WindowSetting;
+using WHManager.DesktopUI.WindowSetting.Interfaces;
 
 namespace WHManager.DesktopUI.Views.FormViews
 {
@@ -51,16 +53,19 @@ namespace WHManager.DesktopUI.Views.FormViews
             get;
             set;
         }
+        private readonly IDisplaySetting displaySetting = new DisplaySetting();
 
         public ManageOrderFormView()
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
             FillData();
         }
 
         public ManageOrderFormView(Order order)
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
             Order = order;
             FillData();
             labelId.Visibility = Visibility.Visible;
@@ -172,7 +177,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 decimal price = 0;
                 foreach (var item in ItemsList)
                 {
-                    price = +item.Product.PriceSell;
+                    price = price+ item.Product.PriceSell;
                     item.IsInStock = false;
                     itemService.UpdateItem(item);
                 }

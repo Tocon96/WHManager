@@ -38,7 +38,6 @@
         <TextBox Grid.Column="1" Grid.Row="5" x:Name="textBoxProductPriceSell">Cena sprzedaży</TextBox>
         <Button Grid.Column="1" Grid.Row="6" Click="AddProductClick">Zatwierdź</Button>
         <Label Grid.Column="0" Grid.Row="6" Visibility="Hidden" x:Name="IdLabel"></Label>
-        <Label Content="Label" Grid.Column="2" HorizontalAlignment="Left" Margin="180,46,0,0" Grid.Row="7" VerticalAlignment="Top" x:Name="test"/>
 
 
     </Grid>

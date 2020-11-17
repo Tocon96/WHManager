@@ -69,9 +69,16 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
         {
             if (IdRadioButton.IsChecked == true)
             {
-                IList<Product> products = GetProductById(int.Parse(textBoxProductSearch.Text));
-                Products = new ObservableCollection<Product>(products);
-                gridProduct.ItemsSource = Products;
+                if(textBoxProductSearch.Text == "")
+                {
+                    gridProduct.ItemsSource = LoadData();
+                }
+                else
+                {
+                    IList<Product> products = GetProductById(int.Parse(textBoxProductSearch.Text));
+                    Products = new ObservableCollection<Product>(products);
+                    gridProduct.ItemsSource = Products;
+                }
             }
             else if(NameRadioButton.IsChecked == true)
             {
@@ -88,9 +95,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 textBoxProductSearch.Text = null;
                 gridProduct.ItemsSource = LoadData();
             }
-            catch(Exception)
+            catch(Exception x)
             {
-                throw;
+                MessageBox.Show("Błąd czyszczenia: " + x);
             }
         }
 
@@ -102,9 +109,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 ManageProductFormView manageProductForm = new ManageProductFormView(product);
                 manageProductForm.Show();
             }
-            catch(Exception)
+            catch(Exception x)
             {
-                throw;
+                MessageBox.Show("Błąd odświeżania: " + x);
             }
         }
 
@@ -116,9 +123,9 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 Product product = gridProduct.SelectedItem as Product;
                 productService.DeleteProduct(product.Id);
             }
-            catch(Exception)
+            catch(Exception x)
             {
-                throw;
+                MessageBox.Show("Błąd usuwania: " + x);
             }
         }
 
@@ -132,9 +139,10 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 products.Add(product);
                 return products;
             }
-            catch(Exception)
+            catch(Exception e)
             {
-                throw;
+                MessageBox.Show("Błąd Wyświetlania: " + e);
+                return null;
             }
         }
 
@@ -146,9 +154,10 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 IList<Product> products = productService.GetProductsByName(name);
                 return products;
             }
-            catch(Exception)
+            catch(Exception e)
             {
-                throw;
+                MessageBox.Show("Błąd Wyświetlania: " + e);
+                return null;
             }
         }
 

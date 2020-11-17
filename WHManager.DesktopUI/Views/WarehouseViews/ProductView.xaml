@@ -29,7 +29,7 @@
         <Button Grid.Column="0" Grid.Row="1" Click="ClearSearchClick">Wyczyść</Button>
         <Button Grid.Column="0" Grid.Row="2" Click="AddProductClick">Dodaj</Button>
         <TextBox Grid.Column="1" Grid.Row="0" Width="200" x:Name="textBoxProductSearch"></TextBox>
-        <DataGrid Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="5" x:Name="gridProduct" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+        <DataGrid Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="5" x:Name="gridProduct" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" Background="Beige"  AlternatingRowBackground="BlanchedAlmond">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Nazwa" Binding="{Binding Name}"></DataGridTextColumn>

@@ -131,16 +131,24 @@ namespace WHManager.DesktopUI.Views.ContractorsView
         {
             if (IdRadioButton.IsChecked == true)
             {
-                try
+                if(textSearchManufacturer.Text == "")
                 {
-                    IList<Manufacturer> manufacturers = GetManufacturerById(int.Parse(textSearchManufacturer.Text));
-                    Manufacturers = new ObservableCollection<Manufacturer>(manufacturers);
-                    gridManufacturers.ItemsSource = Manufacturers;
+                    gridManufacturers.ItemsSource = LoadData();
                 }
-                catch (Exception)
+                else
                 {
-                    throw;
+                    try
+                    {
+                        IList<Manufacturer> manufacturers = GetManufacturerById(int.Parse(textSearchManufacturer.Text));
+                        Manufacturers = new ObservableCollection<Manufacturer>(manufacturers);
+                        gridManufacturers.ItemsSource = Manufacturers;
+                    }
+                    catch (Exception x)
+                    {
+                        MessageBox.Show("Błąd wyszukiwania: " + x);
+                    }
                 }
+                
             }
             else if(NameRadioButton.IsChecked == true)
             {
@@ -150,16 +158,30 @@ namespace WHManager.DesktopUI.Views.ContractorsView
                     Manufacturers = new ObservableCollection<Manufacturer>(manufacturers);
                     gridManufacturers.ItemsSource = Manufacturers;
                 }
-                catch( Exception)
+                catch( Exception x)
                 {
-                    throw;
+                    MessageBox.Show("Błąd wyszukiwania: " + x);
                 }
             }
             else if(NipRadioButton.IsChecked == true)
             {
-                IList<Manufacturer> manufacturers = GetManufacturerByNip(int.Parse(textSearchManufacturer.Text));
-                Manufacturers = new ObservableCollection<Manufacturer>(manufacturers);
-                gridManufacturers.ItemsSource = Manufacturers;
+                if (textSearchManufacturer.Text == "")
+                {
+                    gridManufacturers.ItemsSource = LoadData();
+                }
+                else
+                {
+                    try
+                    {
+                        IList<Manufacturer> manufacturers = GetManufacturerByNip(int.Parse(textSearchManufacturer.Text));
+                        Manufacturers = new ObservableCollection<Manufacturer>(manufacturers);
+                        gridManufacturers.ItemsSource = Manufacturers;
+                    }
+                    catch (Exception x)
+                    {
+                        MessageBox.Show("Błąd wyszukiwania: " + x);
+                    }
+                }
             }
         }
 

@@ -38,7 +38,6 @@
                 <DataGridTextColumn Header="Producent" Binding="{Binding Manufacturer.Name}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Cena kupna" Binding="{Binding PriceBuy}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Cena sprzedaży" Binding="{Binding PriceSell}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Dostępność" Binding="{Binding InStock}"></DataGridTextColumn>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

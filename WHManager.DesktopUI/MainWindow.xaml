@@ -7,7 +7,7 @@
         xmlns:viewmodels="clr-namespace:WHManager.BusinessLogic.ViewModels;assembly=WHManager.BusinessLogic"
         xmlns:views="clr-namespace:WHManager.DesktopUI.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" WindowState="Maximized" Background="LightBlue">
     <Window.Resources>
         <DataTemplate x:Name="WarehouseTemplate" DataType="{x:Type viewmodels:WarehouseViewModel}">
             <views:WarehouseView DataContext="{Binding}"/>
@@ -34,13 +34,23 @@
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-
+        <!--Buttons-->
         <Button Grid.Column="0" Click="WarehouseViewClick">Magazyn</Button>
         <Button Grid.Column="1" Click="ContrahentViewClick">Kontrahenci</Button>
         <Button Grid.Column="2" Click="BusinessViewClick">Biznes</Button>
         <Button Grid.Column="3" Name="buttonAdministration" Click="AdministrationViewClick">Administracja</Button>
-        <Label Grid.Column="4" Name="labelName"></Label>
-        <ContentControl Grid.Row="1" Grid.ColumnSpan="5" x:Name="mainContent"></ContentControl>
-
+        <!--
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="5">
+            <Button Click="WarehouseViewClick" Style="{StaticResource MenuBtn}">Magazyn</Button>
+            <Button Click="ContrahentViewClick" Style="{StaticResource MenuBtn}">Kontrahenci</Button>
+            <Button Click="BusinessViewClick" Style="{StaticResource MenuBtn}">Biznes</Button>
+            <Button Name="buttonAdministration" Click="AdministrationViewClick" Style="{StaticResource MenuBtn}">Administracja</Button>
+        </StackPanel>
+        -->
+        <WrapPanel Grid.Row="0" Grid.Column="4" HorizontalAlignment="Right">
+            <Label Grid.Column="4" Name="labelName" HorizontalContentAlignment="Right" HorizontalAlignment="Left">Zalogowano jako: test</Label>
+            <Button Grid.Column="4" HorizontalAlignment="Right" Click="buttonLogout">Wyloguj</Button>
+        </WrapPanel>
+        <ContentControl Grid.Row="1" Grid.RowSpan="10" Grid.Column="1" Grid.ColumnSpan="5" x:Name="mainContent"></ContentControl>
     </Grid>
 </Window>

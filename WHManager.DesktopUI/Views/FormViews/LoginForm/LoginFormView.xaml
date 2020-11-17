@@ -5,29 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WHManager.DesktopUI.Views.FormViews.LoginForm"
         mc:Ignorable="d"
-        Title="LoginFormView" Height="450" Width="800">
+        Title="LoginFormView" Height="300" Width="300" ResizeMode="NoResize" Background="AliceBlue">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="120"></ColumnDefinition>
+            <ColumnDefinition Width="120"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <!--Textblock-->
-        <TextBlock>Nazwa użytkownika</TextBlock>
-        <TextBlock Grid.Row="1">Hasło</TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" FontSize="25" Text="Witamy w WHManager" TextWrapping="Wrap" TextAlignment="Center"></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="1">Nazwa użytkownika</TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="2">Hasło</TextBlock>
         <!--Textbox-->
-        <TextBox Grid.Column="1" Name="textboxUserName"></TextBox>
-        <TextBox Grid.Column="1" Grid.Row="1" Name="textboxPassword"></TextBox>
+        <TextBox Grid.Column="2" Grid.Row="1" Name="textboxUserName"></TextBox>
+        <PasswordBox Grid.Column="2" Grid.Row="2" Name="textboxPassword"></PasswordBox>
         <!--Button-->
-        <Button Grid.Column="1" Grid.Row="2" Click="LoginClick">Zaloguj</Button>
+        <Button Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Width="120" Click="LoginClick">Zaloguj</Button>
     </Grid>
 </Window>

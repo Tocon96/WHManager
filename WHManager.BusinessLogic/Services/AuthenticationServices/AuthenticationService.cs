@@ -18,10 +18,17 @@ namespace WHManager.BusinessLogic.Services.AuthenticationServices
         public User Login(string username, string password)
         {
             User user = userService.GetUserByName(username);
-            PasswordVerificationResult passwordResult = hasher.VerifyHashedPassword(user.PasswordHash, password);
-            if(passwordResult == PasswordVerificationResult.Success)
+            if(user != null)
             {
-                return user;
+                PasswordVerificationResult passwordResult = hasher.VerifyHashedPassword(user.PasswordHash, password);
+                if (passwordResult == PasswordVerificationResult.Success)
+                {
+                    return user;
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {

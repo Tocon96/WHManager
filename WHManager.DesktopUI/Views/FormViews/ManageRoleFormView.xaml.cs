@@ -12,6 +12,8 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
+using WHManager.DesktopUI.WindowSetting.Interfaces;
+using WHManager.DesktopUI.WindowSetting;
 
 namespace WHManager.DesktopUI.Views.FormViews
 {
@@ -25,14 +27,16 @@ namespace WHManager.DesktopUI.Views.FormViews
             get;
             set;
         }
-
+        private readonly IDisplaySetting displaySetting = new DisplaySetting();
         public ManageRoleFormView()
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
         }
         public ManageRoleFormView(Role role)
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
             Role = role;
             labelId.Visibility = Visibility.Visible;
             labelId.Content = Role.Id;

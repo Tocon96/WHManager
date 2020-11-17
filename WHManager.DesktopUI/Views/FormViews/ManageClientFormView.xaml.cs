@@ -12,6 +12,8 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
+using WHManager.DesktopUI.WindowSetting;
+using WHManager.DesktopUI.WindowSetting.Interfaces;
 
 namespace WHManager.DesktopUI.Views.FormViews
 {
@@ -28,16 +30,18 @@ namespace WHManager.DesktopUI.Views.FormViews
             get { return _client; }
             set { _client = value; }
         }
-
+        private readonly IDisplaySetting displaySetting = new DisplaySetting();
         public ManageClientFormView()
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
         }
         public ManageClientFormView(Client client)
         {
             InitializeComponent();
+            displaySetting.CenterWindowOnScreen(this);
             Client = client;
-            labelId.Visibility = Visibility.Visible;
+            wrpPanelId.Visibility = Visibility.Visible;
             labelId.Content = Client.Id;
             textBoxName.Text = Client.Name;
             textBoxNip.Text = Client.Nip.ToString();
