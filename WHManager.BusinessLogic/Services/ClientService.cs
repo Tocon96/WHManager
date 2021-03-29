@@ -13,7 +13,7 @@ namespace WHManager.BusinessLogic.Services
     {
         private readonly IClientRepository _clientRepository = new ClientRepository(new DataAccess.WHManagerDBContextFactory());
 
-        public async Task CreateNewClient(Client client)
+        public void CreateNewClient(Client client)
         {
             try
             {
@@ -21,23 +21,23 @@ namespace WHManager.BusinessLogic.Services
                 string name = client.Name;
                 string phoneNumber = client.PhoneNumber;
                 double? nip = client.Nip;
-                await _clientRepository.AddNewClientAsync(id, name, nip, phoneNumber);
+                _clientRepository.AddNewClient(id, name, nip, phoneNumber);
             }
-            catch (Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd dodawania klienta: ");
             }
         }
 
-        public async Task DeleteClient(int id)
+        public void DeleteClient(int id)
         {
             try
             {
-                await _clientRepository.DeleteClientAsync(id);
+                _clientRepository.DeleteClient(id);
             }
-            catch(Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd usuwania klienta: ");
             }
         }
 
@@ -60,9 +60,9 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return clientsList;
             }
-            catch (Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd pobierania klientów: ");
             }
         }
 
@@ -87,9 +87,9 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return clientsList;
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania klientów: ");
                 }
             }
             else if(name != null)
@@ -112,9 +112,9 @@ namespace WHManager.BusinessLogic.Services
 
                     return clientsList;
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania klientów: ");
                 }
             }
             else if(nip != null)
@@ -136,18 +136,18 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return clientsList;
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania klientów: ");
                 }
             }
             else
             {
-                return null;
+                throw new Exception("Błąd pobierania klientów: ");
             }
         }
 
-        public async Task UpdateClient(Client client)
+        public void UpdateClient(Client client)
         {
             try
             {
@@ -155,11 +155,11 @@ namespace WHManager.BusinessLogic.Services
                 string name = client.Name;
                 string phoneNumber = client.PhoneNumber;
                 double? nip = client.Nip;
-                await _clientRepository.UpdateClientAsync(id, name, nip, phoneNumber);
+                _clientRepository.UpdateClient(id, name, nip, phoneNumber);
             }
-            catch (Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd pobierania klientów: ");
             }
         }
     }

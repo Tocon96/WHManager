@@ -136,8 +136,8 @@ namespace WHManager.DesktopUI.Views.BusinessViews.BusinessFormViews {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;V1.0.0.0;component/views/businessviews/businessformviews/inv" +
-                    "oiceformview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;component/views/businessviews/businessformviews/invoiceformv" +
+                    "iew.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Views\BusinessViews\BusinessFormViews\InvoiceFormView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

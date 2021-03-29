@@ -13,65 +13,79 @@ namespace WHManager.BusinessLogic.Services
     {
         private readonly IRoleRepository roleRepository = new RoleRepository(new DataAccess.WHManagerDBContextFactory());
 
-        public async Task AddRole(Role role)
+        public void AddRole(Role role)
         {
             try
             {
                 string name = role.Name;
                 bool isadmin = role.IsAdmin;
-                await roleRepository.CreateNewRole(name, isadmin);
+                roleRepository.CreateNewRole(name, isadmin);
             }
-            catch (Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd dodawania roli: ");
             }
             
         }
 
-        public async Task DeleteRole(int id)
+        public void DeleteRole(int id)
         {
             try
             {
-                await roleRepository.DeleteRole(id);
+                roleRepository.DeleteRole(id);
             }
-            catch (Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd usuwania roli: ");
             }
         }
 
         public IList<Role> GetRoleById(int id)
         {
-            IList<Role> roles = new List<Role>();
-            var roleList = roleRepository.GetRole(id);
-            foreach(var role in roleList)
+            try
             {
-                Role newRole = new Role
+                IList<Role> roles = new List<Role>();
+                var roleList = roleRepository.GetRole(id);
+                foreach (var role in roleList)
                 {
-                    Id = role.Id,
-                    Name = role.Name,
-                    IsAdmin = role.IsAdmin
-                };
-                roles.Add(newRole);
+                    Role newRole = new Role
+                    {
+                        Id = role.Id,
+                        Name = role.Name,
+                        IsAdmin = role.IsAdmin
+                    };
+                    roles.Add(newRole);
+                }
+                return roles;
             }
-            return roles;
+            catch
+            {
+                throw new Exception("Błąd pobierania ról: ");
+            }
         }
 
         public IList<Role> GetRoleByName(string name)
         {
-            IList<Role> roles = new List<Role>();
-            var roleList = roleRepository.GetRoleByName(name);
-            foreach (var role in roleList)
+            try
             {
-                Role newRole = new Role
+                IList<Role> roles = new List<Role>();
+                var roleList = roleRepository.GetRoleByName(name);
+                foreach (var role in roleList)
                 {
-                    Id = role.Id,
-                    Name = role.Name,
-                    IsAdmin = role.IsAdmin
-                };
-                roles.Add(newRole);
+                    Role newRole = new Role
+                    {
+                        Id = role.Id,
+                        Name = role.Name,
+                        IsAdmin = role.IsAdmin
+                    };
+                    roles.Add(newRole);
+                }
+                return roles;
             }
-            return roles;
+            catch
+            {
+                throw new Exception("Błąd pobierania ról: ");
+            }
         }
 
         public IList<Role> GetRoles()
@@ -92,25 +106,25 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return roles;
             }
-            catch (Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd pobierania ról: ");
             }
 
         }
 
-        public async Task UpdateRole(Role role)
+        public void UpdateRole(Role role)
         {
             try
             {
                 int id = role.Id;
                 string name = role.Name;
                 bool isadmin = role.IsAdmin;
-                await roleRepository.UpdateRole(id, name, isadmin);
+                roleRepository.UpdateRole(id, name, isadmin);
             }
-            catch (Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd aktualizacji ról: ");
             }
         }
     }

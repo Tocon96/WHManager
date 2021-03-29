@@ -19,106 +19,107 @@ namespace WHManager.DataAccess.Repositories
             _contextFactory = contextFactory;
         }
 
-        public async Task CreateNewRole(string name, bool isadmin)
+        public void CreateNewRole(string name, bool isadmin)
         {
-            try
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                using(WHManagerDBContext context = _contextFactory.CreateDbContext())
+                try
                 {
                     Role role = new Role
                     {
                         Name = name,
                         IsAdmin = isadmin
                     };
-                    await context.Roles.AddAsync(role);
-                    await context.SaveChangesAsync();
+                    context.Roles.Add(role);
+                    context.SaveChanges();
                 }
-            }
-            catch (Exception)
-            {
-                throw;
+                catch
+                {
+                    throw new Exception("Błąd dodawania roli: ");
+                }
             }
         }
 
-        public async Task DeleteRole(int id)
+        public void DeleteRole(int id)
         {
-            try
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                try
                 {
-                    context.Remove(await context.Roles.SingleOrDefaultAsync(x => x.Id == id));
-                    await context.SaveChangesAsync();
+                    context.Remove(context.Roles.SingleOrDefault(x => x.Id == id));
+                    context.SaveChanges();
                 }
-            }
-            catch (Exception)
-            {
-                throw;
+                catch
+                {
+                    throw new Exception("Błąd usuwania roli: ");
+                }
             }
         }
 
         public IEnumerable<Role> GetRole(int id)
         {
-            try
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                try
                 {
                     IEnumerable<Role> roles = context.Roles.ToList().FindAll(x => x.Id == id);
                     return roles;
                 }
-            }
-            catch (Exception)
-            {
-                throw;
+                catch
+                {
+                    throw new Exception("Błąd pobierania roli: ");
+                }
             }
         }
 
         public IEnumerable<Role> GetRoles()
         {
-            try
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                try
                 {
                     IEnumerable<Role> roles = context.Roles.ToList();
                     return roles;
                 }
-            }
-            catch (Exception)
-            {
-                throw;
+                catch
+                {
+                    throw new Exception("Błąd pobierania roli: ");
+                }
             }
         }
 
         public IEnumerable<Role> GetRoleByName(string name)
         {
-            try
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                try
                 {
                     IEnumerable<Role> roles = context.Roles.ToList().FindAll(x => x.Name.StartsWith(name));
                     return roles;
                 }
+                catch
+                {
+                    throw new Exception("Błąd pobierania roli: ");
+                }
             }
-            catch (Exception)
-            {
-                throw;
-            }
+            
         }
 
-        public async Task UpdateRole(int id, string name, bool isadmin)
+        public void UpdateRole(int id, string name, bool isadmin)
         {
-            try
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                try
                 {
                     Role updatedRole = context.Roles.SingleOrDefault(x => x.Id == id);
                     updatedRole.Name = name;
                     updatedRole.IsAdmin = isadmin;
-                    await context.SaveChangesAsync();
+                    context.SaveChanges();
                 }
-            }
-            catch (Exception)
-            {
-                throw;
+                catch
+                {
+                    throw new Exception("Błąd aktualizacji roli: ");
+                }
             }
         }
     }

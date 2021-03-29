@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1
 E:\visualstudio\WHManager\WHManager.DesktopUI\App.xaml
-351182327454
+241451521207
 
-382121096879
+29-690414554
 246211839197
-css\LogButton.xaml;css\MenuBtn.xaml;MainWindow.xaml;Views\AdministrationView.xaml;Views\AdministrationViews\RoleView.xaml;Views\AdministrationViews\UserView.xaml;Views\BusinessView.xaml;Views\BusinessViews\BusinessFormViews\InvoiceFormView.xaml;Views\BusinessViews\InvoiceView.xaml;Views\BusinessViews\OrderView.xaml;Views\ContractorsViews\ClientView.xaml;Views\ContractorsViews\ManufacturerView.xaml;Views\ContractorView.xaml;Views\FormViews\AdvancedSearchProductFormView.xaml;Views\FormViews\LoginForm\LoginFormView.xaml;Views\FormViews\ManageClientFormView.xaml;Views\FormViews\ManageInvoiceFormView.xaml;Views\FormViews\ManageItemFormView.xaml;Views\FormViews\ManageManufacturerFormView.xaml;Views\FormViews\ManageOrderFormView.xaml;Views\FormViews\ManageProductFormView.xaml;Views\FormViews\ManageProductTypeFormView.xaml;Views\FormViews\ManageRoleFormView.xaml;Views\FormViews\ManageTaxFormView.xaml;Views\FormViews\ManageUserFormView.xaml;Views\FormViews\SearchFormViews\SearchoProductsByTypeFormView.xaml;Views\FormViews\SearchFormViews\SearchProductByManufacturerFormView.xaml;Views\FormViews\SearchFormViews\SearchProductsByPricesFormView.xaml;Views\FormViews\SearchFormViews\SearchProductsByTaxFormView.xaml;Views\WarehouseView.xaml;Views\WarehouseViews\EmittedItemsView.xaml;Views\WarehouseViews\ItemView.xaml;Views\WarehouseViews\ProductTypeView.xaml;Views\WarehouseViews\ProductView.xaml;Views\WarehouseViews\TaxView.xaml;
+MainWindow.xaml;Views\AdministrationViews\RoleView.xaml;Views\AdministrationViews\UserView.xaml;Views\BusinessViews\BusinessFormViews\InvoiceFormView.xaml;Views\BusinessViews\InvoiceView.xaml;Views\BusinessViews\OrderView.xaml;Views\ContractorsViews\ClientView.xaml;Views\ContractorsViews\ManufacturerView.xaml;Views\FormViews\LoginForm\LoginFormView.xaml;Views\FormViews\ManageClientFormView.xaml;Views\FormViews\ManageInvoiceFormView.xaml;Views\FormViews\ManageItemFormView.xaml;Views\FormViews\ManageManufacturerFormView.xaml;Views\FormViews\ManageOrderFormView.xaml;Views\FormViews\ManageProductFormView.xaml;Views\FormViews\ManageProductTypeFormView.xaml;Views\FormViews\ManageRoleFormView.xaml;Views\FormViews\ManageTaxFormView.xaml;Views\FormViews\ManageUserFormView.xaml;Views\WarehouseViews\EmittedItemsView.xaml;Views\WarehouseViews\ItemView.xaml;Views\WarehouseViews\ProductTypeView.xaml;Views\WarehouseViews\ProductView.xaml;Views\WarehouseViews\TaxView.xaml;
 
 False
 

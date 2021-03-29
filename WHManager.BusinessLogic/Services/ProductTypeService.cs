@@ -16,16 +16,16 @@ namespace WHManager.BusinessLogic.Services
     {
         private readonly IProductTypeRepository _productTypeRepository = new ProductTypeRepository(new DataAccess.WHManagerDBContextFactory());
 
-        public async Task CreateNewProductType(ProductType productType)
+        public void CreateNewProductType(ProductType productType)
         {
             try
             {
                 string name = productType.Name;
-                await _productTypeRepository.AddProductTypeAsync(name);
+                _productTypeRepository.AddProductType(name);
             }
-            catch(Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd dodawania typu produktu: ");
             }
         }
 
@@ -46,9 +46,9 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return productTypesList;
             }
-            catch(Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd pobierania typu produktu: ");
             }
         }
 
@@ -70,38 +70,38 @@ namespace WHManager.BusinessLogic.Services
                 {
                     return null;
                 }
-            }   
-            catch(Exception)
-            {
-                throw;
             }
-		}
+            catch
+            {
+                throw new Exception("Błąd pobierania typu produktu: ");
+            }
+        }
 		
-		public async Task UpdateProductType(ProductType productType)
+		public void UpdateProductType(ProductType productType)
 		{
             try
             {
                 int id = productType.Id;
                 string name = productType.Name;
-                await _productTypeRepository.UpdateProductTypeAsync(id, name);
+                _productTypeRepository.UpdateProductType(id, name);
             }
-			catch(Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd aktualizacji typu produktu: ");
             }
-		}
+        }
 		
-		public async Task DeleteProductType(int id)
+		public void DeleteProductType(int id)
 		{
             try
             {
-                await _productTypeRepository.DeleteProductTypeAsync(id);
+                _productTypeRepository.DeleteProductType(id);
             }
-			catch(Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd usuwania typu produktu: ");
             }
-		}
+        }
 		
         public IList<ProductType> GetProductTypesByName(string name)
         {
@@ -120,9 +120,9 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return productTypesList;
             }
-            catch(Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd pobierania typu produktu: ");
             }
         }
     }

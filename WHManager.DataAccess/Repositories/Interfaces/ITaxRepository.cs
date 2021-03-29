@@ -8,11 +8,11 @@ namespace WHManager.DataAccess.Repositories.Interfaces
 {
     public interface ITaxRepository
     {
-        Task<Tax> AddTaxAsync(int id, string name, int value);
+        void AddTax(string name, int value);
         IEnumerable<Tax> GetAllTaxes();
         Tax GetTax(int id);
-        Task UpdateTaxAsync(int id, string name, int value);
-        Task DeleteTaxAsync(int id);
+        void UpdateTax(int id, string name, int value);
+        void DeleteTax(int id);
         IEnumerable<Tax> GetTaxesByName(string name);
         IEnumerable<Tax> GetTaxesByValue(int value);
     }

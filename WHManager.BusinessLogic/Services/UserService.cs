@@ -19,14 +19,14 @@ namespace WHManager.BusinessLogic.Services
         private readonly IRoleService roleService = new RoleService();
         private readonly IPasswordHasher hasher = new PasswordHasher();
 
-        public async Task AddUser(User user)
+        public void AddUser(User user)
         {
             try
             {
                 string name = user.UserName;
                 string password = hasher.HashPassword(user.PasswordHash);
                 int role = user.Role.Id;
-                await userRepository.CreateNewUser(name, password, role);
+                userRepository.CreateNewUser(name, password, role);
             }
             catch(Exception)
             {
@@ -34,11 +34,11 @@ namespace WHManager.BusinessLogic.Services
             }
         }
 
-        public async Task DeleteUser(int id)
+        public void DeleteUser(int id)
         {
             try
             {
-                await userRepository.DeleteUser(id);
+                 userRepository.DeleteUser(id);
             }
             catch (Exception)
             {
@@ -46,7 +46,7 @@ namespace WHManager.BusinessLogic.Services
             }
         }
 
-        public async Task UpdateUser(User user)
+        public void UpdateUser(User user)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace WHManager.BusinessLogic.Services
                 string name = user.UserName;
                 string password = hasher.HashPassword(user.PasswordHash);
                 int role = user.Role.Id;
-                await userRepository.UpdateUser(id, name, password, role);
+                 userRepository.UpdateUser(id, name, password, role);
             }
             catch (Exception)
             {

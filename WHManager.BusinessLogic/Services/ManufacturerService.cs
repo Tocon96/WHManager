@@ -14,18 +14,18 @@ namespace WHManager.BusinessLogic.Services
     {
         private readonly IManufacturerRepository _manufacturerRepository = new ManufacturerRepository(new DataAccess.WHManagerDBContextFactory());
 
-        public async Task CreateNewManufacturer(Manufacturer manufacturer)
+        public void CreateNewManufacturer(Manufacturer manufacturer)
         {
             try
             {
                 int id = manufacturer.Id;
                 string name = manufacturer.Name;
                 double nip = manufacturer.Nip;
-                await _manufacturerRepository.AddManufacturerAsync(id, name, nip);
+                _manufacturerRepository.AddManufacturer(name, nip);
             }
-            catch(Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd dodawania producenta: ");
             }
             
         }
@@ -48,9 +48,9 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return manufacturersList;
             }
-            catch(Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd pobierania producentów: ");
             }
             
         }
@@ -68,38 +68,38 @@ namespace WHManager.BusinessLogic.Services
                 };
                 return currentManufacturer;
             }
-            catch (Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd pobierania producenta: ");
             }
 			
 		}
 		
-		public async Task UpdateManufacturer(Manufacturer manufacturer)
+		public void UpdateManufacturer(Manufacturer manufacturer)
 		{
             try
             {
                 int id = manufacturer.Id;
                 string name = manufacturer.Name;
                 double nip = manufacturer.Nip;
-                await _manufacturerRepository.UpdateManufacturerAsync(id, name, nip);
+                _manufacturerRepository.UpdateManufacturer(id, name, nip);
             }
             catch(Exception)
             {
-                throw;
+                throw new Exception("Błąd aktualizacji producenta: ");
             }
 			
 		}
 		
-		public async Task DeleteManufacturer(int id)
+		public void DeleteManufacturer(int id)
 		{
             try
             {
-                await _manufacturerRepository.DeleteManufacturerAsync(id);
+                _manufacturerRepository.DeleteManufacturer(id);
             }
             catch(Exception)
             {
-                throw;
+                throw new Exception("Błąd usuwania producenta: ");
             }
 			
 		}
@@ -122,9 +122,9 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return manufacturersList;
             }
-            catch(Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd pobierania producenta: ");
             }
         }
 
@@ -142,9 +142,9 @@ namespace WHManager.BusinessLogic.Services
                 return currentManufacturer;
 
             }
-            catch(Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd pobierania producenta: ");
             }
         }
     }

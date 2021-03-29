@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -15,6 +16,7 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
+using WHManager.DesktopUI.Views.WarehouseViews;
 using WHManager.DesktopUI.WindowSetting;
 using WHManager.DesktopUI.WindowSetting.Interfaces;
 
@@ -46,40 +48,95 @@ namespace WHManager.DesktopUI.Views.FormViews
             get { return _taxes; }
             set { _taxes = value; }
         }
-        private readonly IDisplaySetting displaySetting = new DisplaySetting();
-        public ManageProductFormView()
+
+        private ObservableCollection<Product> _products;
+        public ObservableCollection<Product> Products
+        {
+            get { return _products; }
+            set { _products = value; }
+        }
+
+        private ProductView _productView;
+        public ProductView ProductGridView
+        {
+            get { return _productView; }
+            set { _productView = value; }
+        }
+
+        private Product _product;
+        public Product Product
+        {
+            get { return _product; }
+            set { _product = value; }
+        }
+
+        private readonly IManufacturerService manufacturerService = new ManufacturerService();
+        private readonly IProductTypeService productTypeService = new ProductTypeService();
+        private readonly IProductService productService = new ProductService();
+        public ManageProductFormView(ProductView productView)
         {
             InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
+            ProductGridView = productView;
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             FillComboBoxes();
         }
-        public ManageProductFormView(Product product)
+        public ManageProductFormView(ProductView productView, Product product)
         {
             InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
+            Product = product;
+            ProductGridView = productView;
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             FillComboBoxes();
-            IdLabel.Visibility = Visibility.Visible;
-            IdLabel.Content = product.Id;
-            textBoxProductName.Text = product.Name;
-            textBoxProductPriceBuy.Text = product.PriceBuy.ToString();
-            textBoxProductPriceSell.Text = product.PriceSell.ToString();
-            comboBoxProductManufacturer.SelectedItem = product.Manufacturer;
-            comboBoxProductTax.SelectedItem = product.Tax;
-            comboBoxProductType.SelectedItem = product.Type;
-            
+            SelectItems(product);
+            textBlockManageProduct.Text = "Edytuj Produkt: "+product.Id;
+        }
+
+        private void SelectItems(Product product)
+        {
+            try
+            {
+                textBoxProductName.Text = product.Name;
+                textBoxProductPriceBuy.Text = product.PriceBuy.ToString();
+                textBoxProductPriceSell.Text = product.PriceSell.ToString();
+                foreach (Manufacturer manufacturer in comboBoxManufacturer.Items)
+                {
+                    if (manufacturer.Id == product.Manufacturer.Id)
+                    {
+                        comboBoxManufacturer.SelectedItem = manufacturer;
+                    }
+                }
+                foreach (Tax tax in comboBoxProductTax.Items)
+                {
+                    if (tax.Id == product.Tax.Id)
+                    {
+                        comboBoxProductTax.SelectedItem = tax;
+                    }
+                }
+                foreach (ProductType type in comboBoxProductType.Items)
+                {
+                    if (type.Id == product.Type.Id)
+                    {
+                        comboBoxProductType.SelectedItem = type;
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Błąd ComboBoxów: " + e);
+            }
         }
 
         private List<Manufacturer> GetManufacturers()
         {
             try
             {
-                IManufacturerService manufacturerService = new ManufacturerService();
                 List<Manufacturer> manufacturers = manufacturerService.GetManufacturers().ToList();
                 return manufacturers;
             }
             catch(Exception e)
             {
-                MessageBox.Show("Błąd wyświetlania: GetManufacturers: " + e);
+                MessageBox.Show("Błąd wyświetlani: " + e);
                 return null;
             }
         }
@@ -93,7 +150,7 @@ namespace WHManager.DesktopUI.Views.FormViews
             }
             catch (Exception e)
             {
-                MessageBox.Show("Błąd wyświetlania: GetTaxes: " + e);
+                MessageBox.Show("Błąd wyświetlania: " + e);
                 return null;
             }
         }
@@ -101,13 +158,12 @@ namespace WHManager.DesktopUI.Views.FormViews
         {
             try
             {
-                IProductTypeService productTypeService = new ProductTypeService();
                 List<ProductType> productTypes = productTypeService.GetProductTypes().ToList();
                 return productTypes;
             }
             catch (Exception e)
             {
-                MessageBox.Show("Błąd wyświetlania: GetProductTypes: " + e);
+                MessageBox.Show("Błąd wyświetlania: " + e);
                 return null;
             }
         }
@@ -122,17 +178,36 @@ namespace WHManager.DesktopUI.Views.FormViews
                 Taxes = new ObservableCollection<Tax>(taxes);
                 ProductTypes = new ObservableCollection<ProductType>(productTypes);
 
-                comboBoxProductManufacturer.ItemsSource = Manufacturers;
+                comboBoxManufacturer.ItemsSource = Manufacturers;
                 comboBoxProductTax.ItemsSource = Taxes;
                 comboBoxProductType.ItemsSource = ProductTypes;
+
+                comboBoxManufacturer.SelectedItem = Manufacturers[0];
+                comboBoxProductTax.SelectedItem = Taxes[0];
+                comboBoxProductType.SelectedItem = ProductTypes[0];
             }
             catch (Exception e)
             {
-                MessageBox.Show("Błąd wyświetlania: FillComboBoxes: " + e);
+                MessageBox.Show("Błąd wyświetlania: " + e);
                 
             }
 
         }
+
+        private List<Product> GetAllProducts()
+        {
+            List<Product> products = productService.GetProducts().ToList();
+            return products;
+        }
+
+
+        private ObservableCollection<Product> LoadData()
+        {
+            List<Product> productsList = GetAllProducts();
+            Products = new ObservableCollection<Product>(productsList);
+            return Products;
+        }
+
         private void AddProduct()
         {
             try
@@ -143,7 +218,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                     Name = textBoxProductName.Text,
                     Type = comboBoxProductType.SelectedItem as ProductType,
                     Tax = comboBoxProductTax.SelectedItem as Tax,
-                    Manufacturer = comboBoxProductManufacturer.SelectedItem as Manufacturer,
+                    Manufacturer = comboBoxManufacturer.SelectedItem as Manufacturer,
                     PriceBuy = int.Parse(textBoxProductPriceBuy.Text),
                     PriceSell = int.Parse(textBoxProductPriceSell.Text)
                 };
@@ -151,7 +226,7 @@ namespace WHManager.DesktopUI.Views.FormViews
             }
             catch (Exception e)
             {
-                MessageBox.Show("Błąd wyświetlania: FillComboBoxes: " + e);
+                MessageBox.Show("Błąd dodawania: " + e);
 
             }
 
@@ -164,11 +239,11 @@ namespace WHManager.DesktopUI.Views.FormViews
                     IProductService productService = new ProductService();
                     Product product = new Product
                     {
-                        Id = (int)IdLabel.Content,
+                        Id = Product.Id,
                         Name = textBoxProductName.Text,
                         Type = comboBoxProductType.SelectedItem as ProductType,
                         Tax = comboBoxProductTax.SelectedItem as Tax,
-                        Manufacturer = comboBoxProductManufacturer.SelectedItem as Manufacturer,
+                        Manufacturer = comboBoxManufacturer.SelectedItem as Manufacturer,
                         PriceBuy = decimal.Parse(textBoxProductPriceBuy.Text),
                         PriceSell = decimal.Parse(textBoxProductPriceSell.Text)
                     };
@@ -176,7 +251,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("Błąd wyświetlania: FillComboBoxes: " + e);
+                    MessageBox.Show("Błąd wyświetlania: " + e);
 
                 }
             }
@@ -184,30 +259,43 @@ namespace WHManager.DesktopUI.Views.FormViews
         private void AddProductClick(object sender, RoutedEventArgs e)
         {
 
-            if(IdLabel.Visibility == Visibility.Visible)
+            if(Product != null)
             {
                 try
                 {
                     UpdateProduct();
+                    DialogResult = true;
                     this.Close();
                 }
                 catch(Exception x)
                 {
-                    MessageBox.Show("Błąd aktualizacji: AddProductClick: " + x);
+                    MessageBox.Show("Błąd aktualizacji: " + x);
                 }
             }
-            else if(IdLabel.Visibility == Visibility.Hidden)
+            else
             {
                 try
                 {
                     AddProduct();
+                    DialogResult = true;
                     this.Close();
                 }
                 catch (Exception x)
                 {
-                    MessageBox.Show("Błąd dodawania: AddProductClick: " + x);
+                    MessageBox.Show("Błąd dodawania: " + x);
                 }
             }
+        }
+
+        private void CancelClick(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            this.Close();
+        }
+
+        public void OnDialogClose()
+        {
+            ProductGridView.gridProduct.Items.Refresh();
         }
     }
 }

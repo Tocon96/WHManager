@@ -8,9 +8,9 @@ namespace WHManager.BusinessLogic.Services.Interfaces
 {
     public interface IClientService
     {
-        Task CreateNewClient(Client client);
-        Task UpdateClient(Client client);
-        Task DeleteClient(int id);
+        void CreateNewClient(Client client);
+        void UpdateClient(Client client);
+        void DeleteClient(int id);
         IList<Client> GetClient(int? id = null, string name = null, double? nip = null);
         IList<Client> GetAllClients();
     }

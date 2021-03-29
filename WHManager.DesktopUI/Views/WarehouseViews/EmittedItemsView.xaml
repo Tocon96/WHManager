@@ -22,11 +22,8 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <RadioButton Grid.Row="0" Grid.Column="2" GroupName="Filters" x:Name="radioButtonId" Click="radioButtonIdClick" IsChecked="true">ID</RadioButton>
-        <RadioButton Grid.Row="0" Grid.Column="3" GroupName="Filters" x:Name="radioButtonDateOfPurchase" Click="radioButtonDateOfPurchaseClick">Data Kupna</RadioButton>
         <Button Grid.Column="0" Grid.Row="0" Click="SearchItemsClick">Wyszukaj</Button>
         <Button Grid.Column="0" Grid.Row="1" Click="ClearSearchClick">Wyczyść</Button>
-        <Button Grid.Column="0" Grid.Row="2" Click="AddItemClick">Dodaj</Button>
         <!--Search fields-->
         <TextBox Grid.Column="1" Grid.Row="0" Width="200" x:Name="SearchTextBox" Visibility="Visible"></TextBox>
         <DatePicker Grid.Column="1" Grid.Row="0" Width="100" HorizontalAlignment="Left" x:Name="datePickerEarlierDate" Visibility="Hidden"></DatePicker>

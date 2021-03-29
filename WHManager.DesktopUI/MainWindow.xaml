@@ -4,53 +4,187 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WHManager.DesktopUI"
-        xmlns:viewmodels="clr-namespace:WHManager.BusinessLogic.ViewModels;assembly=WHManager.BusinessLogic"
-        xmlns:views="clr-namespace:WHManager.DesktopUI.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" WindowState="Maximized" Background="LightBlue">
+        Title="WHManager" WindowState="Maximized">
     <Window.Resources>
-        <DataTemplate x:Name="WarehouseTemplate" DataType="{x:Type viewmodels:WarehouseViewModel}">
-            <views:WarehouseView DataContext="{Binding}"/>
-        </DataTemplate>
-        <DataTemplate x:Name="ContractorsTemplate" DataType="{x:Type viewmodels:ContractorsViewModel}">
-            <views:ContractorView DataContext="{Binding}"/>
-        </DataTemplate>
-        <DataTemplate x:Name="BusinessTemplate" DataType="{x:Type viewmodels:BusinessViewModel}">
-            <views:BusinessView DataContext="{Binding}"/>
-        </DataTemplate>
-        <DataTemplate x:Name="AdministrationTemplate" DataType="{x:Type viewmodels:AdministrationViewModel}">
-            <views:AdministrationView DataContext="{Binding}"/>
-        </DataTemplate>
+        <Thickness x:Key="DefaultSubMenuPadding" Left="10"/>
+    
+        <Style x:Key="MenuTextStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+            <Setter Property="Padding" Value="5,0,5,0"/>
+
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ToggleButton}}" Value="True">
+                    <Setter Property="Foreground" Value="Silver"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ToggleButton}}" Value="True">
+                    <Setter Property="Foreground" Value="Silver"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBoxItem}}" Value="True">
+                    <Setter Property="Foreground" Value="Silver"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBoxItem}}" Value="True">
+                    <Setter Property="Foreground" Value="Silver"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="MenuButtonStyle" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <TextBlock Style="{StaticResource MenuTextStyle}" Grid.Column="0" Text="{TemplateBinding Content}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Content" Value="Dashboard">
+                                <Setter Property="IsChecked" Value="True"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="MenuListButtonStyle" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="#1976d2"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <TextBlock Style="{StaticResource MenuTextStyle}" Grid.Column="0" Text="{TemplateBinding Content}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Content" Value="Dashboard">
+                                <Setter Property="IsChecked" Value="True"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type ListBox}">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="#1976d2"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="SelectedIndex" Value="0"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChecked, ElementName=Menu}" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding SubMenuList}" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="{x:Type ListBoxItem}">
+            <Setter Property="Background" Value="#1976d2"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Border Padding="{Binding SubMenuPadding, ElementName=this, FallbackValue={StaticResource DefaultSubMenuPadding}, TargetNullValue={StaticResource DefaultSubMenuPadding}}">
+                            <RadioButton
+                                x:Name="SMenuButton"
+                                GroupName="SubMenu"
+                                Style="{StaticResource MenuListButtonStyle}"
+                                Content="{Binding SubMenuText, FallbackValue=MenuText, TargetNullValue=MenuText}"
+                                Command="{Binding SubMenuCommand}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=SMenuButton}" Value="True">
+                                <Setter Property="IsSelected" Value="True"/>
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Arrow" />
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Silver"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
     </Window.Resources>
-    <Grid>
+    <Grid Background="#b3e5fc">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="200"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <!--Buttons-->
-        <Button Grid.Column="0" Click="WarehouseViewClick">Magazyn</Button>
-        <Button Grid.Column="1" Click="ContrahentViewClick">Kontrahenci</Button>
-        <Button Grid.Column="2" Click="BusinessViewClick">Biznes</Button>
-        <Button Grid.Column="3" Name="buttonAdministration" Click="AdministrationViewClick">Administracja</Button>
-        <!--
-        <StackPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="5">
-            <Button Click="WarehouseViewClick" Style="{StaticResource MenuBtn}">Magazyn</Button>
-            <Button Click="ContrahentViewClick" Style="{StaticResource MenuBtn}">Kontrahenci</Button>
-            <Button Click="BusinessViewClick" Style="{StaticResource MenuBtn}">Biznes</Button>
-            <Button Name="buttonAdministration" Click="AdministrationViewClick" Style="{StaticResource MenuBtn}">Administracja</Button>
+
+        <ItemsControl ItemsSource="{Binding MenuList}"
+        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+        ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <RadioButton x:Name="Menu"
+                                 Content="{Binding MenuText}"
+                                 Style="{StaticResource MenuButtonStyle}"
+                                 GroupName="MainMenu"
+                                 />
+                        <ListBox
+                        ItemsSource="{Binding SubMenuList}"
+                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"                       
+                        />
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <StackPanel Grid.Row="2" Grid.Column="0">
+            <Separator></Separator>
+            <Label DockPanel.Dock="Top">Zalogowano jako:</Label>
+            <Label Name="labelName" HorizontalContentAlignment="Center">test</Label>
+            <Separator></Separator>
+            <Button DockPanel.Dock="Bottom" Style="{StaticResource ButtonStyle}" Click="buttonLogout">Wyloguj</Button>
         </StackPanel>
-        -->
-        <WrapPanel Grid.Row="0" Grid.Column="4" HorizontalAlignment="Right">
-            <Label Grid.Column="4" Name="labelName" HorizontalContentAlignment="Right" HorizontalAlignment="Left">Zalogowano jako: test</Label>
-            <Button Grid.Column="4" HorizontalAlignment="Right" Click="buttonLogout">Wyloguj</Button>
-        </WrapPanel>
-        <ContentControl Grid.Row="1" Grid.RowSpan="10" Grid.Column="1" Grid.ColumnSpan="5" x:Name="mainContent"></ContentControl>
+        <Frame Grid.Row="0" Grid.RowSpan="6" Grid.Column="1" Grid.ColumnSpan="5" x:Name="mainContent" NavigationUIVisibility="Hidden"></Frame>
+
     </Grid>
 </Window>

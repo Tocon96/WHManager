@@ -6,11 +6,11 @@ namespace WHManager.BusinessLogic.Services
 {
     public interface IManufacturerService
     {
-        Task CreateNewManufacturer(Manufacturer manufacturer);
+        void CreateNewManufacturer(Manufacturer manufacturer);
         IList<Manufacturer> GetManufacturers();
         Manufacturer GetManufacturer(int id);
-        Task UpdateManufacturer(Manufacturer manufacturer);
-        Task DeleteManufacturer(int id);
+        void UpdateManufacturer(Manufacturer manufacturer);
+        void DeleteManufacturer(int id);
         IList<Manufacturer> GetManufacturersByName(string name);
         Manufacturer GetManufacturerByNip(double nip);
 

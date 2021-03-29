@@ -24,33 +24,29 @@ namespace WHManager.DesktopUI.Views.FormViews.LoginForm
         public LoginFormView()
         {
             InitializeComponent();
-            CenterWindowOnScreen();
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
         }
 
         private void LoginClick(object sender, RoutedEventArgs e)
         {
             User user = authenticationService.Login(textboxUserName.Text, textboxPassword.Password);
-            if (user == null)
+            try
             {
-                MessageBox.Show("Błąd logowania");
+                if (user == null)
+                {
+                    MessageBox.Show("Błąd logowania");
+                }
+                else
+                {
+                    MainWindow mainWindow = new MainWindow(user);
+                    mainWindow.Show();
+                    this.Close();
+                }
             }
-            else
+            catch(Exception x)
             {
-                MainWindow mainWindow = new MainWindow(user);
-                mainWindow.Show();
-                this.Close();
+                MessageBox.Show(""+ x);
             }
         }
-
-        private void CenterWindowOnScreen()
-        {
-            double screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
-            double screenHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
-            double windowWidth = this.Width;
-            double windowHeight = this.Height;
-            this.Left = (screenWidth / 2) - (windowWidth / 2);
-            this.Top = (screenHeight / 2) - (windowHeight / 2);
-        }
-
     }
 }

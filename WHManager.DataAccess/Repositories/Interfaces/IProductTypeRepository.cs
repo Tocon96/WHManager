@@ -8,11 +8,11 @@ namespace WHManager.DataAccess.Repositories.Interfaces
 {
     public interface IProductTypeRepository
     {
-        Task<ProductType> AddProductTypeAsync(string name);
+        void AddProductType(string name);
         IEnumerable<ProductType> GetAllProductTypes();
         ProductType GetProductType(int id);
-        Task DeleteProductTypeAsync(int id);
-        Task UpdateProductTypeAsync(int id, string name);
+        void DeleteProductType(int id);
+        void UpdateProductType(int id, string name);
         IEnumerable<ProductType> GetProductTypesByName(string name);
 
     }

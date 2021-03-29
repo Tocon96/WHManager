@@ -8,9 +8,9 @@ namespace WHManager.BusinessLogic.Services.Interfaces
 {
     public interface IUserService
     {
-        Task AddUser(User user);
-        Task DeleteUser(int id);
-        Task UpdateUser(User user);
+        void AddUser(User user);
+        void DeleteUser(int id);
+        void UpdateUser(User user);
         IList<User> GetUsers();
         IList<User> GetUsersByName(string name);
         IList<User> GetUserById(int id);

@@ -19,11 +19,11 @@ namespace WHManager.DataAccess.Repositories
             _contextFactory = contextFactory;
         }
 
-        public async Task CreateNewUser(string name, string password, int roleId)
+        public void CreateNewUser(string name, string password, int roleId)
         {
-            try
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                try
                 {
                     User user = new User
                     {
@@ -31,129 +31,130 @@ namespace WHManager.DataAccess.Repositories
                         PasswordHash = password,
                         Role = context.Roles.SingleOrDefault(x => x.Id == roleId)
                     };
-                    await context.Users.AddAsync(user);
-                    await context.SaveChangesAsync();
+                    context.Users.Add(user);
+                    context.SaveChanges();
                 }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+                catch
+                {
+                    throw new Exception("Błąd dodawania użytkownika: ");
+                }
+            }   
         }
 
-        public async Task DeleteUser(int id)
+        public void DeleteUser(int id)
         {
-            try
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                try
                 {
-                    context.Remove(await context.Users.SingleOrDefaultAsync(x => x.Id == id));
-                    await context.SaveChangesAsync();
+                    context.Remove(context.Users.SingleOrDefault(x => x.Id == id));
+                    context.SaveChanges();
                 }
-            }
-            catch (Exception)
-            {
-                throw;
+                catch
+                {
+                    throw new Exception("Błąd usuwania użytkownika: ");
+                }
             }
         }
 
         public IEnumerable<User> GetUserById(int id)
         {
-            try
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                try
                 {
                     IEnumerable<User> users = context.Users.Include(r => r.Role).ToList().FindAll(x => x.Id == id);
                     return users;
                 }
-            }
-            catch (Exception)
-            {
-                throw;
+                catch
+                {
+                    throw new Exception("Błąd pobierania użytkowników: ");
+                }
             }
         }
 
         public User GetUserByName(string name)
         {
-            try
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                try
                 {
                     User user = context.Users.Include(r => r.Role).FirstOrDefault(x => x.UserName.StartsWith(name));
                     return user;
                 }
-            }
-            catch (Exception)
-            {
-                throw;
+                catch
+                {
+                    throw new Exception("Błąd pobierania użytkowników: ");
+                }
             }
         }
 
         public IEnumerable<User> GetUsers()
         {
-            try
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                try
                 {
                     IEnumerable<User> users = context.Users.Include(r => r.Role).ToList();
                     return users;
                 }
-            }
-            catch (Exception)
-            {
-                throw;
+                catch
+                {
+                    throw new Exception("Błąd pobierania użytkowników: ");
+                }
             }
         }
 
         public IEnumerable<User> GetUsersByName(string name)
         {
-            try
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                try
                 {
                     IEnumerable<User> users = context.Users.Include(r => r.Role).ToList().FindAll(x => x.UserName.StartsWith(name));
                     return users;
                 }
-            }
-            catch (Exception)
-            {
-                throw;
+                catch
+                {
+                    throw new Exception("Błąd pobierania użytkowników: ");
+                }
             }
         }
 
         public IEnumerable<User> GetUsersByRole(int roleId)
         {
-            try
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                try
                 {
                     IEnumerable<User> users = context.Users.Include(r => r.Role).ToList().FindAll(x => x.Role.Id == roleId);
                     return users;
                 }
+                catch
+                {
+                    throw new Exception("Błąd pobierania użytkowników: ");
+                }
             }
-            catch (Exception)
-            {
-                throw;
-            }
+            
         }
 
-        public async Task UpdateUser(int id, string name, string password, int roleId)
+        public void UpdateUser(int id, string name, string password, int roleId)
         {
-            try
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                try
                 {
                     User user = context.Users.SingleOrDefault(x => x.Id == id);
                     user.UserName = name;
                     user.PasswordHash = password;
                     user.Role = context.Roles.SingleOrDefault(x => x.Id == roleId);
-                    await context.Users.AddAsync(user);
-                    await context.SaveChangesAsync();
+                    context.Users.Add(user);
+                    context.SaveChanges();
                 }
-            }
-            catch (Exception)
-            {
-                throw;
+                catch
+                {
+                    throw new Exception("Błąd aktualizacji użytkownik: ");
+                }
             }
         }
     }

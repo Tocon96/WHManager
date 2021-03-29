@@ -5,16 +5,10 @@
     <Compile Update="MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\AdministrationView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\AdministrationViews\RoleView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\AdministrationViews\UserView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\BusinessView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\BusinessViews\BusinessFormViews\InvoiceFormView.xaml.cs">
@@ -27,12 +21,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\ContractorsViews\ClientView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\ContractorView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\FormViews\AdvancedSearchProductFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\FormViews\LoginForm\LoginFormView.xaml.cs">
@@ -65,21 +53,6 @@
     <Compile Update="Views\FormViews\ManageUserFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\FormViews\SearchFormViews\SearchoProductsByTypeFormView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\FormViews\SearchFormViews\SearchProductByManufacturerFormView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\FormViews\SearchFormViews\SearchProductsByPricesFormView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\FormViews\SearchFormViews\SearchProductsByTaxFormView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\WarehouseView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\WarehouseViews\EmittedItemsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -91,25 +64,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="css\LogButton.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="css\MenuBtn.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="MainWindow.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\AdministrationView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\AdministrationViews\RoleView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\AdministrationViews\UserView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\BusinessView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\BusinessViews\BusinessFormViews\InvoiceFormView.xaml">
@@ -122,12 +83,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\ContractorsViews\ClientView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\ContractorView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\FormViews\AdvancedSearchProductFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\FormViews\LoginForm\LoginFormView.xaml">
@@ -158,21 +113,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\FormViews\ManageUserFormView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\FormViews\SearchFormViews\SearchoProductsByTypeFormView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\FormViews\SearchFormViews\SearchProductByManufacturerFormView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\FormViews\SearchFormViews\SearchProductsByPricesFormView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\FormViews\SearchFormViews\SearchProductsByTaxFormView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\WarehouseView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\WarehouseViews\EmittedItemsView.xaml">

@@ -14,7 +14,7 @@ namespace WHManager.BusinessLogic.Services
         private readonly IInvoiceRepository _invoiceRepository = new InvoiceRepository(new DataAccess.WHManagerDBContextFactory());
         private IOrderService orderService = new OrderService();
         private IClientService clientService = new ClientService();
-        public async Task CreateNewInvoice(Invoice invoice)
+        public void CreateNewInvoice(Invoice invoice)
         {
             try
             {
@@ -22,23 +22,23 @@ namespace WHManager.BusinessLogic.Services
                 DateTime dateTime = invoice.DateIssued;
                 int clientId = invoice.Client.Id;
                 int orderId = invoice.Order.Id;
-                await _invoiceRepository.CreateNewInvoiceAsync(id, dateTime, clientId, orderId);
+                _invoiceRepository.CreateNewInvoice(id, dateTime, clientId, orderId);
             }
-            catch (Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd dodawania faktury: ");
             }
         }
 
-        public async Task DeleteInvoice(int id)
+        public void DeleteInvoice(int id)
         {
             try
             {
-                await _invoiceRepository.DeleteInvoiceAsync(id);
+                _invoiceRepository.DeleteInvoice(id);
             }
-            catch (Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd usuwania faktury: ");
             }
         }
 
@@ -59,9 +59,9 @@ namespace WHManager.BusinessLogic.Services
                 };
                 return currentInvoice;
             }
-            catch (Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd pobierania faktury: ");
             }
         }
 
@@ -81,9 +81,9 @@ namespace WHManager.BusinessLogic.Services
                 };
                 return currentInvoice;
             }
-            catch (Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd pobierania faktur: ");
             }
             
         }
@@ -109,9 +109,9 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return invoicesList;
             }
-            catch (Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd pobierania faktur: ");
             }
         }
 
@@ -119,65 +119,85 @@ namespace WHManager.BusinessLogic.Services
         {
             if (clientId != null)
             {
-                IList<Invoice> invoicesList = new List<Invoice>();
-                var invoices = _invoiceRepository.GetInvoicesByClient(clientId);
-                foreach (var invoice in invoices)
+                try
                 {
-                    IList<Client> clients = clientService.GetClient(invoice.Client.Id);
-                    Client client = clients[0];
-                    Invoice currentInvoice = new Invoice
+                    IList<Invoice> invoicesList = new List<Invoice>();
+                    var invoices = _invoiceRepository.GetInvoicesByClient(clientId);
+                    foreach (var invoice in invoices)
                     {
-                        Id = invoice.Id,
-                        DateIssued = invoice.DateIssued,
-                        Client = client,
-                        Order = orderService.GetOrderById(invoice.Order.Id)
-                    };
-                    invoicesList.Add(currentInvoice);
+                        IList<Client> clients = clientService.GetClient(invoice.Client.Id);
+                        Client client = clients[0];
+                        Invoice currentInvoice = new Invoice
+                        {
+                            Id = invoice.Id,
+                            DateIssued = invoice.DateIssued,
+                            Client = client,
+                            Order = orderService.GetOrderById(invoice.Order.Id)
+                        };
+                        invoicesList.Add(currentInvoice);
+                    }
+                    return invoicesList;
                 }
-                return invoicesList;
+                catch
+                {
+                    throw new Exception("Błąd pobierania faktur: ");
+                }
             }
             else if (clientName != null)
             {
-                IList<Invoice> invoicesList = new List<Invoice>();
-                var invoices = _invoiceRepository.GetInvoicesByClient(null, clientName, null);
-                foreach (var invoice in invoices)
+                try
                 {
-                    IList<Client> clients = clientService.GetClient(invoice.Client.Id);
-                    Client client = clients[0];
-                    Invoice currentInvoice = new Invoice
+                    IList<Invoice> invoicesList = new List<Invoice>();
+                    var invoices = _invoiceRepository.GetInvoicesByClient(null, clientName, null);
+                    foreach (var invoice in invoices)
                     {
-                        Id = invoice.Id,
-                        DateIssued = invoice.DateIssued,
-                        Client = client,
-                        Order = orderService.GetOrderById(invoice.Order.Id)
-                    };
-                    invoicesList.Add(currentInvoice);
+                        IList<Client> clients = clientService.GetClient(invoice.Client.Id);
+                        Client client = clients[0];
+                        Invoice currentInvoice = new Invoice
+                        {
+                            Id = invoice.Id,
+                            DateIssued = invoice.DateIssued,
+                            Client = client,
+                            Order = orderService.GetOrderById(invoice.Order.Id)
+                        };
+                        invoicesList.Add(currentInvoice);
+                    }
+                    return invoicesList;
                 }
-                return invoicesList;
+                catch
+                {
+                    throw new Exception("Błąd pobierania faktur: ");
+                }
             }
             else if (clientNip != null)
             {
-                IList<Invoice> invoicesList = new List<Invoice>();
-                var invoices = _invoiceRepository.GetInvoicesByClient(null, null, clientNip);
-                foreach (var invoice in invoices)
+                try
                 {
-                    IList<Client> clients = clientService.GetClient(invoice.Client.Id);
-                    Client client = clients[0];
-                    Invoice currentInvoice = new Invoice
+                    IList<Invoice> invoicesList = new List<Invoice>();
+                    var invoices = _invoiceRepository.GetInvoicesByClient(null, null, clientNip);
+                    foreach (var invoice in invoices)
                     {
-                        Id = invoice.Id,
-                        DateIssued = invoice.DateIssued,
-                        Client = client,
-                        Order = orderService.GetOrderById(invoice.Order.Id)
-                    };
-                    invoicesList.Add(currentInvoice);
+                        IList<Client> clients = clientService.GetClient(invoice.Client.Id);
+                        Client client = clients[0];
+                        Invoice currentInvoice = new Invoice
+                        {
+                            Id = invoice.Id,
+                            DateIssued = invoice.DateIssued,
+                            Client = client,
+                            Order = orderService.GetOrderById(invoice.Order.Id)
+                        };
+                        invoicesList.Add(currentInvoice);
+                    }
+                    return invoicesList;
                 }
-                return invoicesList;
+                catch
+                {
+                    throw new Exception("Błąd pobierania faktur: ");
+                }
             }
-
             else
             {
-                return null;
+                throw new Exception("Błąd pobierania faktur: ");
             }
         }
 
@@ -205,9 +225,9 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return invoicesList;
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania faktur: ");
                 }
             }
             else if(earlierDate != null && laterDate == null)
@@ -231,9 +251,9 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return invoicesList;
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania faktur: ");
                 }
             }
             else if(earlierDate == null && laterDate != null)
@@ -257,9 +277,9 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return invoicesList;
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania faktur: ");
                 }
             }
             else
@@ -283,14 +303,14 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return invoicesList;
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania faktur: ");
                 }
             }
         }
 
-        public async Task UpdateInvoice(Invoice invoice)
+        public void UpdateInvoice(Invoice invoice)
         {
             try
             {
@@ -298,11 +318,11 @@ namespace WHManager.BusinessLogic.Services
                 DateTime dateTime = invoice.DateIssued;
                 int clientId = invoice.Client.Id;
                 int orderId = invoice.Order.Id;
-                await _invoiceRepository.UpdateInvoiceAsync(id, dateTime, clientId, orderId);
+                _invoiceRepository.UpdateInvoice(id, dateTime, clientId, orderId);
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Błąd aktualizacji faktury: ");
             }
         }
     }

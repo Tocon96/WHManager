@@ -8,9 +8,9 @@ namespace WHManager.BusinessLogic.Services.Interfaces
 {
     public interface IRoleService
     {
-        Task AddRole(Role role);
-        Task DeleteRole(int id);
-        Task UpdateRole(Role role);
+        void AddRole(Role role);
+        void DeleteRole(int id);
+        void UpdateRole(Role role);
         IList<Role> GetRoles();
         IList<Role> GetRoleById(int id);
         IList<Role> GetRoleByName(string name);

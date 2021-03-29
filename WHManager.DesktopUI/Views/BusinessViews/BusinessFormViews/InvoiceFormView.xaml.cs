@@ -15,7 +15,6 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
-using WHManager.DesktopUI.Views.FormViews.SearchFormViews;
 
 namespace WHManager.DesktopUI.Views.BusinessViews.BusinessFormViews
 {

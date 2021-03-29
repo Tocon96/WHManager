@@ -8,9 +8,9 @@ namespace WHManager.DataAccess.Repositories.Interfaces
 {
     public interface IInvoiceRepository
     {
-        Task<Invoice> CreateNewInvoiceAsync(int id, DateTime dateIssued, int clientId, int orderId);
-        Task UpdateInvoiceAsync(int id, DateTime dateIssued, int clientId, int orderId);
-        Task DeleteInvoiceAsync(int id);
+        void CreateNewInvoice(int id, DateTime dateIssued, int clientId, int orderId);
+        void UpdateInvoice(int id, DateTime dateIssued, int clientId, int orderId);
+        void DeleteInvoice(int id);
         Invoice GetInvoice(int id);
         IEnumerable<Invoice> GetAllInvoices();
         IEnumerable<Invoice> GetInvoicesByClient(int? clientId = null, string clientName = null, double? clientNip = null);

@@ -14,20 +14,29 @@ namespace WHManager.BusinessLogic.Services
     {
         private readonly IItemRepository _itemRepository = new ItemRepository(new DataAccess.WHManagerDBContextFactory());
         private IProductService productService = new ProductService();
-        public async Task CreateNewItem(Item item)
+        public void CreateNewItems(List<Item> items)
         {
             try
             {
-                int id = item.Id;
-                int product = item.Product.Id;
-                DateTime dateofadmission = item.DateOfAdmission;
-                DateTime? dateofemission = item.DateOfEmission;
-                bool isinstock = item.IsInStock;
-                await _itemRepository.AddItemAsync(id, product, dateofadmission, dateofemission, isinstock);
+                foreach (Item item in items)
+                {
+                    int id = item.Id;
+                    int productId = item.Product.Id;
+                    DateTime dateofadmission = item.DateOfAdmission;
+                    DateTime? dateofemission = item.DateOfEmission;
+                    bool isinstock = item.IsInStock;
+                    _itemRepository.AddItem(id, productId, dateofadmission, dateofemission, isinstock);
+                }
+                Product product = productService.GetProduct(items[0].Product.Id);
+                if(product.InStock == false)
+                {
+                    product.InStock = true;
+                    productService.UpdateProduct(product);
+                }
             }
-            catch(Exception)
+            catch
             {
-                throw;
+                throw new Exception("B³¹d dodawania przedmiotu: ");
             }      
         }
 
@@ -52,9 +61,9 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return itemsList;
             }
-            catch(Exception)
+            catch
             {
-                throw;
+                throw new Exception("B³¹d pobierania przedmiotów: ");
             }
         }
 		
@@ -73,13 +82,13 @@ namespace WHManager.BusinessLogic.Services
                 };
                 return currentItem;
             }
-			catch(Exception)
+			catch
             {
-                throw;
+                throw new Exception("B³¹d pobierania przedmiotu: ");
             }
 		}
 		
-		public async Task UpdateItem(Item item)
+		public void UpdateItem(Item item)
 		{
             try
             {
@@ -88,23 +97,23 @@ namespace WHManager.BusinessLogic.Services
                 DateTime dateofadmission = item.DateOfAdmission;
                 DateTime? dateofemission = item.DateOfEmission;
                 bool isinstock = item.IsInStock;
-                await _itemRepository.UpdateItemAsync(id, product, dateofadmission, dateofemission, isinstock);
+                _itemRepository.UpdateItem(id, product, dateofadmission, dateofemission, isinstock);
             }
-            catch(Exception)
+            catch
             {
-                throw;
+                throw new Exception("B³¹d aktualizowania przedmiotu: ");
             }
 			
 		}
-		public async Task DeleteItem(int id)
+		public void DeleteItem(int id)
 		{
             try
             {
-                await _itemRepository.DeleteItemAsync(id);
+                _itemRepository.DeleteItem(id);
             }
-			catch(Exception)
+			catch
             {
-                throw;
+                throw new Exception("B³¹d usuwania przedmiotu: ");
             }
 		}
 
@@ -131,9 +140,9 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return itemsList;
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("B³¹d pobierania przedmiotów: ");
                 }
             }
             else if(productName != null)
@@ -156,14 +165,14 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return itemsList;
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("B³¹d pobierania przedmiotów: ");
                 }
             }
             else
             {
-                return null;
+                throw new Exception("B³¹d pobierania przedmiotów: ");
             }
         }
 
@@ -189,9 +198,9 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return itemsList;
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("B³¹d pobierania przedmiotów: ");
                 }
             }
             else if (earlierDate != null && laterDate == null)
@@ -214,9 +223,9 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return itemsList;
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("B³¹d pobierania przedmiotów: ");
                 }
             }
             else if(earlierDate == null && laterDate != null)
@@ -239,9 +248,9 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return itemsList;
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("B³¹d pobierania przedmiotów: ");
                 }
             }
             else
@@ -264,9 +273,9 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return itemsList;
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("B³¹d pobierania przedmiotów: ");
                 }
             }
         }
@@ -294,9 +303,9 @@ namespace WHManager.BusinessLogic.Services
                         }
                         return itemsList;
                     }
-                    catch (Exception)
+                    catch
                     {
-                        throw;
+                        throw new Exception("B³¹d pobierania przedmiotów: ");
                     }
                 }
                 else if (earlierDate != null && laterDate == null)
@@ -319,9 +328,9 @@ namespace WHManager.BusinessLogic.Services
                         }
                         return itemsList;
                     }
-                    catch (Exception)
+                    catch
                     {
-                        throw;
+                        throw new Exception("B³¹d pobierania przedmiotów: ");
                     }
                 }
                 else if (earlierDate == null && laterDate != null)
@@ -344,9 +353,9 @@ namespace WHManager.BusinessLogic.Services
                         }
                         return itemsList;
                     }
-                    catch (Exception)
+                    catch
                     {
-                        throw;
+                        throw new Exception("B³¹d pobierania przedmiotów: ");
                     }
                 }
                 else
@@ -369,9 +378,9 @@ namespace WHManager.BusinessLogic.Services
                         }
                         return itemsList;
                     }
-                    catch (Exception)
+                    catch
                     {
-                        throw;
+                        throw new Exception("B³¹d pobierania przedmiotów: ");
                     }
                 }
             }
@@ -400,9 +409,9 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return itemsList;
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("B³¹d pobierania przedmiotów: ");
                 }
             }
             else if (productName != null)
@@ -425,14 +434,14 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return itemsList;
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("B³¹d pobierania przedmiotów: ");
                 }
             }
             else
             {
-                return null;
+                throw new Exception("B³¹d pobierania przedmiotów: ");
             }
         }
     }

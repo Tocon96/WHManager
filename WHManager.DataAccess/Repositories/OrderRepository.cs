@@ -20,7 +20,7 @@ namespace WHManager.DataAccess.Repositories
             _contextFactory = contextFactory;
         }
 
-        public async Task<Order> AddOrderAsync(int id, decimal price, DateTime dateOrdered, IList<int> items, int clientId)
+        public void AddOrder(int id, decimal price, DateTime dateOrdered, IList<int> items, int clientId)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
@@ -39,18 +39,17 @@ namespace WHManager.DataAccess.Repositories
                         DateOrdered = dateOrdered,
                         Client = context.Clients.SingleOrDefault(x => x.Id == clientId),
                     };
-                    await context.Orders.AddAsync(order);
-                    await context.SaveChangesAsync();
-                    return order;
+                    context.Orders.Add(order);
+                    context.SaveChanges();
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd dodawania zamówienia: ");
                 }
             }
         }
 
-        public async Task UpdateOrderAsync(int id, DateTime dateOrdered, IList<int> items, decimal price, int clientId, int? invoiceId = null)
+        public void UpdateOrder(int id, DateTime dateOrdered, IList<int> items, decimal price, int clientId, int? invoiceId = null)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
@@ -70,32 +69,32 @@ namespace WHManager.DataAccess.Repositories
                     if(invoiceId != null)
                     {
                         updatedOrder.Invoice = context.Invoices.SingleOrDefault(x => x.Id == invoiceId);
-                        await context.SaveChangesAsync();
+                        context.SaveChanges();
                     }
                     else
                     {
-                        await context.SaveChangesAsync();
+                        context.SaveChanges();
                     }
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd aktualizacji zamówienia o ID: "+id+" : ");
                 }
             }
         }
 
-        public async Task DeleteOrderAsync(int id)
+        public void DeleteOrder(int id)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
                 try
                 {
-                    context.Remove(await context.Orders.SingleOrDefaultAsync(x => x.Id == id));
-                    await context.SaveChangesAsync();
+                    context.Remove(context.Orders.SingleOrDefault(x => x.Id == id));
+                    context.SaveChanges();
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd usuwania zamówienia o ID: " + id + " : ");
                 }
             }
         }
@@ -112,9 +111,9 @@ namespace WHManager.DataAccess.Repositories
 
                     return orders;
                 }
-                catch(Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania zamówień: ");
                 }
             } 
         }
@@ -133,9 +132,9 @@ namespace WHManager.DataAccess.Repositories
                                                                     .FindAll(c => c.Client.Id == clientId);
                         return orders;
                     }
-                    catch (Exception)
+                    catch
                     {
-                        throw;
+                        throw new Exception("Błąd pobierania zamówień: ");
                     }
                 }
             }
@@ -151,9 +150,9 @@ namespace WHManager.DataAccess.Repositories
                                                                   .FindAll(c => c.Client.Name.StartsWith(clientName));
                         return orders;
                     }
-                    catch (Exception)
+                    catch
                     {
-                        throw;
+                        throw new Exception("Błąd pobierania zamówień: ");
                     }
                 }
             }
@@ -169,15 +168,15 @@ namespace WHManager.DataAccess.Repositories
                                                                   .FindAll(c => c.Client.Nip == clientNip);
                         return orders;
                     }
-                    catch (Exception)
+                    catch
                     {
-                        throw;
+                        throw new Exception("Błąd pobierania zamówień: ");
                     }
                 }
             }
             else
             {
-                return null;
+                throw new Exception("Błąd pobierania zamówień: ");
             }
         }
 
@@ -193,9 +192,9 @@ namespace WHManager.DataAccess.Repositories
                                                 .SingleOrDefault(c => c.Id == id);
                     return order;
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania zamówień: ");
                 }
             }
         }
@@ -212,13 +211,13 @@ namespace WHManager.DataAccess.Repositories
                                                 .SingleOrDefault(c => c.Invoice.Id == invoiceId);
                     return order;
                 }
-                catch (Exception)
+                catch 
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania zamówień: ");
                 }
             }
         }
-        public IEnumerable<Order> GetInvoicesByDate(DateTime? earlierDate, DateTime? laterDate)
+        public IEnumerable<Order> GetOrdersByDate(DateTime? earlierDate, DateTime? laterDate)
         {
             if (earlierDate != null && laterDate != null)
             {
@@ -234,9 +233,9 @@ namespace WHManager.DataAccess.Repositories
                         return orders;
                     }
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania zamówień: ");
                 }
             }
             else if (earlierDate != null && laterDate == null)
@@ -253,9 +252,9 @@ namespace WHManager.DataAccess.Repositories
                         return orders;
                     }
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania zamówień: ");
                 }
             }
             else if (earlierDate == null && laterDate != null)
@@ -272,9 +271,9 @@ namespace WHManager.DataAccess.Repositories
                         return orders;
                     }
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania zamówień: ");
                 }
             }
             else if (earlierDate == null && laterDate == null)
@@ -292,14 +291,14 @@ namespace WHManager.DataAccess.Repositories
                         return orders;
                     }
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania zamówień: ");
                 }
             }
             else
             {
-                return null;
+                throw new Exception("Błąd pobierania zamówień: ");
             }
         }
     }

@@ -5,9 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WHManager.DesktopUI.Views.FormViews"
         mc:Ignorable="d"
-        Title="AddProductFormView" Height="450" Width="800">
+        Title="" SizeToContent="WidthAndHeight" ResizeMode="NoResize" WindowStyle="None">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Background" Value="#1976d2"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="TextAlignment" Value="Center"></Setter>
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Arrow" />
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Silver"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
@@ -18,27 +54,30 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0">Nazwa</TextBlock>
-        <TextBlock Grid.Row="1">Typ</TextBlock>
-        <TextBlock Grid.Row="2">Producent</TextBlock>
-        <TextBlock Grid.Row="3">Podatek</TextBlock>
-        <TextBlock Grid.Row="4">Cena kupna</TextBlock>
-        <TextBlock Grid.Row="5">Cena sprzedaży</TextBlock>
-
-        <TextBox Grid.Column="1" Grid.Row="0" x:Name="textBoxProductName">Nazwa</TextBox>
-        <ComboBox Grid.Column="1" Grid.Row="1" x:Name="comboBoxProductType" DisplayMemberPath="Name"></ComboBox>
-        <ComboBox Grid.Column="1" Grid.Row="2" x:Name="comboBoxProductManufacturer" DisplayMemberPath="Name"></ComboBox>
-        <ComboBox Grid.Column="1" Grid.Row="3" x:Name="comboBoxProductTax" DisplayMemberPath="Value"></ComboBox>
-        <TextBox Grid.Column="1" Grid.Row="4" x:Name="textBoxProductPriceBuy">Cena kupna</TextBox>
-        <TextBox Grid.Column="1" Grid.Row="5" x:Name="textBoxProductPriceSell">Cena sprzedaży</TextBox>
-        <Button Grid.Column="1" Grid.Row="6" Click="AddProductClick">Zatwierdź</Button>
-        <Label Grid.Column="0" Grid.Row="6" Visibility="Hidden" x:Name="IdLabel"></Label>
-
+        <TextBlock x:Name="textBlockManageProduct" Grid.ColumnSpan="3" Grid.Row="0" Height="30" FontSize="18" Background="#1565c0">Dodaj Nowy Produkt</TextBlock>
+        
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="3">Nazwa</TextBlock>
+        <TextBox Grid.Row="2" Grid.ColumnSpan="3" x:Name="textBoxProductName">Nazwa</TextBox>
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="3">Typ</TextBlock>
+        <ComboBox Grid.Row="4" Grid.ColumnSpan="3" x:Name="comboBoxProductType" DisplayMemberPath="Name"></ComboBox>
+        <TextBlock Grid.Row="5" Grid.ColumnSpan="3">Producent</TextBlock>
+        <ComboBox Grid.Row="6" Grid.ColumnSpan="3" x:Name="comboBoxManufacturer" DisplayMemberPath="Name"></ComboBox>
+        <TextBlock Grid.Row="7" Grid.ColumnSpan="3">Podatek</TextBlock>
+        <ComboBox Grid.Row="8" Grid.ColumnSpan="3" x:Name="comboBoxProductTax" DisplayMemberPath="Value"></ComboBox>
+        <TextBlock Grid.Row="9" Grid.ColumnSpan="3">Cena kupna</TextBlock>
+        <TextBox Grid.Row="10" Grid.ColumnSpan="3" x:Name="textBoxProductPriceBuy">Cena kupna</TextBox>
+        <TextBlock Grid.Row="11" Grid.ColumnSpan="3">Cena sprzedaży</TextBlock>
+        <TextBox Grid.Row="12" Grid.ColumnSpan="3" x:Name="textBoxProductPriceSell">Cena sprzedaży</TextBox>
+        <Button Grid.Row="13" Grid.Column="0" HorizontalAlignment="Left" Style="{StaticResource ButtonStyle}" Width="150" Click="CancelClick">Anuluj</Button>
+        <StackPanel Grid.Row="13" Grid.Column="1" Orientation="Vertical">
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+        </StackPanel>
+        <Button Grid.Row="13" Grid.Column="2" HorizontalAlignment="Right" Style="{StaticResource ButtonStyle}" Width="150" Click="AddProductClick">Zatwierdź</Button>
 
     </Grid>
 </Window>

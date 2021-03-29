@@ -85,8 +85,8 @@ namespace WHManager.DesktopUI.Views.FormViews.SearchFormViews {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;V1.0.0.0;component/views/formviews/searchformviews/searchopr" +
-                    "oductsbytypeformview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;component/views/formviews/searchformviews/searchoproductsbyt" +
+                    "ypeformview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Views\FormViews\SearchFormViews\SearchoProductsByTypeFormView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

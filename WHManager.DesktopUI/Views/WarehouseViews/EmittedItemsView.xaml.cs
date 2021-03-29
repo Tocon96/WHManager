@@ -25,7 +25,6 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
     /// </summary>
     public partial class EmittedItemsView : Window
     {
-        private readonly IDisplaySetting displaySetting = new DisplaySetting();
         IItemService itemService = new ItemService();
         private Product _product;
         public Product Product
@@ -43,7 +42,7 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
         public EmittedItemsView(Product product)
         {
             InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             Product = product;
             gridItems.ItemsSource = LoadData();
         }
@@ -78,35 +77,15 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
         }
         private void SearchItemsClick(object sender, RoutedEventArgs e)
         {
-            if (radioButtonId.IsChecked == true)
-            {
-                try
-                {
-                    if(SearchTextBox.Text != "")
-                    {
-                        List<Item> items = GetItemById(int.Parse(SearchTextBox.Text));
+            /**
+                List<Item> items = GetItemById(int.Parse(SearchTextBox.Text));
                         Items = new ObservableCollection<Item>(items);
                         gridItems.ItemsSource = Items;
-                    }
-                }
-                catch (Exception x)
-                {
-                    MessageBox.Show("Błąd wyszukiwania: " + x);
-                }
-            }
-            else if (radioButtonDateOfPurchase.IsChecked == true)
-            {
-                try
-                {
+          
                     List<Item> items = GetItemByDate(datePickerEarlierDate.SelectedDate, datePickerLaterDate.SelectedDate);
                     Items = new ObservableCollection<Item>(items);
                     gridItems.ItemsSource = Items;
-                }
-                catch (Exception x)
-                {
-                    MessageBox.Show("Błąd wyszukiwania: " + x);
-                }
-            }
+             */
         }
         private void ClearSearchClick(object sender, RoutedEventArgs e)
         {

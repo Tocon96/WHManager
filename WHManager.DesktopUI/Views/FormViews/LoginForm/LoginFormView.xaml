@@ -5,13 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WHManager.DesktopUI.Views.FormViews.LoginForm"
         mc:Ignorable="d"
-        Title="LoginFormView" Height="300" Width="300" ResizeMode="NoResize" Background="AliceBlue">
+        Title="" SizeToContent="Width" Height="300" ResizeMode="NoResize" Background="#1976d2" WindowStyle="ToolWindow">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Arrow" />
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="1" BorderBrush="White" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Silver"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="120"></ColumnDefinition>
-            <ColumnDefinition Width="120"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
@@ -22,13 +51,13 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <!--Textblock-->
-        <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" FontSize="25" Text="Witamy w WHManager" TextWrapping="Wrap" TextAlignment="Center"></TextBlock>
-        <TextBlock Grid.Column="1" Grid.Row="1">Nazwa użytkownika</TextBlock>
-        <TextBlock Grid.Column="1" Grid.Row="2">Hasło</TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="1" FontSize="25" Foreground="White" Background="#1976d2" Text="Witamy w WHManager" TextWrapping="Wrap" TextAlignment="Center"></TextBlock>
+        <TextBlock Grid.Column="1"  Grid.Row="1">Nazwa użytkownika</TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="3">Hasło</TextBlock>
         <!--Textbox-->
-        <TextBox Grid.Column="2" Grid.Row="1" Name="textboxUserName"></TextBox>
-        <PasswordBox Grid.Column="2" Grid.Row="2" Name="textboxPassword"></PasswordBox>
+        <TextBox Grid.Column="1" Grid.Row="2" Name="textboxUserName"></TextBox>
+        <PasswordBox Grid.Column="1" Grid.Row="4" Name="textboxPassword"></PasswordBox>
         <!--Button-->
-        <Button Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Width="120" Click="LoginClick">Zaloguj</Button>
+        <Button Grid.Column="1" Grid.Row="5" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Center" Width="100" Click="LoginClick">Zaloguj</Button>
     </Grid>
 </Window>

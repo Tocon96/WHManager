@@ -18,22 +18,28 @@ namespace WHManager.DataAccess.Repositories
 			_contextFactory = contextFactory;
 		}
 
-		public async Task<Item> AddItemAsync(int id, int product, DateTime dateofadmission, DateTime? dateofemission, bool isinstock)
+		public void AddItem(int id, int product, DateTime dateofadmission, DateTime? dateofemission, bool isinstock)
 		{
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				Item newItem = new Item
+				try
 				{
-					Id = id,
-					DateOfAdmission = dateofadmission,
-					DateOfEmission = dateofemission,
-					Product = context.Products.SingleOrDefault(x => x.Id == product),
-					IsInStock = isinstock
-				};
-				await context.Items.AddAsync(newItem);
-				await context.SaveChangesAsync();
-
-				return newItem;
+					Item newItem = new Item
+					{
+						Id = id,
+						DateOfAdmission = dateofadmission,
+						DateOfEmission = dateofemission,
+						Product = context.Products.SingleOrDefault(x => x.Id == product),
+						IsInStock = isinstock
+					};
+                
+					context.Items.Add(newItem);
+					context.SaveChanges();
+				}
+                catch
+                {
+					throw new Exception("B³¹d dodawania przedmiotu: ");
+                }
 			}
 		}
 
@@ -41,36 +47,65 @@ namespace WHManager.DataAccess.Repositories
 		{
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList();
-				return items;
+                try
+                {
+					IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList();
+					return items;
+				}
+                catch
+                {
+					throw new Exception("B³¹d pobierania przedmiotów: ");
+				}
 			}
 		}
 		public Item GetItem(int id)
 		{
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				return context.Items.Include(p => p.Product).SingleOrDefault(x => x.Id == id);
+                try
+                {
+					return context.Items.Include(p => p.Product).SingleOrDefault(x => x.Id == id);
+				}
+				catch
+				{
+					throw new Exception("B³¹d pobierania przedmiotu: ");
+				}
 			}
 		}
 
-		public async Task DeleteItemAsync(int id)
+		public void DeleteItem(int id)
 		{
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				context.Items.Remove(await context.Items.SingleOrDefaultAsync(x => x.Id == id));
-				await context.SaveChangesAsync();
+                try
+                {
+					context.Items.Remove(context.Items.SingleOrDefault(x => x.Id == id));
+					context.SaveChanges();
+				}
+				catch
+				{
+					throw new Exception("B³¹d usuwania przedmiotu: ");
+				}
 			}
 		}
-		public async Task UpdateItemAsync(int id, int product, DateTime dateofadmission, DateTime? dateofemission, bool isinstock)
+		public void UpdateItem(int id, int product, DateTime dateofadmission, DateTime? dateofemission, bool isinstock)
 		{
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				Item updatedItem = context.Items.SingleOrDefault(x => x.Id == id);
-				updatedItem.Product = context.Products.SingleOrDefault(x => x.Id == product);
-				updatedItem.DateOfAdmission = dateofadmission;
-				updatedItem.DateOfEmission = dateofemission;
-				updatedItem.IsInStock = isinstock;
-				await context.SaveChangesAsync();
+                try
+                {
+					Item updatedItem = context.Items.SingleOrDefault(x => x.Id == id);
+					updatedItem.Product = context.Products.SingleOrDefault(x => x.Id == product);
+					updatedItem.DateOfAdmission = dateofadmission;
+					updatedItem.DateOfEmission = dateofemission;
+					updatedItem.IsInStock = isinstock;
+					context.SaveChanges();
+				}
+                catch
+                {
+					throw new Exception("B³¹d aktualizacji przedmiotu o ID "+ id + " : ");
+                }
+				
 			}
 		}
 
@@ -88,7 +123,7 @@ namespace WHManager.DataAccess.Repositories
 				}
 				catch (Exception)
 				{
-					throw;
+					throw new Exception("B³¹d usuwania przedmiotów: ");
 				}
 			}
 			else if (productName != null)
@@ -103,12 +138,12 @@ namespace WHManager.DataAccess.Repositories
 				}
 				catch (Exception)
 				{
-					throw;
+					throw new Exception("B³¹d usuwania przedmiotów: ");
 				}
 			}
 			else
 			{
-				return null;
+				throw new Exception("B³¹d usuwania przedmiotów: ");
 			}
 		}
 		public IEnumerable<Item> GetItemsByProducts(int? productId = null, string productName = null)
@@ -125,7 +160,7 @@ namespace WHManager.DataAccess.Repositories
 				}
 				catch (Exception)
 				{
-					throw;
+					throw new Exception("B³¹d usuwania przedmiotów: ");
 				}
 			}
 			else if (productName != null)
@@ -138,14 +173,14 @@ namespace WHManager.DataAccess.Repositories
 						return items;
 					}
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d usuwania przedmiotów: ");
 				}
 			}
 			else
 			{
-				return null;
+				throw new Exception("B³¹d usuwania przedmiotów: ");
 			}
 		}
 		public IEnumerable<Item> GetItemsByDate(DateTime? earlierDate, DateTime? laterDate)
@@ -160,9 +195,9 @@ namespace WHManager.DataAccess.Repositories
 						return items;
 					}
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d usuwania przedmiotów: "); ;
 				}
 			}
 			else if (earlierDate != null && laterDate == null)
@@ -175,9 +210,9 @@ namespace WHManager.DataAccess.Repositories
 						return items;
 					}
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d usuwania przedmiotów: "); ;
 				}
 			}
 			else if (earlierDate == null && laterDate != null)
@@ -190,9 +225,9 @@ namespace WHManager.DataAccess.Repositories
 						return items;
 					}
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d usuwania przedmiotów: "); ;
 				}
 			}
 			else if (earlierDate == null && laterDate == null)
@@ -205,14 +240,14 @@ namespace WHManager.DataAccess.Repositories
 						return items;
 					}
 				}
-				catch (Exception)
+				catch 
 				{
-					throw;
+					throw new Exception("B³¹d usuwania przedmiotów: ");
 				}
 			}
 			else
 			{
-				return null;
+				throw new Exception("B³¹d usuwania przedmiotów: ");
 			}
 		}
 		public IEnumerable<Item> GetEmittedItemsByDate(DateTime? earlierDate, DateTime? laterDate)
@@ -227,9 +262,9 @@ namespace WHManager.DataAccess.Repositories
 						return items;
 					}
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d usuwania przedmiotów: ");
 				}
 			}
 			else if (earlierDate != null && laterDate == null)
@@ -242,9 +277,9 @@ namespace WHManager.DataAccess.Repositories
 						return items;
 					}
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d usuwania przedmiotów: ");
 				}
 			}
 			else if (earlierDate == null && laterDate != null)
@@ -257,9 +292,9 @@ namespace WHManager.DataAccess.Repositories
 						return items;
 					}
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d usuwania przedmiotów: ");
 				}
 			}
 			else if (earlierDate == null && laterDate == null)
@@ -272,14 +307,14 @@ namespace WHManager.DataAccess.Repositories
 						return items;
 					}
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d usuwania przedmiotów: ");
 				}
 			}
 			else
 			{
-				return null;
+				throw new Exception("B³¹d usuwania przedmiotów: ");
 			}
 		}
 	}

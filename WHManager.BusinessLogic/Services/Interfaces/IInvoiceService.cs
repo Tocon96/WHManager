@@ -8,9 +8,9 @@ namespace WHManager.BusinessLogic.Services.Interfaces
 {
     public interface IInvoiceService
     {
-        Task CreateNewInvoice(Invoice invoice);
-        Task UpdateInvoice(Invoice invoice);
-        Task DeleteInvoice(int id);
+        void CreateNewInvoice(Invoice invoice);
+        void UpdateInvoice(Invoice invoice);
+        void DeleteInvoice(int id);
         Invoice GetInvoiceById(int id);
         Invoice GetInvoiceByOrder(int orderId);
         IList<Invoice> GetInvoicesByClient(int? clientId = null, string clientName = null, double? clientNip = null);

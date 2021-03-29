@@ -109,7 +109,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;V1.0.0.0;component/views/businessviews/invoiceview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;component/views/businessviews/invoiceview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\BusinessViews\InvoiceView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

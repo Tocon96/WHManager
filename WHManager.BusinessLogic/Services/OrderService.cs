@@ -19,7 +19,7 @@ namespace WHManager.BusinessLogic.Services
         private IClientService clientService = new ClientService();
         private readonly IProductService productService = new ProductService();
 
-        public async Task AddOrder(Order order)
+        public void AddOrder(Order order)
         {
             try
             {
@@ -33,15 +33,15 @@ namespace WHManager.BusinessLogic.Services
                 decimal price = CalculateFinalPrice(order);
                 DateTime dateTime = order.DateOrdered;
                 int client = order.Client.Id;
-                await _orderRepository.AddOrderAsync(id, price, dateTime, items, client);
+                _orderRepository.AddOrder(id, price, dateTime, items, client);
             }
-            catch (Exception)
+            catch  
             {
-                throw;
+                throw new Exception("Błąd dodawania zamówienia: ");
             }
         }
 
-        public async Task UpdateOrder(Order order)
+        public void UpdateOrder(Order order)
         {
             try
             {
@@ -58,29 +58,29 @@ namespace WHManager.BusinessLogic.Services
                 if(order.Invoice != null)
                 {
                     int invoice = order.Invoice.Id;
-                    await _orderRepository.UpdateOrderAsync(id, dateTime, items, price, client, invoice);
+                    _orderRepository.UpdateOrder(id, dateTime, items, price, client, invoice);
                 }
                 else
                 {
-                    await _orderRepository.UpdateOrderAsync(id, dateTime, items, price, client);
+                    _orderRepository.UpdateOrder(id, dateTime, items, price, client);
                 }
                 
             }
-            catch (Exception)
+            catch  
             {
-                throw;
+                throw new Exception("Błąd aktualizacji zamówienia: ");
             }
         }
 
-        public async Task DeleteOrder(int id)
+        public void DeleteOrder(int id)
         {
             try
             {
-                await _orderRepository.DeleteOrderAsync(id);
+                _orderRepository.DeleteOrder(id);
             }
-            catch (Exception)
+            catch  
             {
-                throw;
+                throw new Exception("Błąd usuwania zamówienia: ");
             }
         }
 
@@ -111,9 +111,9 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return ordersList;
             }
-            catch (Exception)
+            catch  
             {
-                throw;
+                throw new Exception("Błąd pobierania zamówień: ");
             }
         }
 
@@ -139,31 +139,39 @@ namespace WHManager.BusinessLogic.Services
                 };
                 return currentOrder;
             }
-            catch (Exception)
+            catch  
             {
-                throw;
+                throw new Exception("Błąd pobierania zamówień: ");
             }
         }
 
         public Order GetOrderByInvoice(int invoiceId)
         {
-            var order = _orderRepository.GetOrderByInvoice(invoiceId);
-            IList<Item> itemsList = new List<Item>();
-            IList<Client> clients = clientService.GetClient(order.Client.Id);
-            Client client = clients[0];
-            foreach (var item in order.Items)
+            try
             {
-                itemsList.Add(itemService.GetItem(item.Id));
+                var order = _orderRepository.GetOrderByInvoice(invoiceId);
+                IList<Item> itemsList = new List<Item>();
+                IList<Client> clients = clientService.GetClient(order.Client.Id);
+                Client client = clients[0];
+                foreach (var item in order.Items)
+                {
+                    itemsList.Add(itemService.GetItem(item.Id));
+                }
+                Order currentOrder = new Order
+                {
+                    Id = order.Id,
+                    Items = itemsList,
+                    DateOrdered = order.DateOrdered,
+                    Client = client,
+                    Price = order.Price
+                };
+                return currentOrder;
             }
-            Order currentOrder = new Order
+            catch
             {
-                Id = order.Id,
-                Items = itemsList,
-                DateOrdered = order.DateOrdered,
-                Client = client,
-                Price = order.Price
-            };
-            return currentOrder;
+                throw new Exception("Błąd pobierania zamówień: ");
+            }
+
         }
 
         public IList<Order> GetOrdersByClient(int? clientId = null, string clientName = null, double? clientNip = null)
@@ -195,9 +203,9 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return ordersList;
                 }
-                catch (Exception)
+                catch  
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania zamówień: ");
                 }   
             }
             else if(clientName != null)
@@ -227,9 +235,9 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return ordersList;
                 }
-                catch (Exception)
+                catch  
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania zamówień: ");
                 }
             }
             else if(clientNip != null)
@@ -259,14 +267,14 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return ordersList;
                 }
-                catch (Exception)
+                catch  
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania zamówień: ");
                 }
             }
             else
             {
-                return null;
+                throw new Exception("Błąd pobierania zamówień: ");
             }
         }
 
@@ -277,7 +285,7 @@ namespace WHManager.BusinessLogic.Services
                 try
                 {
                     IList<Order> ordersList = new List<Order>();
-                    var orders = _orderRepository.GetInvoicesByDate(earlierDate, laterDate);
+                    var orders = _orderRepository.GetOrdersByDate(earlierDate, laterDate);
                     foreach (var order in orders)
                     {
                         IList<Client> clients = clientService.GetClient(order.Client.Id);
@@ -299,9 +307,9 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return ordersList;
                 }
-                catch (Exception)
+                catch  
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania zamówień: ");
                 }
             }
             else if (earlierDate != null && laterDate == null)
@@ -309,7 +317,7 @@ namespace WHManager.BusinessLogic.Services
                 try
                 {
                     IList<Order> ordersList = new List<Order>();
-                    var orders = _orderRepository.GetInvoicesByDate(earlierDate, null);
+                    var orders = _orderRepository.GetOrdersByDate(earlierDate, null);
                     foreach (var order in orders)
                     {
                         IList<Client> clients = clientService.GetClient(order.Client.Id);
@@ -331,9 +339,9 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return ordersList;
                 }
-                catch (Exception)
+                catch  
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania zamówień: ");
                 }
             }
             else if (earlierDate == null && laterDate != null)
@@ -341,7 +349,7 @@ namespace WHManager.BusinessLogic.Services
                 try
                 {
                     IList<Order> ordersList = new List<Order>();
-                    var orders = _orderRepository.GetInvoicesByDate(null, laterDate);
+                    var orders = _orderRepository.GetOrdersByDate(null, laterDate);
                     foreach (var order in orders)
                     {
                         IList<Client> clients = clientService.GetClient(order.Client.Id);
@@ -363,9 +371,9 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return ordersList;
                 }
-                catch (Exception)
+                catch  
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania zamówień: ");
                 }
             }
             else
@@ -373,7 +381,7 @@ namespace WHManager.BusinessLogic.Services
                 try
                 {
                     IList<Order> ordersList = new List<Order>();
-                    var orders = _orderRepository.GetInvoicesByDate(null, null);
+                    var orders = _orderRepository.GetOrdersByDate(null, null);
                     foreach (var order in orders)
                     {
                         IList<Client> clients = clientService.GetClient(order.Client.Id);
@@ -395,9 +403,9 @@ namespace WHManager.BusinessLogic.Services
                     }
                     return ordersList;
                 }
-                catch (Exception)
+                catch  
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania zamówień: ");
                 }
             }
         }

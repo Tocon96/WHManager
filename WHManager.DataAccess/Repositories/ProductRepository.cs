@@ -11,13 +11,12 @@ namespace WHManager.DataAccess.Repositories
     public class ProductRepository: IProductRepository
 	{
 		private readonly WHManagerDBContextFactory _contextFactory;
-
 		public ProductRepository(WHManagerDBContextFactory contextFactory)
         {
             _contextFactory = contextFactory;
         }
 		
-		public async Task<Product> AddProductAsync(string name, int producttype, int tax, int manufacturer, decimal pricebuy, decimal pricesell)
+		public Product AddProduct(string name, int producttype, int tax, int manufacturer, decimal pricebuy, decimal pricesell)
 		{
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
@@ -34,12 +33,12 @@ namespace WHManager.DataAccess.Repositories
 			
                 try
                 {
-					await context.Products.AddAsync(newProduct);
-					await context.SaveChangesAsync();
+					context.Products.Add(newProduct);
+					context.SaveChanges();
 				}
-				catch(Exception)
+				catch
                 {
-					throw;
+					throw new Exception("B³¹d dodawania produktu");
                 }
 				return newProduct;
 			}
@@ -49,12 +48,19 @@ namespace WHManager.DataAccess.Repositories
 		{
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				IEnumerable<Product> products = context.Products
+                try
+                {
+					IEnumerable<Product> products = context.Products
 														.Include(x => x.Manufacturer)
 														.Include(x => x.Tax)
 														.Include(x => x.Type)
 														.ToList();
-				return products;	
+					return products;
+				}
+                catch
+                {
+					throw new Exception("B³¹d pobierania produktów: ");
+                }	
 			}
 		}
 		
@@ -62,34 +68,57 @@ namespace WHManager.DataAccess.Repositories
 		{
 			using(WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				return context.Products
+                try
+                {
+					return context.Products
 								.Include(x => x.Manufacturer)
 								.Include(x => x.Tax)
 								.Include(x => x.Type)
-								.SingleOrDefault(x => x.Id == id);	
+								.SingleOrDefault(x => x.Id == id);
+				}
+                catch
+                {
+					throw new Exception("B³¹d pobierania produktów: ");
+				}
+					
 			}
 		}
 		
-		public async Task DeleteProductAsync(int id)
+		public void DeleteProduct(int id)
 		{
 			using(WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				context.Remove(await context.Products.SingleOrDefaultAsync(x => x.Id == id));
-				await context.SaveChangesAsync();
+                try
+                {
+					context.Remove(context.Products.SingleOrDefault(x => x.Id == id));
+					context.SaveChanges();
+				}
+				catch
+				{
+					throw new Exception("B³¹d usuwania produktu o ID: "+id+" : ");
+				}
 			}
 		}
-		public async Task UpdateProductAsync(int id, string name, int producttype, int tax, int manufacturer, decimal pricesell, decimal pricebuy)
+		public void UpdateProduct(int id, string name, int producttype, int tax, int manufacturer, decimal pricesell, decimal pricebuy, bool instock)
 		{
 			using(WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				Product updatedProduct = context.Products.SingleOrDefault(x => x.Id == id);
-				updatedProduct.Name = name;
-				updatedProduct.Type = context.ProductTypes.SingleOrDefault(x => x.Id == producttype);
-				updatedProduct.Tax = context.Taxes.SingleOrDefault(x => x.Id == tax);
-				updatedProduct.Manufacturer = context.Manufacturers.SingleOrDefault(x => x.Id == manufacturer);
-				updatedProduct.PriceBuy = pricebuy;
-				updatedProduct.PriceSell = pricesell;
-				await context.SaveChangesAsync();
+                try
+                {
+					Product updatedProduct = context.Products.SingleOrDefault(x => x.Id == id);
+					updatedProduct.Name = name;
+					updatedProduct.Type = context.ProductTypes.SingleOrDefault(x => x.Id == producttype);
+					updatedProduct.Tax = context.Taxes.SingleOrDefault(x => x.Id == tax);
+					updatedProduct.Manufacturer = context.Manufacturers.SingleOrDefault(x => x.Id == manufacturer);
+					updatedProduct.PriceBuy = pricebuy;
+					updatedProduct.PriceSell = pricesell;
+					updatedProduct.InStock = instock;
+					context.SaveChanges();
+				}
+                catch
+                {
+					throw new Exception("B³¹d aktualizacji produktu: ");
+                }
 			}
 		}
 
@@ -110,9 +139,9 @@ namespace WHManager.DataAccess.Repositories
 						return products;
 					}
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d pobierania produktów");
 				}
 			}
 			else if(manufacturerId != null)
@@ -130,9 +159,9 @@ namespace WHManager.DataAccess.Repositories
 						return products;
 					}
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d pobierania produktów");
 				}
 			}
 			else if(manufacturerNip != null)
@@ -150,15 +179,15 @@ namespace WHManager.DataAccess.Repositories
 						return products;
 					}
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d pobierania produktów");
 				}
 			}
             else
             {
-				return null;
-            }
+				throw new Exception("B³¹d pobierania produktów");
+			}
         }
 
         public IEnumerable<Product> GetProductsByTax(int? taxValue = null, string taxName = null, int? taxId = null)
@@ -178,9 +207,9 @@ namespace WHManager.DataAccess.Repositories
 						return products;
 					}
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d pobierania produktów");
 				}
 			}
 			else if(taxName != null)
@@ -198,9 +227,9 @@ namespace WHManager.DataAccess.Repositories
 						return products;
 					}
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d pobierania produktów");
 				}
 			}
 			else if(taxId != null)
@@ -218,15 +247,15 @@ namespace WHManager.DataAccess.Repositories
 						return products;
 					}
 				}
-				catch (Exception)
+				catch 
 				{
-					throw;
+					throw new Exception("B³¹d pobierania produktów");
 				}
 			}
             else
             {
-				return null;
-            }
+				throw new Exception("B³¹d pobierania produktów");
+			}
 
 			
 		}
@@ -246,9 +275,9 @@ namespace WHManager.DataAccess.Repositories
 					return products;
 				}
 			}
-			catch (Exception)
+			catch
 			{
-				throw;
+				throw new Exception("B³¹d pobierania produktów");
 			}
 		}
 
@@ -270,10 +299,10 @@ namespace WHManager.DataAccess.Repositories
 					}
 						
                 }
-				catch(Exception)
+				catch
                 {
-					throw;
-                }
+					throw new Exception("B³¹d pobierania produktów");
+				}
             }
 			else if(productTypeId != null)
             {
@@ -291,10 +320,10 @@ namespace WHManager.DataAccess.Repositories
 					}
 
 				}
-				catch(Exception)
+				catch
                 {
-					throw;
-                }
+					throw new Exception("B³¹d pobierania produktów");
+				}
             }
             else
             {
@@ -320,9 +349,9 @@ namespace WHManager.DataAccess.Repositories
 					}
 
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d pobierania produktów");
 				}
 			}
 			else if(priceMin != null && priceMax == null)
@@ -341,9 +370,9 @@ namespace WHManager.DataAccess.Repositories
 					}
 
 				}
-				catch (Exception)
-				{	
-					throw;
+				catch
+				{
+					throw new Exception("B³¹d pobierania produktów");
 				}
 			}
 			else if(priceMin == null && priceMax != null)
@@ -362,15 +391,15 @@ namespace WHManager.DataAccess.Repositories
 					}
 
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d pobierania produktów");
 				}
 			}
             else
             {
-				return null;
-            }
+				throw new Exception("B³¹d pobierania produktów");
+			}
         }
 
         public IEnumerable<Product> GetProductsByPriceBuy(decimal? priceMin = null, decimal? priceMax = null)
@@ -391,9 +420,9 @@ namespace WHManager.DataAccess.Repositories
 					}
 
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d pobierania produktów");
 				}
 			}
 			else if (priceMin != null && priceMax == null)
@@ -412,9 +441,9 @@ namespace WHManager.DataAccess.Repositories
 					}
 
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d pobierania produktów");
 				}
 			}
 			else if (priceMin == null && priceMax != null)
@@ -433,14 +462,14 @@ namespace WHManager.DataAccess.Repositories
 					}
 
 				}
-				catch (Exception)
+				catch
 				{
-					throw;
+					throw new Exception("B³¹d pobierania produktów");
 				}
 			}
 			else
 			{
-				return null;
+				throw new Exception("B³¹d pobierania produktów");
 			}
 		}
 
@@ -459,10 +488,10 @@ namespace WHManager.DataAccess.Repositories
 					return products;
                 }
             }
-			catch(Exception)
+			catch
             {
-				throw;
-            }
+				throw new Exception("B³¹d pobierania produktów");
+			}
         }
     }	
 }

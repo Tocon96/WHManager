@@ -18,28 +18,41 @@ namespace WHManager.DataAccess.Repositories
             _contextFactory = contextFactory;
         }
 
-        public async Task<Tax> AddTaxAsync(int id, string name, int value)
+        public void AddTax(string name, int value)
         {
             Tax newTax = new Tax
             {
-                Id = id,
                 Name = name,
                 Value = value
             };
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                await context.Taxes.AddAsync(newTax);
-                await context.SaveChangesAsync();
+                try
+                {
+                    context.Taxes.Add(newTax);
+                    context.SaveChanges();
+                }
+                catch
+                {
+                    throw new Exception("Błąd dodawania podatku: ");
+                }
+
             }
-            return newTax;
         }
 
-        public async Task DeleteTaxAsync(int id)
+        public void DeleteTax(int id)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                context.Remove(await context.Taxes.SingleOrDefaultAsync(x => x.Id == id));
-                await context.SaveChangesAsync();
+                try
+                {
+                    context.Remove(context.Taxes.SingleOrDefault(x => x.Id == id));
+                    context.SaveChanges();
+                }
+                catch
+                {
+                    throw new Exception("Błąd usuwania podatku: ");
+                }
             }
         }
 
@@ -47,8 +60,15 @@ namespace WHManager.DataAccess.Repositories
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                IEnumerable<Tax> taxes = context.Taxes.ToList();
-                return taxes;
+                try
+                {
+                    IEnumerable<Tax> taxes = context.Taxes.ToList();
+                    return taxes;
+                }
+                catch
+                {
+                    throw new Exception("Błąd pobierania podatków: ");
+                }
             } 
         }
 
@@ -56,51 +76,66 @@ namespace WHManager.DataAccess.Repositories
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                return context.Taxes.SingleOrDefault(x => x.Id == id);
+                try
+                {
+                    return context.Taxes.SingleOrDefault(x => x.Id == id);
+                }
+                catch
+                {
+                    throw new Exception("Błąd pobierania podatków: ");
+                }
             }
         }
 
-        public async Task UpdateTaxAsync(int id, string name, int value)
+        public void UpdateTax(int id, string name, int value)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                Tax updatedTax = await context.Taxes.SingleOrDefaultAsync(x => x.Id == id);
-                updatedTax.Name = name;
-                updatedTax.Value = value;
-                await context.SaveChangesAsync();
+                try
+                {
+                    Tax updatedTax = context.Taxes.SingleOrDefault(x => x.Id == id);
+                    updatedTax.Name = name;
+                    updatedTax.Value = value;
+                    context.SaveChanges();
+                }
+                catch
+                {
+                    throw new Exception("Błąd aktualizacji podatku: ");
+                }
             }
         }
 
         public IEnumerable<Tax> GetTaxesByName(string name)
         {
-            try
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                try
                 {
                     IEnumerable<Tax> taxes = context.Taxes.ToList().FindAll(x => x.Name.StartsWith(name));
                     return taxes;
                 }
-            }
-            catch(Exception)
-            {
-                throw;
+                catch
+                {
+                    throw new Exception("Błąd pobierania podatku: ");
+                }
             }
         }
 
         public IEnumerable<Tax> GetTaxesByValue(int value)
         {
-            try
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                try
                 {
                     IEnumerable<Tax> taxes = context.Taxes.ToList().FindAll(x => x.Value == value);
                     return taxes;
                 }
+                catch
+                {
+                    throw new Exception("Błąd pobierania podatku: ");
+                }
             }
-            catch(Exception)
-            {
-                throw;
-            }
+            
         }
     }
 }

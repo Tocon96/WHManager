@@ -8,11 +8,11 @@ namespace WHManager.BusinessLogic.Services.Interfaces
 {
     public interface ITaxService
     {
-        Task CreateNewTax(Tax tax);
+        void CreateNewTax(Tax tax);
         IList<Tax> GetTaxes();
         Tax GetTax(int id);
-        Task DeleteTax(int id);
-        Task UpdateTax(Tax tax);
+        void DeleteTax(int id);
+        void UpdateTax(Tax tax);
         IList<Tax> GetTaxesByName(string name);
         IList<Tax> GetTaxesByValue(int value);
     }

@@ -23,7 +23,6 @@ namespace WHManager.DataAccess.Models
         public decimal PriceSell { get; set; }
         [Required]
         public bool InStock { get; set; }
-
         public ICollection<Item> Items { get; set; }
     }
 }

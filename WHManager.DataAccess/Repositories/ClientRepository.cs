@@ -18,7 +18,7 @@ namespace WHManager.DataAccess.Repositories
         {
             _contextFactory = contextFactory;
         }
-        public async Task<Client> AddNewClientAsync(int id, string name, double? nip, string phonenumber)
+        public void AddNewClient(int id, string name, double? nip, string phonenumber)
         {
             using(WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
@@ -30,49 +30,48 @@ namespace WHManager.DataAccess.Repositories
                         Nip = nip,
                         PhoneNumber = phonenumber
                     };
-                    await context.Clients.AddAsync(client);
-                    await context.SaveChangesAsync();
-                    return client;
+                    context.Clients.Add(client);
+                    context.SaveChanges();
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd dodawania nowego klienta: ");
                 }
             }
         }
 
-        public async Task UpdateClientAsync(int id, string name, double? nip, string phonenumber)
+        public void UpdateClient(int id, string name, double? nip, string phonenumber)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
                 try
                 {
-                    Client updatedClient = await context.Clients.SingleOrDefaultAsync(x => x.Id == id);
+                    Client updatedClient = context.Clients.SingleOrDefault(x => x.Id == id);
                     updatedClient.Name = name;
                     updatedClient.Nip = nip;
                     updatedClient.PhoneNumber = phonenumber;
-                    await context.SaveChangesAsync();
+                    context.SaveChanges();
 
                 }
-                catch (Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd aktualizacji klienta: ");
                 }
             }
         }
 
-        public async Task DeleteClientAsync(int id)
+        public void DeleteClient(int id)
         {
             using(WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
                 try
                 {
-                    context.Remove(await context.Clients.SingleOrDefaultAsync(x => x.Id == id));
-                    await context.SaveChangesAsync();
+                    context.Remove(context.Clients.SingleOrDefault(x => x.Id == id));
+                    context.SaveChanges();
                 }
                 catch (Exception)
                 {
-                    throw;
+                    throw new Exception("Błąd usuwania klienta: ");
                 }
             }
         }
@@ -88,9 +87,9 @@ namespace WHManager.DataAccess.Repositories
                         IEnumerable<Client> clients = context.Clients.ToList().FindAll(x => x.Id == id);
                         return clients;
                     }
-                    catch (Exception)
+                    catch
                     {
-                        throw;
+                        throw new Exception("Błąd pobierania klientów");
                     }
                 }
             }
@@ -105,7 +104,7 @@ namespace WHManager.DataAccess.Repositories
                     }
                     catch (Exception)
                     {
-                        throw;
+                        throw new Exception("Błąd pobierania klientów");
                     }
                 }
             }
@@ -120,7 +119,7 @@ namespace WHManager.DataAccess.Repositories
                     }
                     catch (Exception)
                     {
-                        throw;
+                        throw new Exception("Błąd pobierania klientów");
                     }
                 }
             }
@@ -141,7 +140,7 @@ namespace WHManager.DataAccess.Repositories
                 }
                 catch (Exception)
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania klientów");
                 }
             }
         }

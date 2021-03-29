@@ -86,6 +86,7 @@ namespace WHManager.DesktopUI.Views.FormViews
             try
             {
                 int a = int.Parse(textboxNumberOfItems.Text);
+                List<Item> items = new List<Item>();
                 for (int i = 1; i <= a; i++)
                 {
                     Item item = new Item
@@ -94,8 +95,9 @@ namespace WHManager.DesktopUI.Views.FormViews
                         IsInStock = true,
                         Product = Product
                     };
-                    itemService.CreateNewItem(item);
+                    items.Add(item);
                 }
+                itemService.CreateNewItems(items);
             }
             catch (Exception e)
             {

@@ -8,9 +8,9 @@ namespace WHManager.BusinessLogic.Services.Interfaces
 {
     public interface IOrderService
     {
-        Task AddOrder(Order order);
-        Task UpdateOrder(Order order);
-        Task DeleteOrder(int id);
+        void AddOrder(Order order);
+        void UpdateOrder(Order order);
+        void DeleteOrder(int id);
         IList<Order> GetAllOrders();
         Order GetOrderById(int id);
         Order GetOrderByInvoice(int invoiceId);

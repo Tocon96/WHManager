@@ -14,55 +14,89 @@ namespace WHManager.BusinessLogic.Services
     {
         private readonly ITaxRepository _taxRepository = new TaxRepository(new DataAccess.WHManagerDBContextFactory());
 
-        public async Task CreateNewTax(Tax tax)
+        public void CreateNewTax(Tax tax)
         {
-            int id = tax.Id;
-            string name = tax.Name;
-            int value = tax.Value;
-            await _taxRepository.AddTaxAsync(id, name, value);
+            try
+            {
+                int id = tax.Id;
+                string name = tax.Name;
+                int value = tax.Value;
+                _taxRepository.AddTax(name, value);
+            }
+            catch
+            {
+                throw new Exception("Błąd dodawania podatków: ");
+            }
         }
 
-        public async Task DeleteTax(int id)
+        public void DeleteTax(int id)
         {
-            await _taxRepository.DeleteTaxAsync(id);
+            try
+            {
+                _taxRepository.DeleteTax(id);
+            }
+            catch
+            {
+                throw new Exception("Błąd usuwania podatków: ");
+            }
         }
 
         public Tax GetTax(int id)
         {
-            var tax = _taxRepository.GetTax(id);
-            Tax currentTax = new Tax
+            try
             {
-                Id = tax.Id,
-                Name = tax.Name,
-                Value = tax.Value
-            };
-            return currentTax;
-
-        }
-
-        public IList<Tax> GetTaxes()
-        {
-            IList<Tax> taxesList = new List<Tax>();
-            var taxes = _taxRepository.GetAllTaxes();
-            foreach(var tax in taxes)
-            {
+                var tax = _taxRepository.GetTax(id);
                 Tax currentTax = new Tax
                 {
                     Id = tax.Id,
                     Name = tax.Name,
                     Value = tax.Value
                 };
-                taxesList.Add(currentTax);
+                return currentTax;
             }
-            return taxesList;
+            catch
+            {
+                throw new Exception("Błąd pobierania podatków: ");
+            }
         }
 
-        public async Task UpdateTax(Tax tax)
+        public IList<Tax> GetTaxes()
         {
-            int id = tax.Id;
-            string name = tax.Name;
-            int value = tax.Value;
-            await _taxRepository.UpdateTaxAsync(id, name, value);
+            try
+            {
+                IList<Tax> taxesList = new List<Tax>();
+                var taxes = _taxRepository.GetAllTaxes();
+                foreach (var tax in taxes)
+                {
+                    Tax currentTax = new Tax
+                    {
+                        Id = tax.Id,
+                        Name = tax.Name,
+                        Value = tax.Value
+                    };
+                    taxesList.Add(currentTax);
+                }
+                return taxesList;
+            }
+            catch
+            {
+                throw new Exception("Błąd pobierania podatków: ");
+            }
+        }
+
+        public void UpdateTax(Tax tax)
+        {
+            try
+            {
+                int id = tax.Id;
+                string name = tax.Name;
+                int value = tax.Value;
+                _taxRepository.UpdateTax(id, name, value);
+            }
+            catch
+            {
+                throw new Exception("Błąd aktualizacji podatku: ");
+            }
         }
 
         public IList<Tax> GetTaxesByName(string name)
@@ -83,9 +117,9 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return taxesList;
             }
-            catch(Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd pobierania podatków: ");
             }
         }
 
@@ -107,9 +141,9 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return taxesList;
             }
-            catch(Exception)
+            catch
             {
-                throw;
+                throw new Exception("Błąd pobierania podatków: ");
             }
         }
     }

@@ -41,6 +41,27 @@ namespace WHManager.DataAccess.Migrations
                     b.ToTable("Clients");
                 });
 
+            modelBuilder.Entity("WHManager.DataAccess.Models.GoodsDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("DateIssued")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Destination")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Source")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GoodsDocuments");
+                });
+
             modelBuilder.Entity("WHManager.DataAccess.Models.Invoice", b =>
                 {
                     b.Property<int>("Id")
@@ -80,6 +101,9 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<DateTime?>("DateOfEmission")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("GoodsDocumentId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsInStock")
                         .HasColumnType("bit");
 
@@ -90,6 +114,8 @@ namespace WHManager.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GoodsDocumentId");
 
                     b.HasIndex("OrderId");
 
@@ -282,6 +308,10 @@ namespace WHManager.DataAccess.Migrations
 
             modelBuilder.Entity("WHManager.DataAccess.Models.Item", b =>
                 {
+                    b.HasOne("WHManager.DataAccess.Models.GoodsDocument", null)
+                        .WithMany("Items")
+                        .HasForeignKey("GoodsDocumentId");
+
                     b.HasOne("WHManager.DataAccess.Models.Order", "Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderId")

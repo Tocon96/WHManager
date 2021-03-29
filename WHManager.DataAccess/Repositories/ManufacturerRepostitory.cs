@@ -19,87 +19,121 @@ namespace WHManager.DataAccess.Repositories
 			_contextFactory = contextFactory;
 		}
 
-		public async Task<Manufacturer> AddManufacturerAsync(int id, string name, double nip)
+		public void AddManufacturer(string name, double nip)
 		{
 			Manufacturer newManufacturer = new Manufacturer
 			{
-				Id = id,
 				Name = name,
 				Nip = nip
 			};
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				await context.Manufacturers.AddAsync(newManufacturer);
-				await context.SaveChangesAsync();
+                try
+                {
+					context.Manufacturers.Add(newManufacturer);
+					context.SaveChanges();
+				}
+                catch
+                {
+					throw new Exception("B³¹d dodawania nowego producenta: ");
+                }
 			}
-			return newManufacturer;
 		}
 		
 		public IEnumerable<Manufacturer> GetManufacturers()
 		{
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				IEnumerable<Manufacturer> manufacturers = context.Manufacturers.ToList();
-				return manufacturers;	
+                try
+                {
+					IEnumerable<Manufacturer> manufacturers = context.Manufacturers.ToList();
+					return manufacturers;
+				}
+                catch
+                {
+					throw new Exception("B³¹d pobierania producentów: ");
+				}
 			}
 		}
 		public Manufacturer GetManufacturer(int id)
 		{
 			using(WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				return context.Manufacturers.SingleOrDefault(x => x.Id == id);	
+				try
+				{
+					return context.Manufacturers.SingleOrDefault(x => x.Id == id);
+				}
+				catch
+				{
+					throw new Exception("B³¹d pobierania producentów: ");
+				}
 			}
 		}
 
 		
-		public async Task DeleteManufacturerAsync(int id)
+		public void DeleteManufacturer(int id)
 		{
 			using(WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				context.Remove(await context.Manufacturers.SingleOrDefaultAsync(x => x.Id == id));
-				await context.SaveChangesAsync();
+                try
+                {
+					context.Remove(context.Manufacturers.SingleOrDefault(x => x.Id == id));
+					context.SaveChanges();
+				}
+				catch
+				{
+					throw new Exception("B³¹d usuwania producenta o ID "+id+" : ");
+				}
+
 			}
 		}
-		public async Task UpdateManufacturerAsync(int id, string name, double nip)
+		public void UpdateManufacturer(int id, string name, double nip)
 		{
 			using(WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				Manufacturer updatedManufacturer = context.Manufacturers.SingleOrDefault(x => x.Id == id);
-				updatedManufacturer.Name = name;
-				updatedManufacturer.Nip = nip;
-				await context.SaveChangesAsync();
+                try
+                {
+					Manufacturer updatedManufacturer = context.Manufacturers.SingleOrDefault(x => x.Id == id);
+					updatedManufacturer.Name = name;
+					updatedManufacturer.Nip = nip;
+					context.SaveChanges();
+				}
+				catch
+				{
+					throw new Exception("B³¹d aktualizowania producenta o ID: " + id + " : ");
+				}
 			}
 		}
 
         public Manufacturer GetManufacturerByNip(double nip)
         {
-            try
-            {
-				using(WHManagerDBContext context = _contextFactory.CreateDbContext())
-                {
+			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+			{
+				try
+				{
 					return context.Manufacturers.SingleOrDefault(x => x.Nip == nip);
-                }
-            }
-			catch(Exception)
-            {
-				throw;
-            }
+				}
+				catch
+				{
+					throw new Exception("B³¹d pobierania producenta: ");
+				}
+			}
         }
 
         public IEnumerable<Manufacturer> GetManufacturersByName(string name)
         {
-            try
-            {
-				using(WHManagerDBContext context = _contextFactory.CreateDbContext())
-                {
+			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+			{
+				try
+				{
 					IEnumerable<Manufacturer> manufacturers = context.Manufacturers.ToList().FindAll(x => x.Name.StartsWith(name));
 					return manufacturers;
 				}
-            }
-			catch(Exception)
-            {
-				throw;
-            }
-        }
+				catch (Exception)
+				{
+					throw new Exception("B³¹d pobierania producentów: ");
+				}
+			}
+		}
     }	
 }

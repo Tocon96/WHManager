@@ -8,9 +8,9 @@ namespace WHManager.DataAccess.Repositories.Interfaces
 {
     public interface IUserRepository
     {
-        Task CreateNewUser(string name, string password, int roleId);
-        Task UpdateUser(int id, string name, string password, int roleId);
-        Task DeleteUser(int id);
+        void CreateNewUser(string name, string password, int roleId);
+        void UpdateUser(int id, string name, string password, int roleId);
+        void DeleteUser(int id);
         IEnumerable<User> GetUsers();
         IEnumerable<User> GetUsersByName(string name);
         IEnumerable<User> GetUserById(int id);

@@ -18,7 +18,7 @@ namespace WHManager.DataAccess.Repositories
         {
             _contextFactory = contextFactory;
         }
-        public async Task<Invoice> CreateNewInvoiceAsync(int id, DateTime dateIssued, int clientId, int orderId)
+        public void CreateNewInvoice(int id, DateTime dateIssued, int clientId, int orderId)
         {
             using(WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
@@ -32,17 +32,16 @@ namespace WHManager.DataAccess.Repositories
                         Order = context.Orders.SingleOrDefault(x => x.Id == orderId),
                         OrderId = order.Id
                     };
-                    await context.Invoices.AddAsync(invoice);
-                    await context.SaveChangesAsync();
-                    return invoice;
+                    context.Invoices.Add(invoice);
+                    context.SaveChanges();
                 }
-                catch(Exception)
+                catch
                 {
-                    throw;
+                    throw new Exception("Błąd dodawania faktury: ");
                 }
             }
         }
-        public async Task UpdateInvoiceAsync(int id, DateTime dateIssued, int clientId, int orderId)
+        public void UpdateInvoice(int id, DateTime dateIssued, int clientId, int orderId)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
@@ -54,27 +53,27 @@ namespace WHManager.DataAccess.Repositories
                     updatedInvoice.Client = context.Clients.SingleOrDefault(x => x.Id == clientId);
                     updatedInvoice.Order = context.Orders.SingleOrDefault(x => x.Id == orderId);
                     updatedInvoice.OrderId = order.Id;
-                    await context.SaveChangesAsync();
+                    context.SaveChanges();
                 }
                 catch (Exception)
                 {
-                    throw;
+                    throw new Exception("Błąd aktualizacji faktury: ");
                 }
             }
         }
 
-        public async Task DeleteInvoiceAsync(int id)
+        public void DeleteInvoice(int id)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
                 try
                 {
-                    context.Remove(await context.Invoices.SingleOrDefaultAsync(x => x.Id == id));
-                    await context.SaveChangesAsync();
+                    context.Remove(context.Invoices.SingleOrDefault(x => x.Id == id));
+                    context.SaveChanges();
                 }
                 catch (Exception)
                 {
-                    throw;
+                    throw new Exception("Błąd usuwania faktury: ");
                 }
             }
         }
@@ -92,7 +91,7 @@ namespace WHManager.DataAccess.Repositories
                 }
                 catch (Exception)
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania faktur: ");
                 }
             }
         }
@@ -110,7 +109,7 @@ namespace WHManager.DataAccess.Repositories
                 }
                 catch (Exception)
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania faktury: ");
                 }
             }
         }
@@ -128,7 +127,7 @@ namespace WHManager.DataAccess.Repositories
                 }
                 catch (Exception)
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania faktur: ");
                 }
             }  
         }
@@ -149,7 +148,7 @@ namespace WHManager.DataAccess.Repositories
                     }
                     catch (Exception)
                     {
-                        throw;
+                        throw new Exception("Błąd pobierania faktur: ");
                     }
                 }
             }
@@ -167,7 +166,7 @@ namespace WHManager.DataAccess.Repositories
                     }
                     catch (Exception)
                     {
-                        throw;
+                        throw new Exception("Błąd pobierania faktur: ");
                     }
                 }
             }
@@ -185,13 +184,13 @@ namespace WHManager.DataAccess.Repositories
                     }
                     catch (Exception)
                     {
-                        throw;
+                        throw new Exception("Błąd pobierania faktur: ");
                     }
                 }
             }
             else
             {
-                return null;
+                throw new Exception("Błąd pobierania faktur: ");
             }
         }
 
@@ -211,7 +210,7 @@ namespace WHManager.DataAccess.Repositories
                 }
                 catch (Exception)
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania faktur: ");
                 }
             }
             else if (earlierDate != null && laterDate == null)
@@ -229,7 +228,7 @@ namespace WHManager.DataAccess.Repositories
                 }
                 catch (Exception)
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania faktur: ");
                 }
             }
             else if (earlierDate == null && laterDate != null)
@@ -247,7 +246,7 @@ namespace WHManager.DataAccess.Repositories
                 }
                 catch (Exception)
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania faktur: ");
                 }
             }
             else if (earlierDate == null && laterDate == null)
@@ -265,12 +264,12 @@ namespace WHManager.DataAccess.Repositories
                 }
                 catch (Exception)
                 {
-                    throw;
+                    throw new Exception("Błąd pobierania faktur: ");
                 }
             }
             else
             {
-                return null;
+                throw new Exception("Błąd pobierania faktur: ");
             }
         }
     }

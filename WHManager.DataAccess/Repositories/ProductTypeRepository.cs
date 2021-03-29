@@ -19,7 +19,7 @@ namespace WHManager.DataAccess.Repositories
 			_contextFactory = contextFactory;
 		}
 
-		public async Task<ProductType> AddProductTypeAsync(string name)
+		public void AddProductType(string name)
 		{
 			ProductType newProductType = new ProductType
 			{
@@ -27,18 +27,31 @@ namespace WHManager.DataAccess.Repositories
 			};
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				await context.ProductTypes.AddAsync(newProductType);
-				await context.SaveChangesAsync();
+                try
+                {
+					context.ProductTypes.Add(newProductType);
+					context.SaveChanges();
+				}
+                catch
+                {
+					throw new Exception("B³¹d dodawania typu produktu: ");
+                }
 			}
-			return newProductType;
 		}
 
 		public IEnumerable<ProductType> GetAllProductTypes()
 		{
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				IEnumerable<ProductType> productTypes = context.ProductTypes.ToList();
-				return productTypes;
+                try
+                {
+					IEnumerable<ProductType> productTypes = context.ProductTypes.ToList();
+					return productTypes;
+				}
+                catch
+                {
+					throw new Exception("B³¹d pobierania typów produktów: ");
+                }
 			}
 		}
 		public ProductType GetProductType(int id)
@@ -50,44 +63,60 @@ namespace WHManager.DataAccess.Repositories
 					return context.ProductTypes.SingleOrDefault(x => x.Id == id);
 				}
 			}
-			catch(Exception)
+			catch
             {
-				throw;
-            }
+				throw new Exception("B³¹d pobierania typów produktów: ");
+			}
 			
 		}
-		public async Task DeleteProductTypeAsync(int id)
+		public void DeleteProductType(int id)
 		{
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				context.Remove(await context.ProductTypes.SingleOrDefaultAsync(x => x.Id == id));
-				await context.SaveChangesAsync();
+                try
+                {
+					context.Remove(context.ProductTypes.SingleOrDefault(x => x.Id == id));
+					context.SaveChanges();
+				}
+                catch
+                {
+					throw new Exception("B³¹d usuwania typu produktu: ");
+                }
+				
 			}
 		}
-		public async Task UpdateProductTypeAsync(int id, string name)
+		public void UpdateProductType(int id, string name)
 		{
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				ProductType updatedProductType = await context.ProductTypes.SingleOrDefaultAsync(x => x.Id == id);
-				updatedProductType.Name = name;
-				await context.SaveChangesAsync();
+                try
+                {
+					ProductType updatedProductType = context.ProductTypes.SingleOrDefault(x => x.Id == id);
+					updatedProductType.Name = name;
+					context.SaveChanges();
+				}
+                catch
+                {
+					throw new Exception("B³¹d aktualizacji typu produktu");
+                }
 			}
 		}
 
 		public IEnumerable<ProductType> GetProductTypesByName(string name)
         {
-            try
-            {
-				using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+			{
+				try
 				{
 					IEnumerable<ProductType> productTypes = context.ProductTypes.ToList().FindAll(x => x.Name.StartsWith(name));
 					return productTypes;
 				}
+				catch
+				{
+					throw new Exception("B³¹d pobierania typów produktu");
+				}
 			}
-			catch(Exception)
-            {
-				throw;
-            }
+			
 		}
 	}
 }
