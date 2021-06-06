@@ -13,5 +13,6 @@ namespace WHManager.DataAccess.Repositories.Interfaces
         void DeleteClient(int id);
         IEnumerable<Client> GetClient(int? id = null, string name = null, double? nip = null);
         IEnumerable<Client> GetClients();
+        IEnumerable<Client> SearchClients(List<string> criteria);
     }
 }

@@ -15,5 +15,6 @@ namespace WHManager.DataAccess.Repositories.Interfaces
         void DeleteTax(int id);
         IEnumerable<Tax> GetTaxesByName(string name);
         IEnumerable<Tax> GetTaxesByValue(int value);
+        IEnumerable<Tax> SearchTaxes(List<string> criteria);
     }
 }

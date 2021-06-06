@@ -54,7 +54,7 @@ namespace WHManager.BusinessLogic.Services
                 string name = user.UserName;
                 string password = hasher.HashPassword(user.PasswordHash);
                 int role = user.Role.Id;
-                 userRepository.UpdateUser(id, name, password, role);
+                userRepository.UpdateUser(id, name, password, role);
             }
             catch (Exception)
             {
@@ -162,6 +162,26 @@ namespace WHManager.BusinessLogic.Services
             {
                 return null;
             }
+        }
+
+        public IList<User> SearchUsers(List<string> criteria)
+        {
+            IList<User> users = new List<User>();
+            var usersList = userRepository.SearchUsers(criteria);
+            foreach(var currentUser in usersList)
+            {
+                IList<Role> roles = roleService.GetRoleById(currentUser.Role.Id);
+                Role role = roles[0];
+                User user = new User
+                {
+                    Id = currentUser.Id,
+                    UserName = currentUser.UserName,
+                    PasswordHash = currentUser.PasswordHash,
+                    Role = role
+                };
+                users.Add(user);
+            }
+            return users;
         }
     }
 }

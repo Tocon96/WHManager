@@ -147,5 +147,22 @@ namespace WHManager.BusinessLogic.Services
                 throw new Exception("Błąd pobierania producenta: ");
             }
         }
+
+        public IList<Manufacturer> SearchManufacturers(List<string> criteria)
+        {
+            var manufacturersList = _manufacturerRepository.SearchManufacturers(criteria);
+            IList<Manufacturer> manufacturers = new List<Manufacturer>();
+            foreach(var manufacturer in manufacturersList)
+            {
+                Manufacturer newManufacturer = new Manufacturer
+                {
+                    Id = manufacturer.Id,
+                    Name = manufacturer.Name,
+                    Nip = manufacturer.Nip
+                };
+                manufacturers.Add(newManufacturer);
+            }
+            return manufacturers;
+        }
     }
 }

@@ -64,17 +64,19 @@ namespace WHManager.DataAccess.Repositories
 			}
 		}
 		
-		public Product GetProduct(int id)
+		public IEnumerable<Product> GetProduct(int id)
 		{
 			using(WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
                 try
                 {
-					return context.Products
+					IEnumerable<Product> products = context.Products
 								.Include(x => x.Manufacturer)
 								.Include(x => x.Tax)
 								.Include(x => x.Type)
-								.SingleOrDefault(x => x.Id == id);
+								.ToList()
+								.FindAll(x => x.Id == id);
+					return products;
 				}
                 catch
                 {
@@ -344,7 +346,7 @@ namespace WHManager.DataAccess.Repositories
 																	.Include(x => x.Tax)
 																	.Include(x => x.Type)
 																	.ToList()
-																	.FindAll(x => x.PriceSell >= priceMin && x.PriceSell <= priceMin);
+																	.FindAll(x => x.PriceSell >= priceMin && x.PriceSell <= priceMax);
 						return products;
 					}
 
@@ -415,7 +417,7 @@ namespace WHManager.DataAccess.Repositories
 																.Include(x => x.Tax)
 																.Include(x => x.Type)
 																.ToList()
-																.FindAll(x => x.PriceBuy <= priceMax && x.PriceBuy >= priceMin);
+																.FindAll(x => x.PriceBuy >= priceMin && x.PriceBuy <= priceMax);
 						return products;
 					}
 
@@ -493,5 +495,64 @@ namespace WHManager.DataAccess.Repositories
 				throw new Exception("B³¹d pobierania produktów");
 			}
         }
+
+		public IEnumerable<Product> SearchProducts(List<string> criteria)
+        {
+			try
+			{
+				using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+				{
+					IQueryable<Product> products = context.Products.AsQueryable()
+																   .Include(x => x.Manufacturer)
+																   .Include(x => x.Tax)
+																   .Include(x => x.Type);
+                    if (!string.IsNullOrEmpty(criteria[0]))
+                    {
+						if(int.TryParse(criteria[0], out int result))
+                        {
+							products = products.Where(p => p.Id == result);
+                        }
+                        else
+                        {
+							products = products.Where(p => p.Name.StartsWith(criteria[0]));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(criteria[1]))
+                    {
+						products = products.Where(p => p.Type.Name.StartsWith(criteria[1]));
+                    }
+                    if (!string.IsNullOrEmpty(criteria[2]))
+                    {
+						products = products.Where(p => p.Manufacturer.Name.StartsWith(criteria[2]));
+					}
+					if (!string.IsNullOrEmpty(criteria[3]))
+					{
+						products = products.Where(p => p.Tax.Value == int.Parse(criteria[3]));
+					}
+					if (!string.IsNullOrEmpty(criteria[4]))
+					{
+						products = products.Where(p => p.PriceBuy >= decimal.Parse(criteria[4]));
+					}
+					if (!string.IsNullOrEmpty(criteria[5]))
+					{
+						products = products.Where(p => p.PriceBuy <= decimal.Parse(criteria[5]));
+					}
+					if (!string.IsNullOrEmpty(criteria[6]))
+					{
+						products = products.Where(p => p.PriceSell >= decimal.Parse(criteria[6]));
+					}
+					if (!string.IsNullOrEmpty(criteria[7]))
+					{
+						products = products.Where(p => p.PriceSell <= decimal.Parse(criteria[7]));
+					}
+					IEnumerable<Product> productsList = products.ToList();
+					return productsList;
+				}
+			}
+			catch
+			{
+				throw new Exception("B³¹d wyszukiwania produktów: ");
+			}
+		}
     }	
 }

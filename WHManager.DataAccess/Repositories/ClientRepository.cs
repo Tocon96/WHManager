@@ -144,5 +144,41 @@ namespace WHManager.DataAccess.Repositories
                 }
             }
         }
+
+        public IEnumerable<Client> SearchClients(List<string> criteria)
+        {
+            try
+            {
+                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                {
+                    IQueryable<Client> clients = context.Clients.AsQueryable();
+                    if (!string.IsNullOrEmpty(criteria[0]))
+                    {
+                        if(int.TryParse(criteria[0], out int result))
+                        {
+                            clients = clients.Where(x => x.Id == result);
+                        }
+                        else
+                        {
+                            clients = clients.Where(x => x.Name.StartsWith(criteria[0]));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(criteria[1]))
+                    {
+                        clients = clients.Where(x => x.Nip == int.Parse(criteria[1]));
+                    }
+                    if (!string.IsNullOrEmpty(criteria[2]))
+                    {
+                        clients = clients.Where(x => x.PhoneNumber.StartsWith(criteria[2]));
+                    }
+                    IEnumerable<Client> clientList = clients.ToList();
+                    return clientList;
+                }
+            }
+            catch
+            {
+                throw new Exception("Błąd wyszukiwania: ");
+            }
+        }
     }
 }

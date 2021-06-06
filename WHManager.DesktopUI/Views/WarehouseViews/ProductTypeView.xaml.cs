@@ -24,30 +24,17 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
     /// <summary>
     /// Interaction logic for ProductTypeView.xaml
     /// </summary>
-    public partial class ProductTypeView : UserControl, INotifyPropertyChanged
+    public partial class ProductTypeView : UserControl
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void NotifyPropertyChanged(string propName)
-        {
-            if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
-        }
-
         private ObservableCollection<ProductType> _productTypes;
 
         public ObservableCollection<ProductType> ProductTypes
         {
-            get { return this._productTypes; }
-            set 
-            { 
-                if(this._productTypes != value)
-                {
-                    this._productTypes = value;
-                    this.NotifyPropertyChanged(nameof(this._productTypes));
-                }
-            }
+            get { return _productTypes; }
+            set { _productTypes = value; }
         }
+
+        IProductTypeService productTypeService = new ProductTypeService();
 
         public ProductTypeView()
         {
@@ -57,153 +44,123 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
 
         private void AddProductTypeClick(object sender, RoutedEventArgs e)
         {
-            try
+            ManageProductTypeFormView manageProductTypeFormView = new ManageProductTypeFormView(this);
+            manageProductTypeFormView.ShowDialog();
+            if (manageProductTypeFormView.DialogResult.Value == true)
             {
-                ManageProductTypeFormView manageProductTypeFormView = new ManageProductTypeFormView();
-                manageProductTypeFormView.Show();
                 gridProductTypes.ItemsSource = LoadData();
-            }
-            catch(Exception)
-            {
-                throw;
             }
         }
 
         private void DeleteProductTypeClick(object sender, RoutedEventArgs e)
         {
-            try
+            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie typu produktu spowoduje usunięcie wszystkich produktów należących do tego typu. \nCzy na pewno chcesz usunąć wybrany typ produktów?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
             {
-                IProductTypeService productTypeService = new ProductTypeService();
-                ProductType productType = gridProductTypes.SelectedItem as ProductType;
-                productTypeService.DeleteProductType(productType.Id);
-            }
-            catch(Exception)
-            {
-                throw;
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    ProductType productType = gridProductTypes.SelectedItem as ProductType;
+                    productTypeService.DeleteProductType(productType.Id);
+                }
             }
         }
 
         private List<ProductType> GetAll()
         {
-            try
-            {
-                IProductTypeService productTypeService = new ProductTypeService();
-                List<ProductType> productTypes = productTypeService.GetProductTypes().ToList();
-                return productTypes;
-            }
-            catch(Exception)
-            {
-                throw;
-            }
+            IProductTypeService productTypeService = new ProductTypeService();
+            List<ProductType> productTypes = productTypeService.GetProductTypes().ToList();
+            return productTypes;
         }
 
         private ObservableCollection<ProductType> LoadData()
         {
-            try
-            {
-                List<ProductType> productTypesList = GetAll();
-                ProductTypes = new ObservableCollection<ProductType>(productTypesList);
-                return ProductTypes;
-            }
-            catch(Exception)
-            {
-                throw;
-            }
+            List<ProductType> productTypesList = GetAll();
+            ProductTypes = new ObservableCollection<ProductType>(productTypesList);
+            return ProductTypes;
         }
 
         private void UpdateProductTypeClick(object sender, RoutedEventArgs e)
         {
-            try
+            ProductType productType = gridProductTypes.SelectedItem as ProductType;
+            ManageProductTypeFormView manageProductTypeFormView = new ManageProductTypeFormView(this, productType);
+            manageProductTypeFormView.ShowDialog();
+            if (manageProductTypeFormView.DialogResult.Value == true)
             {
-                ProductType productType = gridProductTypes.SelectedItem as ProductType;
-                ManageProductTypeFormView manageProductTypeFormView = new ManageProductTypeFormView(productType);
-                manageProductTypeFormView.Show();
                 gridProductTypes.ItemsSource = LoadData();
-            }
-            catch(Exception)
-            {
-                throw;
             }
         }
 
         private void SearchProductTypeClick(object sender, RoutedEventArgs e)
         {
-            if (NameRadioButton.IsChecked == true)
+            
+            if (int.TryParse(idNameTextBox.Text, out int result))
             {
-                try
-                {
-                    List<ProductType> productTypes = GetProductsByName(SearchTextBox.Text);
-                    ProductTypes = new ObservableCollection<ProductType>(productTypes);
-                    gridProductTypes.ItemsSource = ProductTypes;
-                }
-                catch(Exception)
-                {
-                    throw;
-                }
+                List<ProductType> productTypes = GetProductById(result);
+                ProductTypes = new ObservableCollection<ProductType>(productTypes);
+                gridProductTypes.ItemsSource = ProductTypes;
             }
-            else if (IdRadioButton.IsChecked == true)
+            else
             {
-                try
-                {
-                    List<ProductType> productTypes = GetProductById(int.Parse(SearchTextBox.Text));
-                    ProductTypes = new ObservableCollection<ProductType>(productTypes);
-                    gridProductTypes.ItemsSource = ProductTypes;
-                }
-                catch (Exception x)
-                {
-                    MessageBox.Show("Błąd wyszukiwania: " + x);
-                }
+                List<ProductType> productTypes = GetProductsByName(idNameTextBox.Text);
+                ProductTypes = new ObservableCollection<ProductType>(productTypes);
+                gridProductTypes.ItemsSource = ProductTypes;
             }
         }
 
         private void ClearSearchClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                SearchTextBox.Text = null;
-                gridProductTypes.ItemsSource = LoadData();
-            }
-            catch(Exception)
-            {
-                throw;
-            }
+            idNameTextBox.Text = null;
+            gridProductTypes.ItemsSource = LoadData();
         }
 
         private List<ProductType> GetProductsByName(string name)
         {
-            try
-            {
-                IProductTypeService productTypeService = new ProductTypeService();
-                List<ProductType> productTypes = productTypeService.GetProductTypesByName(name).ToList();
-                return productTypes;
-            }
-            catch(Exception)
-            {
-                throw;
-            }
+            IProductTypeService productTypeService = new ProductTypeService();
+            List<ProductType> productTypes = productTypeService.GetProductTypesByName(name).ToList();
+            return productTypes;
         }
 
         private List<ProductType> GetProductById(int id)
         {
-            try
+            IProductTypeService productTypeService = new ProductTypeService();
+            List<ProductType> productTypes = new List<ProductType>();
+            ProductType productType = productTypeService.GetProductType(id);
+            if(productType != null)
             {
-                IProductTypeService productTypeService = new ProductTypeService();
-                List<ProductType> productTypes = new List<ProductType>();
-                ProductType productType = productTypeService.GetProductType(id);
-                if(productType != null)
+                productTypes.Add(productType);
+                return productTypes;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        private void DeleteMultipleProductTypesClick(object sender, RoutedEventArgs e)
+        {
+            List<ProductType> selectedProductTypes = gridProductTypes.SelectedItems.Cast<ProductType>().ToList();
+            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie typów produktów spowoduje usunięcie wszystkich produktów należących do tego typu. \nCzy na pewno chcesz usunąć wybrane typy produktów?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+            {
+                if (messageBoxResult == MessageBoxResult.Yes)
                 {
-                    productTypes.Add(productType);
-                    return productTypes;
-                }
-                else
-                {
-                    return null;
+                    foreach (ProductType productType in selectedProductTypes)
+                    {
+                        productTypeService.DeleteProductType(productType.Id);
+                    }
+                    gridProductTypes.ItemsSource = LoadData();
                 }
             }
-            catch(Exception e)
+        }
+        private void DeleteAllProductTypesClick(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie typów produktów spowoduje usunięcie wszystkich produktów należących do tego typu. \nCzy na pewno chcesz usunąć wszystkie typy produktów?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
             {
-                MessageBox.Show("Błąd wyszukiwania: " + e);
-                return null;
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    foreach (ProductType productType in ProductTypes)
+                    {
+                        productTypeService.DeleteProductType(productType.Id);
+                    }
+                    gridProductTypes.ItemsSource = LoadData();
+                }
             }
         }
     }

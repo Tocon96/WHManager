@@ -147,6 +147,31 @@ namespace WHManager.BusinessLogic.Services
             }
         }
 
+        public List<Client> SearchClients(List<string> criteria)
+        {
+            try
+            {
+                List<Client> clients = new List<Client>();
+                var clientsList = _clientRepository.SearchClients(criteria);
+                foreach (var client in clientsList)
+                {
+                    Client currentClient = new Client
+                    {
+                        Id = client.Id,
+                        Name = client.Name,
+                        Nip = client.Nip,
+                        PhoneNumber = client.PhoneNumber,
+                    };
+                    clients.Add(currentClient);
+                }
+                return clients;
+            }
+            catch
+            {
+                throw new Exception("Błąd wyszukiwania typu podatków: ");
+            }
+        }
+
         public void UpdateClient(Client client)
         {
             try

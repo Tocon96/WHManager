@@ -10,7 +10,7 @@ namespace WHManager.BusinessLogic.Services.Interfaces
     {
         void CreateNewProduct(Product product);
         IList<Product> GetProducts();
-        Product GetProduct(int id);
+        IList<Product> GetProduct(int id);
         void UpdateProduct(Product product);
         void DeleteProduct(int id);
         IList<Product> GetProductsByManufacturer(string manufacturerName = null);

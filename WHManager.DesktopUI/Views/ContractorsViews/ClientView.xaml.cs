@@ -24,6 +24,8 @@ namespace WHManager.DesktopUI.Views.ContractorsViews
     /// </summary>
     public partial class ClientView : UserControl
     {
+        IClientService clientService = new ClientService();
+
         private ObservableCollection<Client> _clients;
         public ObservableCollection<Client> Clients
         {
@@ -40,7 +42,6 @@ namespace WHManager.DesktopUI.Views.ContractorsViews
         {
             try
             {
-                IClientService clientService = new ClientService();
                 IList<Client> clients = clientService.GetAllClients().ToList();
                 return clients;
             }
@@ -70,7 +71,9 @@ namespace WHManager.DesktopUI.Views.ContractorsViews
         {
             try
             {
-                textSearchClient.Text = "";
+                textBoxIdName.Text = "";
+                textBoxNip.Text = "";
+                textBoxPhoneNumber.Text = "";
                 gridClients.ItemsSource = LoadData();
             }
             catch(Exception x)
@@ -79,27 +82,58 @@ namespace WHManager.DesktopUI.Views.ContractorsViews
             }
         }
 
-        private void SearchClientClick(object sender, RoutedEventArgs e)
+        private void SearchClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                if(IdRadioButton.IsChecked == true)
+                List<Client> clients = SearchClients();
+                Clients = new ObservableCollection<Client>(clients);
+                gridClients.ItemsSource = Clients;
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show("Błąd wyświetlania: " + x);
+            }
+        }
+
+        private void DeleteMultipleClientClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                List<Client> selectedClients = gridClients.SelectedItems.Cast<Client>().ToList();
+                MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz usunąć wybranych klientów?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
                 {
-                    List<Client> clients = GetClientById(int.Parse(textSearchClient.Text)).ToList();
-                    Clients = new ObservableCollection<Client>(clients);
-                    gridClients.ItemsSource = Clients;
+                    if (messageBoxResult == MessageBoxResult.Yes)
+                    {
+                        foreach (Client client in selectedClients)
+                        {
+                            clientService.DeleteClient(client.Id);
+                        }
+                        gridClients.ItemsSource = LoadData();
+                    }
                 }
-                else if(NameRadioButton.IsChecked == true)
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show("Błąd usuwania: " + x);
+            }
+
+        }
+
+        private void DeleteAllClientClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz usunąć wszystkich klientów?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
                 {
-                    List<Client> clients = GetClientByName(textSearchClient.Text).ToList();
-                    Clients = new ObservableCollection<Client>(clients);
-                    gridClients.ItemsSource = Clients;
-                }
-                else if(NipRadioButton.IsChecked == true)
-                {
-                    List<Client> clients = GetClientByNip(double.Parse(textSearchClient.Text)).ToList();
-                    Clients = new ObservableCollection<Client>(clients);
-                    gridClients.ItemsSource = Clients;
+                    if (messageBoxResult == MessageBoxResult.Yes)
+                    {
+                        foreach (Client client in Clients)
+                        {
+                            clientService.DeleteClient(client.Id);
+                        }
+                        gridClients.ItemsSource = LoadData();
+                    }
                 }
             }
             catch (Exception x)
@@ -112,8 +146,12 @@ namespace WHManager.DesktopUI.Views.ContractorsViews
         {
             try
             {
-                ManageClientFormView manageClientFormView = new ManageClientFormView();
-                manageClientFormView.Show();
+                ManageClientFormView manageClientFormView = new ManageClientFormView(this);
+                manageClientFormView.ShowDialog();
+                if (manageClientFormView.DialogResult.Value == true)
+                {
+                    gridClients.ItemsSource = LoadData();
+                }
             }
             catch (Exception x)
             {
@@ -126,8 +164,12 @@ namespace WHManager.DesktopUI.Views.ContractorsViews
             try
             {
                 Client client = gridClients.SelectedItem as Client;
-                ManageClientFormView manageClientFormView = new ManageClientFormView(client);
-                manageClientFormView.Show();
+                ManageClientFormView manageClientFormView = new ManageClientFormView(this, client);
+                manageClientFormView.ShowDialog();
+                if (manageClientFormView.DialogResult.Value == true)
+                {
+                    gridClients.ItemsSource = LoadData();
+                }
             }
             catch (Exception x)
             {
@@ -149,47 +191,14 @@ namespace WHManager.DesktopUI.Views.ContractorsViews
             }
         }
 
-        private IList<Client> GetClientById(int id)
+        private List<Client> SearchClients()
         {
-            try
-            {
-                IClientService clientService = new ClientService();
-                IList<Client> clients = clientService.GetClient(id);
-                return clients;
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show("Błąd usuwania: " + x);
-                return null;
-            }
-        }
-        private IList<Client> GetClientByName(string name)
-        {
-            try
-            {
-                IClientService clientService = new ClientService();
-                IList<Client> clients = clientService.GetClient(null, name);
-                return clients;
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show("Błąd usuwania: " + x);
-                return null;
-            }
-        }
-        private IList<Client> GetClientByNip(double nip)
-        {
-            try
-            {
-                IClientService clientService = new ClientService();
-                IList<Client> clients = clientService.GetClient(null, null, nip);
-                return clients;
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show("Błąd usuwania: " + x);
-                return null;
-            }
+            List<string> criteria = new List<string>();
+            criteria.Add(textBoxIdName.Text.ToString());      // criteria[0] = Id/Name
+            criteria.Add(textBoxNip.Text.ToString());         // criteria[1] = Nip
+            criteria.Add(textBoxPhoneNumber.Text.ToString()); // criteria[2] = Phone Number
+            List<Client> clients = clientService.SearchClients(criteria);
+            return clients;
         }
     }
 }

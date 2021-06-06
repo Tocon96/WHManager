@@ -13,5 +13,6 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         void DeleteClient(int id);
         IList<Client> GetClient(int? id = null, string name = null, double? nip = null);
         IList<Client> GetAllClients();
+        List<Client> SearchClients(List<string> criteria);
     }
 }

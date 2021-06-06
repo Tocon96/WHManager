@@ -146,5 +146,29 @@ namespace WHManager.BusinessLogic.Services
                 throw new Exception("Błąd pobierania podatków: ");
             }
         }
+
+        public IList<Tax> SearchTaxes(List<string> criteria)
+        {
+            try
+            {
+                IList<Tax> taxes = new List<Tax>();
+                var taxList = _taxRepository.SearchTaxes(criteria);
+                foreach(var tax in taxList)
+                {
+                    Tax currentTax = new Tax
+                    {
+                        Id = tax.Id,
+                        Name = tax.Name,
+                        Value = tax.Value
+                    };
+                    taxes.Add(currentTax);
+                }
+                return taxes;
+            }
+            catch
+            {
+                throw new Exception("Błąd wyszukiwania typu podatków: ");
+            }
+        }
     }
 }

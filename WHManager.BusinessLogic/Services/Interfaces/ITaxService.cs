@@ -15,5 +15,6 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         void UpdateTax(Tax tax);
         IList<Tax> GetTaxesByName(string name);
         IList<Tax> GetTaxesByValue(int value);
+        IList<Tax> SearchTaxes(List<string> criteria);
     }
 }

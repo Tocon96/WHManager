@@ -18,7 +18,7 @@ namespace WHManager.DataAccess.Repositories
 			_contextFactory = contextFactory;
 		}
 
-		public void AddItem(int id, int product, DateTime dateofadmission, DateTime? dateofemission, bool isinstock)
+		public int AddItem(int id, int product, DateTime dateofadmission, DateTime? dateofemission, bool isinstock)
 		{
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
@@ -35,6 +35,7 @@ namespace WHManager.DataAccess.Repositories
                 
 					context.Items.Add(newItem);
 					context.SaveChanges();
+					return newItem.Id;
 				}
                 catch
                 {

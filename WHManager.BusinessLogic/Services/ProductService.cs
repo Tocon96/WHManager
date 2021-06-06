@@ -19,7 +19,7 @@ namespace WHManager.BusinessLogic.Services
         private ITaxService taxService = new TaxService();
 
         public void CreateNewProduct(Product product)
-        { 
+        {
             try
             {
                 string name = product.Name;
@@ -64,28 +64,34 @@ namespace WHManager.BusinessLogic.Services
             }
 
         }
-        public Product GetProduct(int id)
+        public IList<Product> GetProduct(int id)
         {
             try
             {
-                var product = _productRepository.GetProduct(id);
-                Product currentProduct = new Product
+                var products = _productRepository.GetProduct(id);
+                IList<Product> currentProducts = new List<Product>();
+                foreach (var product in products)
                 {
-                    Id = product.Id,
-                    Name = product.Name,
-                    Type = productTypeService.GetProductType(product.Type.Id),
-                    Tax = taxService.GetTax(product.Tax.Id),
-                    Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
-                    PriceBuy = product.PriceBuy,
-                    PriceSell = product.PriceSell,
-                    InStock = product.InStock
-                };
+                    Product currentProduct = new Product
+                    {
+                        Id = product.Id,
+                        Name = product.Name,
+                        Type = productTypeService.GetProductType(product.Type.Id),
+                        Tax = taxService.GetTax(product.Tax.Id),
+                        Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                        PriceBuy = product.PriceBuy,
+                        PriceSell = product.PriceSell,
+                        InStock = product.InStock
+                    };
+                    currentProducts.Add(currentProduct);
+                }
 
-                return currentProduct;
+
+                return currentProducts;
             }
             catch (Exception)
             {
-                throw new Exception ("Błąd pobierania produktu.");
+                throw new Exception("Błąd pobierania produktu.");
             }
         }
         public void UpdateProduct(Product product)
@@ -189,7 +195,7 @@ namespace WHManager.BusinessLogic.Services
         }
         public IList<Product> GetProductsByName(string name)
         {
-            if(name != null)
+            if (name != null)
             {
                 try
                 {
@@ -223,7 +229,7 @@ namespace WHManager.BusinessLogic.Services
         }
         public IList<Product> GetProductsByType(string productTypeName)
         {
-            if(productTypeName != null)
+            if (productTypeName != null)
             {
                 try
                 {
@@ -460,311 +466,28 @@ namespace WHManager.BusinessLogic.Services
         public IList<Product> SearchProducts(List<string> criteria)
         {
             IList<Product> products = new List<Product>();
-            if (criteria[0] != "")
+            var productsList = _productRepository.SearchProducts(criteria);
+            foreach(var product in productsList)
             {
-                if (int.TryParse(criteria[0], out int id))
+                Product newProduct = new Product
                 {
-                    products.Add(GetProduct(id));
-                }
-                else
-                {
-                    IList<Product> productsList = new List<Product>();
-                    productsList = GetProductsByName(criteria[0]);
-                    foreach (var product in productsList)
-                    {
-                        products.Add(product);
-                    }
-                    productsList = null;
-                }
+                    Id = product.Id,
+                    Name = product.Name,
+                    Type = productTypeService.GetProductType(product.Type.Id),
+                    Tax = taxService.GetTax(product.Tax.Id),
+                    Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
+                    PriceBuy = product.PriceBuy,
+                    PriceSell = product.PriceSell
+                };
+                products.Add(newProduct);
             }
-
-            if (criteria[1] != "Wszystkie")
-            {
-                IList<Product> productsList = new List<Product>();
-                productsList = GetProductsByType(criteria[1]);
-                foreach (var product in productsList)
-                {
-                    products.Add(product);
-                }
-                productsList = null;
-            }
-
-            if (criteria[2] != "Wszystkie")
-            {
-                IList<Product> productsList = new List<Product>();
-                productsList = GetProductsByManufacturer(criteria[2]);
-                foreach (var product in productsList)
-                {
-                    products.Add(product);
-                }
-                productsList = null;
-            }
-
-            if (criteria[3] != "Wszystkie")
-            {
-                IList<Product> productsList = new List<Product>();
-                productsList = GetProductsByTax(int.Parse(criteria[3]));
-                foreach (var product in productsList)
-                {
-                    products.Add(product);
-                }
-                productsList = null;
-            }
-
-            if (criteria[4] != "" || criteria[5] != "")
-            {
-                IList<Product> productsList = new List<Product>();
-                if(criteria[4] != "" && criteria[5] == "")
-                {
-                    if(decimal.TryParse(criteria[4], out decimal result))
-                    {
-                        productsList = GetProductsByPriceBuy(result);
-                        foreach (var product in productsList)
-                        {
-                            products.Add(product);
-                        }
-                        productsList = null;
-                    }
-                    else
-                    {
-                        throw new Exception("Wstaw poprawną cenę minimalną");
-                    }
-                }
-                else if(criteria[4] == "" && criteria[5] != "")
-                {
-                    if (decimal.TryParse(criteria[5], out decimal result))
-                    {
-                        productsList = GetProductsByPriceBuy(null, result);
-                        foreach (var product in productsList)
-                        {
-                            products.Add(product);
-                        }
-                        productsList = null;
-                    }
-                    else
-                    {
-                        throw new Exception("Wstaw poprawną cenę maksymalną");
-                    }
-                }
-                else if (criteria[4] != "" && criteria[5] != "")
-                {
-                    if (decimal.TryParse(criteria[4], out decimal minResult))
-                    {
-                        if (decimal.TryParse(criteria[5], out decimal maxResult))
-                        {
-                            productsList = GetProductsByPriceBuy(minResult, maxResult);
-                            foreach (var product in productsList)
-                            {
-                                products.Add(product);
-                            }
-                            productsList = null;
-                        }
-                        else
-                        {
-                            throw new Exception("Wstaw poprawną cenę maksymalną");
-                        }
-                    }
-                    else
-                    {
-                        throw new Exception("Wstaw poprawną cenę minimalną");
-                    }
-                }
-            }
-
-            if (criteria[6] != "" || criteria[7] != "")
-            {
-                IList<Product> productsList = new List<Product>();
-                if (criteria[6] != "" && criteria[7] == "")
-                {
-                    if (decimal.TryParse(criteria[6], out decimal result))
-                    {
-                        productsList = GetProductsByPriceBuy(result);
-                        foreach (var product in productsList)
-                        {
-                            products.Add(product);
-                        }
-                        productsList = null;
-                    }
-                    else
-                    {
-                        throw new Exception("Wstaw poprawną cenę minimalną");
-                    }
-                }
-                else if (criteria[6] == "" && criteria[7] != "")
-                {
-                    if (decimal.TryParse(criteria[7], out decimal result))
-                    {
-                        productsList = GetProductsByPriceBuy(null, result);
-                        foreach (var product in productsList)
-                        {
-                            products.Add(product);
-                        }
-                        productsList = null;
-                    }
-                    else
-                    {
-                        throw new Exception("Wstaw poprawną cenę maksymalną");
-                    }
-                }
-                else if (criteria[6] != "" && criteria[7] != "")
-                {
-                    if (decimal.TryParse(criteria[6], out decimal minResult))
-                    {
-                        if (decimal.TryParse(criteria[7], out decimal maxResult))
-                        {
-                            productsList = GetProductsByPriceBuy(minResult, maxResult);
-                            foreach (var product in productsList)
-                            {
-                                products.Add(product);
-                            }
-                            productsList = null;
-                        }
-                        else
-                        {
-                            throw new Exception("Wstaw poprawną cenę maksymalną");
-                        }
-                    }
-                    else
-                    {
-                        throw new Exception("Wstaw poprawną cenę minimalną");
-                    }
-                }
-            }
-            products = sortProducts(products);
-            products = checkProducts(products, criteria);
             return products;
         }
         public decimal CalculatePrice(Product product)
         {
-
             decimal tax = (Convert.ToDecimal(product.Tax.Value) / 100);
             decimal finalPrice = Math.Round(product.PriceSell + (product.PriceSell * tax), 2);
             return finalPrice;
-        }
-        public IList<Product> sortProducts(IList<Product> unsortedProductList)
-        {
-            IList<Product> sortedProductList = unsortedProductList.OrderBy(i => i.Id).ToList();
-            IList<Product> products = new List<Product>();
-            Product previousProduct = new Product{ Id = 0 };
-            foreach(Product product in sortedProductList)
-            {
-                if(product.Id != previousProduct.Id)
-                {
-                    products.Add(product);
-                }
-                previousProduct = product;
-            }
-            return products;
-        }
-        public IList<Product> checkProducts(IList<Product> uncheckedProducts, List<string> criteria)
-        {
-            IList<Product> products = new List<Product>();
-            foreach(Product product in uncheckedProducts)
-            {
-                if(int.TryParse(criteria[0], out int result))
-                {
-                    if(criteria[0] != "")
-                    {
-                        if (product.Id != result)
-                        {
-                            continue;
-                        }
-                    }
-
-                    if(criteria[1] != "Wszystkie")
-                    {
-                        if (product.Type.Name != criteria[1])
-                        {
-                            continue;
-                        }
-                    }
-
-                    if(criteria[2] != "Wszystkie")
-                    {
-                        if (product.Manufacturer.Name != criteria[2])
-                        {
-                            continue;
-                        }
-                    }
-                    
-                    if(criteria[3] != "Wszystkie")
-                    {
-                        if (product.Tax.Value != int.Parse(criteria[3]))
-                        {
-                            continue;
-                        }
-                    }
-                    
-                    if(criteria[4] != "" || criteria[5] != "")
-                    {
-                        if (decimal.Parse(criteria[4]) > product.PriceBuy || product.PriceBuy > decimal.Parse(criteria[5]))
-                        {
-                            continue;
-                        }
-                    }
-
-                    if(criteria[6] != "" || criteria[7] != "")
-                    {
-                        if (decimal.Parse(criteria[6]) > product.PriceBuy || product.PriceBuy > decimal.Parse(criteria[7]))
-                        {
-                            continue;
-                        }
-                    }
-                    products.Add(product);
-                }
-                else
-                {
-                    if (criteria[0] != "")
-                    {
-                        if (product.Name != criteria[0])
-                        {
-                            continue;
-                        }
-                    }
-
-                    if (criteria[1] != "Wszystkie")
-                    {
-                        if (product.Type.Name != criteria[1])
-                        {
-                            continue;
-                        }
-                    }
-
-                    if (criteria[2] != "Wszystkie")
-                    {
-                        if (product.Manufacturer.Name != criteria[2])
-                        {
-                            continue;
-                        }
-                    }
-
-                    if (criteria[3] != "Wszystkie")
-                    {
-                        if (product.Tax.Value != int.Parse(criteria[3]))
-                        {
-                            continue;
-                        }
-                    }
-
-                    if (criteria[4] != "" || criteria[5] != "")
-                    {
-                        if (decimal.Parse(criteria[4]) > product.PriceBuy || product.PriceBuy > decimal.Parse(criteria[5]))
-                        {
-                            continue;
-                        }
-                    }
-
-                    if (criteria[6] != "" || criteria[7] != "")
-                    {
-                        if (decimal.Parse(criteria[6]) > product.PriceBuy || product.PriceBuy > decimal.Parse(criteria[7]))
-                        {
-                            continue;
-                        }
-                    }
-                    products.Add(product);
-                }
-            }
-            return products;
         }
     }
 }

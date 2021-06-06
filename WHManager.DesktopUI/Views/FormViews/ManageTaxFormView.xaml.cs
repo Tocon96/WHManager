@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
+using WHManager.DesktopUI.Views.WarehouseViews;
 using WHManager.DesktopUI.WindowSetting;
 using WHManager.DesktopUI.WindowSetting.Interfaces;
 
@@ -22,87 +23,92 @@ namespace WHManager.DesktopUI.Views.FormViews
     /// </summary>
     public partial class ManageTaxFormView : Window
     {
-        private readonly IDisplaySetting displaySetting = new DisplaySetting();
-        public ManageTaxFormView()
+        private Tax Tax
         {
-            InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
+            get;
+            set;
         }
 
-        public ManageTaxFormView(Tax tax)
+        private TaxView TaxGridView
+        {
+            get; 
+            set;
+        } 
+        public ManageTaxFormView(TaxView taxView)
         {
             InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
-            Id.Visibility = Visibility.Visible;
-            Id.Content = tax.Id;
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            TaxGridView = taxView;
+        }
+
+        public ManageTaxFormView(TaxView taxView, Tax tax)
+        {
+            InitializeComponent();
+            Tax = tax;
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            TaxGridView = taxView;
             textBoxTaxName.Text = tax.Name;
             textBoxTaxValue.Text = tax.Value.ToString();
+            textBlockManageTax.Text = "Edytuj typ podatku o ID: " + Tax.Id;
         }
 
         private void AddTaxClick(object sender, RoutedEventArgs e)
         {
-            if(Id.Visibility == Visibility.Hidden)
+            if(Tax == null)
             {
-                try
-                {
-                    AddTax();
-                    this.Close();
-                }
-                catch(Exception)
-                {
-                    throw;
-                }
+                AddTax();
+                DialogResult = true;
+                this.Close();
                     
             }
             else
             {
-                try
-                {
-                    UpdateTax();
-                    this.Close();
-                }
-                catch(Exception)
-                {
-                    throw;
-                }    
+                UpdateTax();
+                DialogResult = true;
+                this.Close();
             }
         }
 
         private void AddTax()
         {
-            try
+            ITaxService taxService = new TaxService();
+            Tax tax = new Tax
             {
-                ITaxService taxService = new TaxService();
-                Tax tax = new Tax
-                {
-                    Name = textBoxTaxName.Text,
-                    Value = int.Parse(textBoxTaxValue.Text)
-                };
-                taxService.CreateNewTax(tax);
-            }
-            catch(Exception)
-            {
-                throw;
-            }
+                Name = textBoxTaxName.Text,
+                Value = int.Parse(textBoxTaxValue.Text)
+            };
+            taxService.CreateNewTax(tax);
         }
 
         private void UpdateTax()
         {
-            try
+            ITaxService taxService = new TaxService();
+            Tax tax = new Tax
             {
-                ITaxService taxService = new TaxService();
-                Tax tax = new Tax
-                {
-                    Id = (int)Id.Content,
-                    Name = textBoxTaxName.Text,
-                    Value = int.Parse(textBoxTaxValue.Text)
-                };
-                taxService.UpdateTax(tax);
-            }
-            catch(Exception)
-            {
-                throw;
-            }
+                Id = Tax.Id,
+                Name = textBoxTaxName.Text,
+                Value = int.Parse(textBoxTaxValue.Text)
+            };
+            taxService.UpdateTax(tax);
+        }
+        private void CancelClick(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            this.Close();
+        }
+        public void OnDialogClose()
+        {
+            TaxGridView.gridTaxes.Items.Refresh();
+        }
+
+        private void textBoxTaxName_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            textBoxTaxName.Clear();
+        }
+
+        private void textBoxTaxValue_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            textBoxTaxValue.Clear();
         }
     }
 }

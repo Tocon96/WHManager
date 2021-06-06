@@ -13,5 +13,6 @@ namespace WHManager.DataAccess.Repositories
         void UpdateManufacturer(int id, string name, double nip);
         Manufacturer GetManufacturerByNip(double nip);
         IEnumerable<Manufacturer> GetManufacturersByName(string name);
+        IEnumerable<Manufacturer> SearchManufacturers(List<string> criteria);
     }
 }

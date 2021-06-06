@@ -15,6 +15,7 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         IList<User> GetUsersByName(string name);
         IList<User> GetUserById(int id);
         IList<User> GetUsersByRole(int roleId);
+        IList<User> SearchUsers(List<string> criteria);
         User GetUserByName(string name);
     }
 }

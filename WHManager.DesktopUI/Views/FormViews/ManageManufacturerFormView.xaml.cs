@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
+using WHManager.DesktopUI.Views.ContractorsView;
 using WHManager.DesktopUI.WindowSetting;
 using WHManager.DesktopUI.WindowSetting.Interfaces;
 
@@ -22,21 +23,37 @@ namespace WHManager.DesktopUI.Views.FormViews
     public partial class ManageManufacturerFormView : Window
     {
         IManufacturerService manufacturerService = new ManufacturerService();
-        private readonly IDisplaySetting displaySetting = new DisplaySetting();
-        public ManageManufacturerFormView()
+
+        private ManufacturerView ManufacturerGridView
         {
-            InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
+            get;
+            set;
         }
-        
-        public ManageManufacturerFormView(Manufacturer manufacturer)
+
+        private Manufacturer Manufacturer
+        {
+            get;
+            set;
+        }
+
+        public ManageManufacturerFormView(ManufacturerView manufacturerView)
         {
             InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
-            Id.Visibility = Visibility.Visible;
-            Id.Content = manufacturer.Id;
-            textManufacturerName.Text = manufacturer.Name;
-            textManufacturerNip.Text = manufacturer.Nip.ToString();
+            ManufacturerGridView = manufacturerView;
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+
+        }
+
+        public ManageManufacturerFormView(ManufacturerView manufacturerView, Manufacturer manufacturer)
+        {
+            InitializeComponent();
+            ManufacturerGridView = manufacturerView;
+            Manufacturer = manufacturer;
+            textBoxName.Text = manufacturer.Name;
+            textBoxNip.Text = manufacturer.Nip.ToString();
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            textBlockManageManufacturer.Text = "Edytuj Producenta o ID: " + manufacturer.Id;
+
         }
 
         private void AddManufacturer()
@@ -45,8 +62,8 @@ namespace WHManager.DesktopUI.Views.FormViews
             {
                 Manufacturer manufacturer = new Manufacturer
                 {
-                    Name = textManufacturerName.Text,
-                    Nip = double.Parse(textManufacturerNip.Text)
+                    Name = textBoxName.Text,
+                    Nip = double.Parse(textBoxNip.Text)
                 };
                 manufacturerService.CreateNewManufacturer(manufacturer);
             }
@@ -62,9 +79,9 @@ namespace WHManager.DesktopUI.Views.FormViews
             {
                 Manufacturer manufacturer = new Manufacturer
                 {
-                    Id = (int)Id.Content,
-                    Name = textManufacturerName.Text,
-                    Nip = double.Parse(textManufacturerNip.Text)
+                    Id = Manufacturer.Id,
+                    Name = textBoxName.Text,
+                    Nip = double.Parse(textBoxNip.Text)
                 };
                 manufacturerService.UpdateManufacturer(manufacturer);
             }
@@ -74,13 +91,14 @@ namespace WHManager.DesktopUI.Views.FormViews
             }
         }
 
-        private void AddManufacturerClick(object sender, RoutedEventArgs e)
+        private void buttonConfirmClick(object sender, RoutedEventArgs e)
         {
-            if(Id.Visibility == Visibility.Hidden)
+            if(Manufacturer == null)
             {
                 try
                 {
                     AddManufacturer();
+                    DialogResult = true;
                     this.Close();
                 }
                 catch (Exception x)
@@ -88,11 +106,12 @@ namespace WHManager.DesktopUI.Views.FormViews
                     MessageBox.Show("Błąd dodawania: " + x);
                 }
             }
-            else if(Id.Visibility == Visibility.Visible)
+            else
             {
                 try
                 {
                     UpdateManufacturer();
+                    DialogResult = true;
                     this.Close();
                 }
                 catch (Exception x)
@@ -101,5 +120,32 @@ namespace WHManager.DesktopUI.Views.FormViews
                 }
             }
         }
+        private void CancelClick(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            this.Close();
+        }
+
+        public void OnDialogClose()
+        {
+            ManufacturerGridView.gridManufacturers.Items.Refresh();
+        }
+
+        private void textBoxName_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (textBoxName.Text == "Nazwa")
+            {
+                textBoxName.Clear();
+            }
+        }
+
+        private void textBoxNip_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (textBoxNip.Text == "Nip")
+            {
+                textBoxNip.Clear();
+            }
+        }
+
     }
 }

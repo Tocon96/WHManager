@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
+using WHManager.DesktopUI.Views.WarehouseViews;
 using WHManager.DesktopUI.WindowSetting;
 using WHManager.DesktopUI.WindowSetting.Interfaces;
 
@@ -23,82 +24,85 @@ namespace WHManager.DesktopUI.Views.FormViews
     public partial class ManageProductTypeFormView : Window
     {
         IProductTypeService productTypeService = new ProductTypeService();
-        private readonly IDisplaySetting displaySetting = new DisplaySetting();
-        public ManageProductTypeFormView()
+        private ProductType ProductType
         {
-            InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
+            get;
+            set;
+        }
+        
+        private ProductTypeView ProductTypeGridView
+        {
+            get;
+            set;
         }
 
-        public ManageProductTypeFormView(ProductType productType)
+        public ManageProductTypeFormView(ProductTypeView productTypeView)
         {
             InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
-            Id.Visibility = Visibility.Visible;
-            Id.Content = productType.Id;
+            ProductTypeGridView = productTypeView;
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+        }
+
+        public ManageProductTypeFormView(ProductTypeView productTypeView, ProductType productType)
+        {
+            InitializeComponent();
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            ProductTypeGridView = productTypeView;
+            ProductType = productType;
             textBoxProductTypeName.Text = productType.Name;
+            textBlockManageProductType.Text = "Edytuj typ produktu o ID: " + ProductType.Id;
 
         }
         private void AddProductTypeButton(object sender, RoutedEventArgs e)
         {
-            if (Id.Visibility == Visibility.Hidden)
+            if (ProductType == null)
             {
-                try
-                {
-                    AddProductType();
-                    this.Close();
-                }
-                catch (Exception x)
-                {
-                    MessageBox.Show("Błąd dodawania: AddProductTypeButton" + x);
-                }
+                AddProductType();
+                DialogResult = true;
+                this.Close();
             }
             else
             {
-                try
-                {
-                    UpdateProductType();
-                    this.Close();
-                }
-                catch (Exception x)
-                {
-                    MessageBox.Show("Błąd aktualizacji: AddProductTypeButton" + x);
-                }
+                UpdateProductType();
+                DialogResult = true;
+                this.Close();
             }
            
         }
 
         public void AddProductType()
         {
-            try
+            ProductType productType = new ProductType
             {
-                ProductType productType = new ProductType
-                {
-                    Name = textBoxProductTypeName.Text
-                };
-                productTypeService.CreateNewProductType(productType);
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show("Błąd dodawania: AddProductType" + x);
-            }
+                Name = textBoxProductTypeName.Text
+            };
+            productTypeService.CreateNewProductType(productType);
         }
 
         public void UpdateProductType()
         {
-            try
+            ProductType productType = new ProductType
             {
-                ProductType productType = new ProductType
-                {
-                    Id = (int)Id.Content,
-                    Name = textBoxProductTypeName.Text
-                };
-                productTypeService.UpdateProductType(productType);
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show("Błąd dodawania: UpdateProductType" + x);
-            }
+                Id = ProductType.Id,
+                Name = textBoxProductTypeName.Text
+            };
+            productTypeService.UpdateProductType(productType);
+        }
+
+        private void CancelClick(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            this.Close();
+        }
+
+        public void OnDialogClose()
+        {
+            ProductTypeGridView.gridProductTypes.Items.Refresh();
+        }
+
+        private void TextBlock_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            textBoxProductTypeName.Clear();
         }
     }
 }

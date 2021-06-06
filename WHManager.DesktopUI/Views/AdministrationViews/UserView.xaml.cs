@@ -24,12 +24,13 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
     /// </summary>
     public partial class UserView : UserControl
     {
+        IUserService userService = new UserService();
         public ObservableCollection<User> Users
         {
             get;
             set;
         }
-        public ObservableCollection<Role> Roles
+        public ObservableCollection<string> Roles
         {
             get;
             set;
@@ -38,61 +39,49 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
         {
             InitializeComponent();
             gridUsers.ItemsSource = LoadUsers();
-            comboBoxSearchUnit.ItemsSource = GetRoles();
+            Roles = new ObservableCollection<string>(GetRoles());
+            comboBoxRole.ItemsSource = Roles;
+            comboBoxRole.SelectedItem = Roles[0];
         }
-        private void buttonAddUserClick(object sender, RoutedEventArgs e)
+        private void AddUserClick(object sender, RoutedEventArgs e)
         {
             AddUserForm();
         }
-        private void buttonUpdateUserClick(object sender, RoutedEventArgs e)
+        private void UpdateUserClick(object sender, RoutedEventArgs e)
         {
             UpdateUserForm();
         }
-        private void buttonDeleteUserClick(object sender, RoutedEventArgs e)
+        private void DeleteUserClick(object sender, RoutedEventArgs e)
         {
             DeleteUser();
         }
-        private void buttonSearchUserClick(object sender, RoutedEventArgs e)
+
+        private void DeleteMultipleUserClick(object sender, RoutedEventArgs e)
         {
-            if (radiobuttonId.IsChecked == true)
-            {
-                if (textboxSearchUnit.Text == "")
-                {
-                    gridUsers.ItemsSource = LoadUsers();
-                }
-                else
-                {
-                    gridUsers.ItemsSource = LoadUsersById(int.Parse(textboxSearchUnit.Text));
-                }
-            }
-            else if(radiobuttonName.IsChecked == true)
-            {
-                gridUsers.ItemsSource = LoadUsersByName(textboxSearchUnit.Text);
-            }
-            else if(radiobuttonRole.IsChecked == true)
-            {
-                if (textboxSearchUnit.Text == "")
-                {
-                    gridUsers.ItemsSource = LoadUsers();
-                }
-                else
-                {
-                    Role role = comboBoxSearchUnit.SelectedItem as Role;
-                    gridUsers.ItemsSource = LoadUsersByRole(role.Id);
-                }
-                
-            }
+            DeleteMultipleUsers();
         }
-        private void buttonClearSearchUserClick(object sender, RoutedEventArgs e)
+
+        private void DeleteAllUserClick(object sender, RoutedEventArgs e)
         {
-            textboxSearchUnit.Text = null;
+            DeleteAllUsers();
+        }
+
+        private void SearchClick(object sender, RoutedEventArgs e)
+        {
+            IList<User> users = SearchUsers();
+            Users = new ObservableCollection<User>(users);
+            gridUsers.ItemsSource = Users;
+        }
+        private void SearchClearClick(object sender, RoutedEventArgs e)
+        {
+            textBoxIdName.Text = null;
+            comboBoxRole.SelectedItem = Roles[0];
             gridUsers.ItemsSource = LoadUsers();
         }
         private IList<User> GetUsers()
         {
             try
             {
-                IUserService userService = new UserService();
                 IList<User> users = userService.GetUsers();
                 return users;
             }
@@ -102,48 +91,6 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
                 return null;
             }
 
-        }
-        private IList<User> GetUsersById(int id)
-        {
-            try
-            {
-                IUserService userService = new UserService();
-                IList<User> users = userService.GetUserById(id);
-                return users;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Błąd wczytywania danych: " + e);
-                return null;
-            }
-        }
-        private IList<User> GetUsersByName(string name)
-        {
-            try
-            {
-                IUserService userService = new UserService();
-                IList<User> users = userService.GetUsersByName(name);
-                return users;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Błąd wczytywania danych: " + e);
-                return null;
-            }
-        }
-        private IList<User> GetUsersByRole(int id)
-        {
-            try
-            {
-                IUserService userService = new UserService();
-                IList<User> users = userService.GetUsersByRole(id);
-                return users;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Błąd wczytywania danych: " + e);
-                return null;
-            }
         }
         private ObservableCollection<User> LoadUsers()
         {
@@ -158,53 +105,12 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
                 return null;
             }
         }
-        private ObservableCollection<User> LoadUsersById(int id)
-        {
-            try
-            {
-                Users = new ObservableCollection<User>(GetUsersById(id));
-                return Users;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Błąd wyświetlania danych: " + e);
-                return null;
-            }
-        }
-        private ObservableCollection<User> LoadUsersByName(string name)
-        {
-            try
-            {
-                Users = new ObservableCollection<User>(GetUsersByName(name));
-                return Users;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Błąd wyświetlania danych: " + e);
-                return null;
-            }
-        }
-        private ObservableCollection<User> LoadUsersByRole(int roleId)
-        {
-            try
-            {
-                Users = null;
-                Users = new ObservableCollection<User>(GetUsersByRole(roleId));
-                return Users;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Błąd wyświetlania danych: " + e);
-                return null;
-            }
-        }
         private void DeleteUser()
         {
             try
             {
                 if(gridUsers.SelectedItem != null)
                 {
-                    IUserService userService = new UserService();
                     User user = gridUsers.SelectedItem as User;
                     userService.DeleteUser(user.Id);
                 }
@@ -214,12 +120,49 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
                 MessageBox.Show("Błąd usuwania: " + e);
             }
         }
+
+        private void DeleteAllUsers()
+        {
+            try
+            {
+                if (gridUsers.SelectedItem != null)
+                {
+                    User user = gridUsers.SelectedItem as User;
+                    userService.DeleteUser(user.Id);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Błąd usuwania: " + e);
+            }
+        }
+
+        private void DeleteMultipleUsers()
+        {
+            try
+            {
+                if (gridUsers.SelectedItem != null)
+                {
+                    User user = gridUsers.SelectedItem as User;
+                    userService.DeleteUser(user.Id);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Błąd usuwania: " + e);
+            }
+        }
+
         private void AddUserForm()
         {
             try
             {
-                ManageUserFormView manageUserFormView = new ManageUserFormView();
-                manageUserFormView.Show();
+                ManageUserFormView manageUserFormView = new ManageUserFormView(this);
+                manageUserFormView.ShowDialog();
+                if(manageUserFormView.DialogResult.Value == true)
+                {
+                    gridUsers.ItemsSource = LoadUsers();
+                }
             }
             catch(Exception e)
             {
@@ -231,22 +174,31 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
             try
             {
                 User user = gridUsers.SelectedItem as User;
-                ManageUserFormView manageUserFormView = new ManageUserFormView(user);
-                manageUserFormView.Show();
+                ManageUserFormView manageUserFormView = new ManageUserFormView(this, user);
+                manageUserFormView.ShowDialog();
+                if (manageUserFormView.DialogResult.Value == true)
+                {
+                    gridUsers.ItemsSource = LoadUsers();
+                }
             }
             catch (Exception e)
             {
                 MessageBox.Show("Błąd wywoływania formularza: " + e);
             }
         }
-        private ObservableCollection<Role> GetRoles()
+        private IList<string> GetRoles()
         {
             try
             {
                 IRoleService roleService = new RoleService();
-                IList<Role> roles = roleService.GetRoles();
-                Roles = new ObservableCollection<Role>(roles);
-                return Roles;
+                IList<Role> allRoles = roleService.GetRoles();
+                IList<string> roles = new List<string>();
+                roles.Add("Wszystkie");
+                foreach(Role role in allRoles)
+                {
+                    roles.Add(role.Name);
+                }
+                return roles;
             }
             catch(Exception e)
             {
@@ -254,29 +206,20 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
                 return null;
             }
         }
-        private void radiobuttonIdClick(object sender, RoutedEventArgs e)
+        private IList<User> SearchUsers()
         {
-            if(radiobuttonId.IsChecked == true)
+            List<string> criteria = new List<string>();
+            criteria.Add(textBoxIdName.Text);                           //criteria[0] = Id/Name
+            if(comboBoxRole.SelectedItem.ToString() == "Wszystkie")
             {
-                textboxSearchUnit.Visibility = Visibility.Visible;
-                comboBoxSearchUnit.Visibility = Visibility.Hidden;
+                criteria.Add("");                                       //criteria[1] = Role
             }
-        }
-        private void radiobuttonNameClick(object sender, RoutedEventArgs e)
-        {
-            if (radiobuttonName.IsChecked == true)
+            else
             {
-                textboxSearchUnit.Visibility = Visibility.Visible;
-                comboBoxSearchUnit.Visibility = Visibility.Hidden;
+                criteria.Add(comboBoxRole.SelectedItem.ToString());     //criteria[1] = Role
             }
-        }
-        private void radiobuttonRoleClick(object sender, RoutedEventArgs e)
-        {
-            if (radiobuttonRole.IsChecked == true)
-            {
-                textboxSearchUnit.Visibility = Visibility.Hidden;
-                comboBoxSearchUnit.Visibility = Visibility.Visible;
-            }
+            IList<User> searchedUsers = userService.SearchUsers(criteria);
+            return searchedUsers;
         }
     }
 }

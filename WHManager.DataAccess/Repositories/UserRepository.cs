@@ -138,6 +138,32 @@ namespace WHManager.DataAccess.Repositories
             
         }
 
+        public IEnumerable<User> SearchUsers(List<string> criteria)
+        {
+            using(WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                IQueryable<User> users = context.Users.AsQueryable()
+                                                                   .Include(x => x.Role);
+                if (!string.IsNullOrEmpty(criteria[0]))
+                {
+                    if (int.TryParse(criteria[0], out int result))
+                    {
+                        users = users.Where(p => p.Id == result);
+                    }
+                    else
+                    {
+                        users = users.Where(p => p.UserName.StartsWith(criteria[0]));
+                    }
+                }
+                if (!string.IsNullOrEmpty(criteria[1]))
+                {
+                    users = users.Where(p => p.Role.Name.StartsWith(criteria[1]));
+                }
+                IEnumerable<User> usersList = users.ToList();
+                return usersList;
+            }
+        }
+
         public void UpdateUser(int id, string name, string password, int roleId)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
@@ -148,7 +174,6 @@ namespace WHManager.DataAccess.Repositories
                     user.UserName = name;
                     user.PasswordHash = password;
                     user.Role = context.Roles.SingleOrDefault(x => x.Id == roleId);
-                    context.Users.Add(user);
                     context.SaveChanges();
                 }
                 catch

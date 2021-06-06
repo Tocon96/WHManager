@@ -48,6 +48,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews.BusinessFormViews
             try
             {
                 this.IsEnabled = false;
+                PrintButton.Visibility = Visibility.Hidden;
                 PrintDialog printDialog = new PrintDialog();
                 if (printDialog.ShowDialog() == true)
                 {

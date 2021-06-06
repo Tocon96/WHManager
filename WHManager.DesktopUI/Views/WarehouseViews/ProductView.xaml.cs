@@ -114,131 +114,82 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
         }
         private void FillComboBoxes()
         {
-            try
-            {
-                List<string> manufacturers = GetAllManufacturers();
-                List<string> taxes = GetAllTaxes();
-                List<string> productTypes = GetAllProductTypes();
-                Manufacturers = new ObservableCollection<string>(manufacturers);
-                Taxes = new ObservableCollection<string>(taxes);
-                ProductTypes = new ObservableCollection<string>(productTypes);
+            List<string> manufacturers = GetAllManufacturers();
+            List<string> taxes = GetAllTaxes();
+            List<string> productTypes = GetAllProductTypes();
+            Manufacturers = new ObservableCollection<string>(manufacturers);
+            Taxes = new ObservableCollection<string>(taxes);
+            ProductTypes = new ObservableCollection<string>(productTypes);
 
-                manufacturerComboBox.ItemsSource = Manufacturers;
-                taxComboBox.ItemsSource = Taxes;
-                productTypeComboBox.ItemsSource = ProductTypes;
+            manufacturerComboBox.ItemsSource = Manufacturers;
+            taxComboBox.ItemsSource = Taxes;
+            productTypeComboBox.ItemsSource = ProductTypes;
 
-                manufacturerComboBox.SelectedItem = Manufacturers[0];
-                taxComboBox.SelectedItem = Taxes[0];
-                productTypeComboBox.SelectedItem = ProductTypes[0];
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Błąd wyświetlania: " + e);
-
-            }
+            manufacturerComboBox.SelectedItem = Manufacturers[0];
+            taxComboBox.SelectedItem = Taxes[0];
+            productTypeComboBox.SelectedItem = ProductTypes[0];
         }
         private void SearchClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                List<Product> productsList = SearchProducts();
-                Products = new ObservableCollection<Product>(productsList);
-                gridProduct.ItemsSource = Products;
-            }
-            catch(Exception x)
-            {
-                MessageBox.Show("Błąd wyszukiwania: " + x);
-            }
+            List<Product> productsList = SearchProducts();
+            Products = new ObservableCollection<Product>(productsList);
+            gridProduct.ItemsSource = Products;
         }
+
         private void ClearSearchClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                //FillComboBoxes();
-                gridProduct.ItemsSource = LoadData();
-            }
-            catch(Exception x)
-            {
-                MessageBox.Show("Błąd czyszczenia: " + x);
-            }
+            ClearFilters();
+            gridProduct.ItemsSource = LoadData();
         }
         private void UpdateProductClick(object sender, RoutedEventArgs e)
         {
-            try
+            Product product = gridProduct.SelectedItem as Product;
+            ManageProductFormView manageProductForm = new ManageProductFormView(this, product);
+            manageProductForm.ShowDialog();
+            if (manageProductForm.DialogResult.Value == true)
             {
-                Product product = gridProduct.SelectedItem as Product;
-                ManageProductFormView manageProductForm = new ManageProductFormView(this, product);
-                manageProductForm.ShowDialog();
-                if (manageProductForm.DialogResult.Value == true)
-                {
-                    gridProduct.ItemsSource = LoadData();
-                }
-            }
-            catch(Exception x)
-            {
-                MessageBox.Show("Błąd odświeżania: " + x);
+                gridProduct.ItemsSource = LoadData();
             }
         }
         private void DeleteProductClick(object sender, RoutedEventArgs e)
         {
-            try
+            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie tego produktu spowoduje usunięcie wszystkich przypisanych egzemplarzy. \nCzy na pewno chcesz usunąć wybrany produkt?", "Potwierdź usunięcie.", MessageBoxButton.YesNo);
             {
-                MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz usunąć wybrane produkty?", "Potwierdź usunięcie.", MessageBoxButton.YesNo);
+                if (messageBoxResult == MessageBoxResult.Yes)
                 {
-                    if (messageBoxResult == MessageBoxResult.Yes)
-                    {
-                        Product product = gridProduct.SelectedItem as Product;
-                        productService.DeleteProduct(product.Id);
-                        gridProduct.ItemsSource = LoadData();
-                    }
+                    Product product = gridProduct.SelectedItem as Product;
+                    productService.DeleteProduct(product.Id);
+                    gridProduct.ItemsSource = LoadData();
                 }
-            }
-            catch(Exception x)
-            {
-                MessageBox.Show("Błąd usuwania: " + x);
             }
         }
         private void DeleteMultipleProductsClick(object sender, RoutedEventArgs e)
         {
-            try
+            List<Product> selectedProducts = gridProduct.SelectedItems.Cast<Product>().ToList();
+            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie tych produktów spowoduje usunięcie wszystkich przypisanych egzemplarzy. \nCzy na pewno chcesz usunąć wybrane produkty?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
             {
-                MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz usunąć wybrane produkty?", "Potwierdź usunięcie.", MessageBoxButton.YesNo);
-                {
-                    if (messageBoxResult == MessageBoxResult.Yes)
+                if (messageBoxResult == MessageBoxResult.Yes)
+                { 
+                    foreach (Product product in selectedProducts)
                     {
-                        foreach (Product product in gridProduct.SelectedItems as List<Product>)
-                        {
-                            productService.DeleteProduct(product.Id);
-                        }
-                        gridProduct.ItemsSource = LoadData();
+                        productService.DeleteProduct(product.Id);
                     }
+                    gridProduct.ItemsSource = LoadData();
                 }
-                
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show("Błąd usuwania: " + x);
             }
         }
         private void DeleteAllProductsClick(object sender, RoutedEventArgs e)
         {
-            try
+            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie tych produktów spowoduje usunięcie wszystkich przypisanych egzemplarzy. \nCzy na pewno chcesz usunąć wszystkie produkty?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
             {
-                MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz usunąć wszystkie produkty?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+                if(messageBoxResult == MessageBoxResult.Yes)
                 {
-                    if(messageBoxResult == MessageBoxResult.Yes)
+                    foreach (Product product in Products)
                     {
-                        foreach (Product product in Products)
-                        {
-                            productService.DeleteProduct(product.Id);
-                        }
-                        gridProduct.ItemsSource = LoadData();
+                        productService.DeleteProduct(product.Id);
                     }
+                    gridProduct.ItemsSource = LoadData();
                 }
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show("Błąd usuwania: " + x);
             }
         }
         private void gridProductOpenItemView(object sender, RoutedEventArgs e)
@@ -261,24 +212,42 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
         }
         private List<Product> SearchProducts()
         {
-            try
+            List<string> criteria = new List<string>();
+            criteria.Add(idNameTextBox.Text.ToString());
+            criteria.Add(productTypeComboBox.SelectedItem.ToString());  //ProductType   - criteria[1]
+            if(criteria[1] == "Wszystkie")
             {
-                List<string> criteria = new List<string>();
-                criteria.Add(idNameTextBox.Text.ToString());
-                criteria.Add(productTypeComboBox.SelectedItem.ToString());  //ProductType   - criteria[1]
-                criteria.Add(manufacturerComboBox.SelectedItem.ToString()); //Manufacturer  - criteria[2]
-                criteria.Add(taxComboBox.SelectedItem.ToString());          // Tax          - criteria[3]
-                criteria.Add(priceBuyMinTextBox.Text.ToString());           // priceBuyMin  - criteria[4]
-                criteria.Add(priceBuyMaxTextBox.Text.ToString());           // priceBuyMax  - criteria[5]
-                criteria.Add(priceSellMinTextBox.Text.ToString());          // priceSellMin - criteria[6]
-                criteria.Add(priceSellMaxTextBox.Text.ToString());          // priceSellMax - criteria[7]
-                List<Product> products = productService.SearchProducts(criteria).ToList();
-                return products;
+                criteria[1] = "";
             }
-            catch (Exception)
+            criteria.Add(manufacturerComboBox.SelectedItem.ToString()); //Manufacturer  - criteria[2]
+            if (criteria[2] == "Wszystkie")
             {
-                throw new Exception("Błąd wyszukiwania");
+                criteria[2] = "";
             }
+            criteria.Add(taxComboBox.SelectedItem.ToString());          // Tax          - criteria[3]
+            if (criteria[3] == "Wszystkie")
+            {
+                criteria[3] = "";
+            }
+            criteria.Add(priceBuyMinTextBox.Text.ToString());           // priceBuyMin  - criteria[4]
+            criteria.Add(priceBuyMaxTextBox.Text.ToString());           // priceBuyMax  - criteria[5]
+            criteria.Add(priceSellMinTextBox.Text.ToString());          // priceSellMin - criteria[6]
+            criteria.Add(priceSellMaxTextBox.Text.ToString());          // priceSellMax - criteria[7]
+            List<Product> products = productService.SearchProducts(criteria).ToList();
+            return products;
+        }
+        private void ClearFilters()
+        {
+            manufacturerComboBox.SelectedItem = Manufacturers[0];
+            taxComboBox.SelectedItem = Taxes[0];
+            productTypeComboBox.SelectedItem = ProductTypes[0];
+
+            priceBuyMaxTextBox.Text = null;
+            priceBuyMinTextBox.Text = null;
+            priceSellMaxTextBox.Text = null;
+            priceSellMinTextBox.Text = null;
+
+            idNameTextBox.Text = null;
         }
     }
 }

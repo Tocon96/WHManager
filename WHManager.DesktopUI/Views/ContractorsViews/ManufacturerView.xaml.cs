@@ -32,6 +32,7 @@ namespace WHManager.DesktopUI.Views.ContractorsView
             set { _manufacturers = value; }
         }
 
+        IManufacturerService manufacturerService = new ManufacturerService();
 
         public ManufacturerView()
         {
@@ -41,168 +42,99 @@ namespace WHManager.DesktopUI.Views.ContractorsView
 
         private IList<Manufacturer> GetAll()
         {
-            try
-            {
-                IManufacturerService manufacturerService = new ManufacturerService();
-                IList<Manufacturer> manufacturers = manufacturerService.GetManufacturers().ToList();
-                return manufacturers;
-            }
-            catch(Exception)
-            {
-                throw;
-            }
+            IList<Manufacturer> manufacturers = manufacturerService.GetManufacturers().ToList();
+            return manufacturers;
         }
 
         private ObservableCollection<Manufacturer> LoadData()
         {
-            try
-            {
-                IList<Manufacturer> manufacturers = GetAll();
-                Manufacturers = new ObservableCollection<Manufacturer>(manufacturers);
-                return Manufacturers;
-            }
-            catch(Exception)
-            {
-                throw;
-            }
-            
-        }
-
-        private IList<Manufacturer> GetManufacturersByName(string name)
-        {
-            try
-            {
-                IManufacturerService manufacturerService = new ManufacturerService();
-                IList<Manufacturer> manufacturers = manufacturerService.GetManufacturersByName(name).ToList();
-                return manufacturers;
-            }
-            catch(Exception)
-            {
-                throw;
-            }
-        }
-
-        private IList<Manufacturer> GetManufacturerByNip(int nip)
-        {
-            try
-            {
-                IManufacturerService manufacturerService = new ManufacturerService();
-                IList<Manufacturer> manufacturers = new List<Manufacturer>();
-                Manufacturer manufacturer = manufacturerService.GetManufacturerByNip(nip);
-                manufacturers.Add(manufacturer);
-                return manufacturers;
-            }
-            catch(Exception)
-            {
-                throw;
-            }
-        }
-
-        private IList<Manufacturer> GetManufacturerById(int id)
-        {
-            try
-            {
-                IManufacturerService manufacturerService = new ManufacturerService();
-                IList<Manufacturer> manufacturers = new List<Manufacturer>();
-                Manufacturer manufacturer = manufacturerService.GetManufacturer(id);
-                manufacturers.Add(manufacturer);
-                return manufacturers;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            IList<Manufacturer> manufacturers = GetAll();
+            Manufacturers = new ObservableCollection<Manufacturer>(manufacturers);
+            return Manufacturers;
         }
 
         private void SearchClearClick(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                textSearchManufacturer.Text = null;
-                gridManufacturers.ItemsSource = Manufacturers;
-            }
-            catch(Exception)
-            {
-                throw;
-            }
+            textBoxIdName.Text = null;
+            textBoxNip.Text = null;
+            gridManufacturers.ItemsSource = LoadData();
+
         }
 
-        private void SearchManufacturerClick(object sender, RoutedEventArgs e)
+        private void SearchClick(object sender, RoutedEventArgs e)
         {
-            if (IdRadioButton.IsChecked == true)
-            {
-                if(textSearchManufacturer.Text == "")
-                {
-                    gridManufacturers.ItemsSource = LoadData();
-                }
-                else
-                {
-                    try
-                    {
-                        IList<Manufacturer> manufacturers = GetManufacturerById(int.Parse(textSearchManufacturer.Text));
-                        Manufacturers = new ObservableCollection<Manufacturer>(manufacturers);
-                        gridManufacturers.ItemsSource = Manufacturers;
-                    }
-                    catch (Exception x)
-                    {
-                        MessageBox.Show("Błąd wyszukiwania: " + x);
-                    }
-                }
-                
-            }
-            else if(NameRadioButton.IsChecked == true)
-            {
-                try
-                {
-                    IList<Manufacturer> manufacturers = GetManufacturersByName(textSearchManufacturer.Text);
-                    Manufacturers = new ObservableCollection<Manufacturer>(manufacturers);
-                    gridManufacturers.ItemsSource = Manufacturers;
-                }
-                catch( Exception x)
-                {
-                    MessageBox.Show("Błąd wyszukiwania: " + x);
-                }
-            }
-            else if(NipRadioButton.IsChecked == true)
-            {
-                if (textSearchManufacturer.Text == "")
-                {
-                    gridManufacturers.ItemsSource = LoadData();
-                }
-                else
-                {
-                    try
-                    {
-                        IList<Manufacturer> manufacturers = GetManufacturerByNip(int.Parse(textSearchManufacturer.Text));
-                        Manufacturers = new ObservableCollection<Manufacturer>(manufacturers);
-                        gridManufacturers.ItemsSource = Manufacturers;
-                    }
-                    catch (Exception x)
-                    {
-                        MessageBox.Show("Błąd wyszukiwania: " + x);
-                    }
-                }
-            }
+            IList<Manufacturer> manufacturers = manufacturerService.SearchManufacturers(SearchManufacturers());
+            Manufacturers = new ObservableCollection<Manufacturer>(manufacturers);
+            gridManufacturers.ItemsSource = Manufacturers;
         }
 
         private void AddManufacturerClick(object sender, RoutedEventArgs e)
         {
-            ManageManufacturerFormView manageManufacturerFormView = new ManageManufacturerFormView();
-            manageManufacturerFormView.Show();
+            ManageManufacturerFormView manageManufacturerFormView = new ManageManufacturerFormView(this);
+            manageManufacturerFormView.ShowDialog();
+            if(manageManufacturerFormView.DialogResult.Value == true)
+            {
+                gridManufacturers.ItemsSource = LoadData();
+            }
         }
 
         private void UpdateManufacturerClick(object sender, RoutedEventArgs e)
         {
             Manufacturer manufacturer = gridManufacturers.SelectedItem as Manufacturer;
-            ManageManufacturerFormView manageManufacturerFormView = new ManageManufacturerFormView(manufacturer);
-            manageManufacturerFormView.Show();
+            ManageManufacturerFormView manageManufacturerFormView = new ManageManufacturerFormView(this, manufacturer);
+            manageManufacturerFormView.ShowDialog();
+            if (manageManufacturerFormView.DialogResult.Value == true)
+            {
+                gridManufacturers.ItemsSource = LoadData();
+            }
         }
 
         private void DeleteManufacturerClick(object sender, RoutedEventArgs e)
         {
-            IManufacturerService manufacturerService = new ManufacturerService();
             Manufacturer manufacturer = gridManufacturers.SelectedItem as Manufacturer;
             manufacturerService.DeleteManufacturer(manufacturer.Id);
+            gridManufacturers.ItemsSource = LoadData();
+        }
+
+        private void DeleteMultipleManufacturerClick(object sender, RoutedEventArgs e)
+        {
+            List<Manufacturer> manufacturers = gridManufacturers.SelectedItems.Cast<Manufacturer>().ToList();
+            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie producenta spowoduje usunięcie wszystkich produktów przypisanych do niego. \nCzy na pewno chcesz usunąć wybranych producentów?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+            {
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    foreach (Manufacturer manufacturer in manufacturers)
+                    {
+                        manufacturerService.DeleteManufacturer(manufacturer.Id);
+                    }
+                    gridManufacturers.ItemsSource = LoadData();
+                }
+            }
+
+        }
+
+        private void DeleteAllManufacturerClick(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie producenta spowoduje usunięcie wszystkich produktów przypisanych do niego. \nCzy na pewno chcesz usunąć wszystkich producentów?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+            {
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    foreach (Manufacturer manufacturer in Manufacturers)
+                    {
+                        manufacturerService.DeleteManufacturer(manufacturer.Id);
+                    }
+                    gridManufacturers.ItemsSource = LoadData();
+                }
+            }
+        }
+
+
+        private List<string> SearchManufacturers()
+        {
+            List<string> criteria = new List<string>();
+            criteria.Add(textBoxIdName.Text.ToString());
+            criteria.Add(textBoxNip.Text.ToString());
+            return criteria;
         }
     }
 }

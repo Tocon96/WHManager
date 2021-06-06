@@ -135,5 +135,32 @@ namespace WHManager.DataAccess.Repositories
 				}
 			}
 		}
+
+        public IEnumerable<Manufacturer> SearchManufacturers(List<string> criteria)
+        {
+			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+			{
+				IQueryable<Manufacturer> manufacturers = context.Manufacturers.AsQueryable();
+
+				if (!string.IsNullOrEmpty(criteria[0]))
+				{
+					if (int.TryParse(criteria[0], out int result))
+					{
+						manufacturers = manufacturers.Where(x => x.Id == result);
+					}
+					else
+					{
+						manufacturers = manufacturers.Where(x => x.Name.StartsWith(criteria[0]));
+					}
+				}
+				if (!string.IsNullOrEmpty(criteria[1]))
+                {
+					manufacturers = manufacturers.Where(x => x.Nip == double.Parse(criteria[1]));
+                }
+
+				IEnumerable<Manufacturer> manufacturerList = manufacturers.ToList();
+				return manufacturerList;
+			}
+        }
     }	
 }

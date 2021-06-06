@@ -38,7 +38,7 @@ namespace WHManager.DesktopUI
                         SubMenuList=new List<SubMenuItemsData>{
                             new SubMenuItemsData(){ SubMenuDirectory="WarehouseViews", File = "ProductView", SubMenuText="Produkt" },
                             new SubMenuItemsData(){ SubMenuDirectory="WarehouseViews", File = "ProductTypeView", SubMenuText="Typ Produktów" },
-                            new SubMenuItemsData(){ SubMenuDirectory="WarehouseViews", File = "TaxView", SubMenuText="Typy podatków" }
+                            new SubMenuItemsData(){ SubMenuDirectory="WarehouseViews", File = "TaxView", SubMenuText="Typ Podatków" }
                         }
                     },
                     new MenuItemsData(){ MenuText="Kontrahenci",

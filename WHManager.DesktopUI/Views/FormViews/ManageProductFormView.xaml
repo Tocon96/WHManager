@@ -62,7 +62,7 @@
         <TextBlock x:Name="textBlockManageProduct" Grid.ColumnSpan="3" Grid.Row="0" Height="30" FontSize="18" Background="#1565c0">Dodaj Nowy Produkt</TextBlock>
         
         <TextBlock Grid.Row="1" Grid.ColumnSpan="3">Nazwa</TextBlock>
-        <TextBox Grid.Row="2" Grid.ColumnSpan="3" x:Name="textBoxProductName">Nazwa</TextBox>
+        <TextBox Grid.Row="2" Grid.ColumnSpan="3" x:Name="textBoxProductName" PreviewMouseDown="textBoxProductName_MouseLeftButtonUp">Nazwa</TextBox>
         <TextBlock Grid.Row="3" Grid.ColumnSpan="3">Typ</TextBlock>
         <ComboBox Grid.Row="4" Grid.ColumnSpan="3" x:Name="comboBoxProductType" DisplayMemberPath="Name"></ComboBox>
         <TextBlock Grid.Row="5" Grid.ColumnSpan="3">Producent</TextBlock>
@@ -70,9 +70,9 @@
         <TextBlock Grid.Row="7" Grid.ColumnSpan="3">Podatek</TextBlock>
         <ComboBox Grid.Row="8" Grid.ColumnSpan="3" x:Name="comboBoxProductTax" DisplayMemberPath="Value"></ComboBox>
         <TextBlock Grid.Row="9" Grid.ColumnSpan="3">Cena kupna</TextBlock>
-        <TextBox Grid.Row="10" Grid.ColumnSpan="3" x:Name="textBoxProductPriceBuy">Cena kupna</TextBox>
+        <TextBox Grid.Row="10" Grid.ColumnSpan="3" x:Name="textBoxProductPriceBuy" PreviewMouseDown="textBoxProductPriceBuy_MouseLeftButtonUp">Cena kupna</TextBox>
         <TextBlock Grid.Row="11" Grid.ColumnSpan="3">Cena sprzedaży</TextBlock>
-        <TextBox Grid.Row="12" Grid.ColumnSpan="3" x:Name="textBoxProductPriceSell">Cena sprzedaży</TextBox>
+        <TextBox Grid.Row="12" Grid.ColumnSpan="3" x:Name="textBoxProductPriceSell" PreviewMouseDown="textBoxProductPriceSell_MouseLeftButtonUp">Cena sprzedaży</TextBox>
         <Button Grid.Row="13" Grid.Column="0" HorizontalAlignment="Left" Style="{StaticResource ButtonStyle}" Width="150" Click="CancelClick">Anuluj</Button>
         <StackPanel Grid.Row="13" Grid.Column="1" Orientation="Vertical">
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />

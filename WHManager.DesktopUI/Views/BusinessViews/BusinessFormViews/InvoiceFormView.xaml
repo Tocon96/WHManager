@@ -9,8 +9,7 @@
         Title="InvoiceFormView" Height="800" Width="450" ResizeMode="NoResize">
     <ScrollViewer>
         <Grid>
-            <Button HorizontalAlignment="Right" Margin="10" Click="Button_Click" VerticalAlignment="Top">
-            Drukuj</Button>
+            <Button HorizontalAlignment="Right" Margin="10" Click="Button_Click" VerticalAlignment="Top" Name="PrintButton">Drukuj</Button>
             <Grid x:Name="print">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="120"/>

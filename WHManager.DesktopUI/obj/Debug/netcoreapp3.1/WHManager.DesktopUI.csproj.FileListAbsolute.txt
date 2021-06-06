@@ -140,3 +140,5 @@ E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\MaterialDe
 E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\MaterialDesignThemes.Wpf.dll
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\BusinessViews\BusinessFormViews\InvoiceFormView.g.cs
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\BusinessViews\BusinessFormViews\InvoiceFormView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\BusinessViews\DocumentsView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\BusinessViews\DocumentsView.baml

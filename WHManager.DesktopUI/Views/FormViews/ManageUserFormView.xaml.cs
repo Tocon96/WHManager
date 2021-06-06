@@ -15,6 +15,7 @@ using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
 using WHManager.DesktopUI.WindowSetting.Interfaces;
 using WHManager.DesktopUI.WindowSetting;
+using WHManager.DesktopUI.Views.AdministrationViews;
 
 namespace WHManager.DesktopUI.Views.FormViews
 {
@@ -33,35 +34,63 @@ namespace WHManager.DesktopUI.Views.FormViews
             get;
             set;
         }
-        private readonly IDisplaySetting displaySetting = new DisplaySetting();
-        public ManageUserFormView()
+
+        private UserView UserGridView
         {
-            InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
-            comboboxRoles.ItemsSource = GetRoles();
+            get;
+            set;
         }
-        public ManageUserFormView(User user)
+        public ManageUserFormView(UserView userView)
         {
             InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
-            User = user;
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            UserGridView = userView;
             comboboxRoles.ItemsSource = GetRoles();
-            labelId.Content = user.Id;
-            labelId.Visibility = Visibility.Visible;
+            comboboxRoles.SelectedItem = Roles[0];
+        }
+        public ManageUserFormView(UserView userView, User user)
+        {
+            InitializeComponent();
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            User = user;
+            UserGridView = userView;
+            textBoxName.Text = user.UserName;
+            comboboxRoles.ItemsSource = GetRoles();
+            foreach (Role role in comboboxRoles.Items)
+            {
+                if (role.Id == user.Role.Id)
+                {
+                    comboboxRoles.SelectedItem = role;
+                }
+            }
+            textBlockManageUser.Text = "Edytuj użytkownika ID: " + user.Id;
         }
 
         private void ButtonAddUserClick(object sender, RoutedEventArgs e)
         {
-            if(labelId.Visibility == Visibility.Hidden)
-            {
-                AddUser();
-                this.Close();
-            }
-            else if(labelId.Visibility == Visibility.Visible)
+            if(User != null)
             {
                 UpdateUser();
+                DialogResult = true;
                 this.Close();
             }
+            else
+            {
+                AddUser();
+                DialogResult = true;
+                this.Close();
+            }
+        }
+
+        public void OnDialogClose()
+        {
+            UserGridView.gridUsers.Items.Refresh();
+        }
+
+        private void ButtonCancelClick(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            this.Close();
         }
 
         private ObservableCollection<Role> GetRoles()
@@ -106,13 +135,26 @@ namespace WHManager.DesktopUI.Views.FormViews
                 {
                     Id = User.Id,
                     UserName = textBoxName.Text,
+                    PasswordHash = textBoxPassword.Text,
                     Role = comboboxRoles.SelectedItem as Role
                 };
+                userService.UpdateUser(user);
             }
             catch (Exception e)
             {
                 MessageBox.Show("Błąd edytowania: " + e);
             }
         }
+
+        private void textBoxName_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            textBoxName.Clear();
+        }
+
+        private void textBoxPassword_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            textBoxPassword.Clear();
+        }
+
     }
 }

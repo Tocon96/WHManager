@@ -13,6 +13,6 @@ namespace WHManager.BusinessLogic.Services
         void DeleteManufacturer(int id);
         IList<Manufacturer> GetManufacturersByName(string name);
         Manufacturer GetManufacturerByNip(double nip);
-
+        IList<Manufacturer> SearchManufacturers(List<string> criteria);
     }
 }

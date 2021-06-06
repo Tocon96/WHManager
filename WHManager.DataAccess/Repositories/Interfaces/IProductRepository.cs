@@ -11,7 +11,7 @@ namespace WHManager.DataAccess.Repositories.Interfaces
     {
         Product AddProduct(string name, int producttype, int tax, int manufacturer, decimal pricebuy, decimal pricesell);
         IEnumerable<Product> GetAllProducts();
-        Product GetProduct(int id);
+        IEnumerable<Product> GetProduct(int id);
         void DeleteProduct(int id);
         void UpdateProduct(int id, string name, int producttype, int tax, int manufacturer, decimal pricesell, decimal pricebuy, bool instock);
         IEnumerable<Product> GetProductsByManufacturer(string manufacturerName = null, int? manufacturerId = null, double? manufacturerNip = null);
@@ -21,5 +21,6 @@ namespace WHManager.DataAccess.Repositories.Interfaces
         IEnumerable<Product> GetProductsByPriceSell(decimal? priceMin = null, decimal? priceMax = null);
         IEnumerable<Product> GetProductsByPriceBuy(decimal? priceMin = null, decimal? priceMax = null);
         IEnumerable<Product> GetProductsInStock();
+        IEnumerable<Product> SearchProducts(List<string> criteria);
     }
 }

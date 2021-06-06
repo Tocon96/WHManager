@@ -14,10 +14,11 @@ namespace WHManager.BusinessLogic.Services
     {
         private readonly IItemRepository _itemRepository = new ItemRepository(new DataAccess.WHManagerDBContextFactory());
         private IProductService productService = new ProductService();
-        public void CreateNewItems(List<Item> items)
+        public List<int> CreateNewItems(List<Item> items)
         {
             try
             {
+                List<int> itemIds = new List<int>();
                 foreach (Item item in items)
                 {
                     int id = item.Id;
@@ -25,14 +26,17 @@ namespace WHManager.BusinessLogic.Services
                     DateTime dateofadmission = item.DateOfAdmission;
                     DateTime? dateofemission = item.DateOfEmission;
                     bool isinstock = item.IsInStock;
-                    _itemRepository.AddItem(id, productId, dateofadmission, dateofemission, isinstock);
+                    itemIds.Add(_itemRepository.AddItem(id, productId, dateofadmission, dateofemission, isinstock));
                 }
-                Product product = productService.GetProduct(items[0].Product.Id);
+                IList<Product> prodList = productService.GetProduct(items[0].Product.Id);
+                Product product = prodList[0];
                 if(product.InStock == false)
                 {
                     product.InStock = true;
                     productService.UpdateProduct(product);
+                    return null;
                 }
+                return itemIds;
             }
             catch
             {
@@ -48,12 +52,14 @@ namespace WHManager.BusinessLogic.Services
                 var items = _itemRepository.GetItems().ToList();
                 foreach (var item in items)
                 {
+                    IList<Product> prodList = productService.GetProduct(item.Product.Id);
+                    Product product = prodList[0];
                     Item currentItem = new Item
                     {
                         Id = item.Id,
                         DateOfAdmission = item.DateOfAdmission,
                         DateOfEmission = item.DateOfEmission,
-                        Product = productService.GetProduct(item.Product.Id),
+                        Product = product,
                         IsInStock = item.IsInStock
                         
                     };
@@ -72,12 +78,14 @@ namespace WHManager.BusinessLogic.Services
             try
             {
                 var item = _itemRepository.GetItem(id);
+                IList<Product> prodList = productService.GetProduct(item.Product.Id);
+                Product product = prodList[0];
                 Item currentItem = new Item
                 {
                     Id = item.Id,
                     DateOfAdmission = item.DateOfAdmission,
                     DateOfEmission = item.DateOfEmission,
-                    Product = productService.GetProduct(item.Product.Id),
+                    Product = product,
                     IsInStock = item.IsInStock
                 };
                 return currentItem;
@@ -127,10 +135,12 @@ namespace WHManager.BusinessLogic.Services
                     var items = _itemRepository.GetItemsByProducts(productId, null);
                     foreach(var item in items)
                     {
+                        IList<Product> prodList = productService.GetProduct(item.Product.Id);
+                        Product product = prodList[0];
                         Item currentItem = new Item()
                         {
                             Id = item.Id,
-                            Product = productService.GetProduct(item.Product.Id),
+                            Product = product,
                             DateOfAdmission = item.DateOfAdmission,
                             DateOfEmission = item.DateOfEmission,
                             IsInStock = item.IsInStock
@@ -153,10 +163,12 @@ namespace WHManager.BusinessLogic.Services
                     var items = _itemRepository.GetItemsByProducts(null, productName);
                     foreach (var item in items)
                     {
+                        IList<Product> prodList = productService.GetProduct(item.Product.Id);
+                        Product product = prodList[0];
                         Item currentItem = new Item()
                         {
                             Id = item.Id,
-                            Product = productService.GetProduct(item.Product.Id),
+                            Product = product,
                             DateOfAdmission = item.DateOfAdmission,
                             DateOfEmission = item.DateOfEmission,
                             IsInStock = item.IsInStock
@@ -186,10 +198,12 @@ namespace WHManager.BusinessLogic.Services
                     var items = _itemRepository.GetItemsByDate(earlierDate, laterDate);
                     foreach(var item in items)
                     {
+                        IList<Product> prodList = productService.GetProduct(item.Product.Id);
+                        Product product = prodList[0];
                         Item currentItem = new Item()
                         {
                             Id = item.Id,
-                            Product = productService.GetProduct(item.Product.Id),
+                            Product = product,
                             DateOfAdmission = item.DateOfAdmission,
                             DateOfEmission = item.DateOfEmission,
                             IsInStock = item.IsInStock
@@ -211,10 +225,12 @@ namespace WHManager.BusinessLogic.Services
                     var items = _itemRepository.GetItemsByDate(earlierDate, null);
                     foreach (var item in items)
                     {
+                        IList<Product> prodList = productService.GetProduct(item.Product.Id);
+                        Product product = prodList[0];
                         Item currentItem = new Item()
                         {
                             Id = item.Id,
-                            Product = productService.GetProduct(item.Product.Id),
+                            Product = product,
                             DateOfAdmission = item.DateOfAdmission,
                             DateOfEmission = item.DateOfEmission,
                             IsInStock = item.IsInStock
@@ -236,10 +252,12 @@ namespace WHManager.BusinessLogic.Services
                     var items = _itemRepository.GetItemsByDate(null, laterDate);
                     foreach (var item in items)
                     {
+                        IList<Product> prodList = productService.GetProduct(item.Product.Id);
+                        Product product = prodList[0];
                         Item currentItem = new Item()
                         {
                             Id = item.Id,
-                            Product = productService.GetProduct(item.Product.Id),
+                            Product = product,
                             DateOfAdmission = item.DateOfAdmission,
                             DateOfEmission = item.DateOfEmission,
                             IsInStock = item.IsInStock
@@ -261,10 +279,12 @@ namespace WHManager.BusinessLogic.Services
                     var items = _itemRepository.GetItems();
                     foreach (var item in items)
                     {
+                        IList<Product> prodList = productService.GetProduct(item.Product.Id);
+                        Product product = prodList[0];
                         Item currentItem = new Item()
                         {
                             Id = item.Id,
-                            Product = productService.GetProduct(item.Product.Id),
+                            Product = product,
                             DateOfAdmission = item.DateOfAdmission,
                             DateOfEmission = item.DateOfEmission,
                             IsInStock = item.IsInStock
@@ -291,10 +311,12 @@ namespace WHManager.BusinessLogic.Services
                         var items = _itemRepository.GetEmittedItemsByDate(earlierDate, laterDate);
                         foreach (var item in items)
                         {
+                            IList<Product> prodList = productService.GetProduct(item.Product.Id);
+                            Product product = prodList[0];
                             Item currentItem = new Item()
                             {
                                 Id = item.Id,
-                                Product = productService.GetProduct(item.Product.Id),
+                                Product = product,
                                 DateOfAdmission = item.DateOfAdmission,
                                 DateOfEmission = item.DateOfEmission,
                                 IsInStock = item.IsInStock
@@ -316,10 +338,12 @@ namespace WHManager.BusinessLogic.Services
                         var items = _itemRepository.GetEmittedItemsByDate(earlierDate, null);
                         foreach (var item in items)
                         {
+                            IList<Product> prodList = productService.GetProduct(item.Product.Id);
+                            Product product = prodList[0];
                             Item currentItem = new Item()
                             {
                                 Id = item.Id,
-                                Product = productService.GetProduct(item.Product.Id),
+                                Product = product,
                                 DateOfAdmission = item.DateOfAdmission,
                                 DateOfEmission = item.DateOfEmission,
                                 IsInStock = item.IsInStock
@@ -341,10 +365,12 @@ namespace WHManager.BusinessLogic.Services
                         var items = _itemRepository.GetEmittedItemsByDate(null, laterDate);
                         foreach (var item in items)
                         {
+                            IList<Product> prodList = productService.GetProduct(item.Product.Id);
+                            Product product = prodList[0];
                             Item currentItem = new Item()
                             {
                                 Id = item.Id,
-                                Product = productService.GetProduct(item.Product.Id),
+                                Product = product,
                                 DateOfAdmission = item.DateOfAdmission,
                                 DateOfEmission = item.DateOfEmission,
                                 IsInStock = item.IsInStock
@@ -366,10 +392,12 @@ namespace WHManager.BusinessLogic.Services
                         var items = _itemRepository.GetItems();
                         foreach (var item in items)
                         {
+                            IList<Product> prodList = productService.GetProduct(item.Product.Id);
+                            Product product = prodList[0];
                             Item currentItem = new Item()
                             {
                                 Id = item.Id,
-                                Product = productService.GetProduct(item.Product.Id),
+                                Product = product,
                                 DateOfAdmission = item.DateOfAdmission,
                                 DateOfEmission = item.DateOfEmission,
                                 IsInStock = item.IsInStock
@@ -396,10 +424,12 @@ namespace WHManager.BusinessLogic.Services
                     var items = _itemRepository.GetEmittedItemsByProducts(productId, null);
                     foreach (var item in items)
                     {
+                        IList<Product> prodList = productService.GetProduct(item.Product.Id);
+                        Product product = prodList[0];
                         Item currentItem = new Item()
                         {
                             Id = item.Id,
-                            Product = productService.GetProduct(item.Product.Id),
+                            Product = product,
                             DateOfAdmission = item.DateOfAdmission,
                             DateOfEmission = item.DateOfEmission,
                             IsInStock = item.IsInStock
@@ -422,10 +452,12 @@ namespace WHManager.BusinessLogic.Services
                     var items = _itemRepository.GetEmittedItemsByProducts(null, productName);
                     foreach (var item in items)
                     {
+                        IList<Product> prodList = productService.GetProduct(item.Product.Id);
+                        Product product = prodList[0];
                         Item currentItem = new Item()
                         {
                             Id = item.Id,
-                            Product = productService.GetProduct(item.Product.Id),
+                            Product = product,
                             DateOfAdmission = item.DateOfAdmission,
                             DateOfEmission = item.DateOfEmission,
                             IsInStock = item.IsInStock

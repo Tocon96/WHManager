@@ -15,6 +15,7 @@ namespace WHManager.DataAccess.Repositories.Interfaces
         IEnumerable<User> GetUsersByName(string name);
         IEnumerable<User> GetUserById(int id);
         IEnumerable<User> GetUsersByRole(int roleId);
+        IEnumerable<User> SearchUsers(List<string> criteria);
         User GetUserByName(string name);
     }
 }

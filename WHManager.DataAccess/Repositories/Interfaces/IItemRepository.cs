@@ -8,7 +8,7 @@ namespace WHManager.DataAccess.Repositories.Interfaces
 {
     public interface IItemRepository
     {
-        void AddItem(int id, int product, DateTime dateofadmission, DateTime? dateofemission, bool isinstock);
+        int AddItem(int id, int product, DateTime dateofadmission, DateTime? dateofemission, bool isinstock);
         IEnumerable<Item> GetItems();
         Item GetItem(int id);
         void DeleteItem(int id);

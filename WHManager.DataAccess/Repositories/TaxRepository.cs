@@ -137,5 +137,41 @@ namespace WHManager.DataAccess.Repositories
             }
             
         }
+
+        public IEnumerable<Tax> SearchTaxes(List<string> criteria)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                try
+                {
+                    IQueryable<Tax> taxes = context.Taxes.AsQueryable();
+                    if(!string.IsNullOrEmpty(criteria[0]))
+                    {
+                        if (int.TryParse(criteria[0], out int result))
+                        {
+                            taxes = taxes.Where(x => x.Id == result);
+                        }
+                        else
+                        {
+                            taxes = taxes.Where(x => x.Name.StartsWith(criteria[0]));
+                        }
+                    }
+                    if(!string.IsNullOrEmpty(criteria[1]) && decimal.TryParse(criteria[1], out decimal minimalValue))
+                    {
+                        taxes = taxes.Where(x => x.Value >= minimalValue);
+                    }
+                    if(!string.IsNullOrEmpty(criteria[2]) && decimal.TryParse(criteria[2], out decimal maximumValue))
+                    {
+                        taxes = taxes.Where(x => x.Value <= maximumValue);
+                    }
+                    IEnumerable<Tax> taxList = taxes.ToList();
+                    return taxList;
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+            }
+        }
     }
 }

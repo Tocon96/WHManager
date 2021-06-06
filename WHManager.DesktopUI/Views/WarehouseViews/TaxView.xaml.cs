@@ -26,198 +26,137 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
     /// </summary>
     public partial class TaxView : UserControl
     {
-
         private ObservableCollection<Tax> _taxes;
-
+        private ITaxService taxService = new TaxService();
         public ObservableCollection<Tax> Taxes
         {
             get { return _taxes; }
             set { _taxes = value; }
         }
-
-
         public TaxView()
         {
             InitializeComponent();
             gridTaxes.ItemsSource = LoadData();
         }
-
         private void DeleteTaxClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                ITaxService taxService = new TaxService();
-                Tax tax = gridTaxes.SelectedItem as Tax;
-                taxService.DeleteTax(tax.Id);
+                MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz ten typ podatku?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+                {
+                    if (messageBoxResult == MessageBoxResult.Yes)
+                    {
+                        ITaxService taxService = new TaxService();
+                        Tax tax = gridTaxes.SelectedItem as Tax;
+                        taxService.DeleteTax(tax.Id);
+                    }
+                }
             }
-            catch(Exception)
+            catch(Exception x)
             {
-                throw;
+                MessageBox.Show("Błąd usuwania: " + x);
             }
         }
+        private void DeleteAllTaxClick(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz usunąć wszystkie typy podatków?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+            {
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    foreach (Tax tax in Taxes)
+                    {
+                        try
+                        {
+                            taxService.DeleteTax(tax.Id);
+                        }
+                        catch (Exception x)
+                        {
+                            MessageBox.Show("" + x);
+                        }
+                    }
+                    gridTaxes.ItemsSource = LoadData();
+                }
+            }
+        }
+        private void DeleteMultipleTaxClick(object sender, RoutedEventArgs e)
+        {
+            List<Tax> selectedTaxes = gridTaxes.SelectedItems.Cast<Tax>().ToList();
+            MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz ten wybrane typy podatków?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+            {
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    foreach (Tax tax in selectedTaxes)
+                    {
+                        try
+                        {
+                            taxService.DeleteTax(tax.Id);
+                        }
+                        catch (Exception x)
+                        {
+                            MessageBox.Show("" + x);
+                        }
 
+                    }
+                    gridTaxes.ItemsSource = LoadData();
+                }
+            }
+        }
         private void UpdateTaxClick(object sender, RoutedEventArgs e)
         {
-            try
+            Tax tax = gridTaxes.SelectedItem as Tax;
+            ManageTaxFormView manageTaxFormView = new ManageTaxFormView(this, tax);
+            manageTaxFormView.ShowDialog();
+            if(manageTaxFormView.DialogResult.Value == true)
             {
-                Tax tax = gridTaxes.SelectedItem as Tax;
-                ManageTaxFormView manageTaxFormView = new ManageTaxFormView(tax);
-                manageTaxFormView.Show();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        private void AddTaxClick(object sender, RoutedEventArgs e)
-        {
-            ManageTaxFormView manageTaxFormView = new ManageTaxFormView();
-            manageTaxFormView.Show();
-        }
-
-        private void SearchClearClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                SearchTextBox.Text = null;
                 gridTaxes.ItemsSource = LoadData();
             }
-            catch (Exception)
+        }
+        private void AddTaxClick(object sender, RoutedEventArgs e)
+        {
+            ManageTaxFormView manageTaxFormView = new ManageTaxFormView(this);
+            manageTaxFormView.ShowDialog();
+            if (manageTaxFormView.DialogResult.Value == true)
             {
-                throw;
+                gridTaxes.ItemsSource = LoadData();
             }
         }
-
+        private void SearchClearClick(object sender, RoutedEventArgs e)
+        {
+            ClearFilters();
+            gridTaxes.ItemsSource = LoadData();
+        }
         private void SearchClick(object sender, RoutedEventArgs e)
         {
-            if (IdRadioButton.IsChecked == true)
-            {
-                if(SearchTextBox.Text == "")
-                {
-                    gridTaxes.ItemsSource = LoadData();
-                }
-                else
-                {
-                    try
-                    {
-                        List<Tax> taxes = GetTaxesById(int.Parse(SearchTextBox.Text)).ToList();
-                        Taxes = new ObservableCollection<Tax>(taxes);
-                        gridTaxes.ItemsSource = Taxes;
-                    }
-                    catch (Exception x)
-                    {
-                        MessageBox.Show("Błąd wyszukiwania: " + x);
-                    }
-                }
-                
-            }
-            else if(NameRadioButton.IsChecked == true)
-            {
-                try
-                {
-                    List<Tax> taxes = GetTaxesByName(SearchTextBox.Text).ToList();
-                    Taxes = new ObservableCollection<Tax>(taxes);
-                    gridTaxes.ItemsSource = Taxes;
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
-            else if(ValueRadioButton.IsChecked == true)
-            {
-                if (SearchTextBox.Text == "")
-                {
-                    gridTaxes.ItemsSource = LoadData();
-                }
-                else
-                {
-                    try
-                    {
-                        List<Tax> taxes = GetTaxesByValue(int.Parse(SearchTextBox.Text)).ToList();
-                        Taxes = new ObservableCollection<Tax>(taxes);
-                        gridTaxes.ItemsSource = Taxes;
-                    }
-                    catch (Exception x)
-                    {
-                        MessageBox.Show("Błąd wyszukiwania: " + x);
-                    }
-                }
-            }
+            List<Tax> taxList = SearchTaxes();
+            Taxes = new ObservableCollection<Tax>(taxList);
+            gridTaxes.ItemsSource = Taxes;
         }
-
+        private List<Tax> SearchTaxes()
+        {
+            List<string> criteria = new List<string>();
+            criteria.Add(textBoxIdName.Text.ToString());   // criteria[0] - Id/Name;
+            criteria.Add(textBoxMinValue.Text.ToString()); // criteria[1] - Value Min;
+            criteria.Add(textBoxMaxValue.Text.ToString()); // criteria[2] - Value Max;
+            List<Tax> taxes = taxService.SearchTaxes(criteria).ToList();
+            return taxes;
+        }
         private ObservableCollection<Tax> LoadData()
         {
-            try
-            {
-                IList<Tax> taxes = GetAll();
-                Taxes = new ObservableCollection<Tax>(taxes.ToList());
-                return Taxes;
-            }
-            catch(Exception)
-            {
-                throw;
-            }
+            IList<Tax> taxes = GetAll();
+            Taxes = new ObservableCollection<Tax>(taxes.ToList());
+            return Taxes;
         }
-
         private IList<Tax> GetAll()
         {
-            try
-            {
-                ITaxService taxService = new TaxService();
-                IList<Tax> taxes = taxService.GetTaxes();
-                return taxes;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            ITaxService taxService = new TaxService();
+            IList<Tax> taxes = taxService.GetTaxes();
+            return taxes;
         }
-
-        private IList<Tax> GetTaxesByName(string name)
+        private void ClearFilters()
         {
-            try
-            {
-                ITaxService taxService = new TaxService();
-                IList<Tax> taxes = taxService.GetTaxesByName(name).ToList();
-                return taxes;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        private IList<Tax> GetTaxesByValue(int value)
-        {
-            try
-            {
-                ITaxService taxService = new TaxService();
-                IList<Tax> taxes = taxService.GetTaxesByValue(value).ToList();
-                return taxes;
-            }
-            catch(Exception)
-            {
-                throw;
-            }
-        }
-
-        private IList<Tax> GetTaxesById(int id)
-        {
-            try
-            {
-                ITaxService taxService = new TaxService();
-                IList<Tax> taxes = new List<Tax>();
-                Tax tax = taxService.GetTax(id);
-                taxes.Add(tax);
-                return taxes;
-
-            }
-            catch(Exception)
-            {
-                throw;
-            }
+            textBoxIdName.Text = null;
+            textBoxMinValue.Text = null;
+            textBoxMinValue.Text = null;
         }
     }
 }

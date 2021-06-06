@@ -14,6 +14,9 @@
     <Compile Update="Views\BusinessViews\BusinessFormViews\InvoiceFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\BusinessViews\DocumentsView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\BusinessViews\InvoiceView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -74,6 +77,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\BusinessViews\BusinessFormViews\InvoiceFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\BusinessViews\DocumentsView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\BusinessViews\InvoiceView.xaml">

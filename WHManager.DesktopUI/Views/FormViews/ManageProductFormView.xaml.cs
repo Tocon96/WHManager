@@ -297,5 +297,29 @@ namespace WHManager.DesktopUI.Views.FormViews
         {
             ProductGridView.gridProduct.Items.Refresh();
         }
+
+        private void textBoxProductName_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if(textBoxProductName.Text == "Nazwa")
+            {
+                textBoxProductName.Clear();
+            }
+        }
+
+        private void textBoxProductPriceBuy_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if(textBoxProductPriceBuy.Text == "Cena kupna")
+            {
+                textBoxProductPriceBuy.Clear();
+            }
+        }
+
+        private void textBoxProductPriceSell_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if(textBoxProductPriceSell.Text == "Cena sprzedaży")
+            {
+                textBoxProductPriceSell.Clear();
+            }
+        }
     }
 }

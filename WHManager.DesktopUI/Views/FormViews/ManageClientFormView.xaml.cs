@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
+using WHManager.DesktopUI.Views.ContractorsViews;
 using WHManager.DesktopUI.WindowSetting;
 using WHManager.DesktopUI.WindowSetting.Interfaces;
 
@@ -30,31 +31,39 @@ namespace WHManager.DesktopUI.Views.FormViews
             get { return _client; }
             set { _client = value; }
         }
-        private readonly IDisplaySetting displaySetting = new DisplaySetting();
-        public ManageClientFormView()
+
+        public ClientView ClientGridView
         {
-            InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
+            get;
+            set;
         }
-        public ManageClientFormView(Client client)
+        public ManageClientFormView(ClientView clientView)
         {
             InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
+            ClientGridView = clientView;
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+
+        }
+        public ManageClientFormView(ClientView clientView, Client client)
+        {
+            InitializeComponent();
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             Client = client;
-            wrpPanelId.Visibility = Visibility.Visible;
-            labelId.Content = Client.Id;
+            ClientGridView = clientView;
             textBoxName.Text = Client.Name;
             textBoxNip.Text = Client.Nip.ToString();
             textBoxPhoneNumber.Text = Client.PhoneNumber;
+            textBlockManageClient.Text = "Edytuj klienta o ID: " + Client.Id;
         }
 
         private void buttonConfirmClick(object sender, RoutedEventArgs e)
         {
-            if(labelId.Visibility == Visibility.Hidden)
+            if(Client == null)
             {
                 try
                 {
                     AddClient();
+                    DialogResult = true;
                     this.Close();
                 }
                 catch(Exception x)
@@ -62,11 +71,12 @@ namespace WHManager.DesktopUI.Views.FormViews
                     MessageBox.Show("Błąd dodawania: " + x);
                 }
             }
-            else if(labelId.Visibility == Visibility.Visible)
+            else
             {
                 try
                 {
                     UpdateClient();
+                    DialogResult = true;
                     this.Close();
                 }
                 catch (Exception x)
@@ -100,7 +110,7 @@ namespace WHManager.DesktopUI.Views.FormViews
             {
                 Client client = new Client
                 {
-                    Id = (int)labelId.Content,
+                    Id = Client.Id,
                     Name = textBoxName.Text,
                     Nip = double.Parse(textBoxNip.Text),
                     PhoneNumber = textBoxPhoneNumber.Text
@@ -110,6 +120,41 @@ namespace WHManager.DesktopUI.Views.FormViews
             catch (Exception e)
             {
                 MessageBox.Show("Błąd dodawania: " + e);
+            }
+        }
+
+        private void CancelClick(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            this.Close();
+        }
+
+        public void OnDialogClose()
+        {
+            ClientGridView.gridClients.Items.Refresh();
+        }
+
+        private void textBoxName_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (textBoxName.Text == "Nazwa")
+            {
+                textBoxName.Clear();
+            }
+        }
+
+        private void textBoxNip_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(textBoxNip.Text == "Nip")
+            {
+                textBoxNip.Clear();
+            }
+        }
+
+        private void textBoxPhoneNumber_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(textBoxPhoneNumber.Text == "Numer telefonu")
+            {
+                textBoxPhoneNumber.Clear();
             }
         }
     }
