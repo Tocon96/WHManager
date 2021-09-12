@@ -15,7 +15,5 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         void DeleteItem(int id);
         IList<Item> GetItemsByProduct(int? productId = null, string productName = null);
         IList<Item> GetEmittedItemsByProducts(int? productId = null, string productName = null);
-        IList<Item> GetItemsByDate(DateTime? earlierDate, DateTime? laterDate);
-        IList<Item> GetEmittedItemsByDate(DateTime? earlierDate, DateTime? laterDate);
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -114,6 +115,7 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
                     User user = gridUsers.SelectedItem as User;
                     userService.DeleteUser(user.Id);
                 }
+                gridUsers.ItemsSource = LoadUsers();
             }
             catch(Exception e)
             {
@@ -125,10 +127,16 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
         {
             try
             {
-                if (gridUsers.SelectedItem != null)
+                MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz usunąć wszystkich użytkowników?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
                 {
-                    User user = gridUsers.SelectedItem as User;
-                    userService.DeleteUser(user.Id);
+                    if (messageBoxResult == MessageBoxResult.Yes)
+                    {
+                        foreach (User user in Users)
+                        {
+                            userService.DeleteUser(user.Id);
+                        }
+                        gridUsers.ItemsSource = LoadUsers();
+                    }
                 }
             }
             catch (Exception e)
@@ -141,10 +149,17 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
         {
             try
             {
-                if (gridUsers.SelectedItem != null)
+                List<User> selectedUsers = gridUsers.SelectedItems.Cast<User>().ToList();
+                MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz usunąć wybranych użytkowników?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
                 {
-                    User user = gridUsers.SelectedItem as User;
-                    userService.DeleteUser(user.Id);
+                    if (messageBoxResult == MessageBoxResult.Yes)
+                    {
+                        foreach (User user in selectedUsers)
+                        {
+                            userService.DeleteUser(user.Id);
+                        }
+                        gridUsers.ItemsSource = LoadUsers();
+                    }
                 }
             }
             catch (Exception e)

@@ -29,6 +29,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
     /// </summary>
     public partial class InvoiceView : UserControl
     {
+        IInvoiceService invoiceService = new InvoiceService();
         public ObservableCollection<Invoice> Invoices
         {
             get;
@@ -78,55 +79,28 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             }
         }
 
-        private void buttonSearchClick(object sender, RoutedEventArgs e)
-        {
-            if (radioButtonId.IsChecked == true)
-            {
-                try
-                {
-                    List<Invoice> invoices = GetInvoicesById(int.Parse(textBoxInvoicesSearch.Text));
-                    Invoices = new ObservableCollection<Invoice>(invoices);
-                    gridInvoices.ItemsSource = Invoices;
-                }
-                catch (Exception x)
-                {
-                    MessageBox.Show("Błąd wyszukiwania: " + x);
-                }
-            }
-            else if (radioButtonClient.IsChecked == true)
-            {
-                try
-                {
-                    List<Invoice> invoices = GetInvoicesByClient(int.Parse(textBoxInvoicesSearch.Text));
-                    Invoices = new ObservableCollection<Invoice>(invoices);
-                    gridInvoices.ItemsSource = Invoices;
-                }
-                catch (Exception x)
-                {
-                    MessageBox.Show("Błąd wyszukiwania: " + x);
-                }
-            }
-            else if (radioButtonDate.IsChecked == true)
-            {
-                try
-                {
-                    List<Invoice> invoices = GetInvoicesByDate(datePickerEarlierDate.SelectedDate, datePickerLaterDate.SelectedDate);
-                    Invoices = new ObservableCollection<Invoice>(invoices);
-                    gridInvoices.ItemsSource = Invoices;
-                }
-                catch (Exception x)
-                {
-                    MessageBox.Show("Błąd wyszukiwania: " + x);
-                }
-            }
-
-        }
-
-        private void buttonClearClick(object sender, RoutedEventArgs e)
+        private void SearchClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                textBoxInvoicesSearch.Text = null;
+                List<Invoice> invoices = SearchInvoices().ToList();
+                Invoices = new ObservableCollection<Invoice>(invoices);
+                gridInvoices.ItemsSource = Invoices;
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show("Błąd wyszukiwania: " + x);
+            }
+        }
+
+        private void SearchClearClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                textBoxInvoiceId.Text = null;
+                textBoxClientName.Text = null;
+                datePickerEarlierDate.SelectedDate = null;
+                datePickerLaterDate.SelectedDate = null;
                 gridInvoices.ItemsSource = LoadData();
             }
             catch (Exception x)
@@ -135,123 +109,6 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             }
         }
 
-        private void buttonAddInvoiceClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                ManageInvoiceFormView manageInvoiceFormView = new ManageInvoiceFormView();
-                manageInvoiceFormView.Show();
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show("Błąd dodawania: " + x);
-            }
-        }
-
-        private void buttonUpdateInvoiceClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (gridInvoices.SelectedItem != null)
-                {
-                    Invoice invoice = gridInvoices.SelectedItem as Invoice;
-                    ManageInvoiceFormView manageInvoiceFormView = new ManageInvoiceFormView(invoice);
-                    manageInvoiceFormView.Show();
-                }
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show("Błąd aktualizacji: " + x);
-            }
-        }
-
-        private void buttonDeleteInvoiceClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (gridInvoices.SelectedItem != null)
-                {
-                    IInvoiceService invoiceService = new InvoiceService();
-                    Invoice invoice = gridInvoices.SelectedItem as Invoice;
-                    invoiceService.DeleteInvoice(invoice.Id);
-                }
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show("Błąd usuwania: " + x);
-            }
-        }
-
-        private List<Invoice> GetInvoicesByDate(DateTime? earlierDate, DateTime? laterDate)
-        {
-            IInvoiceService invoiceService = new InvoiceService();
-            List<Invoice> invoicesList = new List<Invoice>();
-            if (datePickerEarlierDate.SelectedDate != null && datePickerLaterDate.SelectedDate != null)
-            {
-                invoicesList = invoiceService.GetInvoicesByDate(earlierDate, laterDate).ToList();
-                return invoicesList;
-            }
-            else if (datePickerEarlierDate.SelectedDate != null && datePickerLaterDate.SelectedDate == null)
-            {
-                invoicesList = invoiceService.GetInvoicesByDate(earlierDate, null).ToList();
-                return invoicesList;
-            }
-            else if (datePickerEarlierDate.SelectedDate == null && datePickerLaterDate.SelectedDate != null)
-            {
-                invoicesList = invoiceService.GetInvoicesByDate(null, laterDate).ToList();
-                return invoicesList;
-            }
-            else
-            {
-                invoicesList = invoiceService.GetInvoicesByDate(null, null).ToList();
-                return invoicesList;
-            }
-        }
-        private List<Invoice> GetInvoicesById(int id)
-        {
-            IInvoiceService invoiceService = new InvoiceService();
-            List<Invoice> invoicesList = new List<Invoice>();
-            Invoice invoice = invoiceService.GetInvoiceById(id);
-            invoicesList.Add(invoice);
-            return invoicesList;
-        }
-
-        private List<Invoice> GetInvoicesByClient(int clientId)
-        {
-            IInvoiceService invoiceService = new InvoiceService();
-            List<Invoice> invoicesList = invoiceService.GetInvoicesByClient(clientId).ToList();
-            return invoicesList;
-        }
-
-        private void radioButtonIdClick(object sender, RoutedEventArgs e)
-        {
-            if (radioButtonId.IsChecked == true)
-            {
-                textBoxInvoicesSearch.Visibility = Visibility.Visible;
-                datePickerEarlierDate.Visibility = Visibility.Hidden;
-                datePickerLaterDate.Visibility = Visibility.Hidden;
-            }
-        }
-
-        private void radioButtonClientClick(object sender, RoutedEventArgs e)
-        {
-            if (radioButtonClient.IsChecked == true)
-            {
-                textBoxInvoicesSearch.Visibility = Visibility.Visible;
-                datePickerEarlierDate.Visibility = Visibility.Hidden;
-                datePickerLaterDate.Visibility = Visibility.Hidden;
-            }
-        }
-
-        private void radioButtonDateClick(object sender, RoutedEventArgs e)
-        {
-            if (radioButtonDate.IsChecked == true)
-            {
-                textBoxInvoicesSearch.Visibility = Visibility.Hidden;
-                datePickerEarlierDate.Visibility = Visibility.Visible;
-                datePickerLaterDate.Visibility = Visibility.Visible;
-            }
-        }
         private void gridProductGeneratePdf(object sender, RoutedEventArgs e)
         {
             GeneratePdf();
@@ -265,6 +122,17 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             }
             InvoiceFormView invoice = new InvoiceFormView(Invoice);
             invoice.Show();
+        }
+
+        private IList<Invoice> SearchInvoices()
+        {
+            List<string> criteria = new List<string>();
+            criteria.Add(textBoxInvoiceId.Text.ToString());
+            criteria.Add(textBoxClientName.Text.ToString());
+            criteria.Add(datePickerEarlierDate.SelectedDate.Value.Date.ToShortDateString());
+            criteria.Add(datePickerLaterDate.SelectedDate.Value.Date.ToShortDateString());
+            IList<Invoice> invoices = invoiceService.SearchInvoices(criteria);
+            return invoices;
         }
     }
 }

@@ -13,9 +13,6 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
-using WHManager.DesktopUI.WindowSetting;
-using WHManager.DesktopUI.WindowSetting.Interfaces;
-
 namespace WHManager.DesktopUI.Views.FormViews
 {
     /// <summary>
@@ -40,39 +37,32 @@ namespace WHManager.DesktopUI.Views.FormViews
             get;
             set;
         }
-        private readonly IDisplaySetting displaySetting = new DisplaySetting();
         public ManageInvoiceFormView()
         {
             InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             FillComboBox();
         }
 
         public ManageInvoiceFormView(Invoice invoice)
         {
             InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
             FillComboBox();
             Invoice = invoice;
-            labelId.Visibility = Visibility.Visible;
-            labelId.Content = invoice.Id;
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             datepickerInvoicesDateIssued.SelectedDate = Invoice.DateIssued;
             textBoxInvoicesOrderId.Text = Invoice.Order.Id.ToString();
         }
 
-        private void buttonInvoicesConfirm(object sender, RoutedEventArgs e)
+        private void buttonConfirmClick(object sender, RoutedEventArgs e)
         {
-            if(labelId.Visibility == Visibility.Hidden)
-            {
-                AddInvoice();
-                this.Close();
-            }
-            else if(labelId.Visibility == Visibility.Visible)
-            {
-                UpdateInvoice();
-                this.Close();
-            }
         }
+
+        private void CancelClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void FillComboBox()
         {
             try
@@ -143,7 +133,6 @@ namespace WHManager.DesktopUI.Views.FormViews
                 IInvoiceService invoiceService = new InvoiceService();
                 Invoice invoice = new Invoice
                 {
-                    Id = (int)labelId.Content,
                     DateIssued = (DateTime)datepickerInvoicesDateIssued.SelectedDate,
                     Client = comboBoxInvoicesClients.SelectedItem as Client,
                     Order = GetOrder()

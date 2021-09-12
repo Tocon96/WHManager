@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -14,6 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
+using WHManager.BusinessLogic.Services.DocumentServices;
+using WHManager.BusinessLogic.Services.DocumentServices.Interfaces;
 using WHManager.BusinessLogic.Services.Interfaces;
 using WHManager.DesktopUI.Views.FormViews;
 
@@ -24,6 +27,10 @@ namespace WHManager.DesktopUI.Views.BusinessViews
     /// </summary>
     public partial class OrderView : UserControl
     {
+        private IInvoiceService invoiceService = new InvoiceService();
+        private IOrderService orderService = new OrderService();
+        private IPdfService pdfService = new PdfService();
+        private IClientService clientService = new ClientService();
         public ObservableCollection<Order> Orders
         {
             get;
@@ -67,61 +74,25 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             }
         }
 
-        private void buttonSearchClick(object sender, RoutedEventArgs e)
+        private void SearchClick(object sender, RoutedEventArgs e)
         {
-            if(radioButtonId.IsChecked == true)
-            {
-                try
-                {
-                    IList<Order> orders = GetOrderById(int.Parse(textBoxOrdersSearch.Text));
-                    Orders = new ObservableCollection<Order>(orders);
-                    gridOrders.ItemsSource = Orders;
-                }
-                catch(Exception x)
-                {
-                    MessageBox.Show("Błąd szukania: " + x);
-                }
-            }
-            else if(radioButtonClient.IsChecked == true)
-            {
-                try
-                {
-                    IList<Order> orders = GetOrdersByClient(int.Parse(textBoxOrdersSearch.Text));
-                    Orders = new ObservableCollection<Order>(orders);
-                    gridOrders.ItemsSource = Orders;
-                }
-                catch (Exception x)
-                {
-                    MessageBox.Show("Błąd szukania: " + x);
-                }
-            }
-            else if(radioButtonDate.IsChecked == true)
-            {
-                try
-                {
-                    IList<Order> orders = GetOrdersByDate(datePickerEarlierDate.SelectedDate, datePickerLaterDate.SelectedDate);
-                    Orders = new ObservableCollection<Order>(orders);
-                    gridOrders.ItemsSource = Orders;
-                }
-                catch (Exception x)
-                {
-                    MessageBox.Show("Błąd szukania: " + x);
-                }
-            }
+            IList<Order> orders = SearchOrders();
+            Orders = new ObservableCollection<Order>(orders);
+            gridOrders.ItemsSource = Orders;
         }
 
-        private void buttonClearClick(object sender, RoutedEventArgs e)
+        private void SearchClearClick(object sender, RoutedEventArgs e)
         {
-            textBoxOrdersSearch.Text = null;
+            textBoxClientName.Text = null;
             gridOrders.ItemsSource = LoadData();
         }
 
-        private void buttonAddOrderClick(object sender, RoutedEventArgs e)
+        private void AddOrderClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                ManageOrderFormView manageOrderFormView = new ManageOrderFormView();
-                manageOrderFormView.Show();
+                ManageOrderFormView manageOrderFormView = new ManageOrderFormView(this);
+                manageOrderFormView.ShowDialog();
             }
             catch (Exception x)
             {
@@ -129,15 +100,15 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             }
         }
 
-        private void buttonUpdateOrderClick(object sender, RoutedEventArgs e)
+        private void UpdateOrderClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (gridOrders.SelectedItem != null)
                 {
                     Order order = gridOrders.SelectedItem as Order;
-                    ManageOrderFormView manageOrderFormView = new ManageOrderFormView(order);
-                    manageOrderFormView.Show();
+                    ManageOrderFormView manageOrderFormView = new ManageOrderFormView(this, order);
+                    manageOrderFormView.ShowDialog();
                 }
             }
             catch (Exception x)
@@ -146,7 +117,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             }
         }
 
-        private void buttonDeleteOrderClick(object sender, RoutedEventArgs e)
+        private void DeleteOrderClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -163,73 +134,85 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             }
         }
 
-        private void radioButtonIdClick(object sender, RoutedEventArgs e)
+        private void DeleteMultipleOrdersClick(object sender, RoutedEventArgs e)
         {
-            if (radioButtonId.IsChecked == true)
+            try
             {
-                textBoxOrdersSearch.Visibility = Visibility.Visible;
-                datePickerEarlierDate.Visibility = Visibility.Hidden;
-                datePickerLaterDate.Visibility = Visibility.Hidden;
+                List<Order> selectedOrders = gridOrders.SelectedItems.Cast<Order>().ToList();
+                MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz usunąć wybrane zamówienia?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+                {
+                    if (messageBoxResult == MessageBoxResult.Yes)
+                    {
+                        foreach (Order order in selectedOrders)
+                        {
+                            orderService.DeleteOrder(order.Id);
+                        }
+                        gridOrders.ItemsSource = LoadData();
+                    }
+                }
+
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show("Błąd usuwania: " + x);
             }
         }
 
-        private void radioButtonClientClick(object sender, RoutedEventArgs e)
+        private void gridProductGeneratePdf(object sender, RoutedEventArgs e)
         {
-            if (radioButtonClient.IsChecked == true)
+            int? invoiceId = GenerateInvoice();
+            if(invoiceId != null)
             {
-                textBoxOrdersSearch.Visibility = Visibility.Visible;
-                datePickerEarlierDate.Visibility = Visibility.Hidden;
-                datePickerLaterDate.Visibility = Visibility.Hidden;
+                SaveFileDialog svg = new SaveFileDialog();
+                svg.Filter = "Documents (*.pdf)|*.pdf|All files (*.*)|*.*";
+                svg.ShowDialog();
+                int invoiceIdNotNullabe = invoiceId.Value;
+
+                pdfService.GeneratePdf(svg.FileName, invoiceIdNotNullabe);
             }
         }
 
-        private void radioButtonDateClick(object sender, RoutedEventArgs e)
+        private void gridProductGenerateWz(object sender, RoutedEventArgs e)
         {
-            if (radioButtonDate.IsChecked == true)
-            {
-                textBoxOrdersSearch.Visibility = Visibility.Hidden;
-                datePickerEarlierDate.Visibility = Visibility.Visible;
-                datePickerLaterDate.Visibility = Visibility.Visible;
-            }
+
         }
-        private List<Order> GetOrderById(int id)
+
+        private IList<Order> SearchOrders()
         {
-            IOrderService orderService = new OrderService();
-            List<Order> ordersList = new List<Order>();
-            Order order = orderService.GetOrderById(id);
-            ordersList.Add(order);
-            return ordersList;
+            IList<string> criteria = new List<string>();
+            criteria.Add(textBoxOrderId.Text.ToString());
+            criteria.Add(textBoxClientName.Text.ToString());
+            criteria.Add(datePickerEarlierDate.SelectedDate.Value.ToShortDateString());
+            criteria.Add(datePickerLaterDate.SelectedDate.Value.ToShortDateString());
+            IList<Order> orders = orderService.SearchOrders(criteria.ToList());
+            return orders;
         }
-        private List<Order> GetOrdersByClient(int clientId)
+
+        private int? GenerateInvoice()
         {
-            IOrderService orderService = new OrderService();
-            List<Order> ordersList = orderService.GetOrdersByClient(clientId).ToList();
-            return ordersList;
+            return AddInvoice();
         }
-        private List<Order> GetOrdersByDate(DateTime? earlierDate, DateTime? laterDate)
+
+        private int? AddInvoice()
         {
-            IOrderService orderService = new OrderService();
-            List<Order> ordersList = new List<Order>();
-            if (datePickerEarlierDate.SelectedDate != null && datePickerLaterDate.SelectedDate != null)
+            try
             {
-                ordersList = orderService.GetOrdersByDate(earlierDate, laterDate).ToList();
-                return ordersList;
+                Order order = gridOrders.SelectedItem as Order;
+                Invoice invoice = new Invoice
+                {
+                    DateIssued = DateTime.Now,
+                    Client = clientService.GetClient(order.Client.Id)[0],
+                    Order = order
+                };
+                return invoiceService.CreateNewInvoice(invoice);
             }
-            else if (datePickerEarlierDate.SelectedDate != null && datePickerLaterDate.SelectedDate == null)
+            catch (Exception e)
             {
-                ordersList = orderService.GetOrdersByDate(earlierDate, null).ToList();
-                return ordersList;
+                MessageBox.Show("Błąd dodawania faktury: " + e);
+                return null;
             }
-            else if (datePickerEarlierDate.SelectedDate == null && datePickerLaterDate.SelectedDate != null)
-            {
-                ordersList = orderService.GetOrdersByDate(null, laterDate).ToList();
-                return ordersList;
-            }
-            else
-            {
-                ordersList = orderService.GetOrdersByDate(null, null).ToList();
-                return ordersList;
-            }
+
         }
+
     }
 }

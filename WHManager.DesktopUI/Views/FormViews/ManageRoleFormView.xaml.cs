@@ -12,8 +12,7 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
-using WHManager.DesktopUI.WindowSetting.Interfaces;
-using WHManager.DesktopUI.WindowSetting;
+using WHManager.DesktopUI.Views.AdministrationViews;
 
 namespace WHManager.DesktopUI.Views.FormViews
 {
@@ -27,34 +26,65 @@ namespace WHManager.DesktopUI.Views.FormViews
             get;
             set;
         }
-        private readonly IDisplaySetting displaySetting = new DisplaySetting();
-        public ManageRoleFormView()
+
+        private RoleView RoleGridView
         {
-            InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
+            get;
+            set;
         }
-        public ManageRoleFormView(Role role)
+
+        public ManageRoleFormView(RoleView roleView)
         {
             InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            RoleGridView = roleView;
+        }
+        public ManageRoleFormView(RoleView roleView, Role role)
+        {
+            InitializeComponent();
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             Role = role;
-            labelId.Visibility = Visibility.Visible;
-            labelId.Content = Role.Id;
+            RoleGridView = roleView;
+            textBoxName.Text = role.Name;
+            if(role.IsAdmin == true)
+            {
+                checkboxAdmin.IsChecked = true;
+            }
         }
 
         private void ButtonAddRoleClick(object sender, RoutedEventArgs e)
         {
-            if(labelId.Visibility != Visibility.Visible)
-            {
-                AddRole();
-                this.Close();
-            }
-            else if(labelId.Visibility == Visibility.Visible)
+            if(Role != null)
             {
                 UpdateRole();
+                DialogResult = true;
+                this.Close();
+            }
+            else
+            {
+                AddRole();
+                DialogResult = true;
                 this.Close();
             }
         }
+
+        private void ButtonCancelClick(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            this.Close();
+        }
+
+
+        public void OnDialogClose()
+        {
+            RoleGridView.gridRoles.Items.Refresh();
+        }
+
+        private void textBoxName_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            textBoxName.Clear();
+        }
+
         private void AddRole()
         {
             try

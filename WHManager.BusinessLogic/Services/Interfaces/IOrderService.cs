@@ -18,5 +18,6 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         IList<Order> GetOrdersByDate(DateTime? earlierDate, DateTime? laterDate);
         decimal CalculateFinalPrice(Order order);
         IList<Product> GetSortedProducts(Order order);
+        IList<Order> SearchOrders(List<string> criteria);
     }
 }

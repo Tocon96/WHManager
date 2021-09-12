@@ -14,9 +14,6 @@
     <Compile Update="Views\BusinessViews\BusinessFormViews\InvoiceFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\BusinessViews\DocumentsView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\BusinessViews\InvoiceView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -24,6 +21,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\ContractorsViews\ClientView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\DocumentViews\PWView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\DocumentViews\PZView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\DocumentViews\RZView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\DocumentViews\WZView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\FormViews\LoginForm\LoginFormView.xaml.cs">
@@ -79,9 +88,6 @@
     <Page Update="Views\BusinessViews\BusinessFormViews\InvoiceFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\BusinessViews\DocumentsView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Views\BusinessViews\InvoiceView.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -89,6 +95,18 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\ContractorsViews\ClientView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\DocumentViews\PWView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\DocumentViews\PZView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\DocumentViews\RZView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\DocumentViews\WZView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\FormViews\LoginForm\LoginFormView.xaml">

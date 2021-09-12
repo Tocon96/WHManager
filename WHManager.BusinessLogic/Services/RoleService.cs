@@ -113,6 +113,23 @@ namespace WHManager.BusinessLogic.Services
 
         }
 
+        public IList<Role> SearchRoles(List<string> criteria)
+        {
+            IList<Role> roles = new List<Role>();
+            var rolesList = roleRepository.SearchRoles(criteria);
+            foreach (var currentRole in rolesList)
+            {
+                Role role = new Role
+                {
+                    Id = currentRole.Id,
+                    Name = currentRole.Name,
+                };
+                roles.Add(role);
+            }
+            return roles;
+
+        }
+
         public void UpdateRole(Role role)
         {
             try

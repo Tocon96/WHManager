@@ -5,52 +5,168 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WHManager.DesktopUI.Views.WarehouseViews"
         mc:Ignorable="d"
-        Title="ItemView" Height="450" Width="800">
+        Title="ItemView" Height="450" Width="800" Background="#b3e5fc">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Arrow" />
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Silver"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="DataGridStyle" TargetType="DataGrid">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="ColumnWidth" Value="*"/>
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style x:Key="Body_Content_DataGrid_Centering"
+        TargetType="{x:Type DataGridCell}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                        <Grid Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Center" />
+                            <ContentPresenter HorizontalAlignment="Center"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-
-        <RadioButton Grid.Row="0" Grid.Column="2" GroupName="Filters" x:Name="radiobuttonId" Click="radioButtonIdClick" IsChecked="true">ID</RadioButton>
-        <RadioButton Grid.Row="0" Grid.Column="3" GroupName="Filters" x:Name="radioButtonDateOfPurchase" Click="radioButtonDateClick" >Data Kupna</RadioButton>
-        <Button Grid.Column="0" Grid.Row="0" Click="SearchItemsClick">Wyszukaj</Button>
-        <Button Grid.Column="0" Grid.Row="1" Click="ClearSearchClick">Wyczyść</Button>
-        <Button Grid.Column="0" Grid.Row="2" Click="AddItemClick">Dodaj</Button>
-        <!--Search fields-->
-        <TextBox Grid.Column="1" Grid.Row="0" Width="200" x:Name="SearchTextBox" Visibility="Visible"></TextBox>
-        <DatePicker Grid.Column="1" Grid.Row="0" Width="100" HorizontalAlignment="Left" x:Name="datePickerEarlierDate" Visibility="Hidden"></DatePicker>
-        <DatePicker Grid.Column="1" Grid.Row="0" Width="100" HorizontalAlignment="Right" x:Name="datePickerLaterDate" Visibility="Hidden"></DatePicker>
-        <DataGrid Grid.Column="1" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="4" x:Name="gridItems" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Produkt" Binding="{Binding Product.Name}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Data przyjęcia" Binding="{Binding DateOfAdmission}"></DataGridTextColumn>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Click="UpdateItemClick">Edytuj</Button>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Click="DeleteItemClick">Usuń</Button>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Button Click="ClearSearchClick" Grid.Row="0" Width="75" Style="{StaticResource ButtonStyle}">Wyczyść</Button>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="10"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <!--Textblocks-->
+                <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">Nazwa/ID:</TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Visibility="Hidden">Nazwa/ID:</TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="1">Od:</TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="2">Do:</TextBlock>
+                <!--Controls-->
+                <TextBox Name="idNameTextBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"></TextBox>
+                <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"  Visibility="Hidden"></TextBox>
+                <DatePicker Grid.Column="1" Grid.Row="3" x:Name="datePickerEarlierDate"></DatePicker>
+                <DatePicker Grid.Column="2" Grid.Row="3" x:Name="datePickerLaterDate"></DatePicker>
+            </Grid>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Button Click="SearchItemClick" Grid.Row="1" Width="75" Style="{StaticResource ButtonStyle}">Wyszukaj</Button>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <DataGrid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" x:Name="gridItems" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Width="*" Binding="{Binding Id}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Produkt" Width="*" Binding="{Binding Product.Name}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Data Przyjęcia" Width="*" Binding="{Binding DateOfAdmission}"></DataGridTextColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Width="50"  Click="UpdateItemClick">Edytuj</Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button  Click="DeleteItemClick">Usuń</Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Grid Grid.Row="2" Grid.ColumnSpan="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Row="0" Grid.RowSpan="3" Height="60" Grid.Column="1" Width="200" Click="AddItemClick" Style="{StaticResource ButtonStyle}">Dodaj</Button>
+                <Button Grid.Row="1" Grid.Column="2" Width="100" HorizontalAlignment="Right" Click="DeleteMultipleItemsClick" Style="{StaticResource ButtonStyle}">Usuń wybrane</Button>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

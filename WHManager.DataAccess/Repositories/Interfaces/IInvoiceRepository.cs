@@ -8,7 +8,7 @@ namespace WHManager.DataAccess.Repositories.Interfaces
 {
     public interface IInvoiceRepository
     {
-        void CreateNewInvoice(int id, DateTime dateIssued, int clientId, int orderId);
+        int CreateNewInvoice(DateTime dateIssued, int clientId, int orderId);
         void UpdateInvoice(int id, DateTime dateIssued, int clientId, int orderId);
         void DeleteInvoice(int id);
         Invoice GetInvoice(int id);
@@ -16,6 +16,6 @@ namespace WHManager.DataAccess.Repositories.Interfaces
         IEnumerable<Invoice> GetInvoicesByClient(int? clientId = null, string clientName = null, double? clientNip = null);
         IEnumerable<Invoice> GetInvoicesByDate(DateTime? earlierDate, DateTime? laterDate);
         Invoice GetInvoiceByOrder(int orderId);
-
+        IEnumerable<Invoice> SearchInvoices(List<string> criteria);
     }
 }

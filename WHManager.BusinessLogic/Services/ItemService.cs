@@ -21,12 +21,11 @@ namespace WHManager.BusinessLogic.Services
                 List<int> itemIds = new List<int>();
                 foreach (Item item in items)
                 {
-                    int id = item.Id;
                     int productId = item.Product.Id;
-                    DateTime dateofadmission = item.DateOfAdmission;
-                    DateTime? dateofemission = item.DateOfEmission;
+                    DateTime dateofadmission = item.DateOfAdmission.Date;
+                    DateTime? dateofemission = item.DateOfEmission.Value.Date;
                     bool isinstock = item.IsInStock;
-                    itemIds.Add(_itemRepository.AddItem(id, productId, dateofadmission, dateofemission, isinstock));
+                    itemIds.Add(_itemRepository.AddItem(productId, dateofadmission, dateofemission, isinstock));
                 }
                 IList<Product> prodList = productService.GetProduct(items[0].Product.Id);
                 Product product = prodList[0];
@@ -57,12 +56,15 @@ namespace WHManager.BusinessLogic.Services
                     Item currentItem = new Item
                     {
                         Id = item.Id,
-                        DateOfAdmission = item.DateOfAdmission,
-                        DateOfEmission = item.DateOfEmission,
+                        DateOfAdmission = item.DateOfAdmission.Date,
                         Product = product,
                         IsInStock = item.IsInStock
                         
                     };
+                    if (item.DateOfEmission.HasValue)
+                    {
+                        currentItem.DateOfEmission = item.DateOfEmission.Value.Date;
+                    }
                     itemsList.Add(currentItem);
                 }
                 return itemsList;
@@ -83,11 +85,16 @@ namespace WHManager.BusinessLogic.Services
                 Item currentItem = new Item
                 {
                     Id = item.Id,
-                    DateOfAdmission = item.DateOfAdmission,
-                    DateOfEmission = item.DateOfEmission,
+                    DateOfAdmission = item.DateOfAdmission.Date,
                     Product = product,
                     IsInStock = item.IsInStock
                 };
+
+                if (item.DateOfEmission.HasValue)
+                {
+                    currentItem.DateOfEmission = item.DateOfEmission.Value.Date;
+                }
+
                 return currentItem;
             }
 			catch
@@ -102,10 +109,18 @@ namespace WHManager.BusinessLogic.Services
             {
                 int id = item.Id;
                 int product = item.Product.Id;
-                DateTime dateofadmission = item.DateOfAdmission;
-                DateTime? dateofemission = item.DateOfEmission;
+                DateTime dateofadmission = item.DateOfAdmission.Date;
                 bool isinstock = item.IsInStock;
-                _itemRepository.UpdateItem(id, product, dateofadmission, dateofemission, isinstock);
+                if (item.DateOfEmission.HasValue)
+                {
+                    DateTime? dateofemission = item.DateOfEmission.Value.Date;
+                    _itemRepository.UpdateItem(id, product, dateofadmission, dateofemission, isinstock);
+                }
+                else
+                {
+                    DateTime? dateofemission = null;
+                    _itemRepository.UpdateItem(id, product, dateofadmission, dateofemission, isinstock);
+                }
             }
             catch
             {
@@ -142,10 +157,13 @@ namespace WHManager.BusinessLogic.Services
                             Id = item.Id,
                             Product = product,
                             DateOfAdmission = item.DateOfAdmission,
-                            DateOfEmission = item.DateOfEmission,
                             IsInStock = item.IsInStock
                            
                         };
+                        if (item.DateOfEmission.HasValue)
+                        {
+                            currentItem.DateOfEmission = item.DateOfEmission.Value.Date;
+                        }
                         itemsList.Add(currentItem);
                     }
                     return itemsList;
@@ -169,10 +187,13 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = item.Id,
                             Product = product,
-                            DateOfAdmission = item.DateOfAdmission,
-                            DateOfEmission = item.DateOfEmission,
+                            DateOfAdmission = item.DateOfAdmission.Date,
                             IsInStock = item.IsInStock
                         };
+                        if (item.DateOfEmission.HasValue)
+                        {
+                            currentItem.DateOfEmission = item.DateOfEmission.Value.Date;
+                        }
                         itemsList.Add(currentItem);
                     }
                     return itemsList;
@@ -185,232 +206,6 @@ namespace WHManager.BusinessLogic.Services
             else
             {
                 throw new Exception("B³¹d pobierania przedmiotów: ");
-            }
-        }
-
-        public IList<Item> GetItemsByDate(DateTime? earlierDate, DateTime? laterDate)
-        {
-            if (earlierDate != null && laterDate != null)
-            {
-                try
-                {
-                    IList<Item> itemsList = new List<Item>();
-                    var items = _itemRepository.GetItemsByDate(earlierDate, laterDate);
-                    foreach(var item in items)
-                    {
-                        IList<Product> prodList = productService.GetProduct(item.Product.Id);
-                        Product product = prodList[0];
-                        Item currentItem = new Item()
-                        {
-                            Id = item.Id,
-                            Product = product,
-                            DateOfAdmission = item.DateOfAdmission,
-                            DateOfEmission = item.DateOfEmission,
-                            IsInStock = item.IsInStock
-                        };
-                        itemsList.Add(currentItem);
-                    }
-                    return itemsList;
-                }
-                catch
-                {
-                    throw new Exception("B³¹d pobierania przedmiotów: ");
-                }
-            }
-            else if (earlierDate != null && laterDate == null)
-            {
-                try
-                {
-                    IList<Item> itemsList = new List<Item>();
-                    var items = _itemRepository.GetItemsByDate(earlierDate, null);
-                    foreach (var item in items)
-                    {
-                        IList<Product> prodList = productService.GetProduct(item.Product.Id);
-                        Product product = prodList[0];
-                        Item currentItem = new Item()
-                        {
-                            Id = item.Id,
-                            Product = product,
-                            DateOfAdmission = item.DateOfAdmission,
-                            DateOfEmission = item.DateOfEmission,
-                            IsInStock = item.IsInStock
-                        };
-                        itemsList.Add(currentItem);
-                    }
-                    return itemsList;
-                }
-                catch
-                {
-                    throw new Exception("B³¹d pobierania przedmiotów: ");
-                }
-            }
-            else if(earlierDate == null && laterDate != null)
-            {
-                try
-                {
-                    IList<Item> itemsList = new List<Item>();
-                    var items = _itemRepository.GetItemsByDate(null, laterDate);
-                    foreach (var item in items)
-                    {
-                        IList<Product> prodList = productService.GetProduct(item.Product.Id);
-                        Product product = prodList[0];
-                        Item currentItem = new Item()
-                        {
-                            Id = item.Id,
-                            Product = product,
-                            DateOfAdmission = item.DateOfAdmission,
-                            DateOfEmission = item.DateOfEmission,
-                            IsInStock = item.IsInStock
-                        };
-                        itemsList.Add(currentItem);
-                    }
-                    return itemsList;
-                }
-                catch
-                {
-                    throw new Exception("B³¹d pobierania przedmiotów: ");
-                }
-            }
-            else
-            {
-                try
-                {
-                    IList<Item> itemsList = new List<Item>();
-                    var items = _itemRepository.GetItems();
-                    foreach (var item in items)
-                    {
-                        IList<Product> prodList = productService.GetProduct(item.Product.Id);
-                        Product product = prodList[0];
-                        Item currentItem = new Item()
-                        {
-                            Id = item.Id,
-                            Product = product,
-                            DateOfAdmission = item.DateOfAdmission,
-                            DateOfEmission = item.DateOfEmission,
-                            IsInStock = item.IsInStock
-                        };
-                        itemsList.Add(currentItem);
-                    }
-                    return itemsList;
-                }
-                catch
-                {
-                    throw new Exception("B³¹d pobierania przedmiotów: ");
-                }
-            }
-        }
-
-        public IList<Item> GetEmittedItemsByDate(DateTime? earlierDate, DateTime? laterDate)
-        {
-            {
-                if (earlierDate != null && laterDate != null)
-                {
-                    try
-                    {
-                        IList<Item> itemsList = new List<Item>();
-                        var items = _itemRepository.GetEmittedItemsByDate(earlierDate, laterDate);
-                        foreach (var item in items)
-                        {
-                            IList<Product> prodList = productService.GetProduct(item.Product.Id);
-                            Product product = prodList[0];
-                            Item currentItem = new Item()
-                            {
-                                Id = item.Id,
-                                Product = product,
-                                DateOfAdmission = item.DateOfAdmission,
-                                DateOfEmission = item.DateOfEmission,
-                                IsInStock = item.IsInStock
-                            };
-                            itemsList.Add(currentItem);
-                        }
-                        return itemsList;
-                    }
-                    catch
-                    {
-                        throw new Exception("B³¹d pobierania przedmiotów: ");
-                    }
-                }
-                else if (earlierDate != null && laterDate == null)
-                {
-                    try
-                    {
-                        IList<Item> itemsList = new List<Item>();
-                        var items = _itemRepository.GetEmittedItemsByDate(earlierDate, null);
-                        foreach (var item in items)
-                        {
-                            IList<Product> prodList = productService.GetProduct(item.Product.Id);
-                            Product product = prodList[0];
-                            Item currentItem = new Item()
-                            {
-                                Id = item.Id,
-                                Product = product,
-                                DateOfAdmission = item.DateOfAdmission,
-                                DateOfEmission = item.DateOfEmission,
-                                IsInStock = item.IsInStock
-                            };
-                            itemsList.Add(currentItem);
-                        }
-                        return itemsList;
-                    }
-                    catch
-                    {
-                        throw new Exception("B³¹d pobierania przedmiotów: ");
-                    }
-                }
-                else if (earlierDate == null && laterDate != null)
-                {
-                    try
-                    {
-                        IList<Item> itemsList = new List<Item>();
-                        var items = _itemRepository.GetEmittedItemsByDate(null, laterDate);
-                        foreach (var item in items)
-                        {
-                            IList<Product> prodList = productService.GetProduct(item.Product.Id);
-                            Product product = prodList[0];
-                            Item currentItem = new Item()
-                            {
-                                Id = item.Id,
-                                Product = product,
-                                DateOfAdmission = item.DateOfAdmission,
-                                DateOfEmission = item.DateOfEmission,
-                                IsInStock = item.IsInStock
-                            };
-                            itemsList.Add(currentItem);
-                        }
-                        return itemsList;
-                    }
-                    catch
-                    {
-                        throw new Exception("B³¹d pobierania przedmiotów: ");
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        IList<Item> itemsList = new List<Item>();
-                        var items = _itemRepository.GetItems();
-                        foreach (var item in items)
-                        {
-                            IList<Product> prodList = productService.GetProduct(item.Product.Id);
-                            Product product = prodList[0];
-                            Item currentItem = new Item()
-                            {
-                                Id = item.Id,
-                                Product = product,
-                                DateOfAdmission = item.DateOfAdmission,
-                                DateOfEmission = item.DateOfEmission,
-                                IsInStock = item.IsInStock
-                            };
-                            itemsList.Add(currentItem);
-                        }
-                        return itemsList;
-                    }
-                    catch
-                    {
-                        throw new Exception("B³¹d pobierania przedmiotów: ");
-                    }
-                }
             }
         }
 
@@ -430,11 +225,14 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = item.Id,
                             Product = product,
-                            DateOfAdmission = item.DateOfAdmission,
-                            DateOfEmission = item.DateOfEmission,
+                            DateOfAdmission = item.DateOfAdmission.Date,
                             IsInStock = item.IsInStock
 
                         };
+                        if (item.DateOfEmission.HasValue)
+                        {
+                            currentItem.DateOfEmission = item.DateOfEmission.Value.Date;
+                        }
                         itemsList.Add(currentItem);
                     }
                     return itemsList;
@@ -458,10 +256,13 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = item.Id,
                             Product = product,
-                            DateOfAdmission = item.DateOfAdmission,
-                            DateOfEmission = item.DateOfEmission,
+                            DateOfAdmission = item.DateOfAdmission.Date,
                             IsInStock = item.IsInStock
                         };
+                        if (item.DateOfEmission.HasValue)
+                        {
+                            currentItem.DateOfEmission = item.DateOfEmission.Value.Date;
+                        }
                         itemsList.Add(currentItem);
                     }
                     return itemsList;

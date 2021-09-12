@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +24,7 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
     /// </summary>
     public partial class RoleView : UserControl
     {
+        IRoleService roleService = new RoleService();
         public ObservableCollection<Role> Roles
         {
             get;
@@ -62,34 +64,15 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
         }
         private void buttonSearchRoleClick(object sender, RoutedEventArgs e)
         {
-            if (radiobuttonId.IsChecked == true)
-            {
-                try
-                {
-                    gridRoles.ItemsSource = LoadRolesById(int.Parse(textboxSearchRole.Text));
-                }
-                catch(Exception x)
-                {
-                    MessageBox.Show("Błąd wyszukiwania: " + x);
-                }
-            }
-            else if(radiobuttonName.IsChecked == true)
-            {
-                try
-                {
-                    gridRoles.ItemsSource = LoadRolesByName(textboxSearchRole.Text);
-                }
-                catch (Exception x)
-                {
-                    MessageBox.Show("Błąd wyszukiwania: " + x);
-                }
-            }    
+            IList<Role> roles = SearchRoles();
+            Roles = new ObservableCollection<Role>(roles);
+            gridRoles.ItemsSource = Roles;
         }
         private void buttonClearSearchRoleClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                textboxSearchRole.Text = null;
+                textBoxIdName.Text = null;
                 gridRoles.ItemsSource = LoadData();
             }
             catch(Exception x)
@@ -99,16 +82,24 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
         }
         private void buttonAddRoleClick(object sender, RoutedEventArgs e)
         {
-            ManageRoleFormView roleFormView = new ManageRoleFormView();
-            roleFormView.Show();
+            ManageRoleFormView roleFormView = new ManageRoleFormView(this);
+            roleFormView.ShowDialog();
+            if (roleFormView.DialogResult.Value == true)
+            {
+                gridRoles.ItemsSource = LoadData();
+            }
         }
         private void buttonUpdateRoleClick(object sender, RoutedEventArgs e)
         {
             if (gridRoles.SelectedItem != null)
             {
                 Role role = gridRoles.SelectedItem as Role;
-                ManageRoleFormView roleFormView = new ManageRoleFormView(role);
-                roleFormView.Show();
+                ManageRoleFormView roleFormView = new ManageRoleFormView(this, role);
+                roleFormView.ShowDialog();
+                if (roleFormView.DialogResult.Value == true)
+                {
+                    gridRoles.ItemsSource = LoadData();
+                }
             }
             
         }
@@ -123,6 +114,31 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
                 MessageBox.Show("Błąd usuwania:" + x);
             }
         }
+
+        private void DeleteMultipleRoleClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DeleteMultipleRoles();
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show("Błąd usuwania:" + x);
+            }
+        }
+
+        private void DeleteAllRolesClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DeleteAllRoles();
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show("Błąd usuwania:" + x);
+            }
+        }
+
         private IList<Role> GetRoleById(int id)
         {
             try
@@ -141,7 +157,6 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
         {
             try
             {
-                IRoleService roleService = new RoleService();
                 IList<Role> roles = roleService.GetRoleByName(name);
                 return roles;
             }
@@ -184,14 +199,68 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
                 try
                 {
                     Role role = gridRoles.SelectedItem as Role;
-                    IRoleService roleService = new RoleService();
                     roleService.DeleteRole(role.Id);
+                    gridRoles.ItemsSource = LoadData();
                 }
                 catch(Exception e)
                 {
                     MessageBox.Show("Błąd usuwania:" + e);
                 }
             }
+        }
+
+        private void DeleteAllRoles()
+        {
+            try
+            {
+                MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz usunąć wszystkie role?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+                {
+                    if (messageBoxResult == MessageBoxResult.Yes)
+                    {
+                        foreach (Role role in Roles)
+                        {
+                            roleService.DeleteRole(role.Id);
+                        }
+                        gridRoles.ItemsSource = LoadData();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Błąd usuwania: " + e);
+            }
+        }
+
+        private void DeleteMultipleRoles()
+        {
+            try
+            {
+                List<Role> selectedRoles = gridRoles.SelectedItems.Cast<Role>().ToList();
+                MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz usunąć wybrane role?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+                {
+                    if (messageBoxResult == MessageBoxResult.Yes)
+                    {
+                        foreach (Role role in selectedRoles)
+                        {
+                            roleService.DeleteRole(role.Id);
+                        }
+                        gridRoles.ItemsSource = LoadData();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Błąd usuwania: " + e);
+            }
+        }
+
+        private IList<Role> SearchRoles()
+        {
+            List<string> criteria = new List<string>();
+            criteria.Add(textBoxIdName.Text);                           //criteria[0] = Id/Name
+            IList<Role> searchedRoles = roleService.SearchRoles(criteria);
+            return searchedRoles;
+
         }
     }
 }

@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WHManager.DesktopUI.Views.BusinessViews
+namespace WHManager.DesktopUI.Views.DocumentViews
 {
     /// <summary>
-    /// Interaction logic for DocumentsView.xaml
+    /// Interaction logic for PWView.xaml
     /// </summary>
-    public partial class DocumentsView : UserControl
+    public partial class PWView : UserControl
     {
-        public DocumentsView()
+        public PWView()
         {
             InitializeComponent();
         }

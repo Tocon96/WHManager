@@ -18,7 +18,7 @@ namespace WHManager.DataAccess.Repositories
         {
             _contextFactory = contextFactory;
         }
-        public void CreateNewInvoice(int id, DateTime dateIssued, int clientId, int orderId)
+        public int CreateNewInvoice(DateTime dateIssued, int clientId, int orderId)
         {
             using(WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
@@ -34,6 +34,7 @@ namespace WHManager.DataAccess.Repositories
                     };
                     context.Invoices.Add(invoice);
                     context.SaveChanges();
+                    return invoice.Id;
                 }
                 catch
                 {
@@ -270,6 +271,52 @@ namespace WHManager.DataAccess.Repositories
             else
             {
                 throw new Exception("Błąd pobierania faktur: ");
+            }
+        }
+
+        public IEnumerable<Invoice> SearchInvoices(List<string> criteria)
+        {
+            try
+            {
+                using(WHManagerDBContext context = _contextFactory.CreateDbContext())
+                {
+                    IQueryable<Invoice> invoices = context.Invoices.AsQueryable();
+                    if (!string.IsNullOrEmpty(criteria[0]))
+                    {
+                        if (int.TryParse(criteria[0], out int result))
+                        {
+                            invoices = invoices.Where(x => x.Id == result);
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(criteria[1]))
+                    {
+                        invoices = invoices.Where(x => x.Client.Name.StartsWith(criteria[1]));
+                    }
+                    if (!string.IsNullOrEmpty(criteria[2]) && string.IsNullOrEmpty(criteria[3]))
+                    {
+                        DateTime earlierDate = Convert.ToDateTime(criteria[2]);
+                        invoices = invoices.Where(x => x.DateIssued >= earlierDate);
+                    }
+
+                    if (string.IsNullOrEmpty(criteria[2]) && !string.IsNullOrEmpty(criteria[3]))
+                    {
+                        DateTime laterDate = Convert.ToDateTime(criteria[3]);
+                        invoices = invoices.Where(x => x.DateIssued <= laterDate);
+                    }
+
+                    if (!string.IsNullOrEmpty(criteria[2]) && !string.IsNullOrEmpty(criteria[3]))
+                    {
+                        DateTime earlierDate = Convert.ToDateTime(criteria[2]);
+                        DateTime laterDate = Convert.ToDateTime(criteria[3]);
+                        invoices = invoices.Where(x => x.DateIssued >= earlierDate && x.DateIssued <= laterDate);
+                    }
+                    IEnumerable<Invoice> invoiceResults = invoices.ToList();
+                    return invoiceResults;
+                }
+            }
+            catch(Exception)
+            {
+                throw new Exception("Błąd pobierania faktur");
             }
         }
     }

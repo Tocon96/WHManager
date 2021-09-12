@@ -15,8 +15,6 @@ using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
 using WHManager.DesktopUI.Views.FormViews;
-using WHManager.DesktopUI.WindowSetting;
-using WHManager.DesktopUI.WindowSetting.Interfaces;
 
 namespace WHManager.DesktopUI.Views.WarehouseViews
 {
@@ -75,23 +73,11 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 return null;
             }
         }
-        private void SearchItemsClick(object sender, RoutedEventArgs e)
-        {
-            /**
-                List<Item> items = GetItemById(int.Parse(SearchTextBox.Text));
-                        Items = new ObservableCollection<Item>(items);
-                        gridItems.ItemsSource = Items;
-          
-                    List<Item> items = GetItemByDate(datePickerEarlierDate.SelectedDate, datePickerLaterDate.SelectedDate);
-                    Items = new ObservableCollection<Item>(items);
-                    gridItems.ItemsSource = Items;
-             */
-        }
+        
         private void ClearSearchClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                SearchTextBox.Text = null;
                 gridItems.ItemsSource = LoadData();
             }
             catch(Exception x)
@@ -99,6 +85,22 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                 MessageBox.Show("Błąd wyczyszczenia: " + x);
             }
         }
+
+        private void SearchItemClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeleteMultipleItemsClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeleteAllItemsClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void AddItemClick(object sender, RoutedEventArgs e)
         {
             try
@@ -151,93 +153,6 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
             {
                 MessageBox.Show("Błąd wyświetlania: " + x);
                 return null;
-            }
-        }
-        private void radioButtonIdClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                SearchTextBox.Visibility = Visibility.Visible;
-                datePickerEarlierDate.Visibility = Visibility.Hidden;
-                datePickerLaterDate.Visibility = Visibility.Hidden;
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show("Błąd zmiany wyświetlania: " + x);
-            }
-        }
-
-        private void radioButtonDateOfPurchaseClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                SearchTextBox.Visibility = Visibility.Hidden;
-                datePickerEarlierDate.Visibility = Visibility.Visible;
-                datePickerLaterDate.Visibility = Visibility.Visible;
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show("Błąd zmiany wyświetlania: " + x);
-            }
-        }
-
-        private List<Item> GetItemByDate(DateTime? earlierDate, DateTime? laterDate)
-        {
-            IItemService itemService = new ItemService();
-            List<Item> itemsList = new List<Item>();
-            if(datePickerEarlierDate.SelectedDate != null && datePickerLaterDate.SelectedDate != null)
-            {
-                try
-                {
-                    itemsList = itemService.GetEmittedItemsByDate(earlierDate, laterDate).ToList();
-                    return itemsList;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Błąd zmiany wyświetlania: " + e);
-                    return null;
-                }
-            }
-            else if(datePickerEarlierDate.SelectedDate != null && datePickerLaterDate.SelectedDate == null)
-            {
-                try
-                {
-                    itemsList = itemService.GetEmittedItemsByDate(earlierDate, null).ToList();
-                    return itemsList;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Błąd zmiany wyświetlania: " + e);
-                    return null;
-                }
-
-            }
-            else if(datePickerEarlierDate.SelectedDate == null && datePickerLaterDate.SelectedDate != null)
-            {
-                try
-                {
-                    itemsList = itemService.GetEmittedItemsByDate(null, laterDate).ToList();
-                    return itemsList;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Błąd zmiany wyświetlania: " + e);
-                    return null;
-                }
-
-            }
-            else
-            {
-                try
-                {
-                    itemsList = itemService.GetEmittedItemsByDate(null, null).ToList();
-                    return itemsList;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Błąd zmiany wyświetlania: " + e);
-                    return null;
-                }
             }
         }
     }

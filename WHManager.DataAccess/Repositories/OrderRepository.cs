@@ -301,5 +301,51 @@ namespace WHManager.DataAccess.Repositories
                 throw new Exception("Błąd pobierania zamówień: ");
             }
         }
+
+        public IEnumerable<Order> SearchOrders(List<string> criteria)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                IEnumerable<Order> orders = context.Orders.AsQueryable()
+                                                          .Include(i => i.Items);
+
+                if (!string.IsNullOrEmpty(criteria[0]))
+                {
+                    if(int.TryParse(criteria[0], out int result))
+                    {
+                        orders = orders.Where(x => x.Id == result);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(criteria[1]))
+                {
+                    orders = orders.Where(x => x.Client.Name.StartsWith(criteria[1]));
+                }
+
+                if (!string.IsNullOrEmpty(criteria[2]) && string.IsNullOrEmpty(criteria[3]))
+                {
+                    DateTime earlierDate = Convert.ToDateTime(criteria[2]);
+                    orders = orders.Where(x => x.DateOrdered >= earlierDate);
+                }
+
+                if (string.IsNullOrEmpty(criteria[2]) && !string.IsNullOrEmpty(criteria[3]))
+                {
+                    DateTime laterDate = Convert.ToDateTime(criteria[3]);
+                    orders = orders.Where(x => x.DateOrdered <= laterDate);
+                }
+
+                if (!string.IsNullOrEmpty(criteria[2]) && !string.IsNullOrEmpty(criteria[3]))
+                {
+                    DateTime earlierDate = Convert.ToDateTime(criteria[2]);
+                    DateTime laterDate = Convert.ToDateTime(criteria[3]);
+                    orders = orders.Where(x => x.DateOrdered >= earlierDate && x.DateOrdered <= laterDate);
+                }
+
+                IEnumerable<Order> ordersList = orders.ToList();
+
+                return ordersList;
+            }
+
+        }
     }
 }

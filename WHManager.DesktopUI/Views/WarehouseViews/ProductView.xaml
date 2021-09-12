@@ -188,9 +188,7 @@
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Row="0" Grid.RowSpan="3" Height="60" Grid.Column="1" Width="200" Click="AddProductClick" Style="{StaticResource ButtonStyle}">Dodaj</Button>
-                <Button Grid.Row="0" Grid.Column="2" Width="100" HorizontalAlignment="Right" Click="DeleteAllProductsClick" Style="{StaticResource ButtonStyle}">Usuń wszystkie</Button>
-                <Separator Grid.Column="2" Grid.Row="1"  Width="100" HorizontalAlignment="Right"></Separator>
-                <Button Grid.Row="2" Grid.Column="2" Width="100" HorizontalAlignment="Right" Click="DeleteMultipleProductsClick" Style="{StaticResource ButtonStyle}">Usuń wybrane</Button>
+                <Button Grid.Row="1" Grid.Column="2" Width="100" HorizontalAlignment="Right" Click="DeleteMultipleProductsClick" Style="{StaticResource ButtonStyle}">Usuń wybrane</Button>
             </Grid>
         </Grid>
     </Grid>

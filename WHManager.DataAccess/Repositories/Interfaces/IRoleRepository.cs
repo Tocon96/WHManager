@@ -14,5 +14,6 @@ namespace WHManager.DataAccess.Repositories.Interfaces
         IEnumerable<Role> GetRoles();
         IEnumerable<Role> GetRole(int id);
         IEnumerable<Role> GetRoleByName(string name);
+        IEnumerable<Role> SearchRoles(List<string> criteria);
     }
 }

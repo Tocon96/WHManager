@@ -463,5 +463,30 @@ namespace WHManager.BusinessLogic.Services
             return sortedProducts;
             
         }
+
+        public IList<Order> SearchOrders(List<string> criteria)
+        {
+            IList<Order> orders = new List<Order>();
+            var ordersList = _orderRepository.SearchOrders(criteria);
+            foreach(var order in ordersList)
+            {
+                IList<Item> itemsList = new List<Item>();
+                foreach (var item in order.Items)
+                {
+                    itemsList.Add(itemService.GetItem(item.Id));
+                }
+                Order newOrder = new Order
+                {
+                    Id = order.Id,
+                    Client = clientService.GetClient(order.Client.Id)[0],
+                    Items = itemsList,
+                    IsRealized = order.IsRealized,
+                    DateOrdered = order.DateOrdered.Date,
+                    Price = order.Price
+                };
+                orders.Add(newOrder);
+            }
+            return orders;
+        }
     }
 }

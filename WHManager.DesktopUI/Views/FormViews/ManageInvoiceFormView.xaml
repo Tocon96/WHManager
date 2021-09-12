@@ -5,12 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WHManager.DesktopUI.Views.FormViews"
         mc:Ignorable="d"
-        Title="ManageInvoiceFormView" Height="450" Width="800">
+        Title="" SizeToContent="WidthAndHeight" ResizeMode="NoResize" WindowStyle="None">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Background" Value="#1976d2"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="TextAlignment" Value="Center"></Setter>
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Arrow" />
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Silver"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
@@ -19,21 +47,27 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <!--TextBlocks-->
-        <TextBlock>Data wystawienia:</TextBlock>
-        <TextBlock Grid.Row="1">Klient:</TextBlock>
-        <TextBlock Grid.Row="2">ID Zamówienia: </TextBlock>
+        <TextBlock x:Name="textBlockManageClient" Grid.ColumnSpan="3" Grid.Row="0" Height="30" FontSize="18">Dodaj Nową Fakturę</TextBlock>
+        <TextBlock Grid.ColumnSpan="3" Grid.Row="1">Data wystawienia:</TextBlock>
+        <TextBlock Grid.ColumnSpan="3" Grid.Row="3">Klient:</TextBlock>
+        <TextBlock Grid.ColumnSpan="3" Grid.Row="5">ID Zamówienia: </TextBlock>
         <!--DatePickers-->
-        <DatePicker x:Name="datepickerInvoicesDateIssued" Grid.Column="1"></DatePicker>
+        <DatePicker x:Name="datepickerInvoicesDateIssued" Grid.ColumnSpan="3" Grid.Row="2"></DatePicker>
         <!--ComboBoxes-->
-        <ComboBox x:Name="comboBoxInvoicesClients" Grid.Column="1" Grid.Row="1" DisplayMemberPath="Name"></ComboBox>
+        <ComboBox x:Name="comboBoxInvoicesClients" Grid.ColumnSpan="3" Grid.Row="4" DisplayMemberPath="Name"></ComboBox>
         <!--TextBoxes-->
-        <TextBox Grid.Row="2" Grid.Column="1" x:Name="textBoxInvoicesOrderId"></TextBox>
+        <TextBox Grid.Row="6" Grid.ColumnSpan="3" x:Name="textBoxInvoicesOrderId"></TextBox>
         <!--Buttons-->
-        <Button Grid.Column="1" Grid.Row="3" Click="buttonInvoicesConfirm">Zatwierdź</Button>
-        <!--Label-->
-        <Label Content="Id" Visibility="Hidden" Grid.Row="3" x:Name="labelId"></Label>
+        <Button x:Name="buttonCancel" Click="CancelClick" Grid.Column="0" Grid.Row="7" Width="150" Style="{StaticResource ButtonStyle}">Anuluj</Button>
+        <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+        </StackPanel>
+        <Button x:Name="buttonConfirm" Click="buttonConfirmClick" Grid.Column="2" Grid.Row="7" Width="150" Style="{StaticResource ButtonStyle}">Zatwierdź</Button>
     </Grid>
 </Window>

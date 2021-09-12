@@ -17,8 +17,6 @@ using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
 using WHManager.DesktopUI.Views.WarehouseViews;
-using WHManager.DesktopUI.WindowSetting;
-using WHManager.DesktopUI.WindowSetting.Interfaces;
 
 namespace WHManager.DesktopUI.Views.FormViews
 {

@@ -14,9 +14,7 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
-using WHManager.DesktopUI.WindowSetting;
-using WHManager.DesktopUI.WindowSetting.Interfaces;
-
+using WHManager.DesktopUI.Views.BusinessViews;
 namespace WHManager.DesktopUI.Views.FormViews
 {
     /// <summary>
@@ -53,38 +51,56 @@ namespace WHManager.DesktopUI.Views.FormViews
             get;
             set;
         }
-        private readonly IDisplaySetting displaySetting = new DisplaySetting();
 
-        public ManageOrderFormView()
+        public OrderView OrderView
+        {
+            get;
+            set;
+        }
+
+        public ManageOrderFormView(OrderView orderView)
         {
             InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
+            OrderView = orderView;
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             FillData();
         }
 
-        public ManageOrderFormView(Order order)
+        public ManageOrderFormView(OrderView orderView, Order order)
         {
             InitializeComponent();
-            displaySetting.CenterWindowOnScreen(this);
             Order = order;
+            OrderView = orderView;
+            datepickerOrdersDate.SelectedDate = Order.DateOrdered;
+            comboBoxOrdersClients.SelectedIndex = Order.Client.Id;
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            textBlockManageOrder.Text = "Edytuj zamówienie o ID: " + Order.Id;
             FillData();
-            labelId.Visibility = Visibility.Visible;
-            labelId.Content = Order.Id;
         }
 
         private void buttonOrdersConfirm(object sender, RoutedEventArgs e)
         {
-            if(labelId.Visibility == Visibility.Hidden)
+            if(Order == null)
             {
                 AddOrder();
-                this.Close();
             }
-            else if(labelId.Visibility == Visibility.Visible)
+            else
             {
                 UpdateOrder();
-                this.Close();
             }
-            
+            DialogResult = true;
+            this.Close();
+        }
+
+        private void buttonOrdersCancel(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            this.Close();
+        }
+
+        public void OnDialogClose()
+        {
+            OrderView.gridOrders.Items.Refresh();
         }
 
         private void comboBoxOrdersProducts_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -203,11 +219,12 @@ namespace WHManager.DesktopUI.Views.FormViews
             if (gridItems.SelectedItem != null)
             {
                 Item item = gridItems.SelectedItem as Item;
+                var index = gridItems.SelectedIndex;
                 ItemsList.Add(item);
+                DataGridRow row = (DataGridRow)((DataGrid)sender).ItemContainerGenerator.ContainerFromIndex(index);
+                row.Background = new SolidColorBrush(Colors.Aquamarine);
                 MessageBox.Show("Przedmiot został dodany do listy");
             }
-            
-
         }
     }
 }

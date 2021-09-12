@@ -8,5 +8,5 @@ E:\visualstudio\WHManager\WHManager.DataAccess\obj\Debug\netcoreapp3.1\WHManager
 E:\visualstudio\WHManager\WHManager.DataAccess\bin\Debug\netcoreapp3.1\WHManager.DataAccess.runtimeconfig.json
 E:\visualstudio\WHManager\WHManager.DataAccess\bin\Debug\netcoreapp3.1\WHManager.DataAccess.runtimeconfig.dev.json
 E:\visualstudio\WHManager\WHManager.DataAccess\obj\Debug\netcoreapp3.1\WHManager.DataAccess.genruntimeconfig.cache
-E:\visualstudio\WHManager\WHManager.DataAccess\obj\Debug\netcoreapp3.1\WHManager.DataAccess.csprojAssemblyReference.cache
 E:\visualstudio\WHManager\WHManager.DataAccess\obj\Debug\netcoreapp3.1\WHManager.DataAccess.csproj.CoreCompileInputs.cache
+E:\visualstudio\WHManager\WHManager.DataAccess\obj\Debug\netcoreapp3.1\WHManager.DataAccess.csproj.AssemblyReference.cache

@@ -122,5 +122,27 @@ namespace WHManager.DataAccess.Repositories
                 }
             }
         }
+
+        public IEnumerable<Role> SearchRoles(List<string> criteria)
+        {
+            using(WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                IQueryable<Role> roles = context.Roles.AsQueryable();
+
+                if (!string.IsNullOrEmpty(criteria[0]))
+                {
+                    if (int.TryParse(criteria[0], out int result))
+                    {
+                        roles = roles.Where(p => p.Id == result);
+                    }
+                    else
+                    {
+                        roles = roles.Where(p => p.Name.StartsWith(criteria[0]));
+                    }
+                }
+                IEnumerable<Role> rolesList = roles.ToList();
+                return rolesList;
+            }
+        }
     }
 }

@@ -13,8 +13,6 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
-using WHManager.DesktopUI.WindowSetting.Interfaces;
-using WHManager.DesktopUI.WindowSetting;
 using WHManager.DesktopUI.Views.AdministrationViews;
 
 namespace WHManager.DesktopUI.Views.FormViews

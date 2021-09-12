@@ -18,7 +18,7 @@ namespace WHManager.DataAccess.Repositories
 			_contextFactory = contextFactory;
 		}
 
-		public int AddItem(int id, int product, DateTime dateofadmission, DateTime? dateofemission, bool isinstock)
+		public int AddItem(int product, DateTime dateofadmission, DateTime? dateofemission, bool isinstock)
 		{
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
@@ -26,7 +26,6 @@ namespace WHManager.DataAccess.Repositories
 				{
 					Item newItem = new Item
 					{
-						Id = id,
 						DateOfAdmission = dateofadmission,
 						DateOfEmission = dateofemission,
 						Product = context.Products.SingleOrDefault(x => x.Id == product),

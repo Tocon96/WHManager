@@ -14,15 +14,15 @@ namespace WHManager.BusinessLogic.Services
         private readonly IInvoiceRepository _invoiceRepository = new InvoiceRepository(new DataAccess.WHManagerDBContextFactory());
         private IOrderService orderService = new OrderService();
         private IClientService clientService = new ClientService();
-        public void CreateNewInvoice(Invoice invoice)
+        public int CreateNewInvoice(Invoice invoice)
         {
             try
             {
-                int id = invoice.Id;
                 DateTime dateTime = invoice.DateIssued;
                 int clientId = invoice.Client.Id;
                 int orderId = invoice.Order.Id;
-                _invoiceRepository.CreateNewInvoice(id, dateTime, clientId, orderId);
+                int invoiceId = _invoiceRepository.CreateNewInvoice(dateTime, clientId, orderId);
+                return invoiceId;
             }
             catch
             {
@@ -323,6 +323,31 @@ namespace WHManager.BusinessLogic.Services
             catch (Exception)
             {
                 throw new Exception("Błąd aktualizacji faktury: ");
+            }
+        }
+
+        public IList<Invoice>SearchInvoices(List<string> criteria)
+        {
+            try
+            {
+                IList<Invoice> invoices = new List<Invoice>();
+                var invoiceList = _invoiceRepository.SearchInvoices(criteria);
+                foreach(var invoice in invoiceList)
+                {
+                    Invoice newInvoice = new Invoice
+                    {
+                        Id = invoice.Id,
+                        Client = clientService.GetClient(invoice.Client.Id)[0],
+                        DateIssued = invoice.DateIssued,
+                        Order = orderService.GetOrderById(invoice.Order.Id)
+                    };
+                    invoices.Add(newInvoice);
+                }
+                return invoices;
+            }
+            catch
+            {
+                throw new Exception();
             }
         }
     }

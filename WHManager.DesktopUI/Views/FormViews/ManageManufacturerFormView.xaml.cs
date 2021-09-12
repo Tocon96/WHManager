@@ -12,8 +12,6 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.DesktopUI.Views.ContractorsView;
-using WHManager.DesktopUI.WindowSetting;
-using WHManager.DesktopUI.WindowSetting.Interfaces;
 
 namespace WHManager.DesktopUI.Views.FormViews
 {

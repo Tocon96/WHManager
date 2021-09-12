@@ -14,5 +14,6 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         IList<Role> GetRoles();
         IList<Role> GetRoleById(int id);
         IList<Role> GetRoleByName(string name);
+        IList<Role> SearchRoles(List<string> criteria); 
     }
 }
