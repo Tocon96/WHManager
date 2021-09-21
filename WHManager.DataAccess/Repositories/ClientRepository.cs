@@ -165,7 +165,7 @@ namespace WHManager.DataAccess.Repositories
                     }
                     if (!string.IsNullOrEmpty(criteria[1]))
                     {
-                        clients = clients.Where(x => x.Nip == int.Parse(criteria[1]));
+                        clients = clients.Where(x => x.Nip == double.Parse(criteria[1]));
                     }
                     if (!string.IsNullOrEmpty(criteria[2]))
                     {

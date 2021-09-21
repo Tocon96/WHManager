@@ -118,5 +118,11 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
             items.Add(item);
             return items;
         }
+
+        private IList<Item> SearchItems()
+        {
+            IList<Item> items = new List<Item>();
+            return items;
+        }
     }
 }

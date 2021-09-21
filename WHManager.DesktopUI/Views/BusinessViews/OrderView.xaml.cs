@@ -42,7 +42,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             InitializeComponent();
             gridOrders.ItemsSource = LoadData();
         }
-
+                                                                                                                                                                                                                                                                            
         private IList<Order> GetAll()
         {
             try
@@ -211,8 +211,6 @@ namespace WHManager.DesktopUI.Views.BusinessViews
                 MessageBox.Show("Błąd dodawania faktury: " + e);
                 return null;
             }
-
         }
-
     }
 }

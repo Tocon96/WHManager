@@ -11,6 +11,36 @@
     <Compile Remove="Migrations\20200924014308_ondeleterulesalledit.Designer.cs" />
     <Compile Remove="Migrations\20200924014515_ondeleterulesalledit.cs" />
     <Compile Remove="Migrations\20200924014515_ondeleterulesalledit.Designer.cs" />
+    <Compile Remove="Migrations\20210918155249_roleupdateanddocuments.cs" />
+    <Compile Remove="Migrations\20210918155249_roleupdateanddocuments.Designer.cs" />
+    <Compile Remove="Migrations\20210918160404_roleupdateanddocuments2.cs" />
+    <Compile Remove="Migrations\20210918160404_roleupdateanddocuments2.Designer.cs" />
+    <Compile Remove="Migrations\20210918162039_migration2.cs" />
+    <Compile Remove="Migrations\20210918162039_migration2.Designer.cs" />
+    <Compile Remove="Migrations\20210918162146_migration2.cs" />
+    <Compile Remove="Migrations\20210918162146_migration2.Designer.cs" />
+    <Compile Remove="Migrations\20210918162456_18092021.cs" />
+    <Compile Remove="Migrations\20210918162456_18092021.Designer.cs" />
+    <Compile Remove="Migrations\20210918162815_18092021.cs" />
+    <Compile Remove="Migrations\20210918162815_18092021.Designer.cs" />
+    <Compile Remove="Migrations\20210918163934_18092021.cs" />
+    <Compile Remove="Migrations\20210918163934_18092021.Designer.cs" />
+    <Compile Remove="Migrations\20210918165356_18092021.cs" />
+    <Compile Remove="Migrations\20210918165356_18092021.Designer.cs" />
+    <Compile Remove="Migrations\20210918170003_18092021.cs" />
+    <Compile Remove="Migrations\20210918170003_18092021.Designer.cs" />
+    <Compile Remove="Migrations\20210918172822_18092021.cs" />
+    <Compile Remove="Migrations\20210918172822_18092021.Designer.cs" />
+    <Compile Remove="Migrations\20210918174646_18092021.cs" />
+    <Compile Remove="Migrations\20210918174646_18092021.Designer.cs" />
+    <Compile Remove="Migrations\20210918174831_18092021.cs" />
+    <Compile Remove="Migrations\20210918174831_18092021.Designer.cs" />
+    <Compile Remove="Migrations\20210918174929_18092021.cs" />
+    <Compile Remove="Migrations\20210918174929_18092021.Designer.cs" />
+    <Compile Remove="Migrations\20210918175452_18092021.cs" />
+    <Compile Remove="Migrations\20210918175452_18092021.Designer.cs" />
+    <Compile Remove="Migrations\20210918175945_18092021.cs" />
+    <Compile Remove="Migrations\20210918175945_18092021.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -46,7 +46,7 @@ namespace WHManager.DesktopUI.Views.FormViews
             Role = role;
             RoleGridView = roleView;
             textBoxName.Text = role.Name;
-            if(role.IsAdmin == true)
+            if(role.Admin == true)
             {
                 checkboxAdmin.IsChecked = true;
             }
@@ -98,7 +98,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 Role role = new Role
                 {
                     Name = textBoxName.Text,
-                    IsAdmin = admin
+                    Admin = admin
                 };
                 roleService.AddRole(role);
             }
@@ -121,7 +121,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 {
                     Id = Role.Id,
                     Name = textBoxName.Text,
-                    IsAdmin = admin
+                    Admin = admin
                 };
                 roleService.UpdateRole(role);
             }

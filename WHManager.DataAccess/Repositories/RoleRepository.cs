@@ -28,7 +28,7 @@ namespace WHManager.DataAccess.Repositories
                     Role role = new Role
                     {
                         Name = name,
-                        IsAdmin = isadmin
+                        Admin = isadmin
                     };
                     context.Roles.Add(role);
                     context.SaveChanges();
@@ -113,7 +113,7 @@ namespace WHManager.DataAccess.Repositories
                 {
                     Role updatedRole = context.Roles.SingleOrDefault(x => x.Id == id);
                     updatedRole.Name = name;
-                    updatedRole.IsAdmin = isadmin;
+                    updatedRole.Admin = isadmin;
                     context.SaveChanges();
                 }
                 catch

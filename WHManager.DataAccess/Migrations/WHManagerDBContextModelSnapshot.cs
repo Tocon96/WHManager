@@ -41,25 +41,53 @@ namespace WHManager.DataAccess.Migrations
                     b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("WHManager.DataAccess.Models.GoodsDocument", b =>
+            modelBuilder.Entity("WHManager.DataAccess.Models.Delivery", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<DateTime>("DateIssued")
+                    b.Property<DateTime>("DateOfArrival")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Destination")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Source")
+                    b.Property<int?>("ProviderId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("GoodsDocuments");
+                    b.HasIndex("ProviderId");
+
+                    b.ToTable("Deliveries");
+                });
+
+            modelBuilder.Entity("WHManager.DataAccess.Models.IncomingDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("DateReceived")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSent")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DeliveryId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProviderId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Source")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProviderId");
+
+                    b.ToTable("IncomingDocuments");
                 });
 
             modelBuilder.Entity("WHManager.DataAccess.Models.Invoice", b =>
@@ -75,15 +103,25 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<DateTime>("DateIssued")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("IncomingDocumentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OutgoingDocumentId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
+                    b.HasIndex("IncomingDocumentId");
+
                     b.HasIndex("OrderId")
                         .IsUnique();
+
+                    b.HasIndex("OutgoingDocumentId");
 
                     b.ToTable("Invoices");
                 });
@@ -101,7 +139,10 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<DateTime?>("DateOfEmission")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("GoodsDocumentId")
+                    b.Property<int?>("DeliveryId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IncomingDocumentId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsInStock")
@@ -110,16 +151,28 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("OutgoingDocumentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProviderId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GoodsDocumentId");
+                    b.HasIndex("DeliveryId");
+
+                    b.HasIndex("IncomingDocumentId");
 
                     b.HasIndex("OrderId");
 
+                    b.HasIndex("OutgoingDocumentId");
+
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("ProviderId");
 
                     b.ToTable("Items");
                 });
@@ -158,8 +211,14 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<DateTime>("DateOrdered")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("IncomingDocumentId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsRealized")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("OutgoingDocumentId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -168,7 +227,40 @@ namespace WHManager.DataAccess.Migrations
 
                     b.HasIndex("ClientId");
 
+                    b.HasIndex("IncomingDocumentId");
+
+                    b.HasIndex("OutgoingDocumentId");
+
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("WHManager.DataAccess.Models.OutgoingDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ContrahentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateReceived")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSent")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Source")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContrahentId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OutgoingDocuments");
                 });
 
             modelBuilder.Entity("WHManager.DataAccess.Models.Product", b =>
@@ -229,6 +321,27 @@ namespace WHManager.DataAccess.Migrations
                     b.ToTable("ProductTypes");
                 });
 
+            modelBuilder.Entity("WHManager.DataAccess.Models.Provider", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Nip")
+                        .HasColumnType("float");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Provider");
+                });
+
             modelBuilder.Entity("WHManager.DataAccess.Models.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -236,11 +349,26 @@ namespace WHManager.DataAccess.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<bool>("IsAdmin")
+                    b.Property<bool>("Admin")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Business")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Contractors")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Documents")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Reports")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Warehouse")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -291,6 +419,21 @@ namespace WHManager.DataAccess.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("WHManager.DataAccess.Models.Delivery", b =>
+                {
+                    b.HasOne("WHManager.DataAccess.Models.Provider", "Provider")
+                        .WithMany()
+                        .HasForeignKey("ProviderId");
+                });
+
+            modelBuilder.Entity("WHManager.DataAccess.Models.IncomingDocument", b =>
+                {
+                    b.HasOne("WHManager.DataAccess.Models.Provider", "Provider")
+                        .WithMany("IncomingDocuments")
+                        .HasForeignKey("ProviderId")
+                        .OnDelete(DeleteBehavior.NoAction);
+                });
+
             modelBuilder.Entity("WHManager.DataAccess.Models.Invoice", b =>
                 {
                     b.HasOne("WHManager.DataAccess.Models.Client", "Client")
@@ -299,29 +442,50 @@ namespace WHManager.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("WHManager.DataAccess.Models.IncomingDocument", "IncomingDocument")
+                        .WithMany()
+                        .HasForeignKey("IncomingDocumentId");
+
                     b.HasOne("WHManager.DataAccess.Models.Order", "Order")
                         .WithOne("Invoice")
                         .HasForeignKey("WHManager.DataAccess.Models.Invoice", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("WHManager.DataAccess.Models.OutgoingDocument", "OutgoingDocument")
+                        .WithMany()
+                        .HasForeignKey("OutgoingDocumentId");
                 });
 
             modelBuilder.Entity("WHManager.DataAccess.Models.Item", b =>
                 {
-                    b.HasOne("WHManager.DataAccess.Models.GoodsDocument", null)
+                    b.HasOne("WHManager.DataAccess.Models.Delivery", null)
                         .WithMany("Items")
-                        .HasForeignKey("GoodsDocumentId");
+                        .HasForeignKey("DeliveryId");
+
+                    b.HasOne("WHManager.DataAccess.Models.IncomingDocument", "IncomingDocument")
+                        .WithMany()
+                        .HasForeignKey("IncomingDocumentId");
 
                     b.HasOne("WHManager.DataAccess.Models.Order", "Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("WHManager.DataAccess.Models.OutgoingDocument", "OutgoingDocument")
+                        .WithMany()
+                        .HasForeignKey("OutgoingDocumentId");
+
                     b.HasOne("WHManager.DataAccess.Models.Product", "Product")
                         .WithMany("Items")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("WHManager.DataAccess.Models.Provider", "Provider")
+                        .WithMany("Items")
+                        .HasForeignKey("ProviderId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("WHManager.DataAccess.Models.Order", b =>
@@ -330,6 +494,32 @@ namespace WHManager.DataAccess.Migrations
                         .WithMany("Orders")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("WHManager.DataAccess.Models.IncomingDocument", "IncomingDocument")
+                        .WithMany()
+                        .HasForeignKey("IncomingDocumentId");
+
+                    b.HasOne("WHManager.DataAccess.Models.OutgoingDocument", "OutgoingDocument")
+                        .WithMany()
+                        .HasForeignKey("OutgoingDocumentId");
+                });
+
+            modelBuilder.Entity("WHManager.DataAccess.Models.OutgoingDocument", b =>
+                {
+                    b.HasOne("WHManager.DataAccess.Models.Client", "Contrahent")
+                        .WithMany("OutgoingDocuments")
+                        .HasForeignKey("ContrahentId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("WHManager.DataAccess.Models.Invoice", "Invoice")
+                        .WithMany()
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WHManager.DataAccess.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId");
                 });
 
             modelBuilder.Entity("WHManager.DataAccess.Models.Product", b =>

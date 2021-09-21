@@ -14,7 +14,8 @@ namespace WHManager.DataAccess.Models
         [Required]
         public Client Client { get; set; }
         public int OrderId { get; set; }
-        [Required]
         public Order Order { get; set; }
+        public OutgoingDocument OutgoingDocument { get; set; }
+        public IncomingDocument IncomingDocument { get; set; }
     }
 }

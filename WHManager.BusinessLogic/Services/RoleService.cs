@@ -18,7 +18,7 @@ namespace WHManager.BusinessLogic.Services
             try
             {
                 string name = role.Name;
-                bool isadmin = role.IsAdmin;
+                bool isadmin = role.Admin;
                 roleRepository.CreateNewRole(name, isadmin);
             }
             catch
@@ -52,7 +52,7 @@ namespace WHManager.BusinessLogic.Services
                     {
                         Id = role.Id,
                         Name = role.Name,
-                        IsAdmin = role.IsAdmin
+                        Admin = role.Admin
                     };
                     roles.Add(newRole);
                 }
@@ -76,7 +76,7 @@ namespace WHManager.BusinessLogic.Services
                     {
                         Id = role.Id,
                         Name = role.Name,
-                        IsAdmin = role.IsAdmin
+                        Admin = role.Admin
                     };
                     roles.Add(newRole);
                 }
@@ -100,7 +100,7 @@ namespace WHManager.BusinessLogic.Services
                     {
                         Id = role.Id,
                         Name = role.Name,
-                        IsAdmin = role.IsAdmin
+                        Admin = role.Admin
                     };
                     roles.Add(newRole);
                 }
@@ -136,7 +136,7 @@ namespace WHManager.BusinessLogic.Services
             {
                 int id = role.Id;
                 string name = role.Name;
-                bool isadmin = role.IsAdmin;
+                bool isadmin = role.Admin;
                 roleRepository.UpdateRole(id, name, isadmin);
             }
             catch

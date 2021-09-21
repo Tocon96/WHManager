@@ -10,7 +10,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
+using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.CommandService;
+using WHManager.BusinessLogic.Services.Interfaces;
 using WHManager.DesktopUI.Views.FormViews.LoginForm;
 
 namespace WHManager.DesktopUI
@@ -21,6 +23,7 @@ namespace WHManager.DesktopUI
     public partial class MainWindow : Window
     {
 
+        private IRoleService roleService = new RoleService();
         public User User
         {
             get;
@@ -31,35 +34,82 @@ namespace WHManager.DesktopUI
         {
             get
             {
-                return new List<MenuItemsData>
-                {                 
-                    //MainMenu Button
-                    new MenuItemsData(){ MenuText="Produkty",
-                        SubMenuList=new List<SubMenuItemsData>{
+                List<MenuItemsData> menu = new List<MenuItemsData>();
+                Role role = roleService.GetRoleById(User.Role.Id)[0];
+                if(role.Warehouse == true)
+                {
+                    MenuItemsData menuItem = new MenuItemsData()
+                    {
+                        MenuText = "Produkty",
+                        SubMenuList = new List<SubMenuItemsData>{
                             new SubMenuItemsData(){ SubMenuDirectory="WarehouseViews", File = "ProductView", SubMenuText="Produkt" },
                             new SubMenuItemsData(){ SubMenuDirectory="WarehouseViews", File = "ProductTypeView", SubMenuText="Typ Produktów" },
                             new SubMenuItemsData(){ SubMenuDirectory="WarehouseViews", File = "TaxView", SubMenuText="Typ Podatków" }
                         }
-                    },
-                    new MenuItemsData(){ MenuText="Kontrahenci",
-                        SubMenuList=new List<SubMenuItemsData>{
+                    };
+                    menu.Add(menuItem);
+                }
+                if(role.Contractors == true)
+                {
+                    MenuItemsData menuItem = new MenuItemsData()
+                    {
+                        MenuText = "Kontrahenci",
+                        SubMenuList = new List<SubMenuItemsData>{
                             new SubMenuItemsData(){ SubMenuDirectory="ContractorsViews", File = "ClientView", SubMenuText="Klienci" },
                             new SubMenuItemsData(){ SubMenuDirectory="ContractorsViews", File = "ManufacturerView", SubMenuText="Producenci" }
                         }
-                    },
-                    new MenuItemsData(){ MenuText="Biznes",
-                        SubMenuList=new List<SubMenuItemsData>{
+                    };
+                    menu.Add(menuItem);
+                }
+                if(role.Business == true)
+                {
+                    MenuItemsData menuItem = new MenuItemsData()
+                    {
+                        MenuText = "Biznes",
+                        SubMenuList = new List<SubMenuItemsData>{
                             new SubMenuItemsData(){ SubMenuDirectory="BusinessViews", File = "InvoiceView", SubMenuText="Faktury" },
-                            new SubMenuItemsData(){ SubMenuDirectory="BusinessViews", File = "OrderView", SubMenuText="Zamówienia" }
+                            new SubMenuItemsData(){ SubMenuDirectory="BusinessViews", File = "OrderView", SubMenuText="Zamówienia" },
+                            new SubMenuItemsData(){ SubMenuDirectory="BusinessViews", File = "DeliveryView", SubMenuText="Dostawy"}
                         }
-                    },
-                    new MenuItemsData(){ MenuText="Panel Administracyjny",
-                        SubMenuList=new List<SubMenuItemsData>{
+                    };
+                    menu.Add(menuItem);
+                }
+                if(role.Admin == true)
+                {
+                    MenuItemsData menuItem = new MenuItemsData()
+                    {
+                        MenuText = "Panel Administracyjny",
+                        SubMenuList = new List<SubMenuItemsData>{
                             new SubMenuItemsData(){ SubMenuDirectory="AdministrationViews", File = "RoleView", SubMenuText="Role" },
                             new SubMenuItemsData(){ SubMenuDirectory="AdministrationViews", File = "UserView", SubMenuText="Użytkownicy" }
                         }
-                    },
-                };
+                    };
+                    menu.Add(menuItem);
+                }
+                if(role.Documents == true)
+                {
+                    MenuItemsData menuItem = new MenuItemsData()
+                    {
+                        MenuText = "Dokumenty",
+                        SubMenuList = new List<SubMenuItemsData>
+                        {
+                            new SubMenuItemsData() { SubMenuDirectory = "DocumentViews", File = "IncomingView", SubMenuText = "Dokumenty Przychodzące"},
+                            new SubMenuItemsData() { SubMenuDirectory = "DocumentViews", File = "OutgoingView", SubMenuText = "Dokumenty Wychodzące"}
+                        }
+                    };
+                }
+                if (role.Reports == true)
+                {
+                    MenuItemsData menuItem = new MenuItemsData()
+                    {
+                        MenuText = "Raporty",
+                        SubMenuList = new List<SubMenuItemsData>
+                        {
+                            new SubMenuItemsData() { SubMenuDirectory = "ReportViews", File = "ReportView", SubMenuText = "Raporty"},
+                        }
+                    };
+                }
+                return menu;
             }
         }
 

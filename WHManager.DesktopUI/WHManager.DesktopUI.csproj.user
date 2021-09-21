@@ -14,6 +14,9 @@
     <Compile Update="Views\BusinessViews\BusinessFormViews\InvoiceFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\BusinessViews\DeliveryView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\BusinessViews\InvoiceView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -23,16 +26,13 @@
     <Compile Update="Views\ContractorsViews\ClientView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\DocumentViews\PWView.xaml.cs">
+    <Compile Update="Views\ContractorsViews\ProviderView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\DocumentViews\PZView.xaml.cs">
+    <Compile Update="Views\DocumentViews\IncomingDocumentView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\DocumentViews\RZView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\DocumentViews\WZView.xaml.cs">
+    <Compile Update="Views\DocumentViews\OutgoingDocumentView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\FormViews\LoginForm\LoginFormView.xaml.cs">
@@ -65,6 +65,9 @@
     <Compile Update="Views\FormViews\ManageUserFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\ReportViews\ReportView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\WarehouseViews\EmittedItemsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -88,6 +91,9 @@
     <Page Update="Views\BusinessViews\BusinessFormViews\InvoiceFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\BusinessViews\DeliveryView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\BusinessViews\InvoiceView.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -97,16 +103,13 @@
     <Page Update="Views\ContractorsViews\ClientView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\DocumentViews\PWView.xaml">
+    <Page Update="Views\ContractorsViews\ProviderView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\DocumentViews\PZView.xaml">
+    <Page Update="Views\DocumentViews\IncomingDocumentView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\DocumentViews\RZView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\DocumentViews\WZView.xaml">
+    <Page Update="Views\DocumentViews\OutgoingDocumentView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\FormViews\LoginForm\LoginFormView.xaml">
@@ -137,6 +140,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\FormViews\ManageUserFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ReportViews\ReportView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\WarehouseViews\EmittedItemsView.xaml">
