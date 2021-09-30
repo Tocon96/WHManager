@@ -16,10 +16,8 @@ namespace WHManager.BusinessLogic.Services
         public void AddRole(Role role)
         {
             try
-            {
-                string name = role.Name;
-                bool isadmin = role.Admin;
-                roleRepository.CreateNewRole(name, isadmin);
+            { 
+                roleRepository.CreateNewRole(role.Name, role.Admin, role.Business, role.Contractors, role.Documents, role.Warehouse, role.Reports);
             }
             catch
             {
@@ -52,7 +50,12 @@ namespace WHManager.BusinessLogic.Services
                     {
                         Id = role.Id,
                         Name = role.Name,
-                        Admin = role.Admin
+                        Admin = role.Admin,
+                        Business = role.Business,
+                        Warehouse = role.Warehouse,
+                        Contractors = role.Contractors,
+                        Reports = role.Reports,
+                        Documents = role.Documents
                     };
                     roles.Add(newRole);
                 }
@@ -76,7 +79,12 @@ namespace WHManager.BusinessLogic.Services
                     {
                         Id = role.Id,
                         Name = role.Name,
-                        Admin = role.Admin
+                        Admin = role.Admin,
+                        Business = role.Business,
+                        Warehouse = role.Warehouse,
+                        Contractors = role.Contractors,
+                        Reports = role.Reports,
+                        Documents = role.Documents
                     };
                     roles.Add(newRole);
                 }
@@ -100,7 +108,12 @@ namespace WHManager.BusinessLogic.Services
                     {
                         Id = role.Id,
                         Name = role.Name,
-                        Admin = role.Admin
+                        Admin = role.Admin,
+                        Business = role.Business,
+                        Warehouse = role.Warehouse,
+                        Contractors = role.Contractors,
+                        Reports = role.Reports,
+                        Documents = role.Documents
                     };
                     roles.Add(newRole);
                 }
@@ -134,10 +147,7 @@ namespace WHManager.BusinessLogic.Services
         {
             try
             {
-                int id = role.Id;
-                string name = role.Name;
-                bool isadmin = role.Admin;
-                roleRepository.UpdateRole(id, name, isadmin);
+                roleRepository.UpdateRole(role.Id, role.Name, role.Admin, role.Business, role.Contractors, role.Documents, role.Warehouse, role.Reports);
             }
             catch
             {

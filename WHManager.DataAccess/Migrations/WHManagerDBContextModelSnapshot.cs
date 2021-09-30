@@ -71,17 +71,11 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<DateTime>("DateReceived")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateSent")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("DeliveryId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ProviderId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("Source")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -139,7 +133,7 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<DateTime?>("DateOfEmission")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DeliveryId")
+                    b.Property<int>("DeliveryId")
                         .HasColumnType("int");
 
                     b.Property<int?>("IncomingDocumentId")
@@ -242,17 +236,11 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<int?>("ContrahentId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateReceived")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("DateSent")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("Source")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -461,7 +449,9 @@ namespace WHManager.DataAccess.Migrations
                 {
                     b.HasOne("WHManager.DataAccess.Models.Delivery", null)
                         .WithMany("Items")
-                        .HasForeignKey("DeliveryId");
+                        .HasForeignKey("DeliveryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WHManager.DataAccess.Models.IncomingDocument", "IncomingDocument")
                         .WithMany()

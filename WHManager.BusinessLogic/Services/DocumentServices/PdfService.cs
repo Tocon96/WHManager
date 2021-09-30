@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Web;
 using WHManager.BusinessLogic.Services.DocumentServices.Interfaces;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
 using System.IO;
 using WHManager.BusinessLogic.Services.Interfaces;
 using WHManager.BusinessLogic.Models;
@@ -23,6 +21,7 @@ namespace WHManager.BusinessLogic.Services.DocumentServices
 
                 IList<string> invoiceData = ProcessInvoice(invoice);
 
+                /*
                 Font bigFont = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1257, 14, Font.BOLD);
                 Font smallFont = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1257, 12, Font.NORMAL);
 
@@ -39,8 +38,8 @@ namespace WHManager.BusinessLogic.Services.DocumentServices
 
                 PdfPTable clientDataTable = CreateClientDataTable(invoiceData, bigFont, smallFont);
                 pdfDoc.Add(clientDataTable);
-
-                pdfDoc.Close();
+                */
+                //pdfDoc.Close();
                 stream.Close();
             }
         }
@@ -64,7 +63,7 @@ namespace WHManager.BusinessLogic.Services.DocumentServices
             
             return invoiceData;
         }
-
+        /*
         private void ApplyCellAttributes(PdfPTable table, PdfPCell cell, string type)
         {
             cell.Border = 0;
@@ -111,6 +110,7 @@ namespace WHManager.BusinessLogic.Services.DocumentServices
             ApplyCellAttributes(table, dateOrdered, "date");
 
             return table;
-        }
+        }{
+        */
     }
 }

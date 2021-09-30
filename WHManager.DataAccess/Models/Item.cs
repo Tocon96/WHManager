@@ -20,5 +20,6 @@ namespace WHManager.DataAccess.Models
         public Provider Provider { get; set; }
         public IncomingDocument IncomingDocument { get; set; }
         public OutgoingDocument OutgoingDocument { get; set; }
+        public int DeliveryId { get; set; }
     }
 }

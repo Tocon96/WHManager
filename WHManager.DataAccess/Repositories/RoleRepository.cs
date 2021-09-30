@@ -19,7 +19,7 @@ namespace WHManager.DataAccess.Repositories
             _contextFactory = contextFactory;
         }
 
-        public void CreateNewRole(string name, bool isadmin)
+        public void CreateNewRole(string name, bool isadmin, bool business, bool contractors, bool documents, bool warehouse, bool reports)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
@@ -28,7 +28,12 @@ namespace WHManager.DataAccess.Repositories
                     Role role = new Role
                     {
                         Name = name,
-                        Admin = isadmin
+                        Admin = isadmin,
+                        Business = business,
+                        Contractors = contractors,
+                        Documents = documents,
+                        Warehouse = warehouse,
+                        Reports = reports
                     };
                     context.Roles.Add(role);
                     context.SaveChanges();
@@ -105,7 +110,7 @@ namespace WHManager.DataAccess.Repositories
             
         }
 
-        public void UpdateRole(int id, string name, bool isadmin)
+        public void UpdateRole(int id, string name, bool isadmin, bool business, bool contractors, bool documents, bool warehouse, bool reports)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
@@ -114,6 +119,12 @@ namespace WHManager.DataAccess.Repositories
                     Role updatedRole = context.Roles.SingleOrDefault(x => x.Id == id);
                     updatedRole.Name = name;
                     updatedRole.Admin = isadmin;
+                    updatedRole.Business = business;
+                    updatedRole.Contractors = contractors;
+                    updatedRole.Documents = documents;
+                    updatedRole.Warehouse = warehouse;
+                    updatedRole.Reports = reports;
+
                     context.SaveChanges();
                 }
                 catch

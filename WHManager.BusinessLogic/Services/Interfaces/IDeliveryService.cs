@@ -7,8 +7,8 @@ namespace WHManager.BusinessLogic.Services.Interfaces
 {
     public interface IDeliveryService
     {
-        public int AddDelivery(Delivery delivery);
-        public int UpdateDelivery(Delivery delivery);
+        public int AddDelivery(Delivery delivery, List<DeliveryOrderTableContent> elements);
+        public int UpdateDelivery(Delivery delivery, List<DeliveryOrderTableContent> elements);
         public void DeleteDelivery(int id);
         public Delivery GetDelivery(int id);
         public IList<Delivery> GetDeliveries();

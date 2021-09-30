@@ -14,6 +14,6 @@ namespace WHManager.BusinessLogic.Services
         public IncomingDocument GetDocument(int id);
         public IList<IncomingDocument> GetDocuments();
         public IList<IncomingDocument> SearchDocuments(IList<string> criteria);
-
+        public void GeneratePdf(string fileName, Delivery delivery);
     }
 }

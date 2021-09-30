@@ -554,5 +554,17 @@ namespace WHManager.DataAccess.Repositories
 				throw new Exception("B³¹d wyszukiwania produktów: ");
 			}
 		}
+
+		public bool CheckIfProductInStock(int productId)
+		{
+			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+			{
+				if (context.Items.Any(x => x.Product.Id == productId))
+				{
+					return true;
+				}
+				return false;
+			}
+		}
     }	
 }

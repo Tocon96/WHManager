@@ -17,15 +17,13 @@ namespace WHManager.DataAccess.Repositories
             _contextFactory = contextFactory;
         }
 
-        public int AddDocument(bool source, int providerId, DateTime dateSent, DateTime dateReceived, int deliveryId)
+        public int AddDocument(int providerId, DateTime dateReceived, int deliveryId)
         {
             using(WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
                 IncomingDocument incomingDocument = new IncomingDocument()
                 {
-                    Source = source,
                     Provider = context.Provider.SingleOrDefault(x => x.Id == providerId),
-                    DateSent = dateSent,
                     DateReceived = dateReceived,
                     DeliveryId = deliveryId
                 };
@@ -54,6 +52,21 @@ namespace WHManager.DataAccess.Repositories
                 catch
                 {
                     throw new Exception("Błąd usuwania dokumentu.");
+                }
+            }
+        }
+
+        public IncomingDocument GetDocumentByDeliveryId(int deliveryId)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                try
+                {
+                    return context.IncomingDocuments.Include(x => x.Provider).SingleOrDefault(x => x.DeliveryId == deliveryId);
+                }
+                catch
+                {
+                    throw new Exception("Błąd wyszukiwania dokumentu.");
                 }
             }
         }
@@ -95,16 +108,14 @@ namespace WHManager.DataAccess.Repositories
             throw new NotImplementedException();
         }
 
-        public int UpdateDocument(int id, bool source, int providerId, DateTime dateSent, DateTime dateReceived, int deliveryId)
+        public int UpdateDocument(int id, int providerId, DateTime dateReceived, int deliveryId)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
                 try
                 {
                     IncomingDocument document = context.IncomingDocuments.SingleOrDefault(x => x.Id == id);
-                    document.Source = source;
                     document.Provider = context.Provider.SingleOrDefault(x => x.Id == providerId);
-                    document.DateSent = dateSent;
                     document.DateReceived = dateReceived;
                     document.DeliveryId = deliveryId;
                     return document.Id;

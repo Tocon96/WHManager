@@ -18,7 +18,7 @@ namespace WHManager.DataAccess.Repositories
 			_contextFactory = contextFactory;
 		}
 
-		public int AddItem(int product, DateTime dateofadmission, DateTime? dateofemission, bool isinstock)
+		public int AddItem(int product, DateTime dateofadmission, DateTime? dateofemission, bool isinstock, int incomingDocumentId, int deliveryId, int providerId)
 		{
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
@@ -29,7 +29,10 @@ namespace WHManager.DataAccess.Repositories
 						DateOfAdmission = dateofadmission,
 						DateOfEmission = dateofemission,
 						Product = context.Products.SingleOrDefault(x => x.Id == product),
-						IsInStock = isinstock
+						IsInStock = isinstock,
+						IncomingDocument = context.IncomingDocuments.SingleOrDefault(x => x.Id == incomingDocumentId),
+						DeliveryId = deliveryId,
+						Provider = context.Provider.SingleOrDefault(x=>x.Id == providerId)
 					};
                 
 					context.Items.Add(newItem);
@@ -42,7 +45,7 @@ namespace WHManager.DataAccess.Repositories
                 }
 			}
 		}
-
+		
 		public IEnumerable<Item> GetItems()
 		{
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
@@ -88,7 +91,7 @@ namespace WHManager.DataAccess.Repositories
 				}
 			}
 		}
-		public void UpdateItem(int id, int product, DateTime dateofadmission, DateTime? dateofemission, bool isinstock)
+		public void UpdateItem(int id, int product, DateTime dateofadmission, DateTime? dateofemission, bool isinstock, int incomingDocumentId, int? outgoingDocumentId, int deliveryId, int providerId, int? orderId)
 		{
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
@@ -99,6 +102,18 @@ namespace WHManager.DataAccess.Repositories
 					updatedItem.DateOfAdmission = dateofadmission;
 					updatedItem.DateOfEmission = dateofemission;
 					updatedItem.IsInStock = isinstock;
+					if(outgoingDocumentId != null)
+                    {
+						updatedItem.OutgoingDocument = context.OutgoingDocuments.SingleOrDefault(x => x.Id == outgoingDocumentId);
+
+					}
+					if(orderId != null)
+                    {
+						updatedItem.Order = context.Orders.SingleOrDefault(x => x.Id == orderId);
+                    }
+					updatedItem.Provider = context.Provider.SingleOrDefault(x => x.Id == providerId);
+					updatedItem.IncomingDocument = context.IncomingDocuments.SingleOrDefault(x => x.Id == incomingDocumentId);
+					updatedItem.DeliveryId = deliveryId;
 					context.SaveChanges();
 				}
                 catch

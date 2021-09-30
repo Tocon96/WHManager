@@ -13,15 +13,48 @@ namespace WHManager.BusinessLogic.Services
     {
         IDeliveryRepository deliveryRepository = new DeliveryRepository(new DataAccess.WHManagerDBContextFactory());
         IItemService itemService = new ItemService();
-        IProviderService providerService = new ProviderService(); 
-        public int AddDelivery(Delivery delivery)
+        IProductService productService = new ProductService();
+        IProviderService providerService = new ProviderService();
+        IIncomingDocumentService documentService = new IncomingDocumentService();
+        public int AddDelivery(Delivery delivery, List<DeliveryOrderTableContent> elements)
         {
-            IList<int> items = new List<int>();
-            foreach(Item item in delivery.Items)
+            IList<int> itemsIds = new List<int>();
+            int deliveryId = deliveryRepository.AddDelivery(delivery.Provider.Id, delivery.DateOfArrival);
+            IncomingDocument document = new IncomingDocument
             {
-                items.Add(item.Id);
+                DateReceived = delivery.DateOfArrival,
+                DeliveryId = deliveryId,
+                Provider = providerService.GetProvider(delivery.Provider.Id)
+            };
+            int documentId = documentService.AddDocument(document); 
+            foreach (DeliveryOrderTableContent element in elements)
+            {
+                IList<Item> items = new List<Item>();
+                IList<int> tempIds = new List<int>();
+
+                for(int i = 0; i<element.Count; i++)
+                {
+                    Item item = new Item
+                    {
+                        Product = productService.GetProduct(element.Id)[0],
+                        DateOfAdmission = delivery.DateOfArrival,
+                        DateOfEmission = null,
+                        Provider = providerService.GetProvider(delivery.Provider.Id),
+                        DeliveryId = deliveryId,
+                        IncomingDocument = documentService.GetDocument(documentId),
+                        IsInStock = true
+                    };
+                    items.Add(item);
+                }
+                tempIds = itemService.CreateNewItems(items.ToList());
+                foreach(int tempId in tempIds)
+                {
+                    itemsIds.Add(tempId);
+                }
             }
-            return deliveryRepository.AddDelivery(delivery.Provider.Id, delivery.DateOfArrival, items);
+            deliveryRepository.UpdateDelivery(deliveryId, delivery.Provider.Id, delivery.DateOfArrival, itemsIds);
+
+            return deliveryId;
         }
 
         public void DeleteDelivery(int id)
@@ -77,7 +110,7 @@ namespace WHManager.BusinessLogic.Services
             throw new NotImplementedException();
         }
 
-        public int UpdateDelivery(Delivery delivery)
+        public int UpdateDelivery(Delivery delivery, List<DeliveryOrderTableContent> elements)
         {
             IList<int> items = new List<int>();
             foreach (Item item in delivery.Items)

@@ -10,9 +10,7 @@ namespace WHManager.BusinessLogic.Services
 {
     public class ProviderService : IProviderService
     {
-        private IProviderRepository providerRepository = new ProviderRepository(new DataAccess.WHManagerDBContextFactory());
-        private IIncomingDocumentService incomingDocumentService = new IncomingDocumentService();
-        private IItemService itemService = new ItemService();
+        private readonly IProviderRepository providerRepository = new ProviderRepository(new DataAccess.WHManagerDBContextFactory());
         public int CreateProvider(Provider provider)
         {
             return providerRepository.AddProvider(provider.Name, provider.Nip, provider.PhoneNumber);
@@ -23,31 +21,18 @@ namespace WHManager.BusinessLogic.Services
             providerRepository.DeleteProvider(id);
         }
 
-        public IList<Provider> GetAllProviders()
+        public IList<Provider> GetAllProviders() 
         {
             var providerEnumerable = providerRepository.GetAllProviders();
             IList<Provider> providerList = new List<Provider>();
             foreach(var provider in providerEnumerable)
             {
-                IList<Item> itemsList = new List<Item>();
-                IList<IncomingDocument> documentList = new List<IncomingDocument>();
-                foreach (var item in provider.Items)
-                {
-                    itemsList.Add(itemService.GetItem(item.Id));
-                }
-                
-                foreach (var incomingDocument in provider.IncomingDocuments)
-                {
-                    documentList.Add(incomingDocumentService.GetDocument(incomingDocument.Id));
-                }
                 Provider newProvider = new Provider
                 {
                     Id = provider.Id,
                     Name = provider.Name,
                     Nip = provider.Nip,
                     PhoneNumber = provider.PhoneNumber,
-                    Items = itemsList,
-                    IncomingDocuments = documentList
                 };
                 providerList.Add(newProvider);
             }
@@ -57,25 +42,12 @@ namespace WHManager.BusinessLogic.Services
         public Provider GetProvider(int id)
         {
             var provider = providerRepository.GetProviderById(id);
-            IList<Item> itemsList = new List<Item>();
-            IList<IncomingDocument> documentList = new List<IncomingDocument>();
-            foreach (var item in provider.Items)
-            {
-                itemsList.Add(itemService.GetItem(item.Id));
-            }
-
-            foreach (var incomingDocument in provider.IncomingDocuments)
-            {
-                documentList.Add(incomingDocumentService.GetDocument(incomingDocument.Id));
-            }
             Provider newProvider = new Provider
             {
                 Id = provider.Id,
                 Name = provider.Name,
                 Nip = provider.Nip,
                 PhoneNumber = provider.PhoneNumber,
-                Items = itemsList,
-                IncomingDocuments = documentList
             };
             return newProvider;
         }

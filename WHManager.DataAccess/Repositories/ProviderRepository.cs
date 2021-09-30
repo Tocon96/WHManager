@@ -15,6 +15,7 @@ namespace WHManager.DataAccess.Repositories
         {
             _contextFactory = contextFactory;
         }
+
         public int AddProvider(string name, double? nip, string phonenumber)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())

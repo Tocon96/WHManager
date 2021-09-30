@@ -14,18 +14,23 @@ namespace WHManager.BusinessLogic.Services
     {
         private readonly IItemRepository _itemRepository = new ItemRepository(new DataAccess.WHManagerDBContextFactory());
         private IProductService productService = new ProductService();
-        public List<int> CreateNewItems(List<Item> items)
+        public IList<int> CreateNewItems(List<Item> items)
         {
             try
             {
-                List<int> itemIds = new List<int>();
+                IList<int> itemIds = new List<int>();
                 foreach (Item item in items)
                 {
                     int productId = item.Product.Id;
                     DateTime dateofadmission = item.DateOfAdmission.Date;
-                    DateTime? dateofemission = item.DateOfEmission.Value.Date;
+                    DateTime? dateofemission = null;
+                    if (item.DateOfEmission != null)
+                    {
+                        dateofemission = item.DateOfEmission.Value.Date;
+                    }
                     bool isinstock = item.IsInStock;
-                    itemIds.Add(_itemRepository.AddItem(productId, dateofadmission, dateofemission, isinstock));
+                    int id = _itemRepository.AddItem(productId, dateofadmission, dateofemission, isinstock, item.IncomingDocument.Id, item.DeliveryId, item.Provider.Id);
+                    itemIds.Add(id);
                 }
                 IList<Product> prodList = productService.GetProduct(items[0].Product.Id);
                 Product product = prodList[0];
@@ -37,9 +42,9 @@ namespace WHManager.BusinessLogic.Services
                 }
                 return itemIds;
             }
-            catch
+            catch(Exception e)
             {
-                throw new Exception("B³¹d dodawania przedmiotu: ");
+                throw new Exception("B³¹d dodawania przedmiotu: " + e);
             }      
         }
 
@@ -111,16 +116,26 @@ namespace WHManager.BusinessLogic.Services
                 int product = item.Product.Id;
                 DateTime dateofadmission = item.DateOfAdmission.Date;
                 bool isinstock = item.IsInStock;
+                DateTime? dateofemission = null;
+                int providerId = item.Provider.Id;
+                int deliveryId = item.DeliveryId;
+                int incomingDocumentId = item.IncomingDocument.Id;
+                int? orderId = null;
+                int? outgoingDocumentId = null;
                 if (item.DateOfEmission.HasValue)
                 {
-                    DateTime? dateofemission = item.DateOfEmission.Value.Date;
-                    _itemRepository.UpdateItem(id, product, dateofadmission, dateofemission, isinstock);
+                    dateofemission = item.DateOfEmission.Value.Date;
+
                 }
-                else
+                if (item.Order != null)
                 {
-                    DateTime? dateofemission = null;
-                    _itemRepository.UpdateItem(id, product, dateofadmission, dateofemission, isinstock);
+                    orderId = item.Order.Id;
                 }
+                if(item.OutgoingDocument != null)
+                {
+                    outgoingDocumentId = item.OutgoingDocument.Id;
+                }
+                _itemRepository.UpdateItem(id, product, dateofadmission, dateofemission, isinstock, incomingDocumentId, outgoingDocumentId, deliveryId, providerId, orderId);
             }
             catch
             {

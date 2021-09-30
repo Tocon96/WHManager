@@ -17,7 +17,7 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
 
         public int AddDocument(OutgoingDocument document)
         {
-            return outgoingDocumentRepository.AddDocument(document.Source, document.Contrahent.Id, document.Order.Id, document.Invoice.Id, document.DateSent, document.DateReceived);
+            return outgoingDocumentRepository.AddDocument(document.Contrahent.Id, document.Order.Id, document.Invoice.Id, document.DateSent);
         }
 
         public void DeleteDocument(int id)
@@ -31,12 +31,9 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
             OutgoingDocument outgoingDocument = new OutgoingDocument()
             {
                 Id = document.Id,
-                Source = document.Source,
                 Contrahent = clientService.GetClient(document.Contrahent.Id)[0],
                 Order = orderService.GetOrderById(document.Order.Id),
                 Invoice = invoiceService.GetInvoiceById(document.Invoice.Id),
-                DateReceived = document.DateReceived,
-                DateSent = document.DateSent
             };
             return outgoingDocument;
 
@@ -51,12 +48,9 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
                 OutgoingDocument newDocument = new OutgoingDocument
                 {
                     Id = document.Id,
-                    Source = document.Source,
                     Contrahent = clientService.GetClient(document.Contrahent.Id)[0],
                     Order = orderService.GetOrderById(document.Order.Id),
                     Invoice = invoiceService.GetInvoiceById(document.Invoice.Id),
-                    DateReceived = document.DateReceived,
-                    DateSent = document.DateSent
                 };
                 documentsList.Add(newDocument);
             }
@@ -71,7 +65,7 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
 
         public int UpdateDocumnet(OutgoingDocument document)
         {
-            return outgoingDocumentRepository.UpdateDocument(document.Id, document.Source, document.Contrahent.Id, document.Order.Id, document.Invoice.Id, document.DateSent, document.DateReceived);
+            return outgoingDocumentRepository.UpdateDocument(document.Id, document.Contrahent.Id, document.Order.Id, document.Invoice.Id, document.DateSent);
         }
     }
 }

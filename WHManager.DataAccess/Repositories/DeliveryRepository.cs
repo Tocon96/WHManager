@@ -18,28 +18,14 @@ namespace WHManager.DataAccess.Repositories
             _contextFactory = contextFactory;
         }
 
-        public int AddDelivery(int providerId, DateTime date, IList<int> items)
+        public int AddDelivery(int providerId, DateTime date)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                ICollection<Item> itemCollection = new ObservableCollection<Item>();
-                foreach(int id in items)
-                {
-                    try
-                    {
-                        Item item = context.Items.SingleOrDefault(x => x.Id == id);
-                        itemCollection.Add(item);
-                    }
-                    catch
-                    {
-                        throw new Exception("Błąd wyszukiwania przedmiotów w dostawach.");
-                    }
-                }
                 Delivery delivery = new Delivery
                 {
                     Provider = context.Provider.SingleOrDefault(x => x.Id == providerId),
-                    DateOfArrival = date,
-                    Items = itemCollection
+                    DateOfArrival = date
                 };
                 try
                 {

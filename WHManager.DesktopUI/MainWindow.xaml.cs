@@ -56,7 +56,8 @@ namespace WHManager.DesktopUI
                         MenuText = "Kontrahenci",
                         SubMenuList = new List<SubMenuItemsData>{
                             new SubMenuItemsData(){ SubMenuDirectory="ContractorsViews", File = "ClientView", SubMenuText="Klienci" },
-                            new SubMenuItemsData(){ SubMenuDirectory="ContractorsViews", File = "ManufacturerView", SubMenuText="Producenci" }
+                            new SubMenuItemsData(){ SubMenuDirectory="ContractorsViews", File = "ManufacturerView", SubMenuText="Producenci" },
+                            new SubMenuItemsData(){ SubMenuDirectory="ContractorsViews", File = "ProviderView", SubMenuText="Dostawcy" }
                         }
                     };
                     menu.Add(menuItem);
@@ -74,18 +75,6 @@ namespace WHManager.DesktopUI
                     };
                     menu.Add(menuItem);
                 }
-                if(role.Admin == true)
-                {
-                    MenuItemsData menuItem = new MenuItemsData()
-                    {
-                        MenuText = "Panel Administracyjny",
-                        SubMenuList = new List<SubMenuItemsData>{
-                            new SubMenuItemsData(){ SubMenuDirectory="AdministrationViews", File = "RoleView", SubMenuText="Role" },
-                            new SubMenuItemsData(){ SubMenuDirectory="AdministrationViews", File = "UserView", SubMenuText="Użytkownicy" }
-                        }
-                    };
-                    menu.Add(menuItem);
-                }
                 if(role.Documents == true)
                 {
                     MenuItemsData menuItem = new MenuItemsData()
@@ -93,10 +82,11 @@ namespace WHManager.DesktopUI
                         MenuText = "Dokumenty",
                         SubMenuList = new List<SubMenuItemsData>
                         {
-                            new SubMenuItemsData() { SubMenuDirectory = "DocumentViews", File = "IncomingView", SubMenuText = "Dokumenty Przychodzące"},
-                            new SubMenuItemsData() { SubMenuDirectory = "DocumentViews", File = "OutgoingView", SubMenuText = "Dokumenty Wychodzące"}
+                            new SubMenuItemsData() { SubMenuDirectory = "DocumentViews", File = "IncomingDocumentView", SubMenuText = "Dokumenty Przychodzące"},
+                            new SubMenuItemsData() { SubMenuDirectory = "DocumentViews", File = "OutgoingDocumentView", SubMenuText = "Dokumenty Wychodzące"}
                         }
                     };
+                    menu.Add(menuItem);
                 }
                 if (role.Reports == true)
                 {
@@ -108,6 +98,19 @@ namespace WHManager.DesktopUI
                             new SubMenuItemsData() { SubMenuDirectory = "ReportViews", File = "ReportView", SubMenuText = "Raporty"},
                         }
                     };
+                    menu.Add(menuItem);
+                }
+                if (role.Admin == true)
+                {
+                    MenuItemsData menuItem = new MenuItemsData()
+                    {
+                        MenuText = "Panel Administracyjny",
+                        SubMenuList = new List<SubMenuItemsData>{
+                            new SubMenuItemsData(){ SubMenuDirectory="AdministrationViews", File = "RoleView", SubMenuText="Role" },
+                            new SubMenuItemsData(){ SubMenuDirectory="AdministrationViews", File = "UserView", SubMenuText="Użytkownicy" }
+                        }
+                    };
+                    menu.Add(menuItem);
                 }
                 return menu;
             }

@@ -1,0 +1,158 @@
+﻿<Window x:Class="WHManager.DesktopUI.Views.FormViews.ManageDeliveryFormView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WHManager.DesktopUI.Views.FormViews"
+        mc:Ignorable="d"
+        Title="" SizeToContent="WidthAndHeight" ResizeMode="NoResize" WindowStyle="None">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Background" Value="#1976d2"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="TextAlignment" Value="Center"></Setter>
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Arrow" />
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Silver"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ButtonGridStyle" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Arrow" />
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Silver"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="DataGridStyle" TargetType="DataGrid">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="ColumnWidth" Value="*"/>
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style x:Key="Body_Content_DataGrid_Centering"
+        TargetType="{x:Type DataGridCell}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                        <Grid Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Center" />
+                            <ContentPresenter HorizontalAlignment="Center"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="5"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <!--TextBlocks-->
+        <TextBlock x:Name="textBlockManageDelivery" Grid.ColumnSpan="4" Grid.Row="0" Height="30" FontSize="18">Dodaj Nowe Zamówienie</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">Data złożenia</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">Dostawca</TextBlock>
+        <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3">Produkt</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3">Ilość</TextBlock>
+        <!--Datepicker-->
+        <DatePicker Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" x:Name="datepickerDeliveryDate"></DatePicker>
+        <!--ComboBox-->
+        <ComboBox x:Name="comboBoxDeliveriesProviders" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" DisplayMemberPath="Name"></ComboBox>
+        <ComboBox x:Name="comboBoxDeliveriesProducts" Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="3" DisplayMemberPath="Name" ></ComboBox>
+        <!--TextBox-->
+        <TextBox x:Name="textBoxDeliveryProductCount" Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="3"></TextBox>
+        <!--Buttons-->
+        <Button Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="9" Click="buttonAddItemsToDelivery" Style="{StaticResource ButtonStyle}">Dodaj przedmioty</Button>
+        <Button Grid.Column="0" Grid.Row="11" Click="buttonDeliveriesCancel" Width="150" Style="{StaticResource ButtonStyle}">Anuluj</Button>
+        <StackPanel Grid.Row="11" Grid.Column="1" Orientation="Horizontal">
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+        </StackPanel>
+        <Button Grid.Column="2" Grid.Row="11" Click="buttonDeliveriesConfirm" Width="150" Style="{StaticResource ButtonStyle}">Zatwierdź</Button>
+        <!--Datagrid-->
+        <DataGrid Grid.Row="1" 
+                  Grid.RowSpan="11" 
+                  Grid.Column="3" 
+                  SelectionMode="Single" 
+                  Name="gridItems" 
+                  AutoGenerateColumns="False" 
+                  CanUserAddRows="False" 
+                  IsReadOnly="True"
+                  ScrollViewer.CanContentScroll="True" 
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  Height="215" VerticalAlignment="Top">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Produkt" Width="150" Binding="{Binding Name}" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Ilość" Width="150" Binding="{Binding Count}" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"></DataGridTextColumn>
+                <DataGridTemplateColumn Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource ButtonGridStyle}" Click="DeleteItemsClick">Usuń</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

@@ -62,9 +62,9 @@
               "target": "Package",
               "version": "[7.0.0, )"
             },
-            "iTextSharp": {
+            "itext7": {
               "target": "Package",
-              "version": "[5.5.13.2, )"
+              "version": "[7.1.16, )"
             }
           },
           "imports": [

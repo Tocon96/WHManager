@@ -21,6 +21,7 @@ namespace WHManager.DataAccess.Repositories.Interfaces
         IEnumerable<Product> GetProductsByPriceSell(decimal? priceMin = null, decimal? priceMax = null);
         IEnumerable<Product> GetProductsByPriceBuy(decimal? priceMin = null, decimal? priceMax = null);
         IEnumerable<Product> GetProductsInStock();
+        bool CheckIfProductInStock(int productId);
         IEnumerable<Product> SearchProducts(List<string> criteria);
     }
 }

@@ -106,8 +106,8 @@ namespace WHManager.DataAccess.Repositories
                 try
                 {
                     IEnumerable<Order> orders = context.Orders.Include(c => c.Client)
-                                                                .Include(i => i.Items)
-                                                                .ToList();
+                                                              .Include(i => i.Items)
+                                                              .ToList();
 
                     return orders;
                 }

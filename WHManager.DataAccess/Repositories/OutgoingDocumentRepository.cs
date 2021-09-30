@@ -16,18 +16,16 @@ namespace WHManager.DataAccess.Repositories
         {
             _contextFactory = contextFactory;
         }
-        public int AddDocument(bool source, int clientId, int orderId, int invoiceId, DateTime dateSent, DateTime dateReceived)
+        public int AddDocument(int clientId, int orderId, int invoiceId, DateTime dateSent)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
                 OutgoingDocument outgoingDocument = new OutgoingDocument()
                 {
-                    Source = source,
                     Contrahent = context.Clients.SingleOrDefault(x => x.Id == clientId),
                     Order = context.Orders.SingleOrDefault(x => x.Id == orderId),
                     Invoice = context.Invoices.SingleOrDefault(x => x.Id == invoiceId),
                     DateSent = dateSent,
-                    DateReceived = dateReceived,
                 };
                 try
                 {
@@ -104,19 +102,17 @@ namespace WHManager.DataAccess.Repositories
             throw new NotImplementedException();
         }
 
-        public int UpdateDocument(int id, bool source, int clientId, int orderId, int invoiceId, DateTime dateSent, DateTime dateReceived)
+        public int UpdateDocument(int id, int clientId, int orderId, int invoiceId, DateTime dateSent)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
                 try
                 {
                     OutgoingDocument document = context.OutgoingDocuments.SingleOrDefault(x => x.Id == id);
-                    document.Source = source;
                     document.Contrahent = context.Clients.SingleOrDefault(x => x.Id == clientId);
                     document.Order = context.Orders.SingleOrDefault(x => x.Id == orderId);
                     document.Invoice = context.Invoices.SingleOrDefault(x => x.Id == invoiceId);
                     document.DateSent = dateSent;
-                    document.DateReceived = dateReceived;
                     return document.Id;
                 }
                 catch

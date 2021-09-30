@@ -8,7 +8,7 @@ namespace WHManager.BusinessLogic.Services.Interfaces
 {
     public interface IItemService
     {
-        List<int> CreateNewItems(List<Item> items);
+        IList<int> CreateNewItems(List<Item> items);
         IList<Item> GetItems();
         Item GetItem(int id);
         void UpdateItem(Item item);

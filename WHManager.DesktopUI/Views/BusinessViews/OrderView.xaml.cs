@@ -123,9 +123,14 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             {
                 if (gridOrders.SelectedItem != null)
                 {
-                    IOrderService orderService = new OrderService();
-                    Order order = gridOrders.SelectedItem as Order;
-                    orderService.DeleteOrder(order.Id);
+                    MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz usunąć wybrane zamówienia?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+                    if (messageBoxResult == MessageBoxResult.Yes)
+                    {
+                        IOrderService orderService = new OrderService();
+                        Order order = gridOrders.SelectedItem as Order;
+                        orderService.DeleteOrder(order.Id);
+                    }
+                    
                 }
             }
             catch (Exception x)
@@ -140,15 +145,13 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             {
                 List<Order> selectedOrders = gridOrders.SelectedItems.Cast<Order>().ToList();
                 MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz usunąć wybrane zamówienia?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+                if (messageBoxResult == MessageBoxResult.Yes)
                 {
-                    if (messageBoxResult == MessageBoxResult.Yes)
+                    foreach (Order order in selectedOrders)
                     {
-                        foreach (Order order in selectedOrders)
-                        {
-                            orderService.DeleteOrder(order.Id);
-                        }
-                        gridOrders.ItemsSource = LoadData();
+                        orderService.DeleteOrder(order.Id);
                     }
+                    gridOrders.ItemsSource = LoadData();
                 }
 
             }

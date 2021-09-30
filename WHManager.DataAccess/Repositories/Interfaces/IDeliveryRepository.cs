@@ -7,7 +7,7 @@ namespace WHManager.DataAccess.Repositories.Interfaces
 {
     public interface IDeliveryRepository
     {
-        public int AddDelivery(int providerId, DateTime date, IList<int> items);
+        public int AddDelivery(int providerId, DateTime date);
         public int UpdateDelivery(int id, int providerId, DateTime date, IList<int> items);
         public void DeleteDelivery(int id);
         public Delivery GetDelivery(int id);
