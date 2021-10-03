@@ -17,6 +17,7 @@ using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
 using WHManager.BusinessLogic.Services.Interfaces;
 using WHManager.DesktopUI.Views.FormViews;
+using WHManager.DesktopUI.Views.WarehouseViews;
 
 namespace WHManager.DesktopUI.Views.BusinessViews
 {
@@ -35,6 +36,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
         {
             InitializeComponent();
             gridDeliveries.ItemsSource = LoadData();
+            FillComboBox();
         }
 
         private ObservableCollection<Delivery> LoadData()
@@ -42,6 +44,16 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             IList<Delivery> deliveries = GetDeliveries();
             Deliveries = new ObservableCollection<Delivery>(deliveries);
             return Deliveries;
+        }
+
+        private void FillComboBox()
+        {
+            IList<string> comboBox = new List<string>();
+            comboBox.Add("Wszystkie");
+            comboBox.Add("Zrealizowane");
+            comboBox.Add("Niezrealizowane");
+            comboBoxRealized.ItemsSource = comboBox;
+            comboBoxRealized.SelectedIndex = 0;
         }
 
         private IList<Delivery> GetDeliveries()
@@ -74,8 +86,49 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             IList<string> criteria = new List<string>();
             criteria.Add(textBoxDeliveryId.Text.ToString());
             criteria.Add(textBoxProviderName.Text.ToString());
-            criteria.Add(datePickerEarlierDate.SelectedDate.Value.ToShortDateString());
-            criteria.Add(datePickerLaterDate.SelectedDate.Value.ToShortDateString());
+            if (datePickerEarlierDateOrdered.SelectedDate.HasValue)
+            {
+                criteria.Add(datePickerEarlierDateOrdered.SelectedDate.Value.ToShortDateString());
+            }
+            else
+            {
+                criteria.Add(null);
+            }
+            if (datePickerLaterDateOrdered.SelectedDate.HasValue)
+            {
+                criteria.Add(datePickerLaterDateOrdered.SelectedDate.Value.ToShortDateString());
+            }
+            else
+            {
+                criteria.Add(null);
+            }
+            if (datePickerEarlierDateRealized.SelectedDate.HasValue)
+            {
+                criteria.Add(datePickerEarlierDateRealized.SelectedDate.Value.ToShortDateString());
+            }
+            else
+            {
+                criteria.Add(null);
+            }
+            if (datePickerLaterDateRealized.SelectedDate.HasValue)
+            {
+                criteria.Add(datePickerLaterDateRealized.SelectedDate.Value.ToShortDateString());
+            }
+            else
+            {
+                criteria.Add(null);
+            }
+            if(comboBoxRealized.SelectedIndex == 0)
+            {
+                criteria.Add(null);
+            }
+            else if(comboBoxRealized.SelectedIndex == 1)
+            {
+                criteria.Add("1");
+            }else if(comboBoxRealized.SelectedIndex == 2)
+            {
+                criteria.Add("0");
+            }
             IList<Delivery> deliveries = deliveryService.SearchDeliveries(criteria);
             return deliveries;
         }
@@ -89,8 +142,11 @@ namespace WHManager.DesktopUI.Views.BusinessViews
         {
             textBoxDeliveryId.Text = "";
             textBoxProviderName.Text = "";
-            datePickerEarlierDate.SelectedDate = null;
-            datePickerLaterDate.SelectedDate = null;
+            datePickerEarlierDateOrdered.SelectedDate = null;
+            datePickerLaterDateOrdered.SelectedDate = null;
+            datePickerEarlierDateRealized.SelectedDate = null;
+            datePickerLaterDateRealized.SelectedDate = null;
+            comboBoxRealized.SelectedIndex = 0;
         }
 
         private void DeleteDeliveryClick(object sender, RoutedEventArgs e)
@@ -127,21 +183,69 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             }
         }
 
-        private void gridProductDisplayItems(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void gridProductGeneratePz(object sender, RoutedEventArgs e)
+        private void gridDeliveryDisplayItems(object sender, RoutedEventArgs e)
         {
             if(gridDeliveries.SelectedItem != null)
             {
                 Delivery delivery = gridDeliveries.SelectedItem as Delivery;
-                SaveFileDialog svg = new SaveFileDialog();
-                svg.Filter = "Documents (*.pdf)|*.pdf|All files (*.*)|*.*";
-                svg.ShowDialog();
-                incomingDocumentService.GeneratePdf(svg.FileName, delivery);
+                if (delivery.Realized == false)
+                {
+                    MessageBox.Show("Zamówienie musi zostać zrealizowane przed wyświetleniem elementów.");
+                }
+                else
+                {
+                    DeliveryItemsView itemsView = new DeliveryItemsView(delivery);
+                    itemsView.Show();
+                }
             }
+        }
+
+        private void gridDeliveryGeneratePz(object sender, RoutedEventArgs e)
+        {
+            if(gridDeliveries.SelectedItem != null)
+            {
+                Delivery delivery = gridDeliveries.SelectedItem as Delivery;
+                if(delivery.Realized == false)
+                {
+                    MessageBox.Show("Zamówienie musi zostać zrealizowane przed wygenerowaniem dokumentu.");
+                }
+                else
+                {
+                    SaveFileDialog svg = new SaveFileDialog();
+                    svg.Filter = "Documents (*.pdf)|*.pdf|All files (*.*)|*.*";
+                    Nullable<bool> result = svg.ShowDialog();
+                    if (result == true)
+                    {
+                        incomingDocumentService.GeneratePdf(svg.FileName, delivery);
+                    }
+                }
+            }
+        }
+
+        private void gridDeliveryRealizeDelivery(object sender, RoutedEventArgs e)
+        {
+            if (gridDeliveries.SelectedItem != null)
+            { 
+                Delivery delivery = gridDeliveries.SelectedItem as Delivery;
+                if(delivery.Realized == true)
+                {
+                    MessageBox.Show("Zamówienie nie może zostać powtórnie zrealizowane");
+                }
+                else
+                {
+                    MessageBoxResult messageBoxResult = MessageBox.Show("Zatwierdzenie dostawy zablokuje możliwość edycji i usunięcia zamówienia oraz umożliwi wygenerowanie dokumentu przyjęcia zewnętrznego.", "Potwierdź zatwierdzenie", MessageBoxButton.YesNo);
+                    {
+                        if (messageBoxResult == MessageBoxResult.Yes)
+                        {
+                            deliveryService.RealizeDelivery(delivery);
+                            this.gridDeliveries.Items.Refresh();
+                        }
+                    }
+
+                }
+                
+            }
+
         }
     }
 }

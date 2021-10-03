@@ -48,17 +48,47 @@ namespace WHManager.DataAccess.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<DateTime>("DateOfArrival")
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateRealized")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("ProviderId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Realized")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProviderId");
 
                     b.ToTable("Deliveries");
+                });
+
+            modelBuilder.Entity("WHManager.DataAccess.Models.DeliveryOrderElements", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("DeliveryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Origin")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DeliveryElements");
                 });
 
             modelBuilder.Entity("WHManager.DataAccess.Models.IncomingDocument", b =>

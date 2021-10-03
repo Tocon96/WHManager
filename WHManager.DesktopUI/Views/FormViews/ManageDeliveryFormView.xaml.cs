@@ -34,6 +34,7 @@ namespace WHManager.DesktopUI.Views.FormViews
         private IList<Provider> Providers { get; set; }
 
         private DeliveryView DeliveryView {get; set;}
+        private Delivery Delivery { get; set; }
 
         public ManageDeliveryFormView(DeliveryView deliveryView)
         {
@@ -43,6 +44,15 @@ namespace WHManager.DesktopUI.Views.FormViews
             SelectItems();
         }
 
+        public ManageDeliveryFormView(DeliveryView deliveryView, Delivery delivery)
+        {
+            InitializeComponent();
+            textBlockManageDelivery.Text = "Aktualizuj zamówienie o ID: " + delivery.Id;
+            DeliveryView = deliveryView;
+            Delivery = delivery;
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            SelectItems();
+        }
 
         private void SelectItems()
         {
@@ -62,11 +72,17 @@ namespace WHManager.DesktopUI.Views.FormViews
             {
                 comboBoxDeliveriesProviders.SelectedItem = Providers[0];
             }
+            if(Delivery != null)
+            {
+                FillTableForEditing();
+            }
         }
 
-        public ManageDeliveryFormView(DeliveryView deliveryView, Delivery delivery)
+        private void FillTableForEditing()
         {
-            InitializeComponent();
+            datepickerDeliveryDate.SelectedDate = Delivery.DateCreated;
+            ElementsList = deliveryService.GetElements(Delivery.Id);
+            gridItems.ItemsSource = ElementsList;
         }
 
         private void buttonDeliveriesCancel(object sender, RoutedEventArgs e)
@@ -82,19 +98,40 @@ namespace WHManager.DesktopUI.Views.FormViews
 
         private void buttonDeliveriesConfirm(object sender, RoutedEventArgs e)
         {
-            if (!ElementsList.Any())
+            if(Delivery != null)
             {
-                MessageBox.Show("Dodaj elementy do dostawy.");
-            }
-            else if (datepickerDeliveryDate.SelectedDate == null)
-            {
-                MessageBox.Show("Wybierz datę");
+                if (!ElementsList.Any())
+                {
+                    MessageBox.Show("Dodaj elementy do dostawy.");
+                }
+                else if (datepickerDeliveryDate.SelectedDate == null)
+                {
+                    MessageBox.Show("Wybierz datę");
+                }
+                else
+                {
+                    UpdateDelivery();
+                    DialogResult = true;
+                    this.Close();
+                }
+
             }
             else
             {
-                AddDelivery();
-                DialogResult = true;
-                this.Close();
+                if (!ElementsList.Any())
+                {
+                    MessageBox.Show("Dodaj elementy do dostawy.");
+                }
+                else if (datepickerDeliveryDate.SelectedDate == null)
+                {
+                    MessageBox.Show("Wybierz datę");
+                }
+                else
+                {
+                    AddDelivery();
+                    DialogResult = true;
+                    this.Close();
+                }
             }
         }
 
@@ -110,25 +147,34 @@ namespace WHManager.DesktopUI.Views.FormViews
             if (ElementsList.Count == 0)
             {
                 CreateNewTableContent(product);
+                EmptyInputs();
                 return true;
             }
             foreach (DeliveryOrderTableContent existingContent in ElementsList)
             {
-                if (product.Id == existingContent.Id)
+                if (product.Id == existingContent.ProductId)
                 {
                     existingContent.Count = double.Parse(textBoxDeliveryProductCount.Text);
                     return true;
                 }
             }
             CreateNewTableContent(product);
+            EmptyInputs();
             return true;
+        }
+
+        private void EmptyInputs()
+        {
+            comboBoxDeliveriesProducts.SelectedItem = Products[0];
+            comboBoxDeliveriesProviders.SelectedItem = Providers[0];
+            textBoxDeliveryProductCount.Text = "";
         }
 
         private void CreateNewTableContent(Product product)
         {
             if(double.TryParse(textBoxDeliveryProductCount.Text, out double result))
             {
-                DeliveryOrderTableContent content = new DeliveryOrderTableContent(product.Id, product.Name, result);
+                DeliveryOrderTableContent content = new DeliveryOrderTableContent(null, product.Id, product.Name, result);
                 ElementsList.Add(content);
             }
             else
@@ -149,10 +195,15 @@ namespace WHManager.DesktopUI.Views.FormViews
         {
             Delivery delivery = new Delivery
             {
-                DateOfArrival = (DateTime)datepickerDeliveryDate.SelectedDate,
+                DateCreated = datepickerDeliveryDate.DisplayDate.Date,
                 Provider = comboBoxDeliveriesProviders.SelectedItem as Provider
             };
             deliveryService.AddDelivery(delivery, ElementsList.ToList());
+        }
+
+        private void UpdateDelivery()
+        {
+            deliveryService.UpdateDelivery(Delivery, ElementsList.ToList());
         }
     }
 }

@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1;
 E:\visualstudio\WHManager\WHManager.DesktopUI\App.xaml
-32-1826246086
+31-2122489738
 
-371518055343
+36736444606
 258-1453473961
-MainWindow.xaml;Views\AdministrationViews\RoleView.xaml;Views\AdministrationViews\UserView.xaml;Views\BusinessViews\BusinessFormViews\InvoiceFormView.xaml;Views\BusinessViews\DeliveryView.xaml;Views\BusinessViews\InvoiceView.xaml;Views\BusinessViews\OrderView.xaml;Views\ContractorsViews\ClientView.xaml;Views\ContractorsViews\ManufacturerView.xaml;Views\ContractorsViews\ProviderView.xaml;Views\DocumentViews\IncomingDocumentView.xaml;Views\DocumentViews\OutgoingDocumentView.xaml;Views\FormViews\LoginForm\LoginFormView.xaml;Views\FormViews\ManageClientFormView.xaml;Views\FormViews\ManageDeliveryFormView.xaml;Views\FormViews\ManageInvoiceFormView.xaml;Views\FormViews\ManageItemFormView.xaml;Views\FormViews\ManageManufacturerFormView.xaml;Views\FormViews\ManageOrderFormView.xaml;Views\FormViews\ManageProductFormView.xaml;Views\FormViews\ManageProductTypeFormView.xaml;Views\FormViews\ManageProviderFormView.xaml;Views\FormViews\ManageRoleFormView.xaml;Views\FormViews\ManageTaxFormView.xaml;Views\FormViews\ManageUserFormView.xaml;Views\ReportViews\ReportView.xaml;Views\WarehouseViews\DeliveryItemsView.xaml;Views\WarehouseViews\EmittedItemsView.xaml;Views\WarehouseViews\ItemView.xaml;Views\WarehouseViews\ProductTypeView.xaml;Views\WarehouseViews\ProductView.xaml;Views\WarehouseViews\TaxView.xaml;
+MainWindow.xaml;Views\AdministrationViews\RoleView.xaml;Views\AdministrationViews\UserView.xaml;Views\BusinessViews\DeliveryView.xaml;Views\BusinessViews\InvoiceView.xaml;Views\BusinessViews\OrderView.xaml;Views\ContractorsViews\ClientView.xaml;Views\ContractorsViews\ManufacturerView.xaml;Views\ContractorsViews\ProviderView.xaml;Views\DocumentViews\IncomingDocumentView.xaml;Views\DocumentViews\OutgoingDocumentView.xaml;Views\FormViews\LoginForm\LoginFormView.xaml;Views\FormViews\ManageClientFormView.xaml;Views\FormViews\ManageDeliveryFormView.xaml;Views\FormViews\ManageInvoiceFormView.xaml;Views\FormViews\ManageItemFormView.xaml;Views\FormViews\ManageManufacturerFormView.xaml;Views\FormViews\ManageOrderFormView.xaml;Views\FormViews\ManageProductFormView.xaml;Views\FormViews\ManageProductTypeFormView.xaml;Views\FormViews\ManageProviderFormView.xaml;Views\FormViews\ManageRoleFormView.xaml;Views\FormViews\ManageTaxFormView.xaml;Views\FormViews\ManageUserFormView.xaml;Views\ReportViews\ReportView.xaml;Views\WarehouseViews\DeliveryItemsView.xaml;Views\WarehouseViews\EmittedItemsView.xaml;Views\WarehouseViews\ItemView.xaml;Views\WarehouseViews\ProductTypeView.xaml;Views\WarehouseViews\ProductView.xaml;Views\WarehouseViews\TaxView.xaml;
 
 True
 

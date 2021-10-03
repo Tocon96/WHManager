@@ -86,7 +86,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 {
                     Item item = new Item
                     {
-                        DateOfAdmission = (DateTime)datepickerDateOfAdmission.SelectedDate,
+                        DateOfAdmission = datepickerDateOfAdmission.DisplayDate.Date,
                         IsInStock = true,
                         Product = Product
                     };
@@ -108,7 +108,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 Item updatedItem = new Item
                 {
                     Id = Item.Id,
-                    DateOfAdmission = (DateTime)datepickerDateOfAdmission.SelectedDate,
+                    DateOfAdmission = datepickerDateOfAdmission.DisplayDate.Date,
                     DateOfEmission = datepickerDateOfEmission.SelectedDate,
                     IsInStock = (bool)checkboxAvalaibility.IsChecked,
                     Product = Item.Product

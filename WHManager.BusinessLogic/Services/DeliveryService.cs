@@ -13,53 +13,56 @@ namespace WHManager.BusinessLogic.Services
     {
         IDeliveryRepository deliveryRepository = new DeliveryRepository(new DataAccess.WHManagerDBContextFactory());
         IItemService itemService = new ItemService();
+        IDeliveryOrderElementsRepository elementRepository = new DeliveryOrderElementsRepository(new DataAccess.WHManagerDBContextFactory());
         IProductService productService = new ProductService();
         IProviderService providerService = new ProviderService();
         IIncomingDocumentService documentService = new IncomingDocumentService();
         public int AddDelivery(Delivery delivery, List<DeliveryOrderTableContent> elements)
         {
-            IList<int> itemsIds = new List<int>();
-            int deliveryId = deliveryRepository.AddDelivery(delivery.Provider.Id, delivery.DateOfArrival);
-            IncomingDocument document = new IncomingDocument
-            {
-                DateReceived = delivery.DateOfArrival,
-                DeliveryId = deliveryId,
-                Provider = providerService.GetProvider(delivery.Provider.Id)
-            };
-            int documentId = documentService.AddDocument(document); 
+            int deliveryId = deliveryRepository.AddDelivery(delivery.Provider.Id, delivery.DateCreated);
             foreach (DeliveryOrderTableContent element in elements)
             {
-                IList<Item> items = new List<Item>();
-                IList<int> tempIds = new List<int>();
+                elementRepository.CreateElement("Delivery", element.ProductId, (int)element.Count, deliveryId);
+            }
+            return deliveryId;
+        }
 
-                for(int i = 0; i<element.Count; i++)
+        public void RealizeDelivery(Delivery delivery)
+        {
+            DateTime currentDate = DateTime.Now;
+            IncomingDocument document = new IncomingDocument
+            {
+                DateReceived = currentDate,
+                DeliveryId = delivery.Id,
+                Provider = providerService.GetProvider(delivery.Provider.Id)
+            };
+            int documentId = documentService.AddDocument(document);
+            var content = elementRepository.GetElementsByDeliveryId("Delivery", delivery.Id);
+            foreach (var element in content)
+            {
+                IList<Item> items = new List<Item>();
+                for (int i = 0; i < element.ProductCount; i++)
                 {
                     Item item = new Item
                     {
-                        Product = productService.GetProduct(element.Id)[0],
-                        DateOfAdmission = delivery.DateOfArrival,
+                        Product = productService.GetProduct(element.ProductId)[0],
+                        DateOfAdmission = delivery.DateCreated,
                         DateOfEmission = null,
                         Provider = providerService.GetProvider(delivery.Provider.Id),
-                        DeliveryId = deliveryId,
+                        DeliveryId = delivery.Id,
                         IncomingDocument = documentService.GetDocument(documentId),
                         IsInStock = true
                     };
                     items.Add(item);
                 }
-                tempIds = itemService.CreateNewItems(items.ToList());
-                foreach(int tempId in tempIds)
-                {
-                    itemsIds.Add(tempId);
-                }
+                itemService.CreateNewItems(items.ToList());
             }
-            deliveryRepository.UpdateDelivery(deliveryId, delivery.Provider.Id, delivery.DateOfArrival, itemsIds);
-
-            return deliveryId;
+            deliveryRepository.UpdateDelivery(delivery.Id, delivery.Provider.Id, delivery.DateCreated, currentDate, true);
         }
-
         public void DeleteDelivery(int id)
         {
             deliveryRepository.DeleteDelivery(id);
+            elementRepository.DeleteElementsByDeliveryId("Delivery", id);
         }
 
         public IList<Delivery> GetDeliveries()
@@ -77,9 +80,11 @@ namespace WHManager.BusinessLogic.Services
                 Delivery newDelivery = new Delivery
                 {
                     Id = delivery.Id,
-                    DateOfArrival = delivery.DateOfArrival,
+                    DateCreated = delivery.DateCreated,
+                    DateRealized = delivery.DateRealized,
                     Items = itemsList,
-                    Provider = provider
+                    Provider = provider,
+                    Realized = delivery.Realized
                 };
                 deliveryList.Add(newDelivery);
             }
@@ -98,7 +103,7 @@ namespace WHManager.BusinessLogic.Services
             Delivery newDelivery = new Delivery
             {
                 Id = delivery.Id,
-                DateOfArrival = delivery.DateOfArrival,
+                DateCreated = delivery.DateCreated,
                 Items = itemsList,
                 Provider = provider
             };
@@ -107,17 +112,76 @@ namespace WHManager.BusinessLogic.Services
 
         public IList<Delivery> SearchDeliveries(IList<string> criteria)
         {
-            throw new NotImplementedException();
+            IList<Delivery> deliveriesList = new List<Delivery>();
+            var deliveries = deliveryRepository.SearchDeliveries(criteria);
+            foreach (var delivery in deliveries)
+            {
+                IList<Item> itemsList = new List<Item>();
+                foreach (var item in delivery.Items)
+                {
+                    itemsList.Add(itemService.GetItem(item.Id));
+                }
+                Delivery newDelivery = new Delivery
+                {
+                    Id = delivery.Id,
+                    DateCreated = delivery.DateCreated,
+                    Items = itemsList,
+                    Provider = providerService.GetProvider(delivery.Provider.Id)
+                };
+                deliveriesList.Add(newDelivery);
+            }
+            return deliveriesList;
         }
 
         public int UpdateDelivery(Delivery delivery, List<DeliveryOrderTableContent> elements)
         {
-            IList<int> items = new List<int>();
-            foreach (Item item in delivery.Items)
+            var existingElements = elementRepository.GetElementsByDeliveryId("Delivery", delivery.Id).ToList();
+            IList<DeliveryOrderTableContent> existingContent = new List<DeliveryOrderTableContent>();
+            foreach(var element in existingElements)
             {
-                items.Add(item.Id);
+                DeliveryOrderTableContent content = new DeliveryOrderTableContent(element.Id, element.ProductId, "", (int)element.ProductCount);
+                existingContent.Add(content);
             }
-            return deliveryRepository.UpdateDelivery(delivery.Id, delivery.Provider.Id, delivery.DateOfArrival, items);
+
+            foreach(DeliveryOrderTableContent element in elements)
+            {
+                if(existingContent.Any(x => x.ProductId == element.ProductId))
+                {
+                    DeliveryOrderTableContent content = existingContent.SingleOrDefault(x => x.ProductId == element.ProductId);
+                    if (content.Count != element.Count)
+                    {
+                        content.Count = element.Count;
+                        elementRepository.UpdateElement((int)content.Id, "Delivery", content.ProductId, (int)element.Count, null);
+                    }
+                }
+                else
+                {
+                    elementRepository.CreateElement("Delivery", element.ProductId, (int)element.Count, delivery.Id);
+                }
+            }
+
+            foreach(DeliveryOrderTableContent content in existingContent)
+            {
+                if(elements.All(x=>x.ProductId != content.ProductId))
+                {
+                    elementRepository.DeleteElement((int)content.Id);
+                }
+            }
+
+            return deliveryRepository.UpdateDelivery(delivery.Id, delivery.Provider.Id, delivery.DateCreated, delivery.DateRealized, delivery.Realized);
+        }
+
+        public IList<DeliveryOrderTableContent> GetElements(int deliveryId)
+        {
+            var contents = elementRepository.GetElementsByDeliveryId("Delivery", deliveryId);
+            IList<DeliveryOrderTableContent> elements = new List<DeliveryOrderTableContent>();
+            foreach(var content in contents) 
+            {
+                Product product = productService.GetProduct(content.ProductId)[0];
+                DeliveryOrderTableContent element = new DeliveryOrderTableContent(null, content.ProductId, product.Name, (double)content.ProductCount);
+                elements.Add(element);
+            }
+            return elements;
         }
     }
 }

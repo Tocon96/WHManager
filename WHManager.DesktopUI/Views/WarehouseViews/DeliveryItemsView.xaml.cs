@@ -22,16 +22,103 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
     public partial class DeliveryItemsView : Window
     {
         private Delivery Delivery { get; set; }
+        private IList<string> AvailabilityOptions { get; set; }
         public DeliveryItemsView(Delivery delivery)
         {
             InitializeComponent();
             Delivery = delivery;
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             FillGrid();
+            FillComboBox();
         }
 
         private void FillGrid()
         {
-            //gridItems.ItemsSource = new ObservableCollection<Item>(Delivery.Items);
+            gridItems.ItemsSource = new ObservableCollection<Item>(Delivery.Items);
+        }
+
+        private void ClearSearchClick(object sender, RoutedEventArgs e)
+        {
+            textBoxProduct.Text = "";
+            textBoxProduct.Text = "";
+            comboBoxAvailability.SelectedItem = AvailabilityOptions[0];
+            FillGrid();
+        }
+
+        private void SearchItemClick(object sender, RoutedEventArgs e)
+        {
+            IList<string> criteria = CreateCriteriaList();
+            IList<Item> items = BrowseItems(criteria);
+            gridItems.ItemsSource = new ObservableCollection<Item>(items);
+        }
+
+        private void FillComboBox()
+        {
+            IList<string> availabilityOptions = new List<string>();
+            availabilityOptions.Add("Wszystkie");
+            availabilityOptions.Add("Dostępne");
+            availabilityOptions.Add("Niedostępne");
+            AvailabilityOptions = availabilityOptions;
+            comboBoxAvailability.ItemsSource = AvailabilityOptions;
+            comboBoxAvailability.SelectedItem = AvailabilityOptions[0];
+        }
+
+        private IList<string> CreateCriteriaList()
+        {
+            IList<string> criteria = new List<string>();
+            criteria.Add(idTextBox.Text);
+            criteria.Add(textBoxProduct.Text);
+            if(comboBoxAvailability.SelectedIndex == 0)
+            {
+                criteria.Add("0");
+            }
+            if(comboBoxAvailability.SelectedIndex == 1)
+            {
+                criteria.Add("1");
+            }
+            if(comboBoxAvailability.SelectedIndex == 2)
+            {
+                criteria.Add("2");
+            }
+            return criteria;
+        }
+
+        private IList<Item> BrowseItems(IList<string>criteria)
+        {
+            IList<Item> items = new List<Item>();
+            foreach(Item item in Delivery.Items)
+            {
+                if(criteria[0] != "")
+                {
+                    if(item.Id == int.Parse(criteria[0]))
+                    {
+                        items.Add(item);
+                    }
+                }
+
+                if(criteria[1] != "")
+                {
+                    if(item.Product.Name == criteria[1])
+                    {
+                        items.Add(item);
+                    }
+                }
+
+                if(criteria[2] == "1")
+                {
+                    if (item.IsInStock)
+                    {
+                        items.Add(item);
+                    }
+                }else if(criteria[2] == "2")
+                {
+                    if (!item.IsInStock)
+                    {
+                        items.Add(item);
+                    }
+                }
+            }
+            return items;
         }
     }
 }

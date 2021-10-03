@@ -10,8 +10,8 @@ using WHManager.DataAccess;
 namespace WHManager.DataAccess.Migrations
 {
     [DbContext(typeof(WHManagerDBContext))]
-    [Migration("20210921223159_initial")]
-    partial class initial
+    [Migration("20211003181336_DeliveryOrderElements")]
+    partial class DeliveryOrderElements
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,17 +50,47 @@ namespace WHManager.DataAccess.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<DateTime>("DateOfArrival")
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateRealized")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("ProviderId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Realized")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProviderId");
 
                     b.ToTable("Deliveries");
+                });
+
+            modelBuilder.Entity("WHManager.DataAccess.Models.DeliveryOrderElements", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("DeliveryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Origin")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DeliveryElements");
                 });
 
             modelBuilder.Entity("WHManager.DataAccess.Models.IncomingDocument", b =>
@@ -73,17 +103,11 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<DateTime>("DateReceived")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateSent")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("DeliveryId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ProviderId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("Source")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -141,7 +165,7 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<DateTime?>("DateOfEmission")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DeliveryId")
+                    b.Property<int>("DeliveryId")
                         .HasColumnType("int");
 
                     b.Property<int?>("IncomingDocumentId")
@@ -244,17 +268,11 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<int?>("ContrahentId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateReceived")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("DateSent")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("Source")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -463,7 +481,9 @@ namespace WHManager.DataAccess.Migrations
                 {
                     b.HasOne("WHManager.DataAccess.Models.Delivery", null)
                         .WithMany("Items")
-                        .HasForeignKey("DeliveryId");
+                        .HasForeignKey("DeliveryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WHManager.DataAccess.Models.IncomingDocument", "IncomingDocument")
                         .WithMany()

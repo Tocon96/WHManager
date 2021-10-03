@@ -25,7 +25,9 @@ namespace WHManager.DataAccess.Repositories
                 Delivery delivery = new Delivery
                 {
                     Provider = context.Provider.SingleOrDefault(x => x.Id == providerId),
-                    DateOfArrival = date
+                    DateCreated = date,
+                    DateRealized = null,
+                    Realized = false
                 };
                 try
                 {
@@ -98,35 +100,80 @@ namespace WHManager.DataAccess.Repositories
 
         public IEnumerable<Delivery> SearchDeliveries(IList<string> criteria)
         {
-            throw new NotImplementedException();
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                IQueryable<Delivery> deliveries = context.Deliveries.Include(x=>x.Provider).Include(x=>x.Items).AsQueryable();
+                if (!string.IsNullOrEmpty(criteria[0]))
+                {
+                    int.TryParse(criteria[0], out int result);
+                    deliveries = deliveries.Where(x => x.Id == result);
+                }
+                if (!string.IsNullOrEmpty(criteria[1]))
+                {
+                    deliveries = deliveries.Where(x => x.Provider.Name.StartsWith(criteria[1]));
+                }
+                if (!string.IsNullOrEmpty(criteria[2]) && string.IsNullOrEmpty(criteria[3]))
+                {
+                    DateTime earlierDate = Convert.ToDateTime(criteria[2]);
+                    deliveries = deliveries.Where(x => x.DateCreated >= earlierDate);
+                }
+
+                if (string.IsNullOrEmpty(criteria[2]) && !string.IsNullOrEmpty(criteria[3]))
+                {
+                    DateTime laterDate = Convert.ToDateTime(criteria[3]);
+                    deliveries = deliveries.Where(x => x.DateCreated <= laterDate);
+                }
+
+                if (!string.IsNullOrEmpty(criteria[2]) && !string.IsNullOrEmpty(criteria[3]))
+                {
+                    DateTime earlierDate = Convert.ToDateTime(criteria[2]);
+                    DateTime laterDate = Convert.ToDateTime(criteria[3]);
+                    deliveries = deliveries.Where(x => x.DateCreated >= earlierDate && x.DateCreated <= laterDate);
+                }
+                if (!string.IsNullOrEmpty(criteria[4]) && string.IsNullOrEmpty(criteria[5]))
+                {
+                    DateTime earlierDate = Convert.ToDateTime(criteria[4]);
+                    deliveries = deliveries.Where(x => x.DateRealized >= earlierDate);
+                }
+
+                if (string.IsNullOrEmpty(criteria[4]) && !string.IsNullOrEmpty(criteria[5]))
+                {
+                    DateTime laterDate = Convert.ToDateTime(criteria[5]);
+                    deliveries = deliveries.Where(x => x.DateRealized <= laterDate);
+                }
+
+                if (!string.IsNullOrEmpty(criteria[4]) && !string.IsNullOrEmpty(criteria[5]))
+                {
+                    DateTime earlierDate = Convert.ToDateTime(criteria[4]);
+                    DateTime laterDate = Convert.ToDateTime(criteria[5]);
+                    deliveries = deliveries.Where(x => x.DateRealized >= earlierDate && x.DateRealized <= laterDate);
+                }
+
+                if (!string.IsNullOrEmpty(criteria[6]))
+                {
+                    deliveries = deliveries.Where(x => x.Realized == bool.Parse(criteria[6]));
+                }
+
+                IEnumerable<Delivery> deliveryList = deliveries.ToList();
+
+                return deliveryList;
+
+            }
         }
 
-        public int UpdateDelivery(int id, int providerId, DateTime date, IList<int> items)
+        public int UpdateDelivery(int id, int providerId, DateTime dateCreated, DateTime? dateRealized, bool realized)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
                 Delivery delivery = context.Deliveries.Include(x => x.Provider)
                                                         .Include(x => x.Items)
                                                         .SingleOrDefault(x => x.Id == id);
-                ICollection<Item> itemCollection = new ObservableCollection<Item>();
-                foreach (int i in items)
-                {
-                    try
-                    {
-                        Item item = context.Items.SingleOrDefault(x => x.Id == i);
-                        itemCollection.Add(item);
-                    }
-                    catch
-                    {
-                        throw new Exception("Błąd wyszukiwania przedmiotów w dostawach.");
-                    }
-                }
-
                 try
                 {
                     delivery.Provider = context.Provider.SingleOrDefault(x => x.Id == providerId);
-                    delivery.DateOfArrival = date;
-                    delivery.Items = itemCollection;
+                    delivery.DateCreated = dateCreated;
+                    delivery.DateRealized = dateRealized;
+                    delivery.Realized = realized;
                     context.Deliveries.Update(delivery);
                     context.SaveChanges();
                     return delivery.Id;
@@ -136,7 +183,6 @@ namespace WHManager.DataAccess.Repositories
                     throw new Exception("Błąd pobierania dostaw");
                 }
             }
-                
         }
     }
 }

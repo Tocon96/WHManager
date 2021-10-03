@@ -24,6 +24,7 @@ namespace WHManager.DataAccess
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Delivery> Deliveries { get; set; }
+        public DbSet<DeliveryOrderElements> DeliveryElements { get; set; }
         public WHManagerDBContext(DbContextOptions options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

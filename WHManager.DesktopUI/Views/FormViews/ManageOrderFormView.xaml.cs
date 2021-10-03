@@ -173,7 +173,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 {
                     Client = comboBoxOrdersClients.SelectedItem as Client,
                     Items = ItemsList,
-                    DateOrdered = (DateTime)datepickerOrdersDate.SelectedDate,
+                    DateOrdered = datepickerOrdersDate.DisplayDate.Date,
                     Price = price,
                 };
                 orderService.AddOrder(order);
@@ -203,7 +203,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                     Id = Order.Id,
                     Client = comboBoxOrdersClients.SelectedItem as Client,
                     Items = ItemsList,
-                    DateOrdered = (DateTime)datepickerOrdersDate.SelectedDate,
+                    DateOrdered = datepickerOrdersDate.DisplayDate.Date,
                     Price = price,
                 };
                 orderService.UpdateOrder(order);

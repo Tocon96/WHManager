@@ -137,8 +137,6 @@ E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\Microsoft.
 E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\Microsoft.Net.Http.Headers.dll
 E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\MaterialDesignColors.dll
 E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\MaterialDesignThemes.Wpf.dll
-E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\BusinessViews\BusinessFormViews\InvoiceFormView.g.cs
-E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\BusinessViews\BusinessFormViews\InvoiceFormView.baml
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\WHManager.DesktopUI.csproj.AssemblyReference.cache
 E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\BusinessViews\DeliveryView.g.cs

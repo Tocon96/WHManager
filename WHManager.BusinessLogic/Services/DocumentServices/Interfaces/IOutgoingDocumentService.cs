@@ -12,6 +12,7 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
         public void DeleteDocument(int id);
         public OutgoingDocument GetDocument(int id);
         public IList<OutgoingDocument> GetDocuments();
-        public IList<OutgoingDocument> SearchDocuments(IList<string>criteria); 
+        public IList<OutgoingDocument> SearchDocuments(IList<string>criteria);
+        public void GeneratePdf(string filename, Order order);
     }
 }

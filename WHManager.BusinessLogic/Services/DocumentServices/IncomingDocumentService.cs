@@ -58,6 +58,7 @@ namespace WHManager.BusinessLogic.Services
                     Id = document.Id,
                     Provider = providerService.GetProvider(document.Provider.Id),
                     DateReceived = document.DateReceived,
+                    DeliveryId = document.DeliveryId
                 };
                 documentsList.Add(newDocument);
             }
@@ -66,7 +67,21 @@ namespace WHManager.BusinessLogic.Services
 
         public IList<IncomingDocument> SearchDocuments(IList<string> criteria)
         {
-            throw new NotImplementedException();
+            IList<IncomingDocument> documentsList = new List<IncomingDocument>();
+            var documents = incomingDocumentRepository.SearchDocuments(criteria);
+            foreach (var document in documents)
+            {
+                IncomingDocument newDocument = new IncomingDocument
+                {
+                    Id = document.Id,
+                    Provider = providerService.GetProvider(document.Provider.Id),
+                    DateReceived = document.DateReceived,
+                    DeliveryId = document.DeliveryId
+                };
+                documentsList.Add(newDocument);
+            }
+            return documentsList;
+
         }
 
         public IncomingDocument GetDocumentByDeliveryId(int deliveryId)
@@ -77,6 +92,7 @@ namespace WHManager.BusinessLogic.Services
                 Id = document.Id,
                 Provider = providerService.GetProvider(document.Provider.Id),
                 DateReceived = document.DateReceived,
+                DeliveryId = document.DeliveryId
             };
             return incomingDocument;
         }
@@ -88,7 +104,7 @@ namespace WHManager.BusinessLogic.Services
 
         public void GeneratePdf(string fileName, Delivery delivery)
         {
-            IncomingDocument incomingDocument = this.GetDocumentByDeliveryId(delivery.Id);
+            IncomingDocument incomingDocument = GetDocumentByDeliveryId(delivery.Id);
             FontProgram fontProgram = FontProgramFactory.CreateFont();
             PdfFont font = PdfFontFactory.CreateFont(fontProgram, "CP1257");
             PdfWriter writer = new PdfWriter(fileName);
@@ -103,7 +119,6 @@ namespace WHManager.BusinessLogic.Services
             document.Add(providerTable);
             document.Add(itemTable);
             document.Close();
-
         }
 
         Table GenerateInitialTable(IncomingDocument document)

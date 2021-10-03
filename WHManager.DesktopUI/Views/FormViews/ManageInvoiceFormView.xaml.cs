@@ -114,7 +114,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 IInvoiceService invoiceService = new InvoiceService();
                 Invoice invoice = new Invoice
                 {
-                    DateIssued = (DateTime)datepickerInvoicesDateIssued.SelectedDate,
+                    DateIssued = datepickerInvoicesDateIssued.DisplayDate.Date,
                     Client = comboBoxInvoicesClients.SelectedItem as Client,
                     Order = GetOrder()
                 };
@@ -133,7 +133,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 IInvoiceService invoiceService = new InvoiceService();
                 Invoice invoice = new Invoice
                 {
-                    DateIssued = (DateTime)datepickerInvoicesDateIssued.SelectedDate,
+                    DateIssued = datepickerInvoicesDateIssued.DisplayDate.Date,
                     Client = comboBoxInvoicesClients.SelectedItem as Client,
                     Order = GetOrder()
                 };

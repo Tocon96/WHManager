@@ -11,9 +11,6 @@
     <Compile Update="Views\AdministrationViews\UserView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\BusinessViews\BusinessFormViews\InvoiceFormView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\BusinessViews\DeliveryView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -95,9 +92,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\AdministrationViews\UserView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\BusinessViews\BusinessFormViews\InvoiceFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\BusinessViews\DeliveryView.xaml">

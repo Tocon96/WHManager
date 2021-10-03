@@ -8,7 +8,9 @@ namespace WHManager.DataAccess.Models
     {
         public int Id { get; set; }
         public Provider Provider { get; set; }
-        public DateTime DateOfArrival { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime? DateRealized { get; set; }
+        public bool Realized { get; set; }
         public ICollection<Item> Items { get; set; }
     }
 }

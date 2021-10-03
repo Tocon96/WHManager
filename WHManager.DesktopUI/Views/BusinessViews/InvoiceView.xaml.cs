@@ -20,7 +20,6 @@ using WHManager.DesktopUI.Views.FormViews;
 using System.ComponentModel;
 using WHManager.BusinessLogic.Services.DocumentServices;
 using WHManager.BusinessLogic.Services.DocumentServices.Interfaces;
-using WHManager.DesktopUI.Views.BusinessViews.BusinessFormViews;
 
 namespace WHManager.DesktopUI.Views.BusinessViews
 {
@@ -116,12 +115,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
 
         private void GeneratePdf()
         {
-            if(gridInvoices.SelectedItem != null)
-            {
-                Invoice = gridInvoices.SelectedItem as Invoice;
-            }
-            InvoiceFormView invoice = new InvoiceFormView(Invoice);
-            invoice.Show();
+
         }
 
         private IList<Invoice> SearchInvoices()

@@ -105,7 +105,46 @@ namespace WHManager.DataAccess.Repositories
 
         public IEnumerable<IncomingDocument> SearchDocuments(IList<string> criteria)
         {
-            throw new NotImplementedException();
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                IQueryable<IncomingDocument> documents = context.IncomingDocuments.AsQueryable();
+                if (!string.IsNullOrEmpty(criteria[0]))
+                {
+                    int.TryParse(criteria[0], out int result);
+                    documents = documents.Where(x => x.Id == result);
+                }
+                if (!string.IsNullOrEmpty(criteria[1]))
+                {
+                    int.TryParse(criteria[1], out int result);
+                    documents = documents.Where(x => x.DeliveryId == result);
+                }
+                if (!string.IsNullOrEmpty(criteria[2]))
+                {
+                    documents = documents.Where(x => x.Provider.Name.StartsWith(criteria[2]));
+                }
+                if (!string.IsNullOrEmpty(criteria[3]) && string.IsNullOrEmpty(criteria[4]))
+                {
+                    DateTime earlierDate = Convert.ToDateTime(criteria[2]);
+                    documents = documents.Where(x => x.DateReceived >= earlierDate);
+                }
+
+                if (string.IsNullOrEmpty(criteria[3]) && !string.IsNullOrEmpty(criteria[4]))
+                {
+                    DateTime laterDate = Convert.ToDateTime(criteria[3]);
+                    documents = documents.Where(x => x.DateReceived <= laterDate);
+                }
+
+                if (!string.IsNullOrEmpty(criteria[3]) && !string.IsNullOrEmpty(criteria[4]))
+                {
+                    DateTime earlierDate = Convert.ToDateTime(criteria[2]);
+                    DateTime laterDate = Convert.ToDateTime(criteria[3]);
+                    documents = documents.Where(x => x.DateReceived >= earlierDate && x.DateReceived <= laterDate);
+                }
+                IEnumerable<IncomingDocument> documentsList = documents.ToList();
+
+                return documentsList;
+
+            }
         }
 
         public int UpdateDocument(int id, int providerId, DateTime dateReceived, int deliveryId)

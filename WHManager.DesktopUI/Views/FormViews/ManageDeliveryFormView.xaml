@@ -115,7 +115,7 @@
         <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3">Produkt</TextBlock>
         <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3">Ilość</TextBlock>
         <!--Datepicker-->
-        <DatePicker Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" x:Name="datepickerDeliveryDate"></DatePicker>
+        <DatePicker Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" x:Name="datepickerDeliveryDate" SelectedDateFormat="Short"></DatePicker>
         <!--ComboBox-->
         <ComboBox x:Name="comboBoxDeliveriesProviders" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" DisplayMemberPath="Name"></ComboBox>
         <ComboBox x:Name="comboBoxDeliveriesProducts" Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="3" DisplayMemberPath="Name" ></ComboBox>

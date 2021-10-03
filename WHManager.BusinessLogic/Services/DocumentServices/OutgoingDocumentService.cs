@@ -67,5 +67,10 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
         {
             return outgoingDocumentRepository.UpdateDocument(document.Id, document.Contrahent.Id, document.Order.Id, document.Invoice.Id, document.DateSent);
         }
+
+        public void GeneratePdf(string filename, Order order)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
