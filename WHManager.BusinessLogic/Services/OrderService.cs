@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using WHManager.BusinessLogic.Models;
+using WHManager.BusinessLogic.Services.DocumentServices.Interfaces;
 using WHManager.BusinessLogic.Services.Interfaces;
 using WHManager.DataAccess.Repositories;
 using WHManager.DataAccess.Repositories.Interfaces;
@@ -15,25 +16,24 @@ namespace WHManager.BusinessLogic.Services
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository = new OrderRepository(new DataAccess.WHManagerDBContextFactory());
+        private readonly IDeliveryOrderElementsRepository elementsRepository = new DeliveryOrderElementsRepository(new DataAccess.WHManagerDBContextFactory());
         private IItemService itemService = new ItemService();
         private IClientService clientService = new ClientService();
         private readonly IProductService productService = new ProductService();
+        
 
-        public void AddOrder(Order order)
+        public void AddOrder(Order order, List<DeliveryOrderTableContent> elements)
         {
             try
             {
-                IList<int> items = new List<int>();
-                int id = order.Id;
-                foreach(var item in order.Items)
+                decimal price = ManageElements(order.Id, elements);
+                int orderId = _orderRepository.AddOrder(price, order.DateOrdered, order.Client.Id);
+                itemService.SetItemsToOrder(orderId, elements);
+                foreach(DeliveryOrderTableContent element in elements)
                 {
-                    int itemId = item.Id;
-                    items.Add(itemId);
+                    Product product = productService.GetProduct(element.ProductId)[0];
+                    elementsRepository.CreateElement("Order", product.Id, (int)element.Count, orderId);
                 }
-                decimal price = CalculateFinalPrice(order);
-                DateTime dateTime = order.DateOrdered;
-                int client = order.Client.Id;
-                _orderRepository.AddOrder(id, price, dateTime, items, client);
             }
             catch  
             {
@@ -41,30 +41,91 @@ namespace WHManager.BusinessLogic.Services
             }
         }
 
-        public void UpdateOrder(Order order)
+        private decimal ManageElements(int orderId, List<DeliveryOrderTableContent> elements)
         {
-            try
+            decimal price = 0;
+            foreach (DeliveryOrderTableContent element in elements)
             {
-                IList<int> items = new List<int>();
-                int id = order.Id;
-                foreach (var item in order.Items)
+                Product product = productService.GetProduct(element.ProductId)[0];
+                if (itemService.CheckCountOfAvailableItemsPerProduct((int)element.Count, product.Id))
                 {
-                    int itemId = item.Id;
-                    items.Add(itemId);
-                }
-                decimal price = CalculateFinalPrice(order);
-                DateTime dateTime = order.DateOrdered;
-                int client = order.Client.Id;
-                if(order.Invoice != null)
-                {
-                    int invoice = order.Invoice.Id;
-                    _orderRepository.UpdateOrder(id, dateTime, items, price, client, invoice);
+                    for (int i = 0; i < element.Count; i++)
+                    {
+                        price += product.PriceSell;
+                    }
                 }
                 else
                 {
-                    _orderRepository.UpdateOrder(id, dateTime, items, price, client);
+                    throw new Exception("Brak wystarczającej ilości egzemplarzy. Otwórz ponownie okno tworzenia zamówień.");
                 }
                 
+            }
+            return price;
+        }
+
+        public void UpdateOrder(Order order, List<DeliveryOrderTableContent> elements)
+        {
+            try
+            {
+                var existingElements = elementsRepository.GetElementsByDeliveryId("Order", order.Id).ToList();
+                decimal price = ManageElements(order.Id, elements);
+                IList<DeliveryOrderTableContent> existingContent = new List<DeliveryOrderTableContent>();
+                foreach (var element in existingElements)
+                {
+                    DeliveryOrderTableContent content = new DeliveryOrderTableContent(element.Id, element.ProductId, "", (int)element.ProductCount);
+                    existingContent.Add(content);
+                }
+
+                foreach (DeliveryOrderTableContent element in elements)
+                {
+                    if (existingContent.Any(x => x.ProductId == element.ProductId))
+                    {
+                        DeliveryOrderTableContent content = existingContent.SingleOrDefault(x => x.ProductId == element.ProductId);
+                        if (content.Count != element.Count)
+                        {
+                            elementsRepository.UpdateElement((int)content.Id, "Order", content.ProductId, (int)element.Count, null);
+                            if (content.Count > element.Count)
+                            {
+                                double difference = content.Count - element.Count;
+                                for (int i=0; i < difference; i++)
+                                {
+                                    itemService.RemoveItemsFromOrderByProduct(order.Id, content.ProductId);
+                                }
+                            }
+                            else
+                            {
+                                double difference = element.Count - content.Count;
+                                for (int i = 0; i < difference; i++)
+                                {
+                                    itemService.AddItemsToOrderByProduct(order.Id, content.ProductId);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        elementsRepository.CreateElement("Order", element.ProductId, (int)element.Count, order.Id);
+                        for(int i=0; i<element.Count; i++)
+                        {
+                            itemService.AddItemsToOrderByProduct(order.Id, element.ProductId);
+                        }
+                    }
+                }
+
+                foreach (DeliveryOrderTableContent content in existingContent)
+                {
+                    if (elements.All(x => x.ProductId != content.ProductId))
+                    {
+                        elementsRepository.DeleteElement((int)content.Id);
+                        for (int i = 0; i < content.Count; i++)
+                        {
+                            itemService.RemoveItemsFromOrderByProduct(order.Id, content.ProductId);
+                        }
+                    }
+                }
+
+                _orderRepository.UpdateOrder(order.Id, order.DateOrdered, price, order.Client.Id);
+
             }
             catch  
             {
@@ -104,6 +165,8 @@ namespace WHManager.BusinessLogic.Services
                         Id = order.Id,
                         Items = itemsList,
                         DateOrdered = order.DateOrdered,
+                        DateRealized = order.DateRealized,
+                        IsRealized = order.IsRealized,
                         Client = client,
                         Price = order.Price
                     };
@@ -134,6 +197,8 @@ namespace WHManager.BusinessLogic.Services
                     Id = order.Id,
                     Items = itemsList,
                     DateOrdered = order.DateOrdered,
+                    DateRealized = order.DateRealized,
+                    IsRealized = order.IsRealized,
                     Client = client,
                     Price = order.Price
                 };
@@ -144,7 +209,6 @@ namespace WHManager.BusinessLogic.Services
                 throw new Exception("Błąd pobierania zamówień: ");
             }
         }
-
         public Order GetOrderByInvoice(int invoiceId)
         {
             try
@@ -163,6 +227,8 @@ namespace WHManager.BusinessLogic.Services
                     Items = itemsList,
                     DateOrdered = order.DateOrdered,
                     Client = client,
+                    DateRealized = order.DateRealized,
+                    IsRealized = order.IsRealized,
                     Price = order.Price
                 };
                 return currentOrder;
@@ -173,7 +239,6 @@ namespace WHManager.BusinessLogic.Services
             }
 
         }
-
         public IList<Order> GetOrdersByClient(int? clientId = null, string clientName = null, double? clientNip = null)
         {
             if(clientId != null)
@@ -197,6 +262,8 @@ namespace WHManager.BusinessLogic.Services
                             Items = itemsList,
                             DateOrdered = order.DateOrdered,
                             Client = client,
+                            DateRealized = order.DateRealized,
+                            IsRealized = order.IsRealized,
                             Price = order.Price
                         };
                         ordersList.Add(currentOrder);
@@ -229,6 +296,8 @@ namespace WHManager.BusinessLogic.Services
                             Items = itemsList,
                             DateOrdered = order.DateOrdered,
                             Client = client,
+                            DateRealized = order.DateRealized,
+                            IsRealized = order.IsRealized,
                             Price = order.Price
                         };
                         ordersList.Add(currentOrder);
@@ -261,6 +330,8 @@ namespace WHManager.BusinessLogic.Services
                             Items = itemsList,
                             DateOrdered = order.DateOrdered,
                             Client = client,
+                            DateRealized = order.DateRealized,
+                            IsRealized = order.IsRealized,
                             Price = order.Price
                         };
                         ordersList.Add(currentOrder);
@@ -277,138 +348,6 @@ namespace WHManager.BusinessLogic.Services
                 throw new Exception("Błąd pobierania zamówień: ");
             }
         }
-
-        public IList<Order> GetOrdersByDate(DateTime? earlierDate, DateTime? laterDate)
-        {
-            if (earlierDate != null && laterDate != null)
-            {
-                try
-                {
-                    IList<Order> ordersList = new List<Order>();
-                    var orders = _orderRepository.GetOrdersByDate(earlierDate, laterDate);
-                    foreach (var order in orders)
-                    {
-                        IList<Client> clients = clientService.GetClient(order.Client.Id);
-                        Client client = clients[0];
-                        IList<Item> itemsList = new List<Item>();
-                        foreach (var item in order.Items)
-                        {
-                            itemsList.Add(itemService.GetItem(item.Id));
-                        }
-                        Order currentOrder = new Order
-                        {
-                            Id = order.Id,
-                            Items = itemsList,
-                            DateOrdered = order.DateOrdered,
-                            Client = client,
-                            Price = order.Price
-                        };
-                        ordersList.Add(currentOrder);
-                    }
-                    return ordersList;
-                }
-                catch  
-                {
-                    throw new Exception("Błąd pobierania zamówień: ");
-                }
-            }
-            else if (earlierDate != null && laterDate == null)
-            {
-                try
-                {
-                    IList<Order> ordersList = new List<Order>();
-                    var orders = _orderRepository.GetOrdersByDate(earlierDate, null);
-                    foreach (var order in orders)
-                    {
-                        IList<Client> clients = clientService.GetClient(order.Client.Id);
-                        Client client = clients[0];
-                        IList<Item> itemsList = new List<Item>();
-                        foreach (var item in order.Items)
-                        {
-                            itemsList.Add(itemService.GetItem(item.Id));
-                        }
-                        Order currentOrder = new Order
-                        {
-                            Id = order.Id,
-                            Items = itemsList,
-                            DateOrdered = order.DateOrdered,
-                            Client = client,
-                            Price = order.Price
-                        };
-                        ordersList.Add(currentOrder);
-                    }
-                    return ordersList;
-                }
-                catch  
-                {
-                    throw new Exception("Błąd pobierania zamówień: ");
-                }
-            }
-            else if (earlierDate == null && laterDate != null)
-            {
-                try
-                {
-                    IList<Order> ordersList = new List<Order>();
-                    var orders = _orderRepository.GetOrdersByDate(null, laterDate);
-                    foreach (var order in orders)
-                    {
-                        IList<Client> clients = clientService.GetClient(order.Client.Id);
-                        Client client = clients[0];
-                        IList<Item> itemsList = new List<Item>();
-                        foreach (var item in order.Items)
-                        {
-                            itemsList.Add(itemService.GetItem(item.Id));
-                        }
-                        Order currentOrder = new Order
-                        {
-                            Id = order.Id,
-                            Items = itemsList,
-                            DateOrdered = order.DateOrdered,
-                            Client = client,
-                            Price = order.Price
-                        };
-                        ordersList.Add(currentOrder);
-                    }
-                    return ordersList;
-                }
-                catch  
-                {
-                    throw new Exception("Błąd pobierania zamówień: ");
-                }
-            }
-            else
-            {
-                try
-                {
-                    IList<Order> ordersList = new List<Order>();
-                    var orders = _orderRepository.GetOrdersByDate(null, null);
-                    foreach (var order in orders)
-                    {
-                        IList<Client> clients = clientService.GetClient(order.Client.Id);
-                        Client client = clients[0];
-                        IList<Item> itemsList = new List<Item>();
-                        foreach (var item in order.Items)
-                        {
-                            itemsList.Add(itemService.GetItem(item.Id));
-                        }
-                        Order currentOrder = new Order
-                        {
-                            Id = order.Id,
-                            Items = itemsList,
-                            DateOrdered = order.DateOrdered,
-                            Client = client,
-                            Price = order.Price
-                        };
-                        ordersList.Add(currentOrder);
-                    }
-                    return ordersList;
-                }
-                catch  
-                {
-                    throw new Exception("Błąd pobierania zamówień: ");
-                }
-            }
-        }
         public decimal CalculateFinalPrice(Order order)
         {
             decimal finalPrice = 0;
@@ -419,51 +358,6 @@ namespace WHManager.BusinessLogic.Services
             }
             return finalPrice;
         }
-
-        public IList<Product> GetSortedProducts(Order order)
-        {
-            IList<Product> products = new List<Product>();
-            IList<Product> sortedProducts = new List<Product>();
-            IList<int> counts = new List<int>();
-            foreach(var item in order.Items)
-            {
-                products.Add(item.Product);
-            }
-            products = products.OrderBy(p => p.Id).ToList();
-            for (int i = 0, j = 0, count = 0; i < products.Count; i++)
-            {
-                if (i == 0)
-                {
-                    sortedProducts.Add(products[i]);
-                    count++;
-                }
-                else
-                {
-                    if (products[i].Id != products[i - 1].Id)
-                    {
-                        sortedProducts[j].CountOf = count;
-                        j++;
-                        count = 1;
-                        sortedProducts.Add(products[i]);
-                    }
-                    else
-                    {
-                        count++;
-                    }
-                }
-                if(i+1 == products.Count)
-                {
-                    sortedProducts[j].CountOf = count;
-                }
-            }
-            foreach(var product in sortedProducts)
-            {
-                product.PriceBrutto = productService.CalculatePrice(product);
-            }
-            return sortedProducts;
-            
-        }
-
         public IList<Order> SearchOrders(List<string> criteria)
         {
             IList<Order> orders = new List<Order>();
@@ -482,11 +376,64 @@ namespace WHManager.BusinessLogic.Services
                     Items = itemsList,
                     IsRealized = order.IsRealized,
                     DateOrdered = order.DateOrdered.Date,
+                    DateRealized = order.DateRealized,
                     Price = order.Price
                 };
                 orders.Add(newOrder);
             }
             return orders;
+        }
+
+        public void EmptyOrderFromItems(Order order)
+        {
+            itemService.RemoveItemsFromOrder(order.Id);
+        }
+
+        public bool RealizeOrder(Order order)
+        {
+            IOutgoingDocumentService documentService = new OutgoingDocumentService();
+            IInvoiceService invoiceService = new InvoiceService();
+            DateTime dateTime = DateTime.Now;
+            OutgoingDocument outgoingDocument = new OutgoingDocument
+            {
+                Contrahent = order.Client,
+                OrderId = order.Id,
+                DateSent = dateTime
+            };
+            int documentId = documentService.AddDocument(outgoingDocument);
+            if(documentId == null)
+            {
+                return false;
+            }
+            Invoice invoice = new Invoice
+            {
+                Client = order.Client,
+                OrderId = order.Id,
+                DateIssued = dateTime
+            };
+            int invoiceId = invoiceService.CreateNewInvoice(invoice);
+            if(invoiceId == null)
+            {
+                return false;
+            }
+
+            _orderRepository.RealizeOrder(order.Id, dateTime);
+            itemService.EmitItemsInOrder(order.Id, dateTime, documentId, invoiceId);
+            return true;
+
+        }
+
+        public IList<DeliveryOrderTableContent> GetElements(int orderId)
+        {
+            var contents = elementsRepository.GetElementsByDeliveryId("Order", orderId);
+            IList<DeliveryOrderTableContent> elements = new List<DeliveryOrderTableContent>();
+            foreach (var content in contents)
+            {
+                Product product = productService.GetProduct(content.ProductId)[0];
+                DeliveryOrderTableContent element = new DeliveryOrderTableContent(null, content.ProductId, product.Name, (double)content.ProductCount);
+                elements.Add(element);
+            }
+            return elements;
         }
     }
 }

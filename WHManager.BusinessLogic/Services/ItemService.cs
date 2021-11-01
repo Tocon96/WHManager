@@ -223,7 +223,6 @@ namespace WHManager.BusinessLogic.Services
                 throw new Exception("B³¹d pobierania przedmiotów: ");
             }
         }
-
         public IList<Item> GetEmittedItemsByProducts(int? productId = null, string productName = null)
         {
             if (productId != null)
@@ -290,6 +289,120 @@ namespace WHManager.BusinessLogic.Services
             else
             {
                 throw new Exception("B³¹d pobierania przedmiotów: ");
+            }
+        }
+
+        public IList<Item> GetAllAvailableItems()
+        {
+            IList<Item> itemsList = new List<Item>();
+            var items = _itemRepository.GetAllAvailableItems().ToList();
+            foreach (var item in items)
+            {
+                IList<Product> prodList = productService.GetProduct(item.Product.Id);
+                Product product = prodList[0];
+                Item currentItem = new Item
+                {
+                    Id = item.Id,
+                    DateOfAdmission = item.DateOfAdmission.Date,
+                    Product = product,
+                    IsInStock = item.IsInStock
+
+                };
+                itemsList.Add(currentItem);
+            }
+            return itemsList;
+        }
+
+        public IList<DeliveryOrderTableContent> GroupItems()
+        {
+            IList<Item> availableItems = GetAllAvailableItems();
+            IList<DeliveryOrderTableContent> contents = new List<DeliveryOrderTableContent>();
+            var grouped = availableItems.OrderBy(x => x.Product.Id).GroupBy(x => x.Product.Id);
+            foreach (var group in grouped)
+            {
+                Product product = productService.GetProduct(group.Key)[0];
+                int itemCount = availableItems.Count(x => x.Product.Id == group.Key);
+                DeliveryOrderTableContent content = new DeliveryOrderTableContent(null, product.Id, product.Name, (double)itemCount);
+                contents.Add(content);
+            }
+            return contents;
+        }
+
+        public void SetItemInOrder(Item item, int orderId, int count)
+        {
+            try
+            {
+                for(int i = 0; i<count; i++)
+                {
+                    _itemRepository.SetItemInOrder(item.Product.Id, orderId);
+                }
+            }
+            catch
+            {
+                throw new Exception("B³¹d aktualizowania przedmiotu: ");
+            }
+        }
+        public void RemoveItemsFromOrderByProduct(int orderId, int productId)
+        {
+            try
+            {
+                _itemRepository.RemoveItemsFromOrderByProduct(orderId, productId);
+            }
+            catch
+            {
+                throw new Exception("B³¹d aktualizowania przedmiotu: ");
+            }
+        }
+
+        public void AddItemsToOrderByProduct(int orderId, int productId)
+        {
+            try
+            {
+                _itemRepository.AddItemsToOrderByProduct(orderId, productId);
+            }
+            catch
+            {
+                throw new Exception("B³¹d aktualizowania przedmiotu: ");
+            }
+        }
+
+        public bool CheckCountOfAvailableItems(int count)
+        {
+            return _itemRepository.CheckCountOfAvailableItems(count);
+        }
+
+        public bool CheckCountOfAvailableItemsPerProduct(int count, int productId)
+        {
+            return _itemRepository.CheckCountOfAvailableItemsPerProduct(count, productId);
+        }
+
+
+        public void SetItemsToOrder(int orderId, List<DeliveryOrderTableContent> elements)
+        {
+            foreach(var element in elements)
+            {
+                for(int i = 0; i < element.Count; i++)
+                {
+                    _itemRepository.SetItemInOrder(element.ProductId, orderId);
+                }
+            }
+        }
+
+        public void RemoveItemsFromOrder(int orderId)
+        {
+            var items = _itemRepository.GetItemsByOrder(orderId);
+            foreach(var item in items)
+            {
+                _itemRepository.RemoveItemFromOrder(item.Id);
+            }
+        }
+
+        public void EmitItemsInOrder(int orderId, DateTime dateTime, int documentId, int invoiceId)
+        {
+            var items = _itemRepository.GetItemsByOrder(orderId);
+            foreach (var item in items)
+            {
+                _itemRepository.EmitItem(item.Id, dateTime, documentId, invoiceId);
             }
         }
     }

@@ -16,16 +16,15 @@ namespace WHManager.DataAccess.Repositories
         {
             _contextFactory = contextFactory;
         }
-        public int AddDocument(int clientId, int orderId, int invoiceId, DateTime dateSent)
+        public int AddDocument(int clientId, int orderId, DateTime dateSent)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
                 OutgoingDocument outgoingDocument = new OutgoingDocument()
                 {
                     Contrahent = context.Clients.SingleOrDefault(x => x.Id == clientId),
-                    Order = context.Orders.SingleOrDefault(x => x.Id == orderId),
-                    Invoice = context.Invoices.SingleOrDefault(x => x.Id == invoiceId),
-                    DateSent = dateSent,
+                    OrderId = orderId,
+                    DateSent = dateSent
                 };
                 try
                 {
@@ -64,9 +63,7 @@ namespace WHManager.DataAccess.Repositories
             {
                 try
                 {
-                    return context.OutgoingDocuments.Include(x => x.Invoice)
-                                                    .Include(x => x.Order)
-                                                    .Include(x => x.Contrahent)
+                    return context.OutgoingDocuments.Include(x => x.Contrahent)
                                                     .SingleOrDefault(x => x.Id == id);
                 }
                 catch
@@ -83,9 +80,7 @@ namespace WHManager.DataAccess.Repositories
             {
                 try
                 {
-                    IEnumerable<OutgoingDocument> documents = context.OutgoingDocuments.Include(x => x.Invoice)
-                                                                                       .Include(x => x.Order)
-                                                                                       .Include(x => x.Contrahent)
+                    IEnumerable<OutgoingDocument> documents = context.OutgoingDocuments.Include(x => x.Contrahent)
                                                                                        .ToList();
                     return documents;
                 }
@@ -102,7 +97,7 @@ namespace WHManager.DataAccess.Repositories
             throw new NotImplementedException();
         }
 
-        public int UpdateDocument(int id, int clientId, int orderId, int invoiceId, DateTime dateSent)
+        public int UpdateDocument(int id, int clientId, int orderId, DateTime dateSent)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
@@ -110,8 +105,7 @@ namespace WHManager.DataAccess.Repositories
                 {
                     OutgoingDocument document = context.OutgoingDocuments.SingleOrDefault(x => x.Id == id);
                     document.Contrahent = context.Clients.SingleOrDefault(x => x.Id == clientId);
-                    document.Order = context.Orders.SingleOrDefault(x => x.Id == orderId);
-                    document.Invoice = context.Invoices.SingleOrDefault(x => x.Id == invoiceId);
+                    document.OrderId = orderId;
                     document.DateSent = dateSent;
                     return document.Id;
                 }

@@ -45,11 +45,17 @@ namespace WHManager.DesktopUI.Views.FormViews
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             Role = role;
             RoleGridView = roleView;
-            textBoxName.Text = role.Name;
-            if(role.Admin == true)
-            {
-                checkboxAdmin.IsChecked = true;
-            }
+            CheckBoxes();
+        }
+
+        private void CheckBoxes()
+        {
+            textBoxName.Text = Role.Name;
+            checkboxAdmin.IsChecked = Role.Admin;
+            checkboxWarehouse.IsChecked = Role.Warehouse;
+            checkboxBusiness.IsChecked = Role.Business;
+            checkboxContractors.IsChecked = Role.Contractors;
+            checkboxDocuments.IsChecked = Role.Documents;
         }
 
         private void ButtonAddRoleClick(object sender, RoutedEventArgs e)
@@ -89,16 +95,15 @@ namespace WHManager.DesktopUI.Views.FormViews
         {
             try
             {
-                bool admin = false;
-                if(checkboxAdmin.IsChecked == true)
-                {
-                    admin = true;
-                }
                 IRoleService roleService = new RoleService();
                 Role role = new Role
                 {
                     Name = textBoxName.Text,
-                    Admin = admin
+                    Admin = checkboxAdmin.IsChecked.Value,
+                    Warehouse = checkboxWarehouse.IsChecked.Value,
+                    Business = checkboxBusiness.IsChecked.Value,
+                    Contractors = checkboxContractors.IsChecked.Value,
+                    Documents = checkboxDocuments.IsChecked.Value
                 };
                 roleService.AddRole(role);
             }
@@ -111,17 +116,16 @@ namespace WHManager.DesktopUI.Views.FormViews
         {
             try
             {
-                bool admin = false;
-                if (checkboxAdmin.IsChecked == true)
-                {
-                    admin = true;
-                }
                 IRoleService roleService = new RoleService();
                 Role role = new Role
                 {
                     Id = Role.Id,
                     Name = textBoxName.Text,
-                    Admin = admin
+                    Admin = checkboxAdmin.IsChecked.Value,
+                    Warehouse = checkboxWarehouse.IsChecked.Value,
+                    Business = checkboxBusiness.IsChecked.Value,
+                    Contractors = checkboxContractors.IsChecked.Value,
+                    Documents = checkboxDocuments.IsChecked.Value
                 };
                 roleService.UpdateRole(role);
             }

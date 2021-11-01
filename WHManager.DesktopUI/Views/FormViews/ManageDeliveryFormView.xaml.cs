@@ -64,11 +64,11 @@ namespace WHManager.DesktopUI.Views.FormViews
             comboBoxDeliveriesProducts.ItemsSource = Products.ToList();
             comboBoxDeliveriesProviders.ItemsSource = Providers.ToList();
 
-            if(Products != null)
+            if(Products.Count != 0)
             {
                 comboBoxDeliveriesProducts.SelectedItem = Products[0];
             }
-            if(Providers != null)
+            if(Providers.Count != 0)
             {
                 comboBoxDeliveriesProviders.SelectedItem = Providers[0];
             }

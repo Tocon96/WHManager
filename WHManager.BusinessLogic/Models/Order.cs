@@ -10,6 +10,7 @@ namespace WHManager.BusinessLogic.Models
         public IList<Item> Items { get; set; }
         public decimal Price { get; set; }
         public DateTime DateOrdered { get; set; }
+        public DateTime? DateRealized { get; set; }
         public Invoice Invoice { get; set; }
         public bool IsRealized { get; set; }
         public Client Client { get; set; }

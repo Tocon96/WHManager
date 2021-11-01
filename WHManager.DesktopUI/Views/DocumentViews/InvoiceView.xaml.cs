@@ -20,6 +20,7 @@ using WHManager.DesktopUI.Views.FormViews;
 using System.ComponentModel;
 using WHManager.BusinessLogic.Services.DocumentServices;
 using WHManager.BusinessLogic.Services.DocumentServices.Interfaces;
+using Microsoft.Win32;
 
 namespace WHManager.DesktopUI.Views.BusinessViews
 {
@@ -29,6 +30,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
     public partial class InvoiceView : UserControl
     {
         IInvoiceService invoiceService = new InvoiceService();
+        IOrderService orderService = new OrderService();
         public ObservableCollection<Invoice> Invoices
         {
             get;
@@ -108,14 +110,25 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             }
         }
 
-        private void gridProductGeneratePdf(object sender, RoutedEventArgs e)
+        private void DownloadDocumentClick(object sender, RoutedEventArgs e)
         {
             GeneratePdf();
         }
 
         private void GeneratePdf()
         {
-
+            if (gridInvoices.SelectedItem != null)
+            {
+                Invoice invoice = gridInvoices.SelectedItem as Invoice;
+                Order order = orderService.GetOrderById(invoice.Id);
+                SaveFileDialog svg = new SaveFileDialog();
+                svg.Filter = "Documents (*.pdf)|*.pdf|All files (*.*)|*.*";
+                Nullable<bool> result = svg.ShowDialog();
+                if (result == true)
+                {
+                    invoiceService.GeneratePdf(svg.FileName, order);
+                }
+            }
         }
 
         private IList<Invoice> SearchInvoices()

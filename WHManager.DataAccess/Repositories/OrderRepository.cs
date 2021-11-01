@@ -20,27 +20,21 @@ namespace WHManager.DataAccess.Repositories
             _contextFactory = contextFactory;
         }
 
-        public void AddOrder(int id, decimal price, DateTime dateOrdered, IList<int> items, int clientId)
+        public int AddOrder(decimal price, DateTime dateOrdered, int clientId)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
                 try
                 {
-                    ICollection<Item> itemCollection = new ObservableCollection<Item>();
-                    foreach(int i in items)
-                    {
-                        Item item = context.Items.SingleOrDefault(x => x.Id == i);
-                        itemCollection.Add(item);
-                    };
                     Order order = new Order
                     {
-                        Items = itemCollection,
                         Price = price,
                         DateOrdered = dateOrdered,
                         Client = context.Clients.SingleOrDefault(x => x.Id == clientId),
                     };
                     context.Orders.Add(order);
                     context.SaveChanges();
+                    return order.Id;
                 }
                 catch
                 {
@@ -49,22 +43,15 @@ namespace WHManager.DataAccess.Repositories
             }
         }
 
-        public void UpdateOrder(int id, DateTime dateOrdered, IList<int> items, decimal price, int clientId, int? invoiceId = null)
+        public void UpdateOrder(int id, DateTime dateOrdered, decimal price, int clientId, int? invoiceId = null)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
                 try
                 {
-                    ICollection<Item> itemCollection = new ObservableCollection<Item>();
-                    foreach (int i in items)
-                    {
-                        Item item = context.Items.SingleOrDefault(x => x.Id == i);
-                        itemCollection.Add(item);
-                    };
                     Order updatedOrder = context.Orders.SingleOrDefault(x => x.Id == id);
                     updatedOrder.Client = context.Clients.SingleOrDefault(x => x.Id == clientId);
                     updatedOrder.DateOrdered = dateOrdered;
-                    updatedOrder.Items = itemCollection;
                     updatedOrder.Price = price;
                     if(invoiceId != null)
                     {
@@ -217,90 +204,6 @@ namespace WHManager.DataAccess.Repositories
                 }
             }
         }
-        public IEnumerable<Order> GetOrdersByDate(DateTime? earlierDate, DateTime? laterDate)
-        {
-            if (earlierDate != null && laterDate != null)
-            {
-                try
-                {
-                    using (WHManagerDBContext context = _contextFactory.CreateDbContext())
-                    {
-                        IEnumerable<Order> orders = context.Orders.Include(c => c.Client)
-                                                                  .Include(i => i.Items)
-                                                                  .ToList()
-                                                                  .FindAll(x => x.DateOrdered >= earlierDate && x.DateOrdered <= laterDate);
-
-                        return orders;
-                    }
-                }
-                catch
-                {
-                    throw new Exception("Błąd pobierania zamówień: ");
-                }
-            }
-            else if (earlierDate != null && laterDate == null)
-            {
-                try
-                {
-                    using (WHManagerDBContext context = _contextFactory.CreateDbContext())
-                    {
-                        IEnumerable<Order> orders = context.Orders.Include(c => c.Client)
-                                                                  .Include(i => i.Items)
-                                                                  .ToList()
-                                                                  .FindAll(x => x.DateOrdered >= earlierDate);
-
-                        return orders;
-                    }
-                }
-                catch
-                {
-                    throw new Exception("Błąd pobierania zamówień: ");
-                }
-            }
-            else if (earlierDate == null && laterDate != null)
-            {
-                try
-                {
-                    using (WHManagerDBContext context = _contextFactory.CreateDbContext())
-                    {
-                        IEnumerable<Order> orders = context.Orders.Include(c => c.Client)
-                                                                   .Include(i => i.Items)
-                                                                   .ToList()
-                                                                   .FindAll(x => x.DateOrdered <= laterDate);
-
-                        return orders;
-                    }
-                }
-                catch
-                {
-                    throw new Exception("Błąd pobierania zamówień: ");
-                }
-            }
-            else if (earlierDate == null && laterDate == null)
-            {
-                try
-                {
-                    using (WHManagerDBContext context = _contextFactory.CreateDbContext())
-                    {
-                        IEnumerable<Order> orders = context.Orders.Include(c => c.Client)
-                                                                        .Include(i => i.Items)
-                                                                        .ToList()
-                                                                        .FindAll(x => x.DateOrdered <= laterDate);
-
-
-                        return orders;
-                    }
-                }
-                catch
-                {
-                    throw new Exception("Błąd pobierania zamówień: ");
-                }
-            }
-            else
-            {
-                throw new Exception("Błąd pobierania zamówień: ");
-            }
-        }
 
         public IEnumerable<Order> SearchOrders(List<string> criteria)
         {
@@ -338,7 +241,24 @@ namespace WHManager.DataAccess.Repositories
                 {
                     DateTime earlierDate = Convert.ToDateTime(criteria[2]);
                     DateTime laterDate = Convert.ToDateTime(criteria[3]);
-                    orders = orders.Where(x => x.DateOrdered >= earlierDate && x.DateOrdered <= laterDate);
+                    orders = orders.Where(x => x.DateRealized >= earlierDate && x.DateRealized <= laterDate);
+                }
+                if (!string.IsNullOrEmpty(criteria[4]) && string.IsNullOrEmpty(criteria[5]))
+                {
+                    DateTime earlierDate = Convert.ToDateTime(criteria[4]);
+                    orders = orders.Where(x => x.DateRealized >= earlierDate);
+                }
+                if (string.IsNullOrEmpty(criteria[4]) && !string.IsNullOrEmpty(criteria[5]))
+                {
+                    DateTime laterDate = Convert.ToDateTime(criteria[5]);
+                    orders = orders.Where(x => x.DateRealized <= laterDate);
+                }
+
+                if (!string.IsNullOrEmpty(criteria[4]) && !string.IsNullOrEmpty(criteria[5]))
+                {
+                    DateTime earlierDate = Convert.ToDateTime(criteria[4]);
+                    DateTime laterDate = Convert.ToDateTime(criteria[5]);
+                    orders = orders.Where(x => x.DateRealized >= earlierDate && x.DateRealized <= laterDate);
                 }
 
                 IEnumerable<Order> ordersList = orders.ToList();
@@ -346,6 +266,19 @@ namespace WHManager.DataAccess.Repositories
                 return ordersList;
             }
 
+        }
+
+        public void RealizeOrder(int orderId, DateTime dateRealized)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                Order order = context.Orders.Include(c => c.Client)
+                                            .Include(i => i.Items)
+                                            .FirstOrDefault(x => x.Id == orderId);
+                order.DateRealized = dateRealized;
+                order.IsRealized = true;
+                context.SaveChanges();
+            }            
         }
     }
 }

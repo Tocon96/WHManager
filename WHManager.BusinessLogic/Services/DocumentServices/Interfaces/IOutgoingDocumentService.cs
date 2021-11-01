@@ -8,7 +8,7 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
     public interface IOutgoingDocumentService
     {
         public int AddDocument(OutgoingDocument document);
-        public int UpdateDocumnet(OutgoingDocument document);
+        public int UpdateDocument(OutgoingDocument document);
         public void DeleteDocument(int id);
         public OutgoingDocument GetDocument(int id);
         public IList<OutgoingDocument> GetDocuments();

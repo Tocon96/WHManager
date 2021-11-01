@@ -17,7 +17,7 @@ namespace WHManager.BusinessLogic.Services
         {
             try
             { 
-                roleRepository.CreateNewRole(role.Name, role.Admin, role.Business, role.Contractors, role.Documents, role.Warehouse, role.Reports);
+                roleRepository.CreateNewRole(role.Name, role.Admin, role.Business, role.Contractors, role.Documents, role.Warehouse);
             }
             catch
             {
@@ -54,7 +54,6 @@ namespace WHManager.BusinessLogic.Services
                         Business = role.Business,
                         Warehouse = role.Warehouse,
                         Contractors = role.Contractors,
-                        Reports = role.Reports,
                         Documents = role.Documents
                     };
                     roles.Add(newRole);
@@ -83,7 +82,6 @@ namespace WHManager.BusinessLogic.Services
                         Business = role.Business,
                         Warehouse = role.Warehouse,
                         Contractors = role.Contractors,
-                        Reports = role.Reports,
                         Documents = role.Documents
                     };
                     roles.Add(newRole);
@@ -112,7 +110,6 @@ namespace WHManager.BusinessLogic.Services
                         Business = role.Business,
                         Warehouse = role.Warehouse,
                         Contractors = role.Contractors,
-                        Reports = role.Reports,
                         Documents = role.Documents
                     };
                     roles.Add(newRole);
@@ -147,7 +144,7 @@ namespace WHManager.BusinessLogic.Services
         {
             try
             {
-                roleRepository.UpdateRole(role.Id, role.Name, role.Admin, role.Business, role.Contractors, role.Documents, role.Warehouse, role.Reports);
+                roleRepository.UpdateRole(role.Id, role.Name, role.Admin, role.Business, role.Contractors, role.Documents, role.Warehouse);
             }
             catch
             {

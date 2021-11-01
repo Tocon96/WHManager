@@ -12,7 +12,6 @@ namespace WHManager.DataAccess.Models
         public bool Business { get; set; }
         public bool Contractors { get; set; } 
         public bool Documents {get; set;}
-        public bool Reports { get; set; }
         public bool Warehouse { get; set; }
         public ICollection<User> Users { get; set; }
     }

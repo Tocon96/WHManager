@@ -139,20 +139,6 @@
                     <DataGridTextColumn Header="ID" Width="*" Binding="{Binding Id}"></DataGridTextColumn>
                     <DataGridTextColumn Header="Produkt" Width="*" Binding="{Binding Product.Name}"></DataGridTextColumn>
                     <DataGridTextColumn Header="Data Wydania" Width="*" Binding="{Binding DateOfEmission}"></DataGridTextColumn>
-                    <DataGridTemplateColumn>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Width="50"  Click="UpdateItemClick">Edytuj</Button>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Width="50" Click="DeleteItemClick">Usuń</Button>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

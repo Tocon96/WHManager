@@ -37,9 +37,10 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
             gridItems.ItemsSource = new ObservableCollection<Item>(Delivery.Items);
         }
 
+
         private void ClearSearchClick(object sender, RoutedEventArgs e)
         {
-            textBoxProduct.Text = "";
+            idTextBox.Text = "";
             textBoxProduct.Text = "";
             comboBoxAvailability.SelectedItem = AvailabilityOptions[0];
             FillGrid();

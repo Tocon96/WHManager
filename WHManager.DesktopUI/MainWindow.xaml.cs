@@ -68,7 +68,6 @@ namespace WHManager.DesktopUI
                     {
                         MenuText = "Biznes",
                         SubMenuList = new List<SubMenuItemsData>{
-                            new SubMenuItemsData(){ SubMenuDirectory="BusinessViews", File = "InvoiceView", SubMenuText="Faktury" },
                             new SubMenuItemsData(){ SubMenuDirectory="BusinessViews", File = "OrderView", SubMenuText="Zamówienia" },
                             new SubMenuItemsData(){ SubMenuDirectory="BusinessViews", File = "DeliveryView", SubMenuText="Dostawy"}
                         }
@@ -83,19 +82,8 @@ namespace WHManager.DesktopUI
                         SubMenuList = new List<SubMenuItemsData>
                         {
                             new SubMenuItemsData() { SubMenuDirectory = "DocumentViews", File = "IncomingDocumentView", SubMenuText = "Dokumenty Przychodzące"},
-                            new SubMenuItemsData() { SubMenuDirectory = "DocumentViews", File = "OutgoingDocumentView", SubMenuText = "Dokumenty Wychodzące"}
-                        }
-                    };
-                    menu.Add(menuItem);
-                }
-                if (role.Reports == true)
-                {
-                    MenuItemsData menuItem = new MenuItemsData()
-                    {
-                        MenuText = "Raporty",
-                        SubMenuList = new List<SubMenuItemsData>
-                        {
-                            new SubMenuItemsData() { SubMenuDirectory = "ReportViews", File = "ReportView", SubMenuText = "Raporty"},
+                            new SubMenuItemsData() { SubMenuDirectory = "DocumentViews", File = "OutgoingDocumentView", SubMenuText = "Dokumenty Wychodzące"},
+                            new SubMenuItemsData() { SubMenuDirectory = "DocumentViews", File = "InvoiceView", SubMenuText="Faktury" },
                         }
                     };
                     menu.Add(menuItem);

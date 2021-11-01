@@ -63,9 +63,32 @@
             </Setter>
             <Setter Property="FontSize" Value="18"/>
         </Style>
+        <Style x:Key="ButtonGridStyle" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Arrow" />
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Silver"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -80,42 +103,68 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <!--TextBlocks-->
-        <TextBlock x:Name="textBlockManageOrder" Grid.ColumnSpan="4" Grid.Row="0" Height="30" FontSize="18">Dodaj Nowe Zamówienie</TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">Data złożenia</TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">Klient</TextBlock>
-        <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3">Produkt</TextBlock>
-        <!--Datepicker-->
-        <DatePicker Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" x:Name="datepickerOrdersDate"></DatePicker>
-        <!--ComboBox-->
-        <ComboBox x:Name="comboBoxOrdersClients" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" DisplayMemberPath="Name"></ComboBox>
-        <ComboBox x:Name="comboBoxOrdersProducts" Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="3" DisplayMemberPath="Name" SelectionChanged="comboBoxOrdersProducts_SelectionChanged"></ComboBox>
-        <!--Buttons-->
-        <Button Grid.Column="0" Grid.Row="7" Click="buttonOrdersCancel" Width="150" Style="{StaticResource ButtonStyle}">Anuluj</Button>
-        <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
-            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-        </StackPanel>
-        <Button Grid.Column="2" Grid.Row="7" Click="buttonOrdersConfirm" Width="150" Style="{StaticResource ButtonStyle}">Zatwierdź</Button>
-        <!--Datagrid-->
         <DataGrid Grid.Row="1" 
-                  Grid.RowSpan="7" 
-                  Grid.Column="4" 
+                  Grid.RowSpan="10" 
+                  Grid.Column="0" 
                   SelectionMode="Single" 
-                  Name="gridItems" 
-                  MouseDoubleClick="gridItems_MouseDoubleClick" 
+                  Name="gridExistingItems" 
                   AutoGenerateColumns="False" 
                   CanUserAddRows="False" 
                   IsReadOnly="True"
                   ScrollViewer.CanContentScroll="True" 
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                  Height="150">
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto" Margin="0,1,0,0">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Width="15" Binding="{Binding Id}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Produkt" Width="150" Binding="{Binding Product.Name}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Data Przyjęcia" Width="130" Binding="{Binding DateOfAdmission}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Produkt" Width="150" Binding="{Binding Name}" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Ilość" Width="150" Binding="{Binding Count}" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <!--TextBlocks-->
+        <TextBlock x:Name="textBlockManageOrder" Grid.ColumnSpan="5" Grid.Row="0" Height="30" FontSize="18">Dodaj Nowe Zamówienie</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3">Data złożenia</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3">Klient</TextBlock>
+        <TextBlock Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3">Produkt</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3">Ilość</TextBlock>
+        <!--Datepicker-->
+        <DatePicker Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2" x:Name="datepickerOrdersDate"></DatePicker>
+        <!--ComboBox-->
+        <ComboBox x:Name="comboBoxOrdersClients" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3" DisplayMemberPath="Name"></ComboBox>
+        <ComboBox x:Name="comboBoxOrdersProducts" Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="3" DisplayMemberPath="Name"></ComboBox>
+        <TextBox x:Name="textBoxDeliveryProductCount" Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="3"></TextBox>
+        <!--Buttons-->
+        <Button Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="9" Click="buttonAddItemsToDelivery" Style="{StaticResource ButtonStyle}">Dodaj przedmioty</Button>
+        <Button Grid.Column="1" Grid.Row="10" Click="buttonOrdersCancel" Width="150" Style="{StaticResource ButtonStyle}">Anuluj</Button>
+        <StackPanel Grid.Row="10" Grid.Column="2" Orientation="Horizontal">
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+        </StackPanel>
+        <Button Grid.Column="3" Grid.Row="10" Click="buttonOrdersConfirm" Width="150" Style="{StaticResource ButtonStyle}">Zatwierdź</Button>
+        <!--Datagrid-->
+        <DataGrid Grid.Row="1" 
+                  Grid.RowSpan="10" 
+                  Grid.Column="4" 
+                  SelectionMode="Single" 
+                  Name="gridItems" 
+                  AutoGenerateColumns="False" 
+                  CanUserAddRows="False" 
+                  IsReadOnly="True"
+                  ScrollViewer.CanContentScroll="True" 
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Produkt" Width="150" Binding="{Binding Name}" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Ilość" Width="150" Binding="{Binding Count}" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"></DataGridTextColumn>
+                <DataGridTemplateColumn Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource ButtonGridStyle}" Click="DeleteItemsClick">Usuń</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

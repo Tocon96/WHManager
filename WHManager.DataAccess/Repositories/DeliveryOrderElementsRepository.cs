@@ -95,7 +95,7 @@ namespace WHManager.DataAccess.Repositories
                 try
                 {
                     IEnumerable<DeliveryOrderElements> elements = context.DeliveryElements.ToList().FindAll(x => x.DeliveryId == deliveryId && x.Origin.StartsWith(origin));
-                    return elements;
+                    return elements;                    
                 }
                 catch (Exception e)
                 {

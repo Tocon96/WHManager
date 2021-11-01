@@ -57,12 +57,17 @@ namespace WHManager.DesktopUI.Views.FormViews
             get;
             set;
         }
-
+        private List<DeliveryOrderTableContent> Elements { get; set; }
+        private List<DeliveryOrderTableContent> ExistingElements { get; set; }
+        IItemService itemService = new ItemService();
+        IOrderService orderService = new OrderService();
+        IProductService productService = new ProductService();
         public ManageOrderFormView(OrderView orderView)
         {
             InitializeComponent();
             OrderView = orderView;
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            GetAllAvailableItems();
             FillData();
         }
 
@@ -75,21 +80,58 @@ namespace WHManager.DesktopUI.Views.FormViews
             comboBoxOrdersClients.SelectedIndex = Order.Client.Id;
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             textBlockManageOrder.Text = "Edytuj zamówienie o ID: " + Order.Id;
+            GetAllAvailableItems();
             FillData();
+        }
+
+        private void GetAllAvailableItems()
+        {
+            ExistingElements = itemService.GroupItems().ToList();
+            Elements = new List<DeliveryOrderTableContent>();
+            gridExistingItems.ItemsSource = ExistingElements;
+            if(Order != null)
+            {
+                Elements = orderService.GetElements(Order.Id).ToList();
+                gridItems.ItemsSource = Elements;
+            }
         }
 
         private void buttonOrdersConfirm(object sender, RoutedEventArgs e)
         {
             if(Order == null)
             {
-                AddOrder();
+                if (!Elements.Any())
+                {
+                    MessageBox.Show("Dodaj elementy do dostawy.");
+                }
+                else if (datepickerOrdersDate.SelectedDate == null)
+                {
+                    MessageBox.Show("Wybierz datę");
+                }
+                else
+                {
+                    AddOrder();
+                    DialogResult = true;
+                    this.Close();
+                }
             }
             else
             {
-                UpdateOrder();
+                if (!Elements.Any())
+                {
+                    MessageBox.Show("Dodaj elementy do dostawy.");
+                }
+                else if (datepickerOrdersDate.SelectedDate == null)
+                {
+                    MessageBox.Show("Wybierz datę");
+                }
+                else
+                {
+                    UpdateOrder();
+                    DialogResult = true;
+                    this.Close();
+                }
             }
-            DialogResult = true;
-            this.Close();
         }
 
         private void buttonOrdersCancel(object sender, RoutedEventArgs e)
@@ -116,7 +158,6 @@ namespace WHManager.DesktopUI.Views.FormViews
         {
             List<Product> products = GetProducts();
             List<Client> clients = GetClients();
-            
 
             Products = new ObservableCollection<Product>(products);
             Clients = new ObservableCollection<Client>(clients);
@@ -126,25 +167,15 @@ namespace WHManager.DesktopUI.Views.FormViews
             comboBoxOrdersClients.SelectedIndex = 0;
             comboBoxOrdersProducts.ItemsSource = Products;
             comboBoxOrdersProducts.SelectedIndex = 0;
-
-            Product product = comboBoxOrdersProducts.SelectedItem as Product;
-
-            List<Item> items = GetItems(product.Id);
-            Items = new ObservableCollection<Item>(items);
-            gridItems.ItemsSource = Items;
-
-            ItemsList = new List<Item>();
         }
 
         private List<Item> GetItems(int id)
         {
-            IItemService itemService = new ItemService();
             List<Item> items = itemService.GetItemsByProduct(id).ToList();
             return items;
         }
         private List<Product> GetProducts()
         {
-            IProductService productService = new ProductService();
             List<Product> products = productService.GetProducts().ToList();
             return products;
         }
@@ -157,74 +188,99 @@ namespace WHManager.DesktopUI.Views.FormViews
 
         private void AddOrder()
         {
-            if (gridItems.SelectedItems != null)
+            Order order = new Order
             {
-                IOrderService orderService = new OrderService();
-                IItemService itemService = new ItemService();
-                decimal price = 0;
-                foreach(var item in ItemsList)
-                {
-                    price = price+item.Product.PriceSell;
-                    item.IsInStock = false;
-                    itemService.UpdateItem(item);
-                }
+                DateOrdered = datepickerOrdersDate.SelectedDate.Value.Date,
+                Client = comboBoxOrdersClients.SelectedItem as Client
+            };
+            orderService.AddOrder(order, Elements);
+        }
+        private void buttonAddItemsToDelivery(object sender, RoutedEventArgs e)
+        {
+            AddElementToTable();
+            gridItems.ItemsSource = new ObservableCollection<DeliveryOrderTableContent>(Elements);
+            gridExistingItems.ItemsSource = new ObservableCollection<DeliveryOrderTableContent>(ExistingElements);
+        }
 
-                Order order = new Order
+        private bool AddElementToTable()
+        {
+            Product product = comboBoxOrdersProducts.SelectedItem as Product;
+            if (Elements.Count == 0)
+            {
+                CreateNewTableContent(product);
+                EmptyInputs();
+                return true;
+            }
+            if (Elements.Any(x => x.ProductId == product.Id))
+            {
+                UpdateElements(product);
+                EmptyInputs();
+                return true;
+            }
+            CreateNewTableContent(product);
+            EmptyInputs();
+            return true;
+        }
+
+        private void CreateNewTableContent(Product product)
+        {
+            if (double.TryParse(textBoxDeliveryProductCount.Text, out double result))
+            {
+                DeliveryOrderTableContent content = new DeliveryOrderTableContent(null, product.Id, product.Name, result);
+                var existingElement = ExistingElements.SingleOrDefault(x => x.ProductId == product.Id);
+                if(result <= existingElement.Count)
                 {
-                    Client = comboBoxOrdersClients.SelectedItem as Client,
-                    Items = ItemsList,
-                    DateOrdered = datepickerOrdersDate.DisplayDate.Date,
-                    Price = price,
-                };
-                orderService.AddOrder(order);
+                    existingElement.Count = existingElement.Count - result;
+                    Elements.Add(content);
+                }
+                else
+                {
+                    MessageBox.Show("Ilość produktów w zamówieniu nie może byc wieksza od ilości egzemplarzy w magazynie.");
+                }
             }
             else
             {
-                MessageBox.Show("Proszę zaznaczyć przedmioty do zamówienia.");
+                MessageBox.Show("Podaj poprawną ilość elementów");
             }
         }
+
+        private void UpdateElements(Product product)
+        {
+            var element = Elements.SingleOrDefault(x => x.ProductId == product.Id);
+            double previousCount = element.Count;
+            double newCount = double.Parse(textBoxDeliveryProductCount.Text);
+            var existingElement = ExistingElements.SingleOrDefault(x => x.ProductId == product.Id);
+            if(existingElement.Count + previousCount >= newCount)
+            {
+                element.Count = newCount;
+                existingElement.Count = existingElement.Count + previousCount - element.Count;
+            }
+            else
+            {
+                MessageBox.Show("Ilość produktów w zamówieniu nie może byc wieksza od ilości egzemplarzy w magazynie.");
+            }
+        }
+
+        private void EmptyInputs()
+        {
+            comboBoxOrdersProducts.SelectedItem = Products[0];
+            comboBoxOrdersClients.SelectedItem = Clients[0];
+            textBoxDeliveryProductCount.Text = "";
+        }
+
         private void UpdateOrder()
         {
-
-            if (gridItems.SelectedItems != null)
-            {
-                IOrderService orderService = new OrderService();
-                IItemService itemService = new ItemService();
-                decimal price = 0;
-                foreach (var item in ItemsList)
-                {
-                    price = price+ item.Product.PriceSell;
-                    item.IsInStock = false;
-                    itemService.UpdateItem(item);
-                }
-
-                Order order = new Order
-                {
-                    Id = Order.Id,
-                    Client = comboBoxOrdersClients.SelectedItem as Client,
-                    Items = ItemsList,
-                    DateOrdered = datepickerOrdersDate.DisplayDate.Date,
-                    Price = price,
-                };
-                orderService.UpdateOrder(order);
-            }
-            else
-            {
-                MessageBox.Show("Proszę zaznaczyć przedmioty do zamówienia.");
-            }
+            orderService.UpdateOrder(Order, Elements.ToList());
         }
 
-        private void gridItems_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void DeleteItemsClick(object sender, RoutedEventArgs e)
         {
-            if (gridItems.SelectedItem != null)
-            {
-                Item item = gridItems.SelectedItem as Item;
-                var index = gridItems.SelectedIndex;
-                ItemsList.Add(item);
-                DataGridRow row = (DataGridRow)((DataGrid)sender).ItemContainerGenerator.ContainerFromIndex(index);
-                row.Background = new SolidColorBrush(Colors.Aquamarine);
-                MessageBox.Show("Przedmiot został dodany do listy");
-            }
+            DeliveryOrderTableContent content = gridItems.SelectedItem as DeliveryOrderTableContent;
+            Elements.Remove(content);
+            var element = ExistingElements.SingleOrDefault(x => x.ProductId == content.ProductId);
+            element.Count = element.Count + content.Count;
+            gridItems.ItemsSource = new ObservableCollection<DeliveryOrderTableContent>(Elements);
+            gridExistingItems.Items.Refresh();
         }
     }
 }

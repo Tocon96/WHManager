@@ -46,6 +46,14 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -57,14 +65,22 @@
         <TextBlock x:Name="textBlockManageRole" Grid.ColumnSpan="3" Grid.Row="0" Height="30" FontSize="18" Background="#1565c0">Dodaj Nową Rolę</TextBlock>
         <TextBlock Grid.Row="1" Grid.Column="0" PreviewMouseDown="textBoxName_PreviewMouseDown"  Grid.ColumnSpan="3">Nazwa</TextBlock>
         <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">Admin</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3">Dokumenty</TextBlock>
+        <TextBlock Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="3">Biznes</TextBlock>
+        <TextBlock Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="3">Kontrahenci</TextBlock>
+        <TextBlock Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="3">Magazyn</TextBlock>
         <!--TextBox-->
         <TextBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Name="textBoxName"></TextBox>
         <CheckBox Grid.Row="4" Grid.Column="1" Name="checkboxAdmin"></CheckBox>
+        <CheckBox Grid.Row="8" Grid.Column="1" Name="checkboxDocuments"></CheckBox>
+        <CheckBox Grid.Row="10" Grid.Column="1" Name="checkboxBusiness"></CheckBox>
+        <CheckBox Grid.Row="12" Grid.Column="1" Name="checkboxContractors"></CheckBox>
+        <CheckBox Grid.Row="14" Grid.Column="1" Name="checkboxWarehouse"></CheckBox>
         <!--Button-->
-        <Button Grid.Column="0" Grid.Row="7" Name="buttonCancel" Style="{StaticResource ButtonStyle}" Width="150" HorizontalAlignment="Left" Click="ButtonCancelClick">Anuluj</Button>
-        <StackPanel Grid.Row="13" Grid.Column="1" Orientation="Vertical">
+        <Button Grid.Column="0" Grid.Row="15" Name="buttonCancel" Style="{StaticResource ButtonStyle}" Width="150" HorizontalAlignment="Left" Click="ButtonCancelClick">Anuluj</Button>
+        <StackPanel Grid.Row="15" Grid.Column="1" Orientation="Vertical">
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
         </StackPanel>
-        <Button Grid.Column="2" Grid.Row="7" Name="buttonAddUser" Style="{StaticResource ButtonStyle}" Width="150" HorizontalAlignment="Right" Click="ButtonAddRoleClick">Zatwierdź</Button>
+        <Button Grid.Column="2" Grid.Row="15" Name="buttonAddUser" Style="{StaticResource ButtonStyle}" Width="150" HorizontalAlignment="Right" Click="ButtonAddRoleClick">Zatwierdź</Button>
     </Grid>
 </Window>

@@ -15,5 +15,15 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         void DeleteItem(int id);
         IList<Item> GetItemsByProduct(int? productId = null, string productName = null);
         IList<Item> GetEmittedItemsByProducts(int? productId = null, string productName = null);
+        IList<Item> GetAllAvailableItems();
+        IList<DeliveryOrderTableContent> GroupItems();
+        void SetItemInOrder(Item item, int orderId, int count);
+        void RemoveItemsFromOrderByProduct(int orderId, int productId);
+        void RemoveItemsFromOrder(int orderId);
+        void AddItemsToOrderByProduct(int orderId, int productId);
+        bool CheckCountOfAvailableItems(int count);
+        bool CheckCountOfAvailableItemsPerProduct(int count, int productId);
+        void SetItemsToOrder(int orderId, List<DeliveryOrderTableContent> elements);
+        void EmitItemsInOrder(int orderId, DateTime dateTime, int documentId, int invoiceId);
     }
 }

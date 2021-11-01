@@ -17,5 +17,15 @@ namespace WHManager.DataAccess.Repositories.Interfaces
         IEnumerable<Item> GetItemsByDate(DateTime? earlierDate, DateTime? laterDate);
         IEnumerable<Item> GetEmittedItemsByDate(DateTime? earlierDate, DateTime? laterDate);
         IEnumerable<Item> GetEmittedItemsByProducts(int? productId = null, string productName = null);
+        IEnumerable<Item> GetAllAvailableItems();
+        IEnumerable<Item> GetItemsByOrder(int orderId);
+		void SetItemInOrder(int productId, int orderId);
+        void AddItemToOrder(int id, int orderId);
+		void RemoveItemFromOrder(int id);
+        void EmitItem(int id, DateTime dateTime, int documentId, int invoiceId);
+        bool CheckCountOfAvailableItems(int count);
+        bool CheckCountOfAvailableItemsPerProduct(int count, int productId);
+        void RemoveItemsFromOrderByProduct(int orderId, int productId);
+        void AddItemsToOrderByProduct(int orderId, int productId);
     }
 }

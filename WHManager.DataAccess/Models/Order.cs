@@ -12,6 +12,7 @@ namespace WHManager.DataAccess.Models
         public ICollection<Item> Items { get; set; }
         public decimal Price { get; set; }
         public DateTime DateOrdered { get; set; }
+        public DateTime? DateRealized { get; set; }
         [AllowNull]
         public Invoice Invoice { get; set; }
         [AllowNull]

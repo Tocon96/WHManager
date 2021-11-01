@@ -78,37 +78,6 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
         {
             gridItems.ItemsSource = LoadData();
         }
-        private void AddItemClick(object sender, RoutedEventArgs e)
-        {
-            ManageItemFormView manageItemFormView = new ManageItemFormView(Product);
-            manageItemFormView.Show();
-        }
-        private void UpdateItemClick(object sender, RoutedEventArgs e)
-        {
-            Item item = gridItems.SelectedItem as Item;
-            ManageItemFormView manageItemFormView = new ManageItemFormView(Product, item);
-            manageItemFormView.Show();
-        }
-        private void DeleteItemClick(object sender, RoutedEventArgs e)
-        {
-            IItemService itemService = new ItemService();
-            Item item = gridItems.SelectedItem as Item;
-            itemService.DeleteItem(item.Id);
-        }
-
-        private void DeleteMultipleItemsClick(object sender, RoutedEventArgs e)
-        {
-            IItemService itemService = new ItemService();
-            Item item = gridItems.SelectedItem as Item;
-            itemService.DeleteItem(item.Id);
-        }
-
-        private void DeleteAllItemsClick(object sender, RoutedEventArgs e)
-        {
-            IItemService itemService = new ItemService();
-            Item item = gridItems.SelectedItem as Item;
-            itemService.DeleteItem(item.Id);
-        }
 
         private List<Item> GetItemById(int id)
         {

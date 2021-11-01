@@ -15,11 +15,13 @@ namespace WHManager.DataAccess.Models
 		public DateTime DateOfAdmission {get; set;}
 		public DateTime? DateOfEmission {get; set;}
         public bool IsInStock { get; set; }
+        public bool IsInOrder { get; set; }
         [AllowNull]
-        public Order Order { get; set; }
+        public int? OrderId { get; set; }
         public Provider Provider { get; set; }
         public IncomingDocument IncomingDocument { get; set; }
         public OutgoingDocument OutgoingDocument { get; set; }
+        public Invoice Invoice { get; set; }
         public int DeliveryId { get; set; }
     }
 }

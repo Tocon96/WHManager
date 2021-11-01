@@ -9,6 +9,6 @@ namespace WHManager.BusinessLogic.Models
         public int Id { get; set; }
         public DateTime DateIssued { get; set; }
         public Client Client { get; set; }
-        public Order Order { get; set; }
+        public int OrderId { get; set; }
     }
 }

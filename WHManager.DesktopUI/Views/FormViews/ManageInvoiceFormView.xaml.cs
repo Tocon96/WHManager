@@ -51,7 +51,7 @@ namespace WHManager.DesktopUI.Views.FormViews
             Invoice = invoice;
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             datepickerInvoicesDateIssued.SelectedDate = Invoice.DateIssued;
-            textBoxInvoicesOrderId.Text = Invoice.Order.Id.ToString();
+            textBoxInvoicesOrderId.Text = Invoice.OrderId.ToString();
         }
 
         private void buttonConfirmClick(object sender, RoutedEventArgs e)
@@ -116,7 +116,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 {
                     DateIssued = datepickerInvoicesDateIssued.DisplayDate.Date,
                     Client = comboBoxInvoicesClients.SelectedItem as Client,
-                    Order = GetOrder()
+                    OrderId = 0
                 };
                 invoiceService.CreateNewInvoice(invoice);
             }
@@ -135,7 +135,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 {
                     DateIssued = datepickerInvoicesDateIssued.DisplayDate.Date,
                     Client = comboBoxInvoicesClients.SelectedItem as Client,
-                    Order = GetOrder()
+                    OrderId = 0
                 };
                 invoiceService.UpdateInvoice(invoice);
             }

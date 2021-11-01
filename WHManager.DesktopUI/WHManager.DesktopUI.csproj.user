@@ -14,7 +14,7 @@
     <Compile Update="Views\BusinessViews\DeliveryView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\BusinessViews\InvoiceView.xaml.cs">
+    <Compile Update="Views\DocumentViews\InvoiceView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\BusinessViews\OrderView.xaml.cs">
@@ -44,9 +44,6 @@
     <Compile Update="Views\FormViews\ManageInvoiceFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\FormViews\ManageItemFormView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\FormViews\ManageManufacturerFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -66,9 +63,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\FormViews\ManageUserFormView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\ReportViews\ReportView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\WarehouseViews\DeliveryItemsView.xaml.cs">
@@ -97,7 +91,7 @@
     <Page Update="Views\BusinessViews\DeliveryView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\BusinessViews\InvoiceView.xaml">
+    <Page Update="Views\DocumentViews\InvoiceView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\BusinessViews\OrderView.xaml">
@@ -127,9 +121,6 @@
     <Page Update="Views\FormViews\ManageInvoiceFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\FormViews\ManageItemFormView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Views\FormViews\ManageManufacturerFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -149,9 +140,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\FormViews\ManageUserFormView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\ReportViews\ReportView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\WarehouseViews\DeliveryItemsView.xaml">

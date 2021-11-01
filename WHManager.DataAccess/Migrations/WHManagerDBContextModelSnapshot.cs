@@ -127,25 +127,15 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<DateTime>("DateIssued")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("IncomingDocumentId")
-                        .HasColumnType("int");
-
                     b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("OutgoingDocumentId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.HasIndex("IncomingDocumentId");
-
                     b.HasIndex("OrderId")
                         .IsUnique();
-
-                    b.HasIndex("OutgoingDocumentId");
 
                     b.ToTable("Invoices");
                 });
@@ -169,6 +159,12 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<int?>("IncomingDocumentId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("InvoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsInOrder")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsInStock")
                         .HasColumnType("bit");
 
@@ -189,6 +185,8 @@ namespace WHManager.DataAccess.Migrations
                     b.HasIndex("DeliveryId");
 
                     b.HasIndex("IncomingDocumentId");
+
+                    b.HasIndex("InvoiceId");
 
                     b.HasIndex("OrderId");
 
@@ -235,14 +233,14 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<DateTime>("DateOrdered")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DateRealized")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("IncomingDocumentId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsRealized")
                         .HasColumnType("bit");
-
-                    b.Property<int?>("OutgoingDocumentId")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -253,15 +251,15 @@ namespace WHManager.DataAccess.Migrations
 
                     b.HasIndex("IncomingDocumentId");
 
-                    b.HasIndex("OutgoingDocumentId");
-
                     b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("WHManager.DataAccess.Models.OutgoingDocument", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
 
                     b.Property<int?>("ContrahentId")
                         .HasColumnType("int");
@@ -269,14 +267,15 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<DateTime>("DateSent")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ContrahentId");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId")
+                        .IsUnique();
 
                     b.ToTable("OutgoingDocuments");
                 });
@@ -460,19 +459,11 @@ namespace WHManager.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WHManager.DataAccess.Models.IncomingDocument", "IncomingDocument")
-                        .WithMany()
-                        .HasForeignKey("IncomingDocumentId");
-
-                    b.HasOne("WHManager.DataAccess.Models.Order", "Order")
+                    b.HasOne("WHManager.DataAccess.Models.Order", null)
                         .WithOne("Invoice")
                         .HasForeignKey("WHManager.DataAccess.Models.Invoice", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("WHManager.DataAccess.Models.OutgoingDocument", "OutgoingDocument")
-                        .WithMany()
-                        .HasForeignKey("OutgoingDocumentId");
                 });
 
             modelBuilder.Entity("WHManager.DataAccess.Models.Item", b =>
@@ -487,10 +478,13 @@ namespace WHManager.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("IncomingDocumentId");
 
-                    b.HasOne("WHManager.DataAccess.Models.Order", "Order")
+                    b.HasOne("WHManager.DataAccess.Models.Invoice", "Invoice")
+                        .WithMany()
+                        .HasForeignKey("InvoiceId");
+
+                    b.HasOne("WHManager.DataAccess.Models.Order", null)
                         .WithMany("Items")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("OrderId");
 
                     b.HasOne("WHManager.DataAccess.Models.OutgoingDocument", "OutgoingDocument")
                         .WithMany()
@@ -518,10 +512,6 @@ namespace WHManager.DataAccess.Migrations
                     b.HasOne("WHManager.DataAccess.Models.IncomingDocument", "IncomingDocument")
                         .WithMany()
                         .HasForeignKey("IncomingDocumentId");
-
-                    b.HasOne("WHManager.DataAccess.Models.OutgoingDocument", "OutgoingDocument")
-                        .WithMany()
-                        .HasForeignKey("OutgoingDocumentId");
                 });
 
             modelBuilder.Entity("WHManager.DataAccess.Models.OutgoingDocument", b =>
@@ -531,15 +521,11 @@ namespace WHManager.DataAccess.Migrations
                         .HasForeignKey("ContrahentId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("WHManager.DataAccess.Models.Invoice", "Invoice")
-                        .WithMany()
-                        .HasForeignKey("Id")
+                    b.HasOne("WHManager.DataAccess.Models.Order", null)
+                        .WithOne("OutgoingDocument")
+                        .HasForeignKey("WHManager.DataAccess.Models.OutgoingDocument", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("WHManager.DataAccess.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId");
                 });
 
             modelBuilder.Entity("WHManager.DataAccess.Models.Product", b =>

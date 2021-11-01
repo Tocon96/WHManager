@@ -29,7 +29,6 @@ namespace WHManager.DataAccess.Repositories
                     {
                         DateIssued = dateIssued,
                         Client = context.Clients.SingleOrDefault(x => x.Id == clientId),
-                        Order = context.Orders.SingleOrDefault(x => x.Id == orderId),
                         OrderId = order.Id
                     };
                     context.Invoices.Add(invoice);
@@ -52,7 +51,6 @@ namespace WHManager.DataAccess.Repositories
                     Invoice updatedInvoice = context.Invoices.SingleOrDefault(x => x.Id == id);
                     updatedInvoice.DateIssued = dateIssued;
                     updatedInvoice.Client = context.Clients.SingleOrDefault(x => x.Id == clientId);
-                    updatedInvoice.Order = context.Orders.SingleOrDefault(x => x.Id == orderId);
                     updatedInvoice.OrderId = order.Id;
                     context.SaveChanges();
                 }
@@ -85,8 +83,7 @@ namespace WHManager.DataAccess.Repositories
             {
                 try
                 {
-                    IEnumerable<Invoice> invoices = context.Invoices.Include(o => o.Order)
-                                                                    .Include(c => c.Client)
+                    IEnumerable<Invoice> invoices = context.Invoices.Include(c => c.Client)
                                                                     .ToList();
                     return invoices;
                 }
@@ -103,8 +100,7 @@ namespace WHManager.DataAccess.Repositories
             {
                 try
                 {
-                    Invoice invoice = context.Invoices.Include(o => o.Order)
-                                                      .Include(c => c.Client)
+                    Invoice invoice = context.Invoices.Include(c => c.Client)
                                                       .SingleOrDefault(x => x.Id == id);
                     return invoice;
                 }
@@ -121,9 +117,8 @@ namespace WHManager.DataAccess.Repositories
             {
                 try
                 {
-                    Invoice invoice = context.Invoices.Include(o => o.Order)
-                                              .Include(c => c.Client)
-                                              .SingleOrDefault(x => x.Order.Id == orderId);
+                    Invoice invoice = context.Invoices.Include(c => c.Client)
+                                                     .SingleOrDefault(x => x.OrderId == orderId);
                     return invoice;
                 }
                 catch (Exception)
@@ -141,8 +136,7 @@ namespace WHManager.DataAccess.Repositories
                 {
                     try
                     {
-                        IEnumerable<Invoice> invoices = context.Invoices.Include(o => o.Order)
-                                                                        .Include(c => c.Client)
+                        IEnumerable<Invoice> invoices = context.Invoices.Include(c => c.Client)
                                                                         .ToList()
                                                                         .FindAll(x => x.Client.Id == clientId);
                         return invoices;
@@ -159,8 +153,7 @@ namespace WHManager.DataAccess.Repositories
                 {
                     try
                     {
-                        IEnumerable<Invoice> invoices = context.Invoices.Include(o => o.Order)
-                                                                        .Include(c => c.Client)
+                        IEnumerable<Invoice> invoices = context.Invoices.Include(c => c.Client)
                                                                         .ToList()
                                                                         .FindAll(x => x.Client.Name.StartsWith(clientName));
                         return invoices;
@@ -177,8 +170,7 @@ namespace WHManager.DataAccess.Repositories
                 {
                     try
                     {
-                        IEnumerable<Invoice> invoices = context.Invoices.Include(o => o.Order)
-                                                                        .Include(c => c.Client)
+                        IEnumerable<Invoice> invoices = context.Invoices.Include(c => c.Client)
                                                                         .ToList()
                                                                         .FindAll(x => x.Client.Nip == clientNip);
                         return invoices;
@@ -203,8 +195,7 @@ namespace WHManager.DataAccess.Repositories
                 {
                     using (WHManagerDBContext context = _contextFactory.CreateDbContext())
                     {
-                        IEnumerable<Invoice> invoices = context.Invoices.Include(o => o.Order)
-                                                                        .Include(c => c.Client)
+                        IEnumerable<Invoice> invoices = context.Invoices.Include(c => c.Client)
                                                                         .ToList().FindAll(x => x.DateIssued >= earlierDate && x.DateIssued <= laterDate);
                         return invoices;
                     }
@@ -220,8 +211,7 @@ namespace WHManager.DataAccess.Repositories
                 {
                     using (WHManagerDBContext context = _contextFactory.CreateDbContext())
                     {
-                        IEnumerable<Invoice> invoices = context.Invoices.Include(o => o.Order)
-                                                                        .Include(c => c.Client)
+                        IEnumerable<Invoice> invoices = context.Invoices.Include(c => c.Client)
                                                                         .ToList()
                                                                         .FindAll(x => x.DateIssued >= earlierDate);
                         return invoices;
@@ -239,7 +229,6 @@ namespace WHManager.DataAccess.Repositories
                     using (WHManagerDBContext context = _contextFactory.CreateDbContext())
                     {
                         IEnumerable<Invoice> invoices = context.Invoices.Include(c => c.Client)
-                                                                        .Include(o => o.Order)
                                                                         .ToList()
                                                                         .FindAll(x => x.DateIssued <= laterDate);
                         return invoices;
@@ -257,7 +246,6 @@ namespace WHManager.DataAccess.Repositories
                     using (WHManagerDBContext context = _contextFactory.CreateDbContext())
                     {
                         IEnumerable<Invoice> invoices = context.Invoices.Include(c => c.Client)
-                                                                        .Include(o => o.Order)
                                                                         .ToList()
                                                                         .FindAll(x => x.DateIssued <= laterDate);
                         return invoices;

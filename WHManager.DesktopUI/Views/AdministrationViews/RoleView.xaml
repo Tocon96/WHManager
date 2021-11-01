@@ -133,7 +133,12 @@
                       Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" x:Name="gridRoles">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="25" Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Nazwa użytkownika" Binding="{Binding Name}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Nazwa roli" Binding="{Binding Name}"></DataGridTextColumn>
+                    <DataGridCheckBoxColumn Header="Administracja" Binding="{Binding Admin}"></DataGridCheckBoxColumn>
+                    <DataGridCheckBoxColumn Header="Dokumenty" Binding="{Binding Documents}"></DataGridCheckBoxColumn>
+                    <DataGridCheckBoxColumn Header="Biznes" Binding="{Binding Business}"></DataGridCheckBoxColumn>
+                    <DataGridCheckBoxColumn Header="Kontrahenci" Binding="{Binding Contractors}"></DataGridCheckBoxColumn>
+                    <DataGridCheckBoxColumn Header="Produkty" Binding="{Binding Warehouse}"></DataGridCheckBoxColumn>
                     <DataGridTemplateColumn Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

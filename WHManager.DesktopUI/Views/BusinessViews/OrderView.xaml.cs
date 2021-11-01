@@ -19,6 +19,7 @@ using WHManager.BusinessLogic.Services.DocumentServices;
 using WHManager.BusinessLogic.Services.DocumentServices.Interfaces;
 using WHManager.BusinessLogic.Services.Interfaces;
 using WHManager.DesktopUI.Views.FormViews;
+using WHManager.DesktopUI.Views.WarehouseViews;
 
 namespace WHManager.DesktopUI.Views.BusinessViews
 {
@@ -29,7 +30,6 @@ namespace WHManager.DesktopUI.Views.BusinessViews
     {
         private IInvoiceService invoiceService = new InvoiceService();
         private IOrderService orderService = new OrderService();
-        private IPdfService pdfService = new PdfService();
         private IClientService clientService = new ClientService();
         public ObservableCollection<Order> Orders
         {
@@ -41,8 +41,20 @@ namespace WHManager.DesktopUI.Views.BusinessViews
         {
             InitializeComponent();
             gridOrders.ItemsSource = LoadData();
+            FillComboBox();
         }
-                                                                                                                                                                                                                                                                            
+
+        private void FillComboBox()
+        {
+            IList<string> comboBox = new List<string>();
+            comboBox.Add("Wszystkie");
+            comboBox.Add("Zrealizowane");
+            comboBox.Add("Niezrealizowane");
+            comboBoxRealized.ItemsSource = comboBox;
+            comboBoxRealized.SelectedIndex = 0;
+        }
+
+
         private IList<Order> GetAll()
         {
             try
@@ -83,7 +95,13 @@ namespace WHManager.DesktopUI.Views.BusinessViews
 
         private void SearchClearClick(object sender, RoutedEventArgs e)
         {
-            textBoxClientName.Text = null;
+            textBoxClientName.Text = "";
+            textBoxOrderId.Text = "";
+            datePickerEarlierDateOrdered.SelectedDate = null;
+            datePickerLaterDateOrdered.SelectedDate = null;
+            datePickerEarlierDateRealized.SelectedDate = null;
+            datePickerLaterDateRealized.SelectedDate = null;
+            comboBoxRealized.SelectedIndex = 0;
             gridOrders.ItemsSource = LoadData();
         }
 
@@ -93,6 +111,10 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             {
                 ManageOrderFormView manageOrderFormView = new ManageOrderFormView(this);
                 manageOrderFormView.ShowDialog();
+                if (manageOrderFormView.DialogResult.Value == true)
+                {
+                    gridOrders.ItemsSource = LoadData();
+                }
             }
             catch (Exception x)
             {
@@ -109,6 +131,10 @@ namespace WHManager.DesktopUI.Views.BusinessViews
                     Order order = gridOrders.SelectedItem as Order;
                     ManageOrderFormView manageOrderFormView = new ManageOrderFormView(this, order);
                     manageOrderFormView.ShowDialog();
+                    if (manageOrderFormView.DialogResult.Value == true)
+                    {
+                        gridOrders.ItemsSource = LoadData();
+                    }
                 }
             }
             catch (Exception x)
@@ -128,32 +154,12 @@ namespace WHManager.DesktopUI.Views.BusinessViews
                     {
                         IOrderService orderService = new OrderService();
                         Order order = gridOrders.SelectedItem as Order;
+                        orderService.EmptyOrderFromItems(order);
                         orderService.DeleteOrder(order.Id);
+                        gridOrders.ItemsSource = LoadData();
                     }
                     
                 }
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show("Błąd usuwania: " + x);
-            }
-        }
-
-        private void DeleteMultipleOrdersClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                List<Order> selectedOrders = gridOrders.SelectedItems.Cast<Order>().ToList();
-                MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz usunąć wybrane zamówienia?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
-                if (messageBoxResult == MessageBoxResult.Yes)
-                {
-                    foreach (Order order in selectedOrders)
-                    {
-                        orderService.DeleteOrder(order.Id);
-                    }
-                    gridOrders.ItemsSource = LoadData();
-                }
-
             }
             catch (Exception x)
             {
@@ -171,13 +177,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
                 svg.ShowDialog();
                 int invoiceIdNotNullabe = invoiceId.Value;
 
-                pdfService.GeneratePdf(svg.FileName, invoiceIdNotNullabe);
             }
-        }
-
-        private void gridProductGenerateWz(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private IList<Order> SearchOrders()
@@ -185,8 +185,50 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             IList<string> criteria = new List<string>();
             criteria.Add(textBoxOrderId.Text.ToString());
             criteria.Add(textBoxClientName.Text.ToString());
-            criteria.Add(datePickerEarlierDate.SelectedDate.Value.ToShortDateString());
-            criteria.Add(datePickerLaterDate.SelectedDate.Value.ToShortDateString());
+            if (datePickerEarlierDateOrdered.SelectedDate.HasValue)
+            {
+                criteria.Add(datePickerEarlierDateOrdered.SelectedDate.Value.ToShortDateString());
+            }
+            else
+            {
+                criteria.Add(null);
+            }
+            if (datePickerLaterDateOrdered.SelectedDate.HasValue)
+            {
+                criteria.Add(datePickerLaterDateOrdered.SelectedDate.Value.ToShortDateString());
+            }
+            else
+            {
+                criteria.Add(null);
+            }
+            if (datePickerEarlierDateRealized.SelectedDate.HasValue)
+            {
+                criteria.Add(datePickerEarlierDateRealized.SelectedDate.Value.ToShortDateString());
+            }
+            else
+            {
+                criteria.Add(null);
+            }
+            if (datePickerLaterDateRealized.SelectedDate.HasValue)
+            {
+                criteria.Add(datePickerLaterDateRealized.SelectedDate.Value.ToShortDateString());
+            }
+            else
+            {
+                criteria.Add(null);
+            }
+            if (comboBoxRealized.SelectedIndex == 0)
+            {
+                criteria.Add(null);
+            }
+            else if (comboBoxRealized.SelectedIndex == 1)
+            {
+                criteria.Add("1");
+            }
+            else if (comboBoxRealized.SelectedIndex == 2)
+            {
+                criteria.Add("0");
+            }
             IList<Order> orders = orderService.SearchOrders(criteria.ToList());
             return orders;
         }
@@ -195,6 +237,57 @@ namespace WHManager.DesktopUI.Views.BusinessViews
         {
             return AddInvoice();
         }
+
+        private void gridOrderRealizeOrder(object sender, RoutedEventArgs e)
+        {
+            if(gridOrders.SelectedItem != null)
+            {
+                Order order = gridOrders.SelectedItem as Order;
+                if (order.IsRealized == true)
+                {
+                    MessageBox.Show("Zamówienie nie może zostać powtórnie zrealizowane");
+                }
+                else
+                {
+                    MessageBoxResult messageBoxResult = MessageBox.Show("Realizacja zamówienia zablokuje możliwość edycji oraz wygeneruje fakturę oraz dokument WZ", "Czy chcesz kontynuować", MessageBoxButton.YesNo);
+                    if (messageBoxResult == MessageBoxResult.Yes)
+                    {
+
+                        bool result = orderService.RealizeOrder(order);
+                        if (result == true)
+                        {
+                            gridOrders.ItemsSource = LoadData();
+                            MessageBox.Show("Zamówienie zostało zrealizowane.");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Błąd realizacji zamówienia.");
+                        }
+                    }
+                }
+            }
+        }
+
+        private void gridOrderGenerateWz(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void gridOrderGenerateInvoice(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void gridOrderDisplayItems(object sender, RoutedEventArgs e)
+        {
+            if (gridOrders.SelectedItem != null)
+            {
+                Order order = gridOrders.SelectedItem as Order;
+                OrderItemsView itemsView = new OrderItemsView(order);
+                itemsView.Show();
+            }
+        }
+
 
         private int? AddInvoice()
         {
@@ -205,7 +298,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
                 {
                     DateIssued = DateTime.Now,
                     Client = clientService.GetClient(order.Client.Id)[0],
-                    Order = order
+                    OrderId = order.Id
                 };
                 return invoiceService.CreateNewInvoice(invoice);
             }

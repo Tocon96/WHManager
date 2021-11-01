@@ -13,9 +13,8 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         void DeleteInvoice(int id);
         Invoice GetInvoiceById(int id);
         Invoice GetInvoiceByOrder(int orderId);
-        IList<Invoice> GetInvoicesByClient(int? clientId = null, string clientName = null, double? clientNip = null);
         IList<Invoice> GetInvoices();
-        IList<Invoice> GetInvoicesByDate(DateTime? earlierDate, DateTime? laterDate);
         IList<Invoice> SearchInvoices(List<string>criteria);
+        void GeneratePdf(string filename, Order order);
     }
 }

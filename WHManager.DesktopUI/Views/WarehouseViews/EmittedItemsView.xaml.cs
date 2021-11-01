@@ -91,41 +91,6 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
 
         }
 
-        private void DeleteMultipleItemsClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void DeleteAllItemsClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void AddItemClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                ManageItemFormView manageItemFormView = new ManageItemFormView(Product);
-                manageItemFormView.Show();
-            }
-            catch(Exception x)
-            {
-                MessageBox.Show("Błąd dodawania: " + x);
-            }
-        }
-        private void UpdateItemClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Item item = gridItems.SelectedItem as Item;
-                ManageItemFormView manageItemFormView = new ManageItemFormView(Product, item);
-                manageItemFormView.Show();
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show("Błąd aktualizacji: " + x);
-            }
-        }
         private void DeleteItemClick(object sender, RoutedEventArgs e)
         {
             try

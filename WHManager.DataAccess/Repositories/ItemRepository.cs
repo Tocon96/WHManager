@@ -30,6 +30,7 @@ namespace WHManager.DataAccess.Repositories
 						DateOfEmission = dateofemission,
 						Product = context.Products.SingleOrDefault(x => x.Id == product),
 						IsInStock = isinstock,
+						IsInOrder = false,
 						IncomingDocument = context.IncomingDocuments.SingleOrDefault(x => x.Id == incomingDocumentId),
 						DeliveryId = deliveryId,
 						Provider = context.Provider.SingleOrDefault(x=>x.Id == providerId)
@@ -109,7 +110,7 @@ namespace WHManager.DataAccess.Repositories
 					}
 					if(orderId != null)
                     {
-						updatedItem.Order = context.Orders.SingleOrDefault(x => x.Id == orderId);
+						updatedItem.OrderId = (int)orderId;
                     }
 					updatedItem.Provider = context.Provider.SingleOrDefault(x => x.Id == providerId);
 					updatedItem.IncomingDocument = context.IncomingDocuments.SingleOrDefault(x => x.Id == incomingDocumentId);
@@ -332,5 +333,120 @@ namespace WHManager.DataAccess.Repositories
 				throw new Exception("B³¹d usuwania przedmiotów: ");
 			}
 		}
-	}
+
+        public IEnumerable<Item> GetAllAvailableItems()
+        {
+			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+			{
+				IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList().FindAll(x => x.IsInStock == true && x.IsInOrder == false);
+				return items;
+			}
+		}
+
+		public void SetItemInOrder(int productId, int orderId)
+        {
+			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+			{
+				Item updatedItem = context.Items.FirstOrDefault(x => x.Product.Id == productId && x.IsInOrder == false);
+				updatedItem.IsInOrder = true;
+				updatedItem.OrderId = orderId;
+				context.SaveChanges();
+			}
+		}
+
+		public void RemoveItemFromOrder(int id)
+        {
+			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+			{
+				Item updatedItem = context.Items.SingleOrDefault(x => x.Id == id);
+				updatedItem.IsInOrder = false;
+				updatedItem.OrderId = null;
+				context.SaveChanges();
+			}
+		}
+
+		public void AddItemToOrder(int id, int orderId)
+        {
+			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+			{
+				Item updatedItem = context.Items.FirstOrDefault(x => x.Id == id && x.IsInOrder == false);
+				updatedItem.IsInOrder = true;
+				updatedItem.OrderId = orderId;
+				context.SaveChanges();
+			}
+		}
+
+		public void EmitItem(int id, DateTime dateTime, int documentId, int invoiceId)
+        {
+			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+			{
+				Item updatedItem = context.Items.SingleOrDefault(x => x.Id == id);
+				updatedItem.IsInStock = false;
+				updatedItem.DateOfEmission = dateTime;
+				updatedItem.OutgoingDocument = context.OutgoingDocuments.SingleOrDefault(x => x.Id == documentId);
+				updatedItem.Invoice = context.Invoices.SingleOrDefault(x => x.Id == invoiceId);
+				context.SaveChanges();
+			}
+		}
+
+        public bool CheckCountOfAvailableItems(int count)
+        {
+			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+			{
+				if(context.Items.Count(x=>x.IsInOrder == false) >= count)
+                {
+					return true;
+                }else
+                {
+					return false;
+                }
+			}
+		}
+
+        public IEnumerable<Item> GetItemsByOrder(int orderId)
+        {
+			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+			{
+				IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList().FindAll(x=>x.OrderId == orderId);
+				return items;
+			}
+		}
+
+        public bool CheckCountOfAvailableItemsPerProduct(int count, int productId)
+        {
+			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+			{
+				if (context.Items.Count(x => x.IsInOrder == false && x.Product.Id == productId) >= count)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+		}
+
+        public void RemoveItemsFromOrderByProduct(int orderId, int productId)
+        {
+			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+			{
+				Item updatedItem = context.Items.Include(p => p.Product).FirstOrDefault(x => x.Product.Id == productId && x.OrderId == orderId);
+				updatedItem.IsInOrder = false;
+				updatedItem.OrderId = null;
+				context.SaveChanges();
+			}
+		}
+
+        public void AddItemsToOrderByProduct(int orderId, int productId)
+        {
+			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+			{
+				Item updatedItem = context.Items.Include(p => p.Product).FirstOrDefault(x => x.Product.Id == productId && x.IsInOrder == false);
+				updatedItem.IsInOrder = true;
+				updatedItem.OrderId = orderId;
+				context.SaveChanges();
+			}
+		}
+    }
 }

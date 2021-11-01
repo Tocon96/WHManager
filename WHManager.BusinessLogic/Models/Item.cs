@@ -15,6 +15,7 @@ namespace WHManager.BusinessLogic.Models
         public Provider Provider { get; set; }
         public IncomingDocument IncomingDocument { get; set; }
         public OutgoingDocument OutgoingDocument { get; set; }
+        public Invoice Invoice { get; set; }
         public int DeliveryId { get; set; }
     }
 }

@@ -152,21 +152,9 @@ namespace WHManager.DesktopUI.Views.BusinessViews
         private void DeleteDeliveryClick(object sender, RoutedEventArgs e)
         {
             MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz usunąć wybraną dostawę?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
-            Delivery delivery = gridDeliveries.SelectedItem as Delivery;
             if(messageBoxResult == MessageBoxResult.Yes)
             {
-                deliveryService.DeleteDelivery(delivery.Id);
-                gridDeliveries.ItemsSource = LoadData();
-            }
-        }
-
-        private void DeleteMultipleDeliveriesClick(object sender, RoutedEventArgs e)
-        {
-            IList<Delivery> deliveries = gridDeliveries.SelectedItems.Cast<Delivery>().ToList();
-            MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz usunąć wybraną dostawę?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
-            Delivery delivery = gridDeliveries.SelectedItem as Delivery;
-            if (messageBoxResult == MessageBoxResult.Yes)
-            {
+                Delivery delivery = gridDeliveries.SelectedItem as Delivery;
                 deliveryService.DeleteDelivery(delivery.Id);
                 gridDeliveries.ItemsSource = LoadData();
             }
@@ -238,14 +226,12 @@ namespace WHManager.DesktopUI.Views.BusinessViews
                         if (messageBoxResult == MessageBoxResult.Yes)
                         {
                             deliveryService.RealizeDelivery(delivery);
-                            this.gridDeliveries.Items.Refresh();
+                            gridDeliveries.ItemsSource = LoadData();
                         }
                     }
 
                 }
-                
             }
-
         }
     }
 }
