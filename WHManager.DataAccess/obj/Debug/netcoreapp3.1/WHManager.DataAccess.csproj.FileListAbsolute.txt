@@ -10,3 +10,4 @@ E:\visualstudio\WHManager\WHManager.DataAccess\bin\Debug\netcoreapp3.1\WHManager
 E:\visualstudio\WHManager\WHManager.DataAccess\obj\Debug\netcoreapp3.1\WHManager.DataAccess.genruntimeconfig.cache
 E:\visualstudio\WHManager\WHManager.DataAccess\obj\Debug\netcoreapp3.1\WHManager.DataAccess.csproj.CoreCompileInputs.cache
 E:\visualstudio\WHManager\WHManager.DataAccess\obj\Debug\netcoreapp3.1\WHManager.DataAccess.csproj.AssemblyReference.cache
+E:\visualstudio\WHManager\WHManager.DataAccess\obj\Debug\netcoreapp3.1\WHManager.DataAccess.GeneratedMSBuildEditorConfig.editorconfig

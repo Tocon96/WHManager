@@ -19,6 +19,36 @@ namespace WHManager.DataAccess.Repositories
             _contextFactory = contextFactory;
         }
 
+        public bool CheckIfAdminExists()
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                if (context.Users.Any(x => x.Id == 1))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        public void CreateAdminUser(string password)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                User user = new User
+                {
+                    UserName = "Admin",
+                    PasswordHash = password,
+                    Role = context.Roles.SingleOrDefault(x => x.Id == 1)
+                };
+                context.Users.Add(user);
+                context.SaveChanges();
+            }       
+        }
+
         public void CreateNewUser(string name, string password, int roleId)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())

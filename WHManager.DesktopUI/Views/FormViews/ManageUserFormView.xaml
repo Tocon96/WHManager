@@ -60,7 +60,7 @@
         <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3">Rola</TextBlock>
         <!--TextBox-->
         <TextBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Name="textBoxName"></TextBox>
-        <TextBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Name="textBoxPassword"></TextBox>
+        <PasswordBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Name="textBoxPassword"></PasswordBox>
         <!--ComboBox-->
         <ComboBox Name="comboboxRoles"  Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="6" DisplayMemberPath="Name"></ComboBox>
         <!--Button-->

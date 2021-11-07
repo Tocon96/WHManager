@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WHManager.DesktopUI.Views.FormViews.LoginForm"
         mc:Ignorable="d"
-        Title="" SizeToContent="Width" Height="300" ResizeMode="NoResize" Background="#1976d2" WindowStyle="ToolWindow">
+        Title="" SizeToContent="Width" Height="300" ResizeMode="NoResize" Background="#1976d2" WindowStyle="SingleBorderWindow">
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="Background" Value="#1565c0"/>

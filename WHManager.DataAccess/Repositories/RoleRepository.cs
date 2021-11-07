@@ -153,5 +153,46 @@ namespace WHManager.DataAccess.Repositories
                 return rolesList;
             }
         }
+
+        public void CreateAdminRole()
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                try
+                {
+                    Role role = new Role
+                    {
+                        Name = "Administracja",
+                        Admin = true,
+                        Business = true,
+                        Contractors = true,
+                        Documents = true,
+                        Warehouse = true,
+                    };
+                    context.Roles.Add(role);
+                    context.SaveChanges();
+                }
+                catch
+                {
+                    throw new Exception("Błąd dodawania roli: ");
+                }
+            }
+
+        }
+
+        public bool CheckIfAdminRoleExists()
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                if(context.Roles.Any(x=>x.Id == 1))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
     }
 }

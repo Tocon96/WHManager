@@ -210,7 +210,8 @@ namespace WHManager.DataAccess.Repositories
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
                 IEnumerable<Order> orders = context.Orders.AsQueryable()
-                                                          .Include(i => i.Items);
+                                                          .Include(i => i.Items)
+                                                          .Include(c => c.Client);
 
                 if (!string.IsNullOrEmpty(criteria[0]))
                 {
@@ -241,7 +242,7 @@ namespace WHManager.DataAccess.Repositories
                 {
                     DateTime earlierDate = Convert.ToDateTime(criteria[2]);
                     DateTime laterDate = Convert.ToDateTime(criteria[3]);
-                    orders = orders.Where(x => x.DateRealized >= earlierDate && x.DateRealized <= laterDate);
+                    orders = orders.Where(x => x.DateOrdered >= earlierDate && x.DateOrdered <= laterDate);
                 }
                 if (!string.IsNullOrEmpty(criteria[4]) && string.IsNullOrEmpty(criteria[5]))
                 {

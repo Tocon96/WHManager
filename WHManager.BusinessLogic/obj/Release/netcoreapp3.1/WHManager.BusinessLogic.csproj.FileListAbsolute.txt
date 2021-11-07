@@ -1,0 +1,12 @@
+E:\visualstudio\WHManager\WHManager.BusinessLogic\bin\Release\netcoreapp3.1\WHManager.BusinessLogic.deps.json
+E:\visualstudio\WHManager\WHManager.BusinessLogic\bin\Release\netcoreapp3.1\WHManager.BusinessLogic.dll
+E:\visualstudio\WHManager\WHManager.BusinessLogic\bin\Release\netcoreapp3.1\WHManager.BusinessLogic.pdb
+E:\visualstudio\WHManager\WHManager.BusinessLogic\bin\Release\netcoreapp3.1\WHManager.DataAccess.dll
+E:\visualstudio\WHManager\WHManager.BusinessLogic\bin\Release\netcoreapp3.1\WHManager.DataAccess.pdb
+E:\visualstudio\WHManager\WHManager.BusinessLogic\obj\Release\netcoreapp3.1\WHManager.BusinessLogic.csproj.AssemblyReference.cache
+E:\visualstudio\WHManager\WHManager.BusinessLogic\obj\Release\netcoreapp3.1\WHManager.BusinessLogic.GeneratedMSBuildEditorConfig.editorconfig
+E:\visualstudio\WHManager\WHManager.BusinessLogic\obj\Release\netcoreapp3.1\WHManager.BusinessLogic.AssemblyInfoInputs.cache
+E:\visualstudio\WHManager\WHManager.BusinessLogic\obj\Release\netcoreapp3.1\WHManager.BusinessLogic.AssemblyInfo.cs
+E:\visualstudio\WHManager\WHManager.BusinessLogic\obj\Release\netcoreapp3.1\WHManager.BusinessLogic.csproj.CoreCompileInputs.cache
+E:\visualstudio\WHManager\WHManager.BusinessLogic\obj\Release\netcoreapp3.1\WHManager.BusinessLogic.dll
+E:\visualstudio\WHManager\WHManager.BusinessLogic\obj\Release\netcoreapp3.1\WHManager.BusinessLogic.pdb

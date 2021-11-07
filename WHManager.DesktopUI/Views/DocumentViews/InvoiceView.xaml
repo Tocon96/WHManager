@@ -138,9 +138,10 @@
                       CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
                       Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" x:Name="gridInvoices">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="30" Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="ID zamówienia" Binding="{Binding OrderId}"></DataGridTextColumn>
                     <DataGridTextColumn Header="Nazwa klienta" Binding="{Binding Client.Name}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Data złożenia" Binding="{Binding DateIssued}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Data złożenia" Binding="{Binding DateIssued, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
                     <DataGridTemplateColumn Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

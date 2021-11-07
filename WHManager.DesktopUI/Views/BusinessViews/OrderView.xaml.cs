@@ -31,6 +31,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
         private IInvoiceService invoiceService = new InvoiceService();
         private IOrderService orderService = new OrderService();
         private IClientService clientService = new ClientService();
+        private IOutgoingDocumentService documentService = new OutgoingDocumentService();
         public ObservableCollection<Order> Orders
         {
             get;
@@ -270,11 +271,47 @@ namespace WHManager.DesktopUI.Views.BusinessViews
 
         private void gridOrderGenerateWz(object sender, RoutedEventArgs e)
         {
+            if (gridOrders.SelectedItem != null)
+            {
+                Order order = gridOrders.SelectedItem as Order;
+                if (order.IsRealized == false)
+                {
+                    MessageBox.Show("Zamówienie musi zostać zrealizowane przed wygenerowaniem dokumentu.");
+                }
+                else
+                {
+                    SaveFileDialog svg = new SaveFileDialog();
+                    svg.Filter = "Documents (*.pdf)|*.pdf|All files (*.*)|*.*";
+                    Nullable<bool> result = svg.ShowDialog();
+                    if (result == true)
+                    {
+                        documentService.GeneratePdf(svg.FileName, order);
+                    }
+                }
+            }
 
         }
 
         private void gridOrderGenerateInvoice(object sender, RoutedEventArgs e)
         {
+            if (gridOrders.SelectedItem != null)
+            {
+                Order order = gridOrders.SelectedItem as Order;
+                if (order.IsRealized == false)
+                {
+                    MessageBox.Show("Zamówienie musi zostać zrealizowane przed wygenerowaniem dokumentu.");
+                }
+                else
+                {
+                    SaveFileDialog svg = new SaveFileDialog();
+                    svg.Filter = "Documents (*.pdf)|*.pdf|All files (*.*)|*.*";
+                    Nullable<bool> result = svg.ShowDialog();
+                    if (result == true)
+                    {
+                        invoiceService.GeneratePdf(svg.FileName, order);
+                    }
+                }
+            }
 
         }
 

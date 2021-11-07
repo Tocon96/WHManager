@@ -184,6 +184,7 @@ namespace WHManager.DesktopUI.Views.ContractorsViews
                 IClientService clientService = new ClientService();
                 Client client = gridClients.SelectedItem as Client;
                 clientService.DeleteClient(client.Id);
+                gridClients.ItemsSource = LoadData();
             }
             catch (Exception x)
             {
@@ -195,7 +196,18 @@ namespace WHManager.DesktopUI.Views.ContractorsViews
         {
             List<string> criteria = new List<string>();
             criteria.Add(textBoxIdName.Text.ToString());      // criteria[0] = Id/Name
-            criteria.Add(textBoxNip.Text.ToString());         // criteria[1] = Nip
+            if (double.TryParse(textBoxNip.Text, out double result))
+            {
+                criteria.Add(result.ToString());
+            }
+            else
+            {
+                if (textBoxNip.Text != "")
+                {
+                    MessageBox.Show("NIP nie może zawierać znaków tekstowych.");
+                }
+                criteria.Add("");
+            }
             criteria.Add(textBoxPhoneNumber.Text.ToString()); // criteria[2] = Phone Number
             List<Client> clients = clientService.SearchClients(criteria);
             return clients;

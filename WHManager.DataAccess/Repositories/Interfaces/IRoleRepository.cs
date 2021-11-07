@@ -8,12 +8,14 @@ namespace WHManager.DataAccess.Repositories.Interfaces
 {
     public interface IRoleRepository
     {
-        void CreateNewRole(string name, bool isadmin, bool business, bool contractors, bool documents, bool warehouse, bool reports);
-        void UpdateRole(int id, string name, bool isadmin, bool business, bool contractors, bool documents, bool warehouse, bool reports);
+        void CreateNewRole(string name, bool isadmin, bool business, bool contractors, bool documents, bool warehouse);
+        void CreateAdminRole();
+        void UpdateRole(int id, string name, bool isadmin, bool business, bool contractors, bool documents, bool warehouse);
         void DeleteRole(int id);
         IEnumerable<Role> GetRoles();
         IEnumerable<Role> GetRole(int id);
         IEnumerable<Role> GetRoleByName(string name);
         IEnumerable<Role> SearchRoles(List<string> criteria);
+        bool CheckIfAdminRoleExists();
     }
 }

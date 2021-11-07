@@ -26,6 +26,16 @@ namespace WHManager.BusinessLogic.Services
             
         }
 
+        public bool CheckIfAdminRoleExists()
+        {
+            return roleRepository.CheckIfAdminRoleExists();
+        }
+
+        public void CreateAdminRole()
+        {
+            roleRepository.CreateAdminRole();
+        }
+
         public void DeleteRole(int id)
         {
             try

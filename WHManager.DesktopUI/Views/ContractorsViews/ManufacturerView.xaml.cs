@@ -133,7 +133,19 @@ namespace WHManager.DesktopUI.Views.ContractorsView
         {
             List<string> criteria = new List<string>();
             criteria.Add(textBoxIdName.Text.ToString());
-            criteria.Add(textBoxNip.Text.ToString());
+            if(double.TryParse(textBoxNip.Text, out double result))
+            {
+                criteria.Add(result.ToString());
+            }
+            else
+            {
+                if(textBoxNip.Text != "")
+                {
+                    MessageBox.Show("NIP nie może zawierać znaków tekstowych.");
+                }
+                criteria.Add("");
+            }
+            
             return criteria;
         }
     }

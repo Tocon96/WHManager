@@ -94,7 +94,44 @@ namespace WHManager.DataAccess.Repositories
 
         public IEnumerable<OutgoingDocument> SearchDocuments(IList<string> criteria)
         {
-            throw new NotImplementedException();
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                IQueryable<OutgoingDocument> documents = context.OutgoingDocuments.AsQueryable();
+                if (!string.IsNullOrEmpty(criteria[0]))
+                {
+                    int.TryParse(criteria[0], out int result);
+                    documents = documents.Include(x => x.Contrahent).Where(x => x.Id == result);
+                }
+                if (!string.IsNullOrEmpty(criteria[1]))
+                {
+                    int.TryParse(criteria[1], out int result);
+                    documents = documents.Include(x => x.Contrahent).Where(x => x.OrderId == result);
+                }
+                if (!string.IsNullOrEmpty(criteria[2]))
+                {
+                    documents = documents.Include(x => x.Contrahent).Where(x => x.Contrahent.Name.StartsWith(criteria[2]));
+                }
+                if (!string.IsNullOrEmpty(criteria[3]) && string.IsNullOrEmpty(criteria[4]))
+                {
+                    DateTime earlierDate = Convert.ToDateTime(criteria[3]);
+                    documents = documents.Include(x => x.Contrahent).Where(x => x.DateSent >= earlierDate);
+                }
+
+                if (string.IsNullOrEmpty(criteria[3]) && !string.IsNullOrEmpty(criteria[4]))
+                {
+                    DateTime laterDate = Convert.ToDateTime(criteria[4]);
+                    documents = documents.Include(x => x.Contrahent).Where(x => x.DateSent <= laterDate);
+                }
+
+                if (!string.IsNullOrEmpty(criteria[3]) && !string.IsNullOrEmpty(criteria[4]))
+                {
+                    DateTime earlierDate = Convert.ToDateTime(criteria[3]);
+                    DateTime laterDate = Convert.ToDateTime(criteria[4]);
+                    documents = documents.Include(x => x.Contrahent).Where(x => x.DateSent >= earlierDate && x.DateSent <= laterDate);
+                }
+                IEnumerable<OutgoingDocument> documentsList = documents.ToList();
+                return documentsList;
+            }            
         }
 
         public int UpdateDocument(int id, int clientId, int orderId, DateTime dateSent)

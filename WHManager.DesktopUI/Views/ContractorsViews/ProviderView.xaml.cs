@@ -48,12 +48,12 @@ namespace WHManager.DesktopUI.Views.ContractorsViews
             IList<Provider> providers = SearchProviders();
             Providers = new ObservableCollection<Provider>(providers);
             gridProviders.ItemsSource = Providers;
-            ClearFilters();
         }
 
         private void SearchClearClick(object sender, RoutedEventArgs e)
         {
             ClearFilters();
+            gridProviders.ItemsSource = LoadData();
         }
 
         private void DeleteProviderClick(object sender, RoutedEventArgs e)
@@ -107,7 +107,18 @@ namespace WHManager.DesktopUI.Views.ContractorsViews
         {
             IList<string> criteria = new List<string>();
             criteria.Add(textBoxIdName.Text.ToString());      // criteria[0] = Id/Name
-            criteria.Add(textBoxNip.Text.ToString());         // criteria[1] = Nip
+            if (double.TryParse(textBoxNip.Text, out double result))
+            {
+                criteria.Add(result.ToString());
+            }
+            else
+            {
+                if (textBoxNip.Text != "")
+                {
+                    MessageBox.Show("NIP nie może zawierać znaków tekstowych.");
+                }
+                criteria.Add("");
+            }
             criteria.Add(textBoxPhoneNumber.Text.ToString()); // criteria[2] = Phone Number
             IList<Provider> providers = providerService.SearchProviders(criteria.ToList());
             return providers;

@@ -126,8 +126,13 @@ namespace WHManager.BusinessLogic.Services
                     Id = delivery.Id,
                     DateCreated = delivery.DateCreated,
                     Items = itemsList,
-                    Provider = providerService.GetProvider(delivery.Provider.Id)
+                    Provider = providerService.GetProvider(delivery.Provider.Id),
+                    Realized = delivery.Realized
                 };
+                if(delivery.DateRealized != null)
+                {
+                    newDelivery.DateRealized = delivery.DateRealized;
+                }
                 deliveriesList.Add(newDelivery);
             }
             return deliveriesList;

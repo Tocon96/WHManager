@@ -5,6 +5,9 @@
     <Compile Update="MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\AdministrationViews\CompanyDataView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\AdministrationViews\RoleView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -32,10 +35,16 @@
     <Compile Update="Views\DocumentViews\OutgoingDocumentView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\FormViews\LoginForm\InitializeCompanyFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\FormViews\LoginForm\LoginFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\FormViews\ManageClientFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\FormViews\ManageCompanyDataFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\FormViews\ManageDeliveryFormView.xaml.cs">
@@ -82,6 +91,9 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\AdministrationViews\CompanyDataView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\AdministrationViews\RoleView.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -109,10 +121,16 @@
     <Page Update="Views\DocumentViews\OutgoingDocumentView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\FormViews\LoginForm\InitializeCompanyFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\FormViews\LoginForm\LoginFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\FormViews\ManageClientFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\FormViews\ManageCompanyDataFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\FormViews\ManageDeliveryFormView.xaml">

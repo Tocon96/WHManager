@@ -195,7 +195,7 @@ namespace WHManager.DesktopUI.Views.FormViews
         {
             Delivery delivery = new Delivery
             {
-                DateCreated = datepickerDeliveryDate.DisplayDate.Date,
+                DateCreated = datepickerDeliveryDate.SelectedDate.Value.Date,
                 Provider = comboBoxDeliveriesProviders.SelectedItem as Provider
             };
             deliveryService.AddDelivery(delivery, ElementsList.ToList());

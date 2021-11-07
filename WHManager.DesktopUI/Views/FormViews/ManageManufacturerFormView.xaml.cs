@@ -91,31 +91,38 @@ namespace WHManager.DesktopUI.Views.FormViews
 
         private void buttonConfirmClick(object sender, RoutedEventArgs e)
         {
-            if(Manufacturer == null)
+            if (double.TryParse(textBoxNip.Text, out double result))
             {
-                try
+                if (Manufacturer == null)
                 {
-                    AddManufacturer();
-                    DialogResult = true;
-                    this.Close();
+                    try
+                    {
+                        AddManufacturer();
+                        DialogResult = true;
+                        this.Close();
+                    }
+                    catch (Exception x)
+                    {
+                        MessageBox.Show("Błąd dodawania: " + x);
+                    }
                 }
-                catch (Exception x)
+                else
                 {
-                    MessageBox.Show("Błąd dodawania: " + x);
+                    try
+                    {
+                        UpdateManufacturer();
+                        DialogResult = true;
+                        this.Close();
+                    }
+                    catch (Exception x)
+                    {
+                        MessageBox.Show("Błąd aktualizacji: " + x);
+                    }
                 }
             }
             else
             {
-                try
-                {
-                    UpdateManufacturer();
-                    DialogResult = true;
-                    this.Close();
-                }
-                catch (Exception x)
-                {
-                    MessageBox.Show("Błąd aktualizacji: " + x);
-                }
+                MessageBox.Show("Proszę podać poprawny NIP");
             }
         }
         private void CancelClick(object sender, RoutedEventArgs e)

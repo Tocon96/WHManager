@@ -5,6 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using WHManager.BusinessLogic.Services;
+using WHManager.BusinessLogic.Services.Interfaces;
 using WHManager.DesktopUI.Views.FormViews.LoginForm;
 
 namespace WHManager.DesktopUI
@@ -18,9 +20,18 @@ namespace WHManager.DesktopUI
         {
             base.OnStartup(e);
 
-            LoginFormView loginFormView = new LoginFormView();
-            loginFormView.Show();
-        }
+            IConfigService configService = new ConfigService();
 
+            if (configService.CheckIfConfigIsInitialized())
+            {
+                LoginFormView loginFormView = new LoginFormView();
+                loginFormView.Show();
+            }
+            else
+            {
+                InitializeCompanyFormView initializationView = new InitializeCompanyFormView();
+                initializationView.Show();
+            }
+        }
     }
 }

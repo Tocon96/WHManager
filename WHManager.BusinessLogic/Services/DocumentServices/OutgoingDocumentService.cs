@@ -1,19 +1,17 @@
-﻿using System;
+﻿using iText.IO.Font;
+using iText.Kernel.Font;
+using iText.Kernel.Geom;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services.Interfaces;
 using WHManager.DataAccess.Repositories;
 using WHManager.DataAccess.Repositories.Interfaces;
-using iText.Kernel.Geom;
-using iText.Kernel.Font;
-using iText.IO.Font;
-using iText.Layout.Borders;
-using System.Linq;
-using iText.Layout.Element;
-using iText.Layout;
-using iText.Kernel.Pdf;
-using iText.Layout.Properties;
 
 namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
 {
@@ -127,7 +125,7 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
             Table table = new Table(UnitValue.CreatePercentArray(3)).UseAllAvailableWidth().SetHeight(100);
             table.AddCell(new Cell());
             table.AddCell(new Cell()
-                              .Add(new Paragraph("Rozchód Wewnętrzny")
+                              .Add(new Paragraph("Rozchód Zewnętrzny")
                                        .SetTextAlignment(TextAlignment.CENTER)
                                        .SetFontSize(20)
                                        .SetBold())
@@ -183,9 +181,9 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
                 table.AddCell(new Cell().Add(new Paragraph(product.Name)));
                 int itemCount = order.Items.Count(x => x.Product.Id == group.Key);
                 table.AddCell(new Cell().Add(new Paragraph(itemCount.ToString())));
-                table.AddCell(new Cell().Add(new Paragraph(product.PriceBuy.ToString())));
+                table.AddCell(new Cell().Add(new Paragraph(product.PriceSell.ToString())));
                 table.AddCell(new Cell().Add(new Paragraph(product.Tax.Value.ToString())));
-                decimal totalNetto = Math.Round(itemCount * product.PriceBuy, 2);
+                decimal totalNetto = Math.Round(itemCount * product.PriceSell, 2);
                 totalNettoDelivery.Add(totalNetto);
                 table.AddCell(new Cell().Add(new Paragraph(totalNetto.ToString())));
                 decimal vatValue = Math.Round((decimal)product.Tax.Value / 100 * totalNetto, 2);

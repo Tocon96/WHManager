@@ -171,15 +171,19 @@ namespace WHManager.BusinessLogic.Services
             PdfFont font = PdfFontFactory.CreateFont(fontProgram, "CP1257");
             PdfWriter writer = new PdfWriter(filename);
             PdfDocument pdf = new PdfDocument(writer);
-            pdf.SetDefaultPageSize(PageSize.A4.Rotate());
+            pdf.SetDefaultPageSize(PageSize.A4);
             Document document = new Document(pdf);
             document.SetFont(font);
             Table initialTable = GenerateInitialTable(invoice);
-            Table providerTable = GenerateProviderTable(order.Client);
+            Table clientTable = GenerateClientTable(order.Client);
             Table itemTable = GenerateItemTable(order);
+            Table signatureTable = GenerateSignatureTable();
             document.Add(initialTable);
-            document.Add(providerTable);
+            document.Add(clientTable);
             document.Add(itemTable);
+            document.Add(new Paragraph("").SetHeight(50));
+            document.Add(signatureTable);
+
             document.Close();
         }
 
@@ -205,17 +209,29 @@ namespace WHManager.BusinessLogic.Services
             return table;
         }
 
-        Table GenerateProviderTable(Client client)
+        Table GenerateClientTable(Client client)
         {
 
+            IConfigService configService = new ConfigService();
+            IList<Config> companyData = configService.GetCompanyData();
+
             Table table = new Table(UnitValue.CreatePercentArray(2)).UseAllAvailableWidth();
-            table.AddHeaderCell(new Cell(1, 2).Add(new Paragraph("Klient").SetTextAlignment(TextAlignment.CENTER).SetBold().SetFontSize(14)));
-            table.AddCell(new Cell().Add(new Paragraph("Nazwa: ")));
-            table.AddCell(new Cell().Add(new Paragraph(client.Name)));
-            table.AddCell(new Cell().Add(new Paragraph("NIP: ")));
-            table.AddCell(new Cell().Add(new Paragraph(client.Nip.ToString())));
-            table.AddCell(new Cell().Add(new Paragraph("Numer telefonu: ")));
-            table.AddCell(new Cell().Add(new Paragraph(client.PhoneNumber)));
+            table.AddCell(new Cell().SetBorder(iText.Layout.Borders.Border.NO_BORDER).Add(new Table(UnitValue.CreatePercentArray(2)).UseAllAvailableWidth()
+                                                .AddHeaderCell(new Cell(1, 2).Add(new Paragraph("Sprzedający").SetTextAlignment(TextAlignment.CENTER).SetBold().SetFontSize(14)))
+                                                .AddCell(new Cell().Add(new Paragraph("Nazwa: ")))
+                                                .AddCell(new Cell().Add(new Paragraph(companyData.First(x => x.Field.StartsWith("CompanyName")).Value)))
+                                                .AddCell(new Cell().Add(new Paragraph("NIP: ")))
+                                                .AddCell(new Cell().Add(new Paragraph(companyData.First(x => x.Field.StartsWith("CompanyNip")).Value)))
+                                                .AddCell(new Cell().Add(new Paragraph("Numer telefonu: ")))
+                                                .AddCell(new Cell().Add(new Paragraph(companyData.First(x => x.Field.StartsWith("CompanyPhoneNumber")).Value)))));
+            table.AddCell(new Cell().SetBorder(iText.Layout.Borders.Border.NO_BORDER).Add(new Table(UnitValue.CreatePercentArray(2)).UseAllAvailableWidth()
+                                                .AddHeaderCell(new Cell(1, 2).Add(new Paragraph("Kupujący").SetTextAlignment(TextAlignment.CENTER).SetBold().SetFontSize(14)))
+                                                .AddCell(new Cell().Add(new Paragraph("Nazwa: ")))
+                                                .AddCell(new Cell().Add(new Paragraph(client.Name)))
+                                                .AddCell(new Cell().Add(new Paragraph("NIP: ")))
+                                                .AddCell(new Cell().Add(new Paragraph(client.Nip.ToString())))
+                                                .AddCell(new Cell().Add(new Paragraph("Numer telefonu: ")))
+                                                .AddCell(new Cell().Add(new Paragraph(client.PhoneNumber)))));
             return table;
         }
 
@@ -245,9 +261,9 @@ namespace WHManager.BusinessLogic.Services
                 table.AddCell(new Cell().Add(new Paragraph(product.Name)));
                 int itemCount = order.Items.Count(x => x.Product.Id == group.Key);
                 table.AddCell(new Cell().Add(new Paragraph(itemCount.ToString())));
-                table.AddCell(new Cell().Add(new Paragraph(product.PriceBuy.ToString())));
+                table.AddCell(new Cell().Add(new Paragraph(product.PriceSell.ToString())));
                 table.AddCell(new Cell().Add(new Paragraph(product.Tax.Value.ToString())));
-                decimal totalNetto = Math.Round(itemCount * product.PriceBuy, 2);
+                decimal totalNetto = Math.Round(itemCount * product.PriceSell, 2);
                 totalNettoDelivery.Add(totalNetto);
                 table.AddCell(new Cell().Add(new Paragraph(totalNetto.ToString())));
                 decimal vatValue = Math.Round((decimal)product.Tax.Value / 100 * totalNetto, 2);
@@ -264,6 +280,17 @@ namespace WHManager.BusinessLogic.Services
             table.AddCell(new Cell().Add(new Paragraph(totalTaxDelivery.Sum().ToString())));
             table.AddCell(new Cell().Add(new Paragraph(totalBruttoDelivery.Sum().ToString())));
 
+            return table;
+        }
+
+
+        Table GenerateSignatureTable()
+        {
+            Table table = new Table(UnitValue.CreatePercentArray(2)).UseAllAvailableWidth();
+            table.AddCell(new Cell().SetBorder(iText.Layout.Borders.Border.NO_BORDER).Add(new Paragraph("............................................................................").SetTextAlignment(TextAlignment.CENTER)));
+            table.AddCell(new Cell().SetBorder(iText.Layout.Borders.Border.NO_BORDER).Add(new Paragraph("............................................................................").SetTextAlignment(TextAlignment.CENTER)));
+            table.AddCell(new Cell().SetBorder(iText.Layout.Borders.Border.NO_BORDER).Add(new Paragraph("Podpis osoby wystawiającej").SetTextAlignment(TextAlignment.CENTER)));
+            table.AddCell(new Cell().SetBorder(iText.Layout.Borders.Border.NO_BORDER).Add(new Paragraph("Podpis osoby odbierającej").SetTextAlignment(TextAlignment.CENTER)));
             return table;
         }
 

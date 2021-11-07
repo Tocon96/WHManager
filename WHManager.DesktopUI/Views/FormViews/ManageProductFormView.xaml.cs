@@ -256,32 +256,38 @@ namespace WHManager.DesktopUI.Views.FormViews
         }
         private void AddProductClick(object sender, RoutedEventArgs e)
         {
-
-            if(Product != null)
+            if(decimal.TryParse(textBoxProductPriceBuy.Text, out decimal buyVal) && decimal.TryParse(textBoxProductPriceSell.Text, out decimal sellVal))
             {
-                try
+                if (Product != null)
                 {
-                    UpdateProduct();
-                    DialogResult = true;
-                    this.Close();
+                    try
+                    {
+                        UpdateProduct();
+                        DialogResult = true;
+                        this.Close();
+                    }
+                    catch (Exception x)
+                    {
+                        MessageBox.Show("Błąd aktualizacji: " + x);
+                    }
                 }
-                catch(Exception x)
+                else
                 {
-                    MessageBox.Show("Błąd aktualizacji: " + x);
+                    try
+                    {
+                        AddProduct();
+                        DialogResult = true;
+                        this.Close();
+                    }
+                    catch (Exception x)
+                    {
+                        MessageBox.Show("Błąd dodawania: " + x);
+                    }
                 }
             }
             else
             {
-                try
-                {
-                    AddProduct();
-                    DialogResult = true;
-                    this.Close();
-                }
-                catch (Exception x)
-                {
-                    MessageBox.Show("Błąd dodawania: " + x);
-                }
+                MessageBox.Show("Proszę podać poprawne ceny.");
             }
         }
 

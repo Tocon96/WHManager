@@ -95,7 +95,8 @@ namespace WHManager.DesktopUI
                         MenuText = "Panel Administracyjny",
                         SubMenuList = new List<SubMenuItemsData>{
                             new SubMenuItemsData(){ SubMenuDirectory="AdministrationViews", File = "RoleView", SubMenuText="Role" },
-                            new SubMenuItemsData(){ SubMenuDirectory="AdministrationViews", File = "UserView", SubMenuText="Użytkownicy" }
+                            new SubMenuItemsData(){ SubMenuDirectory="AdministrationViews", File = "UserView", SubMenuText="Użytkownicy" },
+                            new SubMenuItemsData(){ SubMenuDirectory="AdministrationViews", File = "CompanyDataView", SubMenuText="Dane Firmy" }
                         }
                     };
                     menu.Add(menuItem);

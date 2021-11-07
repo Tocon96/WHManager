@@ -55,31 +55,38 @@ namespace WHManager.DesktopUI.Views.FormViews
 
         private void buttonConfirmClick(object sender, RoutedEventArgs e)
         {
-            if(Client == null)
+            if (double.TryParse(textBoxNip.Text, out double result))
             {
-                try
+                if (Client == null)
                 {
-                    AddClient();
-                    DialogResult = true;
-                    this.Close();
+                    try
+                    {
+                        AddClient();
+                        DialogResult = true;
+                        this.Close();
+                    }
+                    catch (Exception x)
+                    {
+                        MessageBox.Show("Błąd dodawania: " + x);
+                    }
                 }
-                catch(Exception x)
+                else
                 {
-                    MessageBox.Show("Błąd dodawania: " + x);
+                    try
+                    {
+                        UpdateClient();
+                        DialogResult = true;
+                        this.Close();
+                    }
+                    catch (Exception x)
+                    {
+                        MessageBox.Show("Błąd aktualizacji: " + x);
+                    }
                 }
             }
             else
             {
-                try
-                {
-                    UpdateClient();
-                    DialogResult = true;
-                    this.Close();
-                }
-                catch (Exception x)
-                {
-                    MessageBox.Show("Błąd aktualizacji: " + x);
-                }
+                MessageBox.Show("Proszę podać poprawny NIP");
             }
         }
 

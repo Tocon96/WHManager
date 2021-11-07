@@ -135,8 +135,32 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
         {
             List<string> criteria = new List<string>();
             criteria.Add(textBoxIdName.Text.ToString());   // criteria[0] - Id/Name;
-            criteria.Add(textBoxMinValue.Text.ToString()); // criteria[1] - Value Min;
-            criteria.Add(textBoxMaxValue.Text.ToString()); // criteria[2] - Value Max;
+            if (int.TryParse(textBoxMinValue.Text, out int result))
+            {
+                criteria.Add(result.ToString());
+            }
+            else
+            {
+                if (textBoxMinValue.Text != "")
+                {
+                    MessageBox.Show("Wartość podatku nie może zawierać znaków tekstowych.");
+                }
+                criteria.Add("");
+            }
+
+            if (int.TryParse(textBoxMaxValue.Text, out int maxResult))
+            {
+                criteria.Add(result.ToString());
+            }
+            else
+            {
+                if (textBoxMaxValue.Text != "")
+                {
+                    MessageBox.Show("Wartość podatku nie może zawierać znaków tekstowych.");
+                }
+                criteria.Add("");
+            }
+
             List<Tax> taxes = taxService.SearchTaxes(criteria).ToList();
             return taxes;
         }
@@ -156,7 +180,7 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
         {
             textBoxIdName.Text = null;
             textBoxMinValue.Text = null;
-            textBoxMinValue.Text = null;
+            textBoxMaxValue.Text = null;
         }
     }
 }

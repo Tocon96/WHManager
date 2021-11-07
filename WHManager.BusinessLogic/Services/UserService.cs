@@ -183,5 +183,15 @@ namespace WHManager.BusinessLogic.Services
             }
             return users;
         }
+
+        public void CreateAdminUser(string password)
+        {
+            userRepository.CreateAdminUser(hasher.HashPassword(password));
+        }
+
+        public bool CheckIfAdminExists()
+        {
+            return userRepository.CheckIfAdminExists();
+        }
     }
 }

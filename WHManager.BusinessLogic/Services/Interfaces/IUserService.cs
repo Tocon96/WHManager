@@ -9,6 +9,7 @@ namespace WHManager.BusinessLogic.Services.Interfaces
     public interface IUserService
     {
         void AddUser(User user);
+        void CreateAdminUser(string password);
         void DeleteUser(int id);
         void UpdateUser(User user);
         IList<User> GetUsers();
@@ -17,5 +18,6 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         IList<User> GetUsersByRole(int roleId);
         IList<User> SearchUsers(List<string> criteria);
         User GetUserByName(string name);
+        bool CheckIfAdminExists();
     }
 }

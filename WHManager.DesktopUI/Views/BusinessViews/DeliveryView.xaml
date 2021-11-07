@@ -132,25 +132,30 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+
                 </Grid.ColumnDefinitions>
                 <!--Textblocks-->
-                <TextBlock Grid.Row="0" Grid.Column="1">ID zamówienia:</TextBlock>
-                <TextBlock Grid.Row="0" Grid.Column="2">Nazwa dostawcy:</TextBlock>
-                <TextBlock Grid.Row="0" Grid.Column="3">Realizacja:</TextBlock>
-                <TextBlock Grid.Row="0" Grid.Column="1" Visibility="Hidden">Nazwa dostawcy:</TextBlock>
-                <TextBlock Grid.Row="2" Grid.Column="1">Od: (Data złożenia)</TextBlock>
-                <TextBlock Grid.Row="2" Grid.Column="2">Do: (Data złożenia)</TextBlock>
-                <TextBlock Grid.Row="4" Grid.Column="1">Od: (Data zrealizowania)</TextBlock>
-                <TextBlock Grid.Row="4" Grid.Column="2">Do: (Data zrealizowania)</TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">ID zamówienia:</TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2">Nazwa dostawcy:</TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="5" Grid.ColumnSpan="2">Realizacja:</TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Visibility="Hidden">Nazwa dostawcy:</TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2">Od: (Data złożenia)</TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2">Do: (Data złożenia)</TextBlock>
+                <TextBlock Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2">Od: (Data realizacji)</TextBlock>
+                <TextBlock Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="2">Do: (Data realizacji)</TextBlock>
                 <!--Controls-->
-                <TextBox Name="textBoxDeliveryId" Grid.Row="1" Grid.Column="1"></TextBox>
-                <TextBox Name="textBoxProviderName" Grid.Row="1" Grid.Column="2"></TextBox>
-                <ComboBox Name="comboBoxRealized" Grid.Column="3" Grid.Row="1"></ComboBox>
+                <TextBox Name="textBoxDeliveryId" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"></TextBox>
+                <TextBox Name="textBoxProviderName" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2"></TextBox>
                 <TextBox Grid.Row="3" Grid.Column="1"  Visibility="Hidden"></TextBox>
-                <DatePicker Grid.Column="1" Grid.Row="3" x:Name="datePickerEarlierDateOrdered"></DatePicker>
-                <DatePicker Grid.Column="2" Grid.Row="3" x:Name="datePickerLaterDateOrdered"></DatePicker>
-                <DatePicker Grid.Column="1" Grid.Row="5" x:Name="datePickerEarlierDateRealized"></DatePicker>
-                <DatePicker Grid.Column="2" Grid.Row="5" x:Name="datePickerLaterDateRealized"></DatePicker>
+                <ComboBox Name="comboBoxRealized" Grid.Column="5" Grid.Row="1" Grid.ColumnSpan="2"></ComboBox>
+                <DatePicker Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="3" x:Name="datePickerEarlierDateOrdered"></DatePicker>
+                <DatePicker Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="3" x:Name="datePickerLaterDateOrdered"></DatePicker>
+                <DatePicker Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" x:Name="datePickerEarlierDateRealized"></DatePicker>
+                <DatePicker Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="5" x:Name="datePickerLaterDateRealized"></DatePicker>
             </Grid>
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
@@ -176,7 +181,7 @@
                       Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" x:Name="gridDeliveries">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="30" Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Nazwa klienta" Binding="{Binding Provider.Name}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Nazwa dostawcy" Binding="{Binding Provider.Name}"></DataGridTextColumn>
                     <DataGridTextColumn Width="100" Header="Data złożenia" Binding="{Binding DateCreated, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
                     <DataGridTextColumn Width="100" Header="Data zrealizowania" Binding="{Binding DateRealized, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
                     <DataGridCheckBoxColumn Width="70" Header="Zrealizowane" x:Name="Realized" Binding="{Binding Realized}"></DataGridCheckBoxColumn>

@@ -62,7 +62,11 @@ namespace WHManager.DataAccess.Repositories
             {
                 try
                 {
-                    context.DeliveryElements.Remove(context.DeliveryElements.SingleOrDefault(x => x.DeliveryId == deliveryId && x.Origin.StartsWith(origin)));
+                    IEnumerable<DeliveryOrderElements> elements = context.DeliveryElements.Where(x => x.DeliveryId == deliveryId && x.Origin.StartsWith(origin));
+                    foreach(DeliveryOrderElements element in elements)
+                    {
+                        context.DeliveryElements.Remove(element);
+                    }
                     context.SaveChanges();
                 }
                 catch (Exception e)

@@ -77,7 +77,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
         private void SearchClick(object sender, RoutedEventArgs e)
         {
             IList<Delivery> deliveries = SearchDeliveries();
-            Deliveries = new ObservableCollection<Delivery>();
+            Deliveries = new ObservableCollection<Delivery>(deliveries);
             gridDeliveries.ItemsSource = Deliveries;
         }
         
@@ -92,7 +92,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             }
             else
             {
-                criteria.Add(null);
+                criteria.Add("");
             }
             if (datePickerLaterDateOrdered.SelectedDate.HasValue)
             {
@@ -100,7 +100,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             }
             else
             {
-                criteria.Add(null);
+                criteria.Add("");
             }
             if (datePickerEarlierDateRealized.SelectedDate.HasValue)
             {
@@ -108,7 +108,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             }
             else
             {
-                criteria.Add(null);
+                criteria.Add("");
             }
             if (datePickerLaterDateRealized.SelectedDate.HasValue)
             {
@@ -116,18 +116,18 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             }
             else
             {
-                criteria.Add(null);
+                criteria.Add("");
             }
             if(comboBoxRealized.SelectedIndex == 0)
             {
-                criteria.Add(null);
+                criteria.Add("");
             }
             else if(comboBoxRealized.SelectedIndex == 1)
             {
-                criteria.Add("1");
+                criteria.Add("true");
             }else if(comboBoxRealized.SelectedIndex == 2)
             {
-                criteria.Add("0");
+                criteria.Add("false");
             }
             IList<Delivery> deliveries = deliveryService.SearchDeliveries(criteria);
             return deliveries;
@@ -136,6 +136,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews
         private void SearchClearClick(object sender, RoutedEventArgs e)
         {
             ClearFilters();
+            gridDeliveries.ItemsSource = LoadData();
         }
 
         private void ClearFilters()

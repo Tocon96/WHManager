@@ -273,30 +273,30 @@ namespace WHManager.DataAccess.Repositories
                     {
                         if (int.TryParse(criteria[0], out int result))
                         {
-                            invoices = invoices.Where(x => x.Id == result);
+                            invoices = invoices.Include(c => c.Client).Where(x => x.Id == result);
                         }
                     }
                     if (!string.IsNullOrEmpty(criteria[1]))
                     {
-                        invoices = invoices.Where(x => x.Client.Name.StartsWith(criteria[1]));
+                        invoices = invoices.Include(c => c.Client).Where(x => x.Client.Name.StartsWith(criteria[1]));
                     }
                     if (!string.IsNullOrEmpty(criteria[2]) && string.IsNullOrEmpty(criteria[3]))
                     {
                         DateTime earlierDate = Convert.ToDateTime(criteria[2]);
-                        invoices = invoices.Where(x => x.DateIssued >= earlierDate);
+                        invoices = invoices.Include(c => c.Client).Where(x => x.DateIssued >= earlierDate);
                     }
 
                     if (string.IsNullOrEmpty(criteria[2]) && !string.IsNullOrEmpty(criteria[3]))
                     {
                         DateTime laterDate = Convert.ToDateTime(criteria[3]);
-                        invoices = invoices.Where(x => x.DateIssued <= laterDate);
+                        invoices = invoices.Include(c => c.Client).Where(x => x.DateIssued <= laterDate);
                     }
 
                     if (!string.IsNullOrEmpty(criteria[2]) && !string.IsNullOrEmpty(criteria[3]))
                     {
                         DateTime earlierDate = Convert.ToDateTime(criteria[2]);
                         DateTime laterDate = Convert.ToDateTime(criteria[3]);
-                        invoices = invoices.Where(x => x.DateIssued >= earlierDate && x.DateIssued <= laterDate);
+                        invoices = invoices.Include(c => c.Client).Where(x => x.DateIssued >= earlierDate && x.DateIssued <= laterDate);
                     }
                     IEnumerable<Invoice> invoiceResults = invoices.ToList();
                     return invoiceResults;

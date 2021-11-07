@@ -136,8 +136,23 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             List<string> criteria = new List<string>();
             criteria.Add(textBoxInvoiceId.Text.ToString());
             criteria.Add(textBoxClientName.Text.ToString());
-            criteria.Add(datePickerEarlierDate.SelectedDate.Value.Date.ToShortDateString());
-            criteria.Add(datePickerLaterDate.SelectedDate.Value.Date.ToShortDateString());
+            if (datePickerEarlierDate.SelectedDate.HasValue == true)
+            {
+                criteria.Add(datePickerEarlierDate.SelectedDate.Value.Date.ToShortDateString());
+            }
+            else
+            {
+                criteria.Add("");
+            }
+
+            if (datePickerLaterDate.SelectedDate.HasValue == true)
+            {
+                criteria.Add(datePickerLaterDate.SelectedDate.Value.Date.ToShortDateString());
+            }
+            else
+            {
+                criteria.Add("");
+            }
             IList<Invoice> invoices = invoiceService.SearchInvoices(criteria);
             return invoices;
         }

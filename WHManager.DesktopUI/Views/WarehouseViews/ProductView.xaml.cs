@@ -229,10 +229,73 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
             {
                 criteria[3] = "";
             }
-            criteria.Add(priceBuyMinTextBox.Text.ToString());           // priceBuyMin  - criteria[4]
-            criteria.Add(priceBuyMaxTextBox.Text.ToString());           // priceBuyMax  - criteria[5]
-            criteria.Add(priceSellMinTextBox.Text.ToString());          // priceSellMin - criteria[6]
-            criteria.Add(priceSellMaxTextBox.Text.ToString());          // priceSellMax - criteria[7]
+            if (!string.IsNullOrEmpty(priceBuyMinTextBox.Text))
+            {
+                if (decimal.TryParse(priceBuyMinTextBox.Text, out decimal result))
+                {
+                    criteria.Add(result.ToString());           // priceBuyMin  - criteria[4]
+                }
+                else
+                {
+                    criteria.Add("");
+                    MessageBox.Show("Proszę podać poprawną cenę");
+                }
+            }
+            else
+            {
+                criteria.Add("");
+            }
+
+            if (!string.IsNullOrEmpty(priceBuyMaxTextBox.Text))
+            {
+                if (decimal.TryParse(priceBuyMaxTextBox.Text, out decimal result))
+                {
+                    criteria.Add(result.ToString());           // priceBuyMin  - criteria[4]
+                }
+                else
+                {
+                    criteria.Add("");
+                    MessageBox.Show("Proszę podać poprawną cenę");
+                }
+            }
+            else
+            {
+                criteria.Add("");
+            }
+
+            if (!string.IsNullOrEmpty(priceSellMinTextBox.Text))
+            {
+                if (decimal.TryParse(priceSellMinTextBox.Text, out decimal result))
+                {
+                    criteria.Add(result.ToString());          // priceSellMin - criteria[6]
+                }
+                else
+                {
+                    criteria.Add("");
+                    MessageBox.Show("Proszę podać poprawną cenę");
+                }
+            }
+            else
+            {
+                criteria.Add("");
+            }
+
+            if (!string.IsNullOrEmpty(priceSellMaxTextBox.Text))
+            {
+                if (decimal.TryParse(priceSellMaxTextBox.Text, out decimal result))
+                {
+                    criteria.Add(priceSellMaxTextBox.Text.ToString());          // priceSellMax - criteria[7]
+                }
+                else
+                {
+                    criteria.Add("");
+                    MessageBox.Show("Proszę podać poprawną cenę");
+                }
+            }
+            else
+            {
+                criteria.Add("");
+            }
             List<Product> products = productService.SearchProducts(criteria).ToList();
             return products;
         }

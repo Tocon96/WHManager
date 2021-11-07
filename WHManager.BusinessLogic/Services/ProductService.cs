@@ -477,7 +477,8 @@ namespace WHManager.BusinessLogic.Services
                     Tax = taxService.GetTax(product.Tax.Id),
                     Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
                     PriceBuy = product.PriceBuy,
-                    PriceSell = product.PriceSell
+                    PriceSell = product.PriceSell,
+                    InStock = product.InStock
                 };
                 products.Add(newProduct);
             }

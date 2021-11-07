@@ -133,7 +133,10 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
                     {
                         foreach (User user in Users)
                         {
-                            userService.DeleteUser(user.Id);
+                            if(user.Id != 1)
+                            {
+                                userService.DeleteUser(user.Id);
+                            }
                         }
                         gridUsers.ItemsSource = LoadUsers();
                     }
@@ -156,7 +159,10 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
                     {
                         foreach (User user in selectedUsers)
                         {
-                            userService.DeleteUser(user.Id);
+                            if(user.Id != 1)
+                            {
+                                userService.DeleteUser(user.Id);
+                            }   
                         }
                         gridUsers.ItemsSource = LoadUsers();
                     }

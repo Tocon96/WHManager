@@ -114,7 +114,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 User user = new User
                 {
                     UserName = textBoxName.Text,
-                    PasswordHash = textBoxPassword.Text,
+                    PasswordHash = textBoxPassword.Password,
                     Role = comboboxRoles.SelectedItem as Role
                 };
                 userService.AddUser(user);
@@ -133,7 +133,7 @@ namespace WHManager.DesktopUI.Views.FormViews
                 {
                     Id = User.Id,
                     UserName = textBoxName.Text,
-                    PasswordHash = textBoxPassword.Text,
+                    PasswordHash = textBoxPassword.Password,
                     Role = comboboxRoles.SelectedItem as Role
                 };
                 userService.UpdateUser(user);

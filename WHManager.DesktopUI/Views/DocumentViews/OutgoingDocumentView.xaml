@@ -142,7 +142,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Width="30" Binding="{Binding Id}"></DataGridTextColumn>
                     <DataGridTextColumn Header="ID zamówienia" Binding="{Binding OrderId}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Nazwa dostawcy" Binding="{Binding Contrahent.Name}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Nazwa klienta" Binding="{Binding Contrahent.Name}"></DataGridTextColumn>
                     <DataGridTextColumn Header="Data złożenia" Binding="{Binding DateSent, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
                     <DataGridTemplateColumn Width="50">
                         <DataGridTemplateColumn.CellTemplate>

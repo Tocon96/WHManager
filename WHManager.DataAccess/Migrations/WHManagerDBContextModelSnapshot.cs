@@ -41,6 +41,24 @@ namespace WHManager.DataAccess.Migrations
                     b.ToTable("Clients");
                 });
 
+            modelBuilder.Entity("WHManager.DataAccess.Models.Config", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Field")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Config");
+                });
+
             modelBuilder.Entity("WHManager.DataAccess.Models.Delivery", b =>
                 {
                     b.Property<int>("Id")
@@ -380,9 +398,6 @@ namespace WHManager.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Reports")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("Warehouse")
                         .HasColumnType("bit");

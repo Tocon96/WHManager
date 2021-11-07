@@ -52,18 +52,25 @@ namespace WHManager.DesktopUI.Views.FormViews
 
         private void AddTaxClick(object sender, RoutedEventArgs e)
         {
-            if(Tax == null)
+            if (int.TryParse(textBoxTaxValue.Text, out int result))
             {
-                AddTax();
-                DialogResult = true;
-                this.Close();
-                    
+                if (Tax == null)
+                {
+                    AddTax();
+                    DialogResult = true;
+                    this.Close();
+
+                }
+                else
+                {
+                    UpdateTax();
+                    DialogResult = true;
+                    this.Close();
+                }
             }
-            else
+            else 
             {
-                UpdateTax();
-                DialogResult = true;
-                this.Close();
+                MessageBox.Show("Proszę podać poprawną wartość podatku.");
             }
         }
 

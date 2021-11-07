@@ -9,6 +9,7 @@ namespace WHManager.DataAccess.Repositories.Interfaces
     public interface IUserRepository
     {
         void CreateNewUser(string name, string password, int roleId);
+        void CreateAdminUser(string password);
         void UpdateUser(int id, string name, string password, int roleId);
         void DeleteUser(int id);
         IEnumerable<User> GetUsers();
@@ -17,5 +18,6 @@ namespace WHManager.DataAccess.Repositories.Interfaces
         IEnumerable<User> GetUsersByRole(int roleId);
         IEnumerable<User> SearchUsers(List<string> criteria);
         User GetUserByName(string name);
+        bool CheckIfAdminExists();
     }
 }

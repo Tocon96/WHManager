@@ -219,7 +219,10 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
                     {
                         foreach (Role role in Roles)
                         {
-                            roleService.DeleteRole(role.Id);
+                            if(role.Id != 1)
+                            {
+                                roleService.DeleteRole(role.Id);
+                            }
                         }
                         gridRoles.ItemsSource = LoadData();
                     }
@@ -242,7 +245,10 @@ namespace WHManager.DesktopUI.Views.AdministrationViews
                     {
                         foreach (Role role in selectedRoles)
                         {
-                            roleService.DeleteRole(role.Id);
+                            if(role.Id != 1)
+                            {
+                                roleService.DeleteRole(role.Id);
+                            }
                         }
                         gridRoles.ItemsSource = LoadData();
                     }
