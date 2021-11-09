@@ -26,6 +26,9 @@ FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\FormViews\ManageProviderFor
 FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\FormViews\ManageRoleFormView.xaml;;
 FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\FormViews\ManageTaxFormView.xaml;;
 FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\FormViews\ManageUserFormView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\ReportViews\ClientReportView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\ReportViews\ProductReportView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\ReportViews\ProviderReportView.xaml;;
 FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\WarehouseViews\DeliveryItemsView.xaml;;
 FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\WarehouseViews\EmittedItemsView.xaml;;
 FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\WarehouseViews\ItemView.xaml;;

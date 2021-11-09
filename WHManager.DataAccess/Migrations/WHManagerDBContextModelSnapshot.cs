@@ -59,6 +59,30 @@ namespace WHManager.DataAccess.Migrations
                     b.ToTable("Config");
                 });
 
+            modelBuilder.Entity("WHManager.DataAccess.Models.ContrahentReports", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("ContrahentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DateFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReportOrigin")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContrahentReports");
+                });
+
             modelBuilder.Entity("WHManager.DataAccess.Models.Delivery", b =>
                 {
                     b.Property<int>("Id")
@@ -339,6 +363,36 @@ namespace WHManager.DataAccess.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("WHManager.DataAccess.Models.ProductReports", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime?>("DateFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ManufacturerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductReports");
+                });
+
             modelBuilder.Entity("WHManager.DataAccess.Models.ProductType", b =>
                 {
                     b.Property<int>("Id")
@@ -398,6 +452,9 @@ namespace WHManager.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Report")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("Warehouse")
                         .HasColumnType("bit");
@@ -471,7 +528,7 @@ namespace WHManager.DataAccess.Migrations
                     b.HasOne("WHManager.DataAccess.Models.Client", "Client")
                         .WithMany("Invoices")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WHManager.DataAccess.Models.Order", null)

@@ -170,4 +170,9 @@ E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\Form
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ManageCompanyDataFormView.baml
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\AdministrationViews\CompanyDataView.g.cs
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\AdministrationViews\CompanyDataView.baml
-E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\WHManager.DesktopUI.csproj.CopyComplete
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ClientReportView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ProductReportView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ProviderReportView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ClientReportView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ProductReportView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ProviderReportView.baml

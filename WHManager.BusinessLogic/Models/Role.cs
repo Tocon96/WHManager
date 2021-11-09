@@ -13,5 +13,6 @@ namespace WHManager.BusinessLogic.Models
         public bool Contractors { get; set; }
         public bool Documents { get; set; }
         public bool Warehouse { get; set; }
+        public bool Report { get; set; }
     }
 }

@@ -74,6 +74,24 @@
     <Compile Update="Views\FormViews\ManageUserFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\FormViews\ReportForms\ManageClientReportFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\FormViews\ReportForms\ManageProductReportFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\FormViews\ReportForms\ManageProviderReportFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ReportViews\ClientReportView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ReportViews\ProductReportView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ReportViews\ProviderReportView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\WarehouseViews\DeliveryItemsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -158,6 +176,24 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\FormViews\ManageUserFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\FormViews\ReportForms\ManageClientReportFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\FormViews\ReportForms\ManageProductReportFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\FormViews\ReportForms\ManageProviderReportFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ReportViews\ClientReportView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ReportViews\ProductReportView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ReportViews\ProviderReportView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\WarehouseViews\DeliveryItemsView.xaml">

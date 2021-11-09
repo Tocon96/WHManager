@@ -101,6 +101,21 @@ namespace WHManager.DesktopUI
                     };
                     menu.Add(menuItem);
                 }
+
+                if (role.Report == true)
+                {
+                    MenuItemsData menuItem = new MenuItemsData()
+                    {
+                        MenuText = "Raporty",
+                        SubMenuList = new List<SubMenuItemsData>{
+                            new SubMenuItemsData(){ SubMenuDirectory="ReportViews", File = "ClientReportView", SubMenuText="Raporty klienckie" },
+                            new SubMenuItemsData(){ SubMenuDirectory="ReportViews", File = "ProviderReportView", SubMenuText="Raporty dostawców" },
+                            new SubMenuItemsData(){ SubMenuDirectory="ReportViews", File = "ProductReportView", SubMenuText="Raporty sprzedażowe" }
+                        }
+                    };
+                    menu.Add(menuItem);
+                }
+
                 return menu;
             }
         }

@@ -85,8 +85,8 @@ namespace WHManager.DesktopUI.Views.FormViews.LoginForm {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;component/views/formviews/loginform/initializecompanyformvie" +
-                    "w.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;V1.0.0.0;component/views/formviews/loginform/initializecompa" +
+                    "nyformview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Views\FormViews\LoginForm\InitializeCompanyFormView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

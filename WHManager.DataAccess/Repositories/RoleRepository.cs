@@ -19,7 +19,7 @@ namespace WHManager.DataAccess.Repositories
             _contextFactory = contextFactory;
         }
 
-        public void CreateNewRole(string name, bool isadmin, bool business, bool contractors, bool documents, bool warehouse)
+        public void CreateNewRole(string name, bool isadmin, bool business, bool contractors, bool documents, bool warehouse, bool reports)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
@@ -33,6 +33,7 @@ namespace WHManager.DataAccess.Repositories
                         Contractors = contractors,
                         Documents = documents,
                         Warehouse = warehouse,
+                        Report = reports
                     };
                     context.Roles.Add(role);
                     context.SaveChanges();
@@ -109,7 +110,7 @@ namespace WHManager.DataAccess.Repositories
             
         }
 
-        public void UpdateRole(int id, string name, bool isadmin, bool business, bool contractors, bool documents, bool warehouse)
+        public void UpdateRole(int id, string name, bool isadmin, bool business, bool contractors, bool documents, bool warehouse, bool reports)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
@@ -122,6 +123,7 @@ namespace WHManager.DataAccess.Repositories
                     updatedRole.Contractors = contractors;
                     updatedRole.Documents = documents;
                     updatedRole.Warehouse = warehouse;
+                    updatedRole.Report = reports;
 
                     context.SaveChanges();
                 }
@@ -168,6 +170,7 @@ namespace WHManager.DataAccess.Repositories
                         Contractors = true,
                         Documents = true,
                         Warehouse = true,
+                        Report = true
                     };
                     context.Roles.Add(role);
                     context.SaveChanges();

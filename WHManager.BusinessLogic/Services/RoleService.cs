@@ -17,7 +17,7 @@ namespace WHManager.BusinessLogic.Services
         {
             try
             { 
-                roleRepository.CreateNewRole(role.Name, role.Admin, role.Business, role.Contractors, role.Documents, role.Warehouse);
+                roleRepository.CreateNewRole(role.Name, role.Admin, role.Business, role.Contractors, role.Documents, role.Warehouse, role.Report);
             }
             catch
             {
@@ -64,7 +64,8 @@ namespace WHManager.BusinessLogic.Services
                         Business = role.Business,
                         Warehouse = role.Warehouse,
                         Contractors = role.Contractors,
-                        Documents = role.Documents
+                        Documents = role.Documents,
+                        Report = role.Report
                     };
                     roles.Add(newRole);
                 }
@@ -92,7 +93,8 @@ namespace WHManager.BusinessLogic.Services
                         Business = role.Business,
                         Warehouse = role.Warehouse,
                         Contractors = role.Contractors,
-                        Documents = role.Documents
+                        Documents = role.Documents,
+                        Report = role.Report
                     };
                     roles.Add(newRole);
                 }
@@ -120,7 +122,8 @@ namespace WHManager.BusinessLogic.Services
                         Business = role.Business,
                         Warehouse = role.Warehouse,
                         Contractors = role.Contractors,
-                        Documents = role.Documents
+                        Documents = role.Documents,
+                        Report = role.Report
                     };
                     roles.Add(newRole);
                 }
@@ -154,7 +157,7 @@ namespace WHManager.BusinessLogic.Services
         {
             try
             {
-                roleRepository.UpdateRole(role.Id, role.Name, role.Admin, role.Business, role.Contractors, role.Documents, role.Warehouse);
+                roleRepository.UpdateRole(role.Id, role.Name, role.Admin, role.Business, role.Contractors, role.Documents, role.Warehouse, role.Report);
             }
             catch
             {
