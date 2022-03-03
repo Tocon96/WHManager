@@ -169,6 +169,7 @@
                     <DataGridCheckBoxColumn Header="Biznes" Binding="{Binding Business}"></DataGridCheckBoxColumn>
                     <DataGridCheckBoxColumn Header="Kontrahenci" Binding="{Binding Contractors}"></DataGridCheckBoxColumn>
                     <DataGridCheckBoxColumn Header="Produkty" Binding="{Binding Warehouse}"></DataGridCheckBoxColumn>
+                    <DataGridCheckBoxColumn Header="Raporty" Binding="{Binding Report}"></DataGridCheckBoxColumn>
                     <DataGridTemplateColumn Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

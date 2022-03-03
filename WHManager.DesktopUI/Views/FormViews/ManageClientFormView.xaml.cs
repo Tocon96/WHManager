@@ -90,6 +90,7 @@ namespace WHManager.DesktopUI.Views.FormViews
             }
         }
 
+
         private void AddClient()
         {
             try

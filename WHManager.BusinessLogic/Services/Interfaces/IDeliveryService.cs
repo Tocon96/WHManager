@@ -15,5 +15,6 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         public IList<Delivery> SearchDeliveries(IList<string> criteria);
         public void RealizeDelivery(Delivery delivery);
         public IList<DeliveryOrderTableContent> GetElements(int deliveryId);
+        public IList<Delivery> GetRealizedDeliveriesByProvider(int contrahentId);
     }
 }

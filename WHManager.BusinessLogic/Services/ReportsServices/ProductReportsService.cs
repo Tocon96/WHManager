@@ -13,7 +13,14 @@ namespace WHManager.BusinessLogic.Services.ReportsServices
         IProductReportRepository reportRepository = new ProductReportRepository(new DataAccess.WHManagerDBContextFactory());
         public int CreateReport(ProductReports productReport)
         {
-            return reportRepository.CreateReport(productReport.Name, productReport.ProductId, productReport.ManufacturerId, productReport.TypeId, productReport.DateFrom, productReport.DateTo);
+            return reportRepository.CreateReport(productReport.Name,
+                                                 productReport.ProductId, 
+                                                 productReport.ManufacturerId, 
+                                                 productReport.TypeId, 
+                                                 productReport.DateDeliveredFrom, 
+                                                 productReport.DateDeliveredTo,
+                                                 productReport.DateOrderedFrom, 
+                                                 productReport.DateOrderedTo);
         }
 
         public void DeleteReport(int reportId)
@@ -31,8 +38,10 @@ namespace WHManager.BusinessLogic.Services.ReportsServices
                 ProductId = report.ProductId,
                 ManufacturerId = report.ManufacturerId,
                 TypeId = report.TypeId,
-                DateFrom = report.DateFrom,
-                DateTo = report.DateTo
+                DateDeliveredFrom = report.DateDeliveredFrom,
+                DateDeliveredTo = report.DateDeliveredTo,
+                DateOrderedFrom = report.DateOrderedFrom,
+                DateOrderedTo = report.DateOrderedTo
             };
             return newReport;
 
@@ -51,8 +60,11 @@ namespace WHManager.BusinessLogic.Services.ReportsServices
                     ProductId = report.ProductId,
                     ManufacturerId = report.ManufacturerId,
                     TypeId = report.TypeId,
-                    DateFrom = report.DateFrom,
-                    DateTo = report.DateTo
+                    DateDeliveredFrom = report.DateDeliveredFrom,
+                    DateDeliveredTo = report.DateDeliveredTo,
+                    DateOrderedFrom = report.DateOrderedFrom,
+                    DateOrderedTo = report.DateOrderedTo
+
                 };
                 reports.Add(newReport);
             }
@@ -72,8 +84,10 @@ namespace WHManager.BusinessLogic.Services.ReportsServices
                     ProductId = report.ProductId,
                     ManufacturerId = report.ManufacturerId,
                     TypeId = report.TypeId,
-                    DateFrom = report.DateFrom,
-                    DateTo = report.DateTo
+                    DateDeliveredFrom = report.DateDeliveredFrom,
+                    DateDeliveredTo = report.DateDeliveredTo,
+                    DateOrderedFrom = report.DateOrderedFrom,
+                    DateOrderedTo = report.DateOrderedTo
                 };
                 reports.Add(newReport);
             }

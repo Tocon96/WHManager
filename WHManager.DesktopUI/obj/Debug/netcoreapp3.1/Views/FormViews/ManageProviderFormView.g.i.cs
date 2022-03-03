@@ -101,8 +101,7 @@ namespace WHManager.DesktopUI.Views.FormViews {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;V1.0.0.0;component/views/formviews/manageproviderformview.xa" +
-                    "ml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;component/views/formviews/manageproviderformview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\FormViews\ManageProviderFormView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

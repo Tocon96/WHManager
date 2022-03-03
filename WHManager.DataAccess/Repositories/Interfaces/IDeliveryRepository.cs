@@ -13,5 +13,6 @@ namespace WHManager.DataAccess.Repositories.Interfaces
         public Delivery GetDelivery(int id);
         public IEnumerable<Delivery> GetAllDeliveries();
         public IEnumerable<Delivery> SearchDeliveries(IList<string> criteria);
+        public IEnumerable<Delivery> GetDeliveriesByClient(int providerId);
     }
 }

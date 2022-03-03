@@ -139,8 +139,8 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Width="25" Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Nazwa klienta" Binding="{Binding ContrahentName}"></DataGridTextColumn>
-                        <DataGridTextColumn Width="100" Header="Od:" Binding="{Binding DateBeginning}"></DataGridTextColumn>
-                        <DataGridTextColumn Width="100" Header="Do:" Binding="{Binding DateEnd}"></DataGridTextColumn>
+                        <DataGridTextColumn Width="100" Header="Od:" Binding="{Binding DateFrom, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
+                        <DataGridTextColumn Width="100" Header="Do:" Binding="{Binding DateTo, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
                         <DataGridTemplateColumn Width="50">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -149,6 +149,11 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Generuj raport" Click="gridReportGenerateRaport"></MenuItem>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
                 </DataGrid>
                 <Grid Grid.Row="2" Grid.ColumnSpan="10">
                     <Grid.RowDefinitions>

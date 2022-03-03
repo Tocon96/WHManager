@@ -11,6 +11,7 @@ namespace WHManager.DataAccess.Repositories.Interfaces
         public int UpdateDocument(int id, int clientId, int orderId, DateTime dateSent);
         public void DeleteDocument(int id);
         public OutgoingDocument GetDocumentById(int id);
+        public OutgoingDocument GetDocumentByOrderId(int id);
         public IEnumerable<OutgoingDocument> GetDocuments();
         public IEnumerable<OutgoingDocument> SearchDocuments(IList<string> criteria);
     }

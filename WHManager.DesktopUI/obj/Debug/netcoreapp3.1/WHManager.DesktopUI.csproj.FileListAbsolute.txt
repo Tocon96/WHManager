@@ -24,7 +24,6 @@ E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\Microsoft.
 E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll
 E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
-E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\MvvmCross.dll
 E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
 E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\System.ComponentModel.Annotations.dll
@@ -176,3 +175,14 @@ E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\Repo
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ClientReportView.baml
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ProductReportView.baml
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ProviderReportView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ReportForms\ManageClientReportFormView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ReportForms\ManageProductFormPhaseIView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ReportForms\ManageProviderReportFormView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ReportForms\ManageClientReportFormView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ReportForms\ManageProductFormPhaseIView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ReportForms\ManageProviderReportFormView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\LiveCharts.dll
+E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\LiveCharts.Wpf.dll
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ReportDisplayViews\ContrahentReportDisplayView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ReportDisplayViews\ContrahentReportDisplayView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\WHManager.DesktopUI.csproj.CopyComplete

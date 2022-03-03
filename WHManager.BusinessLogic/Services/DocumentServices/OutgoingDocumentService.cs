@@ -20,7 +20,9 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
         IOutgoingDocumentRepository outgoingDocumentRepository = new OutgoingDocumentRepository(new DataAccess.WHManagerDBContextFactory());
         IClientService clientService = new ClientService();
         IProductService productService = new ProductService();
-        
+        IDocumentDataService dataService = new DocumentDataService();
+
+
         public int AddDocument(OutgoingDocument document)
         {
             return outgoingDocumentRepository.AddDocument(document.Contrahent.Id, document.OrderId, document.DateSent);
@@ -88,7 +90,7 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
 
         public OutgoingDocument GetDocumentByOrderId(int orderId)
         {
-            var document = outgoingDocumentRepository.GetDocumentById(orderId);
+            var document = outgoingDocumentRepository.GetDocumentByOrderId(orderId);
             OutgoingDocument outgoingDocument = new OutgoingDocument()
             {
                 Id = document.Id,
@@ -109,9 +111,10 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
             pdf.SetDefaultPageSize(PageSize.A4.Rotate());
             Document document = new Document(pdf);
             document.SetFont(font);
-            Table initialTable = GenerateInitialTable(outgoingDocument);
-            Table providerTable = GenerateProviderTable(order.Client);
-            Table itemTable = GenerateItemTable(order);
+            IList<DocumentData> documentData = dataService.GetRecordsByDocument(outgoingDocument.Id, "OutgoingDocument");
+            Table initialTable = GenerateInitialTable(documentData[0]);
+            Table providerTable = GenerateProviderTable(documentData[0]);
+            Table itemTable = GenerateItemTable(documentData);
             document.Add(initialTable);
             document.Add(providerTable);
             document.Add(itemTable);
@@ -119,7 +122,7 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
 
         }
 
-        Table GenerateInitialTable(OutgoingDocument document)
+        Table GenerateInitialTable(DocumentData documentData)
         {
 
             Table table = new Table(UnitValue.CreatePercentArray(3)).UseAllAvailableWidth().SetHeight(100);
@@ -133,29 +136,29 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
             table.AddCell(new Cell()
                                 .Add(new Table(2)
                                             .AddCell(new Paragraph("Numer dokumentu: "))
-                                            .AddCell(new Paragraph(document.Id.ToString()))
+                                            .AddCell(new Paragraph(documentData.DocumentId.ToString()))
                                             .AddCell(new Paragraph("Data realizacji"))
-                                            .AddCell(new Paragraph(document.DateSent.ToShortDateString())))
+                                            .AddCell(new Paragraph(documentData.DocumentDate.ToShortDateString())))
                                 .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                                 .SetHorizontalAlignment(HorizontalAlignment.CENTER));
             return table;
         }
 
-        Table GenerateProviderTable(Client client)
+        Table GenerateProviderTable(DocumentData documentData)
         {
 
             Table table = new Table(UnitValue.CreatePercentArray(2)).UseAllAvailableWidth();
             table.AddHeaderCell(new Cell(1, 2).Add(new Paragraph("Klient").SetTextAlignment(TextAlignment.CENTER).SetBold().SetFontSize(14)));
             table.AddCell(new Cell().Add(new Paragraph("Nazwa: ")));
-            table.AddCell(new Cell().Add(new Paragraph(client.Name)));
+            table.AddCell(new Cell().Add(new Paragraph(documentData.ContrahentName)));
             table.AddCell(new Cell().Add(new Paragraph("NIP: ")));
-            table.AddCell(new Cell().Add(new Paragraph(client.Nip.ToString())));
+            table.AddCell(new Cell().Add(new Paragraph(documentData.ContrahentNip.ToString())));
             table.AddCell(new Cell().Add(new Paragraph("Numer telefonu: ")));
-            table.AddCell(new Cell().Add(new Paragraph(client.PhoneNumber)));
+            table.AddCell(new Cell().Add(new Paragraph(documentData.ContrahentPhoneNumber)));
             return table;
         }
 
-        Table GenerateItemTable(Order order)
+        Table GenerateItemTable(IList<DocumentData> documentData)
         {
             Table table = new Table(UnitValue.CreatePercentArray(8)).UseAllAvailableWidth();
             table.AddHeaderCell(new Cell(1, 8).Add(new Paragraph("Elementy").SetTextAlignment(TextAlignment.CENTER).SetBold().SetFontSize(14)));
@@ -168,30 +171,25 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
             table.AddHeaderCell(new Cell().Add(new Paragraph("Kwota VAT(PLN)")));
             table.AddHeaderCell(new Cell().Add(new Paragraph("Kwota Brutto(PLN)")));
 
-            var grouped = order.Items.OrderBy(x => x.Product.Id).GroupBy(x => x.Product.Id);
             int enumerator = 1;
             IList<decimal> totalNettoDelivery = new List<decimal>();
             IList<decimal> totalTaxDelivery = new List<decimal>();
             IList<decimal> totalBruttoDelivery = new List<decimal>();
 
-            foreach (var group in grouped)
+            foreach (DocumentData data in documentData)
             {
-                Product product = productService.GetProduct(group.Key)[0];
+                totalNettoDelivery.Add(data.NetValue);
+                totalTaxDelivery.Add(data.TaxValue);
+                totalBruttoDelivery.Add(data.GrossValue);
+
                 table.AddCell(new Cell().Add(new Paragraph(enumerator.ToString())));
-                table.AddCell(new Cell().Add(new Paragraph(product.Name)));
-                int itemCount = order.Items.Count(x => x.Product.Id == group.Key);
-                table.AddCell(new Cell().Add(new Paragraph(itemCount.ToString())));
-                table.AddCell(new Cell().Add(new Paragraph(product.PriceSell.ToString())));
-                table.AddCell(new Cell().Add(new Paragraph(product.Tax.Value.ToString())));
-                decimal totalNetto = Math.Round(itemCount * product.PriceSell, 2);
-                totalNettoDelivery.Add(totalNetto);
-                table.AddCell(new Cell().Add(new Paragraph(totalNetto.ToString())));
-                decimal vatValue = Math.Round((decimal)product.Tax.Value / 100 * totalNetto, 2);
-                totalTaxDelivery.Add(vatValue);
-                table.AddCell(new Cell().Add(new Paragraph(vatValue.ToString())));
-                decimal totalBrutto = Math.Round(vatValue + totalNetto, 2);
-                totalBruttoDelivery.Add(totalBrutto);
-                table.AddCell(new Cell().Add(new Paragraph(totalBrutto.ToString())));
+                table.AddCell(new Cell().Add(new Paragraph(data.ProductName)));
+                table.AddCell(new Cell().Add(new Paragraph(data.ProductCount.ToString())));
+                table.AddCell(new Cell().Add(new Paragraph(data.ProductPrice.ToString())));
+                table.AddCell(new Cell().Add(new Paragraph(data.TaxType.ToString())));
+                table.AddCell(new Cell().Add(new Paragraph(data.NetValue.ToString())));
+                table.AddCell(new Cell().Add(new Paragraph(data.TaxValue.ToString())));
+                table.AddCell(new Cell().Add(new Paragraph(data.GrossValue.ToString())));
                 enumerator++;
             }
 

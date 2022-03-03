@@ -17,7 +17,7 @@ namespace WHManager.DataAccess.Repositories
             _contextFactory = contextFactory;
         }
 
-        public int CreateReport(string name, int? productId, int? manufacturerId, int? typeId, DateTime? dateFrom, DateTime? dateTo)
+        public int CreateReport(string name, int? productId, int? manufacturerId, int? typeId, DateTime? dateDeliveredFrom, DateTime? dateDeliveredTo, DateTime? dateOrderedFrom, DateTime? dateOrderedTo)
         {
             using(WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
@@ -27,8 +27,10 @@ namespace WHManager.DataAccess.Repositories
                     ProductId = productId,
                     ManufacturerId = manufacturerId,
                     TypeId = typeId,
-                    DateFrom = dateFrom,
-                    DateTo = dateTo
+                    DateDeliveredFrom = dateDeliveredFrom,
+                    DateDeliveredTo = dateDeliveredTo,
+                    DateOrderedFrom = dateOrderedFrom,
+                    DateOrderedTo = dateOrderedTo
                 };
                 context.ProductReports.Add(report);
                 context.SaveChanges();
@@ -80,23 +82,42 @@ namespace WHManager.DataAccess.Repositories
                         reports = reports.Where(x => x.Name.StartsWith(criteria[0]));
                     }
                 }
-                if (!string.IsNullOrEmpty(criteria[2]) && string.IsNullOrEmpty(criteria[3]))
+                if (!string.IsNullOrEmpty(criteria[1]) && string.IsNullOrEmpty(criteria[2]))
                 {
-                    DateTime earlierDate = Convert.ToDateTime(criteria[2]);
-                    reports = reports.Where(x => x.DateFrom >= earlierDate);
+                    DateTime earlierDate = Convert.ToDateTime(criteria[1]);
+                    reports = reports.Where(x => x.DateDeliveredFrom >= earlierDate);
                 }
 
-                if (string.IsNullOrEmpty(criteria[2]) && !string.IsNullOrEmpty(criteria[3]))
+                if (string.IsNullOrEmpty(criteria[1]) && !string.IsNullOrEmpty(criteria[2]))
                 {
-                    DateTime laterDate = Convert.ToDateTime(criteria[3]);
-                    reports = reports.Where(x => x.DateTo <= laterDate);
+                    DateTime laterDate = Convert.ToDateTime(criteria[2]);
+                    reports = reports.Where(x => x.DateDeliveredTo <= laterDate);
                 }
 
-                if (!string.IsNullOrEmpty(criteria[2]) && !string.IsNullOrEmpty(criteria[3]))
+                if (!string.IsNullOrEmpty(criteria[1]) && !string.IsNullOrEmpty(criteria[2]))
                 {
-                    DateTime earlierDate = Convert.ToDateTime(criteria[2]);
-                    DateTime laterDate = Convert.ToDateTime(criteria[3]);
-                    reports = reports.Where(x => x.DateFrom >= earlierDate && x.DateTo <= laterDate);
+                    DateTime earlierDate = Convert.ToDateTime(criteria[1]);
+                    DateTime laterDate = Convert.ToDateTime(criteria[2]);
+                    reports = reports.Where(x => x.DateDeliveredFrom >= earlierDate && x.DateDeliveredTo <= laterDate);
+                }
+
+                if (!string.IsNullOrEmpty(criteria[3]) && string.IsNullOrEmpty(criteria[4]))
+                {
+                    DateTime earlierDate = Convert.ToDateTime(criteria[4]);
+                    reports = reports.Where(x => x.DateOrderedFrom >= earlierDate);
+                }
+
+                if (string.IsNullOrEmpty(criteria[3]) && !string.IsNullOrEmpty(criteria[4]))
+                {
+                    DateTime laterDate = Convert.ToDateTime(criteria[5]);
+                    reports = reports.Where(x => x.DateOrderedTo <= laterDate);
+                }
+
+                if (!string.IsNullOrEmpty(criteria[4]) && !string.IsNullOrEmpty(criteria[5]))
+                {
+                    DateTime earlierDate = Convert.ToDateTime(criteria[4]);
+                    DateTime laterDate = Convert.ToDateTime(criteria[5]);
+                    reports = reports.Where(x => x.DateOrderedFrom >= earlierDate && x.DateOrderedTo <= laterDate);
                 }
 
                 IEnumerable<ProductReports> reportList = reports.ToList();

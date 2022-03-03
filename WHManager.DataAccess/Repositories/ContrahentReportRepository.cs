@@ -15,7 +15,7 @@ namespace WHManager.DataAccess.Repositories
         {
             _contextFactory = contextFactory;
         }
-        public int CreateReport(string reportOrigin, int contrahentId, DateTime? dateFrom, DateTime? dateTo)
+        public int CreateReport(string reportOrigin, int contrahentId, string contrahentName, DateTime? dateFrom, DateTime? dateTo)
         {
             using(WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
@@ -23,6 +23,7 @@ namespace WHManager.DataAccess.Repositories
                 {
                     ReportOrigin = reportOrigin,
                     ContrahentId = contrahentId,
+                    ContrahentName = contrahentName,
                     DateFrom = dateFrom,
                     DateTo = dateTo
                 };
@@ -78,23 +79,27 @@ namespace WHManager.DataAccess.Repositories
                 {
                     reports = reports.Where(x => x.Id == int.Parse(criteria[0]));
                 }
-                reports = reports.Where(x => x.ReportOrigin.StartsWith(criteria[1]));
-                if (!string.IsNullOrEmpty(criteria[2]) && string.IsNullOrEmpty(criteria[3]))
+                if (!string.IsNullOrEmpty(criteria[1]))
                 {
-                    DateTime earlierDate = Convert.ToDateTime(criteria[2]);
+                    reports = reports.Where(x => x.ContrahentName.StartsWith(criteria[1]));
+                }
+                reports = reports.Where(x => x.ReportOrigin.StartsWith(criteria[2]));
+                if (!string.IsNullOrEmpty(criteria[3]) && string.IsNullOrEmpty(criteria[4]))
+                {
+                    DateTime earlierDate = Convert.ToDateTime(criteria[3]);
                     reports = reports.Where(x => x.DateFrom >= earlierDate);
                 }
 
-                if (string.IsNullOrEmpty(criteria[2]) && !string.IsNullOrEmpty(criteria[3]))
+                if (string.IsNullOrEmpty(criteria[3]) && !string.IsNullOrEmpty(criteria[4]))
                 {
-                    DateTime laterDate = Convert.ToDateTime(criteria[3]);
+                    DateTime laterDate = Convert.ToDateTime(criteria[4]);
                     reports = reports.Where(x => x.DateTo <= laterDate);
                 }
 
-                if (!string.IsNullOrEmpty(criteria[2]) && !string.IsNullOrEmpty(criteria[3]))
+                if (!string.IsNullOrEmpty(criteria[3]) && !string.IsNullOrEmpty(criteria[4]))
                 {
-                    DateTime earlierDate = Convert.ToDateTime(criteria[2]);
-                    DateTime laterDate = Convert.ToDateTime(criteria[3]);
+                    DateTime earlierDate = Convert.ToDateTime(criteria[3]);
+                    DateTime laterDate = Convert.ToDateTime(criteria[4]);
                     reports = reports.Where(x => x.DateFrom >= earlierDate && x.DateTo <= laterDate);
                 }
 

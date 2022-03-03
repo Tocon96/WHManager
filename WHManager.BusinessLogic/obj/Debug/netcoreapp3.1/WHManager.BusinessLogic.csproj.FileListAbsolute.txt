@@ -10,4 +10,3 @@ E:\visualstudio\WHManager\WHManager.BusinessLogic\bin\Debug\netcoreapp3.1\WHMana
 E:\visualstudio\WHManager\WHManager.BusinessLogic\obj\Debug\netcoreapp3.1\WHManager.BusinessLogic.csproj.CoreCompileInputs.cache
 E:\visualstudio\WHManager\WHManager.BusinessLogic\obj\Debug\netcoreapp3.1\WHManager.BusinessLogic.csproj.AssemblyReference.cache
 E:\visualstudio\WHManager\WHManager.BusinessLogic\obj\Debug\netcoreapp3.1\WHManager.BusinessLogic.GeneratedMSBuildEditorConfig.editorconfig
-E:\visualstudio\WHManager\WHManager.BusinessLogic\obj\Debug\netcoreapp3.1\WHManager.BusinessLogic.csproj.CopyComplete

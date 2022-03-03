@@ -13,6 +13,7 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
         public OutgoingDocument GetDocument(int id);
         public IList<OutgoingDocument> GetDocuments();
         public IList<OutgoingDocument> SearchDocuments(IList<string>criteria);
+        public OutgoingDocument GetDocumentByOrderId(int orderId);
         public void GeneratePdf(string filename, Order order);
     }
 }

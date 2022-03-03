@@ -14,7 +14,7 @@ namespace WHManager.DataAccess.Repositories.Interfaces
         IEnumerable<Order> GetAllOrders();
         Order GetOrderById(int id);
         Order GetOrderByInvoice(int invoiceId);
-        IEnumerable<Order> GetOrdersByClient(int? clientId = null, string clientName = null, double? clientNip = null);
+        IEnumerable<Order> GetOrdersByClient(int clientId);
         IEnumerable<Order> SearchOrders(List<string> criteria);
         void RealizeOrder(int orderId, DateTime dateRealized);
     }

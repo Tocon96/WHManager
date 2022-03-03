@@ -74,6 +74,23 @@ namespace WHManager.DataAccess.Repositories
 
         }
 
+        public OutgoingDocument GetDocumentByOrderId(int id)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                try
+                {
+                    return context.OutgoingDocuments.Include(x => x.Contrahent)
+                                                    .SingleOrDefault(x => x.OrderId == id);
+                }
+                catch
+                {
+                    throw new Exception("Błąd wyszukiwania dokumentu.");
+                }
+            }
+
+        }
+
         public IEnumerable<OutgoingDocument> GetDocuments()
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())

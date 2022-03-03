@@ -14,11 +14,11 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         IList<Order> GetAllOrders();
         Order GetOrderById(int id);
         Order GetOrderByInvoice(int invoiceId);
-        IList<Order> GetOrdersByClient(int? clientId = null, string clientName = null, double? clientNip = null);
         decimal CalculateFinalPrice(Order order);
         IList<Order> SearchOrders(List<string> criteria);
         bool RealizeOrder(Order order);
         void EmptyOrderFromItems(Order order);
         public IList<DeliveryOrderTableContent> GetElements(int orderId);
+        IList<Order> GetRealizedOrdersByClient(int clientId);
     }
 }

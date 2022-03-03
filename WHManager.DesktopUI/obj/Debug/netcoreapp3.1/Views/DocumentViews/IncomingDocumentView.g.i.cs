@@ -101,8 +101,7 @@ namespace WHManager.DesktopUI.Views.DocumentViews {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;V1.0.0.0;component/views/documentviews/incomingdocumentview." +
-                    "xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;component/views/documentviews/incomingdocumentview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\DocumentViews\IncomingDocumentView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

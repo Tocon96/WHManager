@@ -118,6 +118,10 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
                         items.Add(item);
                     }
                 }
+                else if(criteria[2] == "0")
+                {
+                    items.Add(item);
+                }
             }
             return items;
         }

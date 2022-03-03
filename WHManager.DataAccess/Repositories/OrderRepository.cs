@@ -105,65 +105,22 @@ namespace WHManager.DataAccess.Repositories
             } 
         }
 
-        public IEnumerable<Order> GetOrdersByClient(int? clientId = null, string clientName = null, double? clientNip = null)
+        public IEnumerable<Order> GetOrdersByClient(int clientId)
         {
-            if (clientId != null)
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
             {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                try
                 {
-                    try
-                    {
-                        IEnumerable<Order> orders = context.Orders.Include(c => c.Client)
-                                                                    .Include(i => i.Items)
-                                                                    .ToList()
-                                                                    .FindAll(c => c.Client.Id == clientId);
-                        return orders;
-                    }
-                    catch
-                    {
-                        throw new Exception("Błąd pobierania zamówień: ");
-                    }
+                    IEnumerable<Order> orders = context.Orders.Include(c => c.Client)
+                                                                .Include(i => i.Items)
+                                                                .ToList()
+                                                                .FindAll(c => c.Client.Id == clientId);
+                    return orders;
                 }
-            }
-            else if(clientName != null)
-            {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+                catch
                 {
-                    try
-                    {
-                        IEnumerable<Order> orders = context.Orders.Include(c => c.Client)
-                                                                  .Include(i => i.Items)
-                                                                  .ToList()
-                                                                  .FindAll(c => c.Client.Name.StartsWith(clientName));
-                        return orders;
-                    }
-                    catch
-                    {
-                        throw new Exception("Błąd pobierania zamówień: ");
-                    }
+                    throw new Exception("Błąd pobierania zamówień: ");
                 }
-            }
-            else if(clientNip != null)
-            {
-                using (WHManagerDBContext context = _contextFactory.CreateDbContext())
-                {
-                    try
-                    {
-                        IEnumerable<Order> orders = context.Orders.Include(c => c.Client)
-                                                                  .Include(i => i.Items)
-                                                                  .ToList()
-                                                                  .FindAll(c => c.Client.Nip == clientNip);
-                        return orders;
-                    }
-                    catch
-                    {
-                        throw new Exception("Błąd pobierania zamówień: ");
-                    }
-                }
-            }
-            else
-            {
-                throw new Exception("Błąd pobierania zamówień: ");
             }
         }
 

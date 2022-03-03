@@ -11,6 +11,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WHManager.BusinessLogic.Models;
+using WHManager.BusinessLogic.Services.DocumentServices;
+using WHManager.BusinessLogic.Services.DocumentServices.Interfaces;
 using WHManager.BusinessLogic.Services.Interfaces;
 using WHManager.DataAccess.Repositories;
 using WHManager.DataAccess.Repositories.Interfaces;
@@ -22,6 +24,7 @@ namespace WHManager.BusinessLogic.Services
         private readonly IInvoiceRepository _invoiceRepository = new InvoiceRepository(new DataAccess.WHManagerDBContextFactory());
         private IClientService clientService = new ClientService();
         private IProductService productService = new ProductService();
+        IDocumentDataService dataService = new DocumentDataService();
         public int CreateNewInvoice(Invoice invoice)
         {
             try
@@ -166,7 +169,7 @@ namespace WHManager.BusinessLogic.Services
 
         public void GeneratePdf(string filename, Order order)
         {
-            Invoice invoice = GetInvoiceById(order.Id);
+            Invoice invoice = GetInvoiceByOrder(order.Id);
             FontProgram fontProgram = FontProgramFactory.CreateFont();
             PdfFont font = PdfFontFactory.CreateFont(fontProgram, "CP1257");
             PdfWriter writer = new PdfWriter(filename);
@@ -174,9 +177,10 @@ namespace WHManager.BusinessLogic.Services
             pdf.SetDefaultPageSize(PageSize.A4);
             Document document = new Document(pdf);
             document.SetFont(font);
-            Table initialTable = GenerateInitialTable(invoice);
-            Table clientTable = GenerateClientTable(order.Client);
-            Table itemTable = GenerateItemTable(order);
+            IList<DocumentData> documentData = dataService.GetRecordsByDocument(invoice.Id, "Invoice");
+            Table initialTable = GenerateInitialTable(documentData[0]);
+            Table clientTable = GenerateClientTable(documentData[0]);
+            Table itemTable = GenerateItemTable(documentData);
             Table signatureTable = GenerateSignatureTable();
             document.Add(initialTable);
             document.Add(clientTable);
@@ -187,7 +191,7 @@ namespace WHManager.BusinessLogic.Services
             document.Close();
         }
 
-        Table GenerateInitialTable(Invoice invoice)
+        Table GenerateInitialTable(DocumentData documentData)
         {
 
             Table table = new Table(UnitValue.CreatePercentArray(3)).UseAllAvailableWidth().SetHeight(100);
@@ -201,15 +205,15 @@ namespace WHManager.BusinessLogic.Services
             table.AddCell(new Cell()
                                 .Add(new Table(2)
                                             .AddCell(new Paragraph("Numer dokumentu: "))
-                                            .AddCell(new Paragraph(invoice.Id.ToString()))
+                                            .AddCell(new Paragraph(documentData.DocumentId.ToString()))
                                             .AddCell(new Paragraph("Data realizacji"))
-                                            .AddCell(new Paragraph(invoice.DateIssued.ToShortDateString())))
+                                            .AddCell(new Paragraph(documentData.DocumentDate.ToShortDateString())))
                                 .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                                 .SetHorizontalAlignment(HorizontalAlignment.CENTER));
             return table;
         }
 
-        Table GenerateClientTable(Client client)
+        Table GenerateClientTable(DocumentData documentData)
         {
 
             IConfigService configService = new ConfigService();
@@ -227,15 +231,15 @@ namespace WHManager.BusinessLogic.Services
             table.AddCell(new Cell().SetBorder(iText.Layout.Borders.Border.NO_BORDER).Add(new Table(UnitValue.CreatePercentArray(2)).UseAllAvailableWidth()
                                                 .AddHeaderCell(new Cell(1, 2).Add(new Paragraph("Kupujący").SetTextAlignment(TextAlignment.CENTER).SetBold().SetFontSize(14)))
                                                 .AddCell(new Cell().Add(new Paragraph("Nazwa: ")))
-                                                .AddCell(new Cell().Add(new Paragraph(client.Name)))
+                                                .AddCell(new Cell().Add(new Paragraph(documentData.ContrahentName)))
                                                 .AddCell(new Cell().Add(new Paragraph("NIP: ")))
-                                                .AddCell(new Cell().Add(new Paragraph(client.Nip.ToString())))
+                                                .AddCell(new Cell().Add(new Paragraph(documentData.ContrahentNip.ToString())))
                                                 .AddCell(new Cell().Add(new Paragraph("Numer telefonu: ")))
-                                                .AddCell(new Cell().Add(new Paragraph(client.PhoneNumber)))));
+                                                .AddCell(new Cell().Add(new Paragraph(documentData.ContrahentPhoneNumber)))));
             return table;
         }
 
-        Table GenerateItemTable(Order order)
+        Table GenerateItemTable(IList<DocumentData> documentData)
         {
             Table table = new Table(UnitValue.CreatePercentArray(8)).UseAllAvailableWidth();
             table.AddHeaderCell(new Cell(1, 8).Add(new Paragraph("Elementy").SetTextAlignment(TextAlignment.CENTER).SetBold().SetFontSize(14)));
@@ -248,30 +252,25 @@ namespace WHManager.BusinessLogic.Services
             table.AddHeaderCell(new Cell().Add(new Paragraph("Kwota VAT(PLN)")));
             table.AddHeaderCell(new Cell().Add(new Paragraph("Kwota Brutto(PLN)")));
 
-            var grouped = order.Items.OrderBy(x => x.Product.Id).GroupBy(x => x.Product.Id);
             int enumerator = 1;
             IList<decimal> totalNettoDelivery = new List<decimal>();
             IList<decimal> totalTaxDelivery = new List<decimal>();
             IList<decimal> totalBruttoDelivery = new List<decimal>();
 
-            foreach (var group in grouped)
+            foreach (DocumentData data in documentData)
             {
-                Product product = productService.GetProduct(group.Key)[0];
+                totalNettoDelivery.Add(data.NetValue);
+                totalTaxDelivery.Add(data.TaxValue);
+                totalBruttoDelivery.Add(data.GrossValue);
+
                 table.AddCell(new Cell().Add(new Paragraph(enumerator.ToString())));
-                table.AddCell(new Cell().Add(new Paragraph(product.Name)));
-                int itemCount = order.Items.Count(x => x.Product.Id == group.Key);
-                table.AddCell(new Cell().Add(new Paragraph(itemCount.ToString())));
-                table.AddCell(new Cell().Add(new Paragraph(product.PriceSell.ToString())));
-                table.AddCell(new Cell().Add(new Paragraph(product.Tax.Value.ToString())));
-                decimal totalNetto = Math.Round(itemCount * product.PriceSell, 2);
-                totalNettoDelivery.Add(totalNetto);
-                table.AddCell(new Cell().Add(new Paragraph(totalNetto.ToString())));
-                decimal vatValue = Math.Round((decimal)product.Tax.Value / 100 * totalNetto, 2);
-                totalTaxDelivery.Add(vatValue);
-                table.AddCell(new Cell().Add(new Paragraph(vatValue.ToString())));
-                decimal totalBrutto = Math.Round(vatValue + totalNetto, 2);
-                totalBruttoDelivery.Add(totalBrutto);
-                table.AddCell(new Cell().Add(new Paragraph(totalBrutto.ToString())));
+                table.AddCell(new Cell().Add(new Paragraph(data.ProductName)));
+                table.AddCell(new Cell().Add(new Paragraph(data.ProductCount.ToString())));
+                table.AddCell(new Cell().Add(new Paragraph(data.ProductPrice.ToString())));
+                table.AddCell(new Cell().Add(new Paragraph(data.TaxType.ToString())));
+                table.AddCell(new Cell().Add(new Paragraph(data.NetValue.ToString())));
+                table.AddCell(new Cell().Add(new Paragraph(data.TaxValue.ToString())));
+                table.AddCell(new Cell().Add(new Paragraph(data.GrossValue.ToString())));
                 enumerator++;
             }
 

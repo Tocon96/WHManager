@@ -56,6 +56,7 @@ namespace WHManager.DesktopUI.Views.FormViews
             checkboxBusiness.IsChecked = Role.Business;
             checkboxContractors.IsChecked = Role.Contractors;
             checkboxDocuments.IsChecked = Role.Documents;
+            checkboxReports.IsChecked = Role.Report;
         }
 
         private void ButtonAddRoleClick(object sender, RoutedEventArgs e)
@@ -103,7 +104,8 @@ namespace WHManager.DesktopUI.Views.FormViews
                     Warehouse = checkboxWarehouse.IsChecked.Value,
                     Business = checkboxBusiness.IsChecked.Value,
                     Contractors = checkboxContractors.IsChecked.Value,
-                    Documents = checkboxDocuments.IsChecked.Value
+                    Documents = checkboxDocuments.IsChecked.Value,
+                    Report = checkboxReports.IsChecked.Value
                 };
                 roleService.AddRole(role);
             }
@@ -125,7 +127,8 @@ namespace WHManager.DesktopUI.Views.FormViews
                     Warehouse = checkboxWarehouse.IsChecked.Value,
                     Business = checkboxBusiness.IsChecked.Value,
                     Contractors = checkboxContractors.IsChecked.Value,
-                    Documents = checkboxDocuments.IsChecked.Value
+                    Documents = checkboxDocuments.IsChecked.Value,
+                    Report = checkboxReports.IsChecked.Value
                 };
                 roleService.UpdateRole(role);
             }

@@ -103,7 +103,7 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <!--Textblocks-->
-                    <TextBlock Grid.Row="0" Grid.Column="1">ID faktury:</TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="1">ID raportu:</TextBlock>
                     <TextBlock Grid.Row="0" Grid.Column="2">Nazwa dostawcy:</TextBlock>
                     <TextBlock Grid.Row="2" Grid.Column="1">Od:</TextBlock>
                     <TextBlock Grid.Row="2" Grid.Column="2">Do:</TextBlock>
@@ -139,8 +139,8 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Width="25" Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Nazwa dostawcy" Binding="{Binding ContrahentName}"></DataGridTextColumn>
-                        <DataGridTextColumn Width="100" Header="Od:" Binding="{Binding DateBeginning}"></DataGridTextColumn>
-                        <DataGridTextColumn Width="100" Header="Do:" Binding="{Binding DateEnd}"></DataGridTextColumn>
+                        <DataGridTextColumn Width="100" Header="Od:" Binding="{Binding DateFrom, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
+                        <DataGridTextColumn Width="100" Header="Do:" Binding="{Binding DateTo, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
                         <DataGridTemplateColumn Width="50">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

@@ -27,6 +27,5 @@ namespace WHManager.BusinessLogic.Services.CommandService
             add { }
             remove { }
         }
-
     }
 }

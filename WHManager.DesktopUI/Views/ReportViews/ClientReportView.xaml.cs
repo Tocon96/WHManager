@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services.ReportsServices;
 using WHManager.BusinessLogic.Services.ReportsServices.Interfaces;
+using WHManager.DesktopUI.Views.FormViews.ReportForms;
+using WHManager.DesktopUI.Views.ReportViews.ReportDisplayViews;
 
 namespace WHManager.DesktopUI.Views.ReportViews
 {
@@ -50,6 +52,21 @@ namespace WHManager.DesktopUI.Views.ReportViews
             LoadData();
         }
 
+        private void gridReportGenerateRaport(object sender, RoutedEventArgs e)
+        {
+            if(gridReports.SelectedItem != null)
+            {
+                ContrahentReports report = gridReports.SelectedItem as ContrahentReports;
+                foreach (System.Windows.Window window in Application.Current.Windows)
+                    {
+                    if (window.GetType() == typeof(MainWindow))
+                    {
+                        (window as MainWindow).mainContent.Navigate(new ContrahentReportDisplayView(report));
+                    }
+                }
+            }
+        }
+
         private void SearchClick(object sender, RoutedEventArgs e)
         {
             IList<string> criteria = new List<string>();
@@ -70,6 +87,7 @@ namespace WHManager.DesktopUI.Views.ReportViews
                 criteria.Add("");
             }
             criteria.Add(textBoxClientName.Text);
+            criteria.Add("Clients");
             if (datePickerEarlierDate.SelectedDate.HasValue)
             {
                 criteria.Add(datePickerEarlierDate.SelectedDate.Value.ToShortDateString());
@@ -88,6 +106,7 @@ namespace WHManager.DesktopUI.Views.ReportViews
             }
             IList<ContrahentReports> reports = reportsService.SearchReports(criteria.ToList());
             Reports = new ObservableCollection<ContrahentReports>(reports);
+            gridReports.ItemsSource = Reports;
         }
 
         private void DeleteReportClick(object sender, RoutedEventArgs e)
@@ -127,7 +146,13 @@ namespace WHManager.DesktopUI.Views.ReportViews
 
         private void AddReportClick(object sender, RoutedEventArgs e)
         {
+            ManageClientReportFormView formView = new ManageClientReportFormView(this);
+            formView.ShowDialog();
 
+            if (formView.DialogResult.Value == true)
+            {
+                LoadData();
+            }
         }
     }
 }

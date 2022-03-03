@@ -88,19 +88,6 @@ namespace WHManager.DesktopUI
                     };
                     menu.Add(menuItem);
                 }
-                if (role.Admin == true)
-                {
-                    MenuItemsData menuItem = new MenuItemsData()
-                    {
-                        MenuText = "Panel Administracyjny",
-                        SubMenuList = new List<SubMenuItemsData>{
-                            new SubMenuItemsData(){ SubMenuDirectory="AdministrationViews", File = "RoleView", SubMenuText="Role" },
-                            new SubMenuItemsData(){ SubMenuDirectory="AdministrationViews", File = "UserView", SubMenuText="Użytkownicy" },
-                            new SubMenuItemsData(){ SubMenuDirectory="AdministrationViews", File = "CompanyDataView", SubMenuText="Dane Firmy" }
-                        }
-                    };
-                    menu.Add(menuItem);
-                }
 
                 if (role.Report == true)
                 {
@@ -116,6 +103,19 @@ namespace WHManager.DesktopUI
                     menu.Add(menuItem);
                 }
 
+                if (role.Admin == true)
+                {
+                    MenuItemsData menuItem = new MenuItemsData()
+                    {
+                        MenuText = "Panel Administracyjny",
+                        SubMenuList = new List<SubMenuItemsData>{
+                            new SubMenuItemsData(){ SubMenuDirectory="AdministrationViews", File = "RoleView", SubMenuText="Role" },
+                            new SubMenuItemsData(){ SubMenuDirectory="AdministrationViews", File = "UserView", SubMenuText="Użytkownicy" },
+                            new SubMenuItemsData(){ SubMenuDirectory="AdministrationViews", File = "CompanyDataView", SubMenuText="Dane Firmy" }
+                        }
+                    };
+                    menu.Add(menuItem);
+                }
                 return menu;
             }
         }
@@ -139,7 +139,6 @@ namespace WHManager.DesktopUI
 
         public class MenuItemsData
         {
-            //Icon Data
             public string MenuText { get; set; }
             public List<SubMenuItemsData> SubMenuList { get; set; }
 
@@ -157,7 +156,6 @@ namespace WHManager.DesktopUI
 
             public string File { get; set; }
 
-            //To Add click event to our Buttons we will use ICommand here to switch pages when specific button is clicked
             public SubMenuItemsData()
             {
                 SubMenuCommand = new CommandService(Execute);
@@ -173,8 +171,6 @@ namespace WHManager.DesktopUI
 
             private void navigateToPage(string Directory, string Menu)
             {
-                //We will search for our Main Window in open windows and then will access the frame inside it to set the navigation to desired page..
-                //lets see how... ;)
                 foreach (System.Windows.Window window in Application.Current.Windows)
                 {
                     if (window.GetType() == typeof(MainWindow))

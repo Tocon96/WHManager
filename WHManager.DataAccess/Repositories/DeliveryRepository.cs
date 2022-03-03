@@ -77,6 +77,27 @@ namespace WHManager.DataAccess.Repositories
 
         }
 
+        public IEnumerable<Delivery> GetDeliveriesByClient(int providerId)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                try
+                {
+                    IEnumerable<Delivery> deliveries = context.Deliveries.Include(x => x.Provider)
+                                                                         .Include(x => x.Items)
+                                                                         .ToList()
+                                                                         .FindAll(x => x.Provider.Id == providerId);
+
+                    return deliveries;
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Błąd pobierania dostaw");
+                }
+
+            }
+        }
+
         public Delivery GetDelivery(int id)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
