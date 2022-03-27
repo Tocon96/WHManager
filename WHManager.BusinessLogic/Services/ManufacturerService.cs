@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services.Interfaces;
+using WHManager.BusinessLogic.Services.ReportsServices;
+using WHManager.BusinessLogic.Services.ReportsServices.Interfaces;
 using WHManager.DataAccess.Repositories;
 using WHManager.DataAccess.Repositories.Interfaces;
 
@@ -13,6 +15,7 @@ namespace WHManager.BusinessLogic.Services
     public class ManufacturerService : IManufacturerService
     {
         private readonly IManufacturerRepository _manufacturerRepository = new ManufacturerRepository(new DataAccess.WHManagerDBContextFactory());
+        IProductReportsService reportService = new ProductReportsService();
 
         public void CreateNewManufacturer(Manufacturer manufacturer)
         {
@@ -72,7 +75,6 @@ namespace WHManager.BusinessLogic.Services
             {
                 throw new Exception("Błąd pobierania producenta: ");
             }
-			
 		}
 		
 		public void UpdateManufacturer(Manufacturer manufacturer)

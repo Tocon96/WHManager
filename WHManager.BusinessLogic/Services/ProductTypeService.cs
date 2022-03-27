@@ -7,6 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services.Interfaces;
+using WHManager.BusinessLogic.Services.ReportsServices;
+using WHManager.BusinessLogic.Services.ReportsServices.Interfaces;
 using WHManager.DataAccess.Repositories;
 using WHManager.DataAccess.Repositories.Interfaces;
 
@@ -15,6 +17,7 @@ namespace WHManager.BusinessLogic.Services
     public class ProductTypeService : IProductTypeService
     {
         private readonly IProductTypeRepository _productTypeRepository = new ProductTypeRepository(new DataAccess.WHManagerDBContextFactory());
+        IProductReportsService productReportService = new ProductReportsService();
 
         public void CreateNewProductType(ProductType productType)
         {

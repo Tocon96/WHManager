@@ -42,14 +42,22 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
         {
             try
             {
-                MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz ten typ podatku?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+                ITaxService taxService = new TaxService();
+                Tax tax = gridTaxes.SelectedItem as Tax;
+                if (!taxService.CheckIfTaxIsUsed(tax.Id))
                 {
-                    if (messageBoxResult == MessageBoxResult.Yes)
+                    MessageBoxResult messageBoxResult = MessageBox.Show("Czy na pewno chcesz ten typ podatku?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
                     {
-                        ITaxService taxService = new TaxService();
-                        Tax tax = gridTaxes.SelectedItem as Tax;
-                        taxService.DeleteTax(tax.Id);
+                        if (messageBoxResult == MessageBoxResult.Yes)
+                        {
+                            taxService.DeleteTax(tax.Id);
+                            gridTaxes.ItemsSource = LoadData();
+                        }
                     }
+                }
+                else
+                {
+                    MessageBox.Show("Nie można usunąć podatku który jest obecnie przypisany do produktu.");
                 }
             }
             catch(Exception x)

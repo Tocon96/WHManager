@@ -92,14 +92,20 @@ namespace WHManager.DesktopUI.Views.ContractorsView
         private void DeleteManufacturerClick(object sender, RoutedEventArgs e)
         {
             Manufacturer manufacturer = gridManufacturers.SelectedItem as Manufacturer;
-            manufacturerService.DeleteManufacturer(manufacturer.Id);
-            gridManufacturers.ItemsSource = LoadData();
+            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie producenta spowoduje usunięcie wszystkich produktów i raportów przypisanych do niego. \nCzy na pewno chcesz usunąć wybranych producentów?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+            {
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    manufacturerService.DeleteManufacturer(manufacturer.Id);
+                    gridManufacturers.ItemsSource = LoadData();
+                }
+            }
         }
 
         private void DeleteMultipleManufacturerClick(object sender, RoutedEventArgs e)
         {
             List<Manufacturer> manufacturers = gridManufacturers.SelectedItems.Cast<Manufacturer>().ToList();
-            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie producenta spowoduje usunięcie wszystkich produktów przypisanych do niego. \nCzy na pewno chcesz usunąć wybranych producentów?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie producenta spowoduje usunięcie wszystkich produktów i raportów przypisanych do niego. \nCzy na pewno chcesz usunąć wybranych producentów?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
             {
                 if (messageBoxResult == MessageBoxResult.Yes)
                 {
@@ -115,7 +121,7 @@ namespace WHManager.DesktopUI.Views.ContractorsView
 
         private void DeleteAllManufacturerClick(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie producenta spowoduje usunięcie wszystkich produktów przypisanych do niego. \nCzy na pewno chcesz usunąć wszystkich producentów?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie producenta spowoduje usunięcie wszystkich produktów i raportów przypisanych do niego. \nCzy na pewno chcesz usunąć wszystkich producentów?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
             {
                 if (messageBoxResult == MessageBoxResult.Yes)
                 {

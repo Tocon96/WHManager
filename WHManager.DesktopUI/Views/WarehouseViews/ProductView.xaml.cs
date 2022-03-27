@@ -28,6 +28,11 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
         IProductTypeService productTypeService = new ProductTypeService();
         ITaxService taxService = new TaxService();
         IManufacturerService manufacturerService = new ManufacturerService();
+
+        private bool ManufacturerCheck { get; set; }
+        private bool TypeCheck { get; set; }
+        private bool TaxCheck { get; set; }
+
         private ObservableCollection<Product> _products;
         public ObservableCollection<Product> Products
         {
@@ -55,17 +60,27 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
         public ProductView()
         {
             InitializeComponent();
+            ManufacturerCheck = false;
+            TypeCheck = false;
+            TaxCheck = false;
             FillComboBoxes();
             gridProduct.ItemsSource = LoadData();
         }
         private void AddProductClick(object sender, RoutedEventArgs e)
         {
-            ManageProductFormView manageProductForm = new ManageProductFormView(this);
-            manageProductForm.ShowDialog();
-
-            if(manageProductForm.DialogResult.Value == true)
+            if (ManufacturerCheck == true && TypeCheck == true && TaxCheck == true)
             {
-                gridProduct.ItemsSource = LoadData();
+                ManageProductFormView manageProductForm = new ManageProductFormView(this);
+                manageProductForm.ShowDialog();
+
+                if (manageProductForm.DialogResult.Value == true)
+                {
+                    gridProduct.ItemsSource = LoadData();
+                }
+            }
+            else 
+            {
+                MessageBox.Show("Brakuje elementów niezbędnych do utworzenia produktu.");
             }
         }
         private List<Product> GetAllProducts()
@@ -82,6 +97,10 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
             {
                 productTypes.Add(productType.Name);
             }
+            if (productTypes.Count > 1)
+            {
+                TypeCheck = true;
+            }
             return productTypes;
         }
         private List<string> GetAllManufacturers()
@@ -93,6 +112,10 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
             {
                 manufacturers.Add(manufacturer.Name);
             }
+            if(manufacturers.Count > 1)
+            {
+                ManufacturerCheck = true;
+            }
             return manufacturers;
         }
         private List<string> GetAllTaxes()
@@ -103,6 +126,10 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
             foreach (Tax tax in taxesList)
             {
                 taxes.Add(tax.Value.ToString());
+            }
+            if (taxes.Count > 1)
+            {
+                TaxCheck = true;
             }
             return taxes;
         }
@@ -153,7 +180,7 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
         }
         private void DeleteProductClick(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie tego produktu spowoduje usunięcie wszystkich przypisanych egzemplarzy. \nCzy na pewno chcesz usunąć wybrany produkt?", "Potwierdź usunięcie.", MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie tego produktu spowoduje usunięcie wszystkich przypisanych egzemplarzy i raportów. \nCzy na pewno chcesz usunąć wybrany produkt?", "Potwierdź usunięcie.", MessageBoxButton.YesNo);
             {
                 if (messageBoxResult == MessageBoxResult.Yes)
                 {
@@ -166,25 +193,11 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
         private void DeleteMultipleProductsClick(object sender, RoutedEventArgs e)
         {
             List<Product> selectedProducts = gridProduct.SelectedItems.Cast<Product>().ToList();
-            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie tych produktów spowoduje usunięcie wszystkich przypisanych egzemplarzy. \nCzy na pewno chcesz usunąć wybrane produkty?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie tych produktów spowoduje usunięcie wszystkich przypisanych egzemplarzy i raportów. \nCzy na pewno chcesz usunąć wybrane produkty?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
             {
                 if (messageBoxResult == MessageBoxResult.Yes)
                 { 
                     foreach (Product product in selectedProducts)
-                    {
-                        productService.DeleteProduct(product.Id);
-                    }
-                    gridProduct.ItemsSource = LoadData();
-                }
-            }
-        }
-        private void DeleteAllProductsClick(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie tych produktów spowoduje usunięcie wszystkich przypisanych egzemplarzy. \nCzy na pewno chcesz usunąć wszystkie produkty?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
-            {
-                if(messageBoxResult == MessageBoxResult.Yes)
-                {
-                    foreach (Product product in Products)
                     {
                         productService.DeleteProduct(product.Id);
                     }

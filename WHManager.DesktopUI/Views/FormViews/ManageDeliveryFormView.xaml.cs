@@ -166,13 +166,12 @@ namespace WHManager.DesktopUI.Views.FormViews
         private void EmptyInputs()
         {
             comboBoxDeliveriesProducts.SelectedItem = Products[0];
-            comboBoxDeliveriesProviders.SelectedItem = Providers[0];
             textBoxDeliveryProductCount.Text = "";
         }
 
         private void CreateNewTableContent(Product product)
         {
-            if(double.TryParse(textBoxDeliveryProductCount.Text, out double result))
+            if(double.TryParse(textBoxDeliveryProductCount.Text, out double result) && result >= 1)
             {
                 DeliveryOrderTableContent content = new DeliveryOrderTableContent(null, product.Id, product.Name, result);
                 ElementsList.Add(content);

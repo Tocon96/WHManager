@@ -14,5 +14,10 @@ namespace WHManager.DataAccess.Repositories.Interfaces
         public IEnumerable<Delivery> GetAllDeliveries();
         public IEnumerable<Delivery> SearchDeliveries(IList<string> criteria);
         public IEnumerable<Delivery> GetDeliveriesByClient(int providerId);
+        public IEnumerable<Delivery> GetRealizedDeliveriesByProviderWithinDateRanges(int contrahentId, DateTime? dateFrom, DateTime? dateTo);
+        public IEnumerable<Delivery> GetDeliveriesByManufacturer(int manufacturerId, DateTime? datefrom, DateTime? dateTo);
+        public IEnumerable<Delivery> GetDeliveriesByProductType(int productTypeId, DateTime? datefrom, DateTime? dateTo);
+        public IEnumerable<Delivery> GetDeliveriesByProduct(int productId, DateTime? datefrom, DateTime? dateTo);
+
     }
 }

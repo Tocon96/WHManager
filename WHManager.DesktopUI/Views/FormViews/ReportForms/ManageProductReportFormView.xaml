@@ -68,15 +68,12 @@
         <TextBlock Grid.ColumnSpan="3" Grid.Row="1">Nazwa</TextBlock>
         <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">Rodzaj</TextBlock>
         <TextBlock x:Name="textBlockElementType" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3"></TextBlock>
-        <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3">Daty</TextBlock>
-        <TextBlock Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="3">Interwał</TextBlock>
         <TextBlock x:Name="textBlockDateFrom" Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="3"></TextBlock>
         <TextBlock x:Name="textBlockDateTo" Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="3"></TextBlock>
         <!--Textboxes-->
         <TextBox x:Name="textBoxName" Grid.Row="2" Grid.ColumnSpan="3"></TextBox>
         <ComboBox x:Name="comboBoxType" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" SelectionChanged="comboBoxTypeSelectionChanged"></ComboBox>
         <ComboBox x:Name="comboBoxElementType" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" DisplayMemberPath="Name"></ComboBox>
-        <ComboBox x:Name="comboBoxDateType" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" SelectionChanged="comboBoxDateTypeSelectionChanged"></ComboBox>
         <DatePicker x:Name="datePickerDateFrom" Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="3"></DatePicker>
         <DatePicker x:Name="datePickerDateTo" Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="3"></DatePicker>
 

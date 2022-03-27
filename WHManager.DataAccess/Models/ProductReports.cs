@@ -8,12 +8,8 @@ namespace WHManager.DataAccess.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int? ProductId { get; set; }
-        public int? ManufacturerId { get; set; }
-        public int? TypeId { get; set; }
-        public DateTime? DateDeliveredFrom { get; set; }
-        public DateTime? DateDeliveredTo { get; set; }
-        public DateTime? DateOrderedFrom { get; set; }
-        public DateTime? DateOrderedTo { get; set; }
+        public Product Product { get; set; }
+        public DateTime? DateRealizedFrom { get; set; }
+        public DateTime? DateRealizedTo { get; set; }
     }
 }

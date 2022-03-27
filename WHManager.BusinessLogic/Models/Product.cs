@@ -16,5 +16,9 @@ namespace WHManager.BusinessLogic.Models
         public decimal PriceBrutto { get; set; }
         public int CountOf { get; set; }
         public bool InStock { get; set; }
+        public decimal? Balance { get; set; }
+        public int? ItemsDeliveredCount { get; set; }
+        public int? ItemsOrderedCount { get; set; }
+        public int? ItemInWarehouseCount { get; set; }
     }
 }

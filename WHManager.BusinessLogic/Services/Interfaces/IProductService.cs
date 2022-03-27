@@ -22,5 +22,7 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         IList<Product> GetProductsInStock();
         IList<Product> SearchProducts(List<string> criteria);
         decimal CalculatePrice(Product product);
+        IList<Product> GetProductsByManufacturerId(IList<Delivery> deliveries, IList<Order> orders, int manufacturerId);
+        IList<Product> GetProductsByTypeId(IList<Delivery> deliveries, IList<Order> orders, int typeId);
     }
 }

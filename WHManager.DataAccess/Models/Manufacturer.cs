@@ -14,5 +14,6 @@ namespace WHManager.DataAccess.Models
         public double Nip { get; set; }
 
         public ICollection<Product> Products { get; set; }
+        public ICollection<ManufacturerReports> Reports { get; set; }
     }
 }

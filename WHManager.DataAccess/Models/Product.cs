@@ -24,5 +24,6 @@ namespace WHManager.DataAccess.Models
         [Required]
         public bool InStock { get; set; }
         public ICollection<Item> Items { get; set; }
+        public ICollection<ProductReports> Reports { get; set; }
     }
 }

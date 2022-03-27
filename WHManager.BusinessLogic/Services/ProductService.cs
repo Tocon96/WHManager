@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services.Interfaces;
+using WHManager.BusinessLogic.Services.ReportsServices;
+using WHManager.BusinessLogic.Services.ReportsServices.Interfaces;
 using WHManager.DataAccess.Repositories;
 using WHManager.DataAccess.Repositories.Interfaces;
 
@@ -17,6 +19,7 @@ namespace WHManager.BusinessLogic.Services
         private IProductTypeService productTypeService = new ProductTypeService();
         private IManufacturerService manufacturerService = new ManufacturerService();
         private ITaxService taxService = new TaxService();
+        private IProductReportsService reportService = new ProductReportsService();
 
         public void CreateNewProduct(Product product)
         {
@@ -52,7 +55,8 @@ namespace WHManager.BusinessLogic.Services
                         Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
                         PriceBuy = product.PriceBuy,
                         PriceSell = product.PriceSell,
-                        InStock = product.InStock
+                        InStock = product.InStock,
+                        ItemInWarehouseCount = product.Items.Count(x => !x.OrderId.HasValue)
                     };
                     productsList.Add(currentProduct);
                 }
@@ -81,7 +85,8 @@ namespace WHManager.BusinessLogic.Services
                         Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
                         PriceBuy = product.PriceBuy,
                         PriceSell = product.PriceSell,
-                        InStock = product.InStock
+                        InStock = product.InStock,
+                        ItemInWarehouseCount = product.Items.Count(x => !x.OrderId.HasValue)
                     };
                     currentProducts.Add(currentProduct);
                 }
@@ -119,6 +124,7 @@ namespace WHManager.BusinessLogic.Services
             try
             {
                 _productRepository.DeleteProduct(id);
+                reportService.DeleteReportsByProduct(id);
             }
             catch (Exception)
             {
@@ -143,7 +149,8 @@ namespace WHManager.BusinessLogic.Services
                             Tax = taxService.GetTax(product.Tax.Id),
                             Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
                             PriceBuy = product.PriceBuy,
-                            PriceSell = product.PriceSell
+                            PriceSell = product.PriceSell,
+                            ItemInWarehouseCount = product.Items.Count(x => !x.OrderId.HasValue)
                         };
                         productsList.Add(currentProduct);
                     }
@@ -159,6 +166,66 @@ namespace WHManager.BusinessLogic.Services
                 throw new Exception("Nazwa producenta nie może być pusta.");
             }
         }
+
+        public IList<Product> GetProductsByManufacturerId(IList<Delivery> deliveries, IList<Order> orders, int manufacturerId)
+        {
+            try
+            {
+                IList<Item> items = new List<Item>();
+                foreach(Delivery delivery in deliveries)
+                {
+                    foreach(Item item in delivery.Items)
+                    {
+                        items.Add(item);
+                    }
+                }
+
+                HashSet<int> orderIds = new HashSet<int>();
+                foreach (Order order in orders)
+                {
+                    orderIds.Add(order.Id);
+                }
+
+                var grouped = items.Where(x => x.Product.Manufacturer.Id == manufacturerId).OrderBy(x => x.Product.Id).GroupBy(x => x.Product.Id);
+                IList <Product> products = new List<Product>();
+                foreach (var group in grouped)
+                {
+                    Product product = GetProduct(group.Key)[0];
+                    product.ItemsDeliveredCount = GetCountOfItemsDelivered(items, group.Key);
+                    product.ItemsOrderedCount = GetCountOfItemsOrdered(items, orderIds, group.Key);
+                    product.Balance = GetBalanceForProductList(items, orderIds, group.Key);
+                    products.Add(product);
+
+                }
+                return products;
+            }
+            catch (Exception)
+            {
+                throw new Exception("Błąd producenta produktu.");
+            }
+        }
+
+        private decimal GetBalanceForProductList(IList<Item> itemsDelivered, HashSet<int> orders, int productId)
+        {
+            decimal totalBuy = itemsDelivered.Where(x => x.Product.Id == productId).Sum(x => x.Product.PriceBuy + ((x.Product.Tax.Value / 100) * x.Product.PriceBuy));
+            decimal totalSell = itemsDelivered.Where(x => x.OrderId.HasValue && orders.Contains(x.OrderId.Value) && x.Product.Id == productId).Sum(x => x.Product.PriceSell + ((x.Product.Tax.Value / 100) * x.Product.PriceSell));
+            decimal balance = totalSell - totalBuy;
+
+            return balance;
+        }
+
+        private int GetCountOfItemsDelivered(IList<Item> items, int productId)
+        {
+            return items.Count(x => x.Product.Id == productId);
+        }
+
+        private int GetCountOfItemsOrdered(IList<Item> items, HashSet<int> orders, int productId)
+        {
+
+            items = items.Where(x => x.OrderId.HasValue && orders.Contains(x.OrderId.Value) && x.Product.Id == productId).ToList();
+            return items.Count();
+        }
+
         public IList<Product> GetProductsByTax(int? taxValue = null)
         {
             if (taxValue != null)
@@ -478,7 +545,8 @@ namespace WHManager.BusinessLogic.Services
                     Manufacturer = manufacturerService.GetManufacturer(product.Manufacturer.Id),
                     PriceBuy = product.PriceBuy,
                     PriceSell = product.PriceSell,
-                    InStock = product.InStock
+                    InStock = product.InStock,
+                    ItemInWarehouseCount = product.Items.Count(x => !x.OrderId.HasValue)
                 };
                 products.Add(newProduct);
             }
@@ -489,6 +557,38 @@ namespace WHManager.BusinessLogic.Services
             decimal tax = (Convert.ToDecimal(product.Tax.Value) / 100);
             decimal finalPrice = Math.Round(product.PriceSell + (product.PriceSell * tax), 2);
             return finalPrice;
+        }
+
+        public IList<Product> GetProductsByTypeId(IList<Delivery> deliveries, IList<Order> orders, int typeId)
+        {
+            IList<Item> items = new List<Item>();
+            foreach (Delivery delivery in deliveries)
+            {
+                foreach (Item item in delivery.Items)
+                {
+                    items.Add(item);
+                }
+            }
+
+            HashSet<int> orderIds = new HashSet<int>();
+            foreach (Order order in orders)
+            {
+                orderIds.Add(order.Id);
+            }
+
+            var grouped = items.Where(x => x.Product.Type.Id == typeId).OrderBy(x => x.Product.Id).GroupBy(x => x.Product.Id);
+            IList<Product> products = new List<Product>();
+            foreach (var group in grouped)
+            {
+                Product product = GetProduct(group.Key)[0];
+                product.ItemsDeliveredCount = GetCountOfItemsDelivered(items, group.Key);
+                product.ItemsOrderedCount = GetCountOfItemsOrdered(items, orderIds, group.Key);
+                product.Balance = GetBalanceForProductList(items, orderIds, group.Key);
+                products.Add(product);
+
+            }
+            return products;
+
         }
     }
 }

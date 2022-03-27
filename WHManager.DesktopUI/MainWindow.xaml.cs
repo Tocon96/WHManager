@@ -24,11 +24,7 @@ namespace WHManager.DesktopUI
     {
 
         private IRoleService roleService = new RoleService();
-        public User User
-        {
-            get;
-            set;
-        }
+        public User User { get; set; }
 
         public List<MenuItemsData> MenuList
         {
@@ -97,7 +93,9 @@ namespace WHManager.DesktopUI
                         SubMenuList = new List<SubMenuItemsData>{
                             new SubMenuItemsData(){ SubMenuDirectory="ReportViews", File = "ClientReportView", SubMenuText="Raporty klienckie" },
                             new SubMenuItemsData(){ SubMenuDirectory="ReportViews", File = "ProviderReportView", SubMenuText="Raporty dostawców" },
-                            new SubMenuItemsData(){ SubMenuDirectory="ReportViews", File = "ProductReportView", SubMenuText="Raporty sprzedażowe" }
+                            new SubMenuItemsData(){ SubMenuDirectory="ReportViews", File = "ProductReportView", SubMenuText="Raporty produktów" },
+                            new SubMenuItemsData(){ SubMenuDirectory="ReportViews", File = "ProductTypeReportView", SubMenuText="Raporty typów" },
+                            new SubMenuItemsData(){ SubMenuDirectory="ReportViews", File = "ManufacturerReportView", SubMenuText="Raporty producentów" }
                         }
                     };
                     menu.Add(menuItem);
@@ -141,19 +139,12 @@ namespace WHManager.DesktopUI
         {
             public string MenuText { get; set; }
             public List<SubMenuItemsData> SubMenuList { get; set; }
-
-            public MenuItemsData()
-            {
-
-            }
         }
 
         public class SubMenuItemsData
         {
             public string SubMenuText { get; set; }
-
             public string SubMenuDirectory { get; set; }
-
             public string File { get; set; }
 
             public SubMenuItemsData()

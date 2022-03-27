@@ -170,5 +170,10 @@ namespace WHManager.BusinessLogic.Services
                 throw new Exception("Błąd wyszukiwania typu podatków: ");
             }
         }
+
+        public bool CheckIfTaxIsUsed(int id)
+        {
+            return _taxRepository.CheckIfTaxIsUsed(id);
+        }
     }
 }

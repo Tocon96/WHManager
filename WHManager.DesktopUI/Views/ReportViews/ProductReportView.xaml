@@ -104,18 +104,15 @@
                     </Grid.ColumnDefinitions>
                     <!--Textblocks-->
                     <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">ID/Nazwa raportu:</TextBlock>
-                    <TextBlock Grid.Row="2" Grid.Column="1">Od: (Data dostawy)</TextBlock>
-                    <TextBlock Grid.Row="2" Grid.Column="2">Do: (Data dostawy)</TextBlock>
-                    <TextBlock Grid.Row="4" Grid.Column="1">Od: (Data realizacji zamówienia)</TextBlock>
-                    <TextBlock Grid.Row="4" Grid.Column="2">Do: (Data realizacji zamówienia)</TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="2">ID/Nazwa produktu:</TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="1">Od:</TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="2">Do:</TextBlock>
                     <!--Controls-->
-                    <TextBox Name="textBoxReportId" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="1"></TextBox>
+                    <TextBox Name="textBoxReportId" Grid.Row="1" Grid.Column="1"></TextBox>
+                    <TextBox Name="textBoxProductId" Grid.Row="1" Grid.Column="2"></TextBox>
                     <TextBox Grid.Row="3" Grid.Column="1"  Visibility="Hidden"></TextBox>
                     <DatePicker Grid.Column="1" Grid.Row="3" x:Name="datePickerEarlierDateDelivered"></DatePicker>
                     <DatePicker Grid.Column="2" Grid.Row="3" x:Name="datePickerLaterDateDelivered"></DatePicker>
-                    <DatePicker Grid.Column="1" Grid.Row="5" x:Name="datePickerEarlierDateOrdered"></DatePicker>
-                    <DatePicker Grid.Column="2" Grid.Row="5" x:Name="datePickerLaterDateOrdered"></DatePicker>
-
                 </Grid>
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
@@ -142,10 +139,9 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Width="25" Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Nazwa" Binding="{Binding Name}"></DataGridTextColumn>
-                        <DataGridTextColumn Width="200" Header="Od: (Data dostawy)" Binding="{Binding DateDeliveredFrom, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
-                        <DataGridTextColumn Width="200" Header="Do: (Data dostawy)" Binding="{Binding DateDeliveredTo, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
-                        <DataGridTextColumn Width="200" Header="Od: (Data realizacji zamówienia)" Binding="{Binding DateOrderedFrom, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
-                        <DataGridTextColumn Width="200" Header="Do: (Data realizacji zamówienia)" Binding="{Binding DateOrderedTo, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Nazwa produktu" Binding="{Binding Product.Name}"></DataGridTextColumn>
+                        <DataGridTextColumn Width="100" Header="Od:" Binding="{Binding DateRealizedFrom, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
+                        <DataGridTextColumn Width="100" Header="Do:" Binding="{Binding DateRealizedTo, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
                         <DataGridTemplateColumn Width="50">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -154,6 +150,11 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Generuj raport" Click="gridReportsGenerateRaport"></MenuItem>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
                 </DataGrid>
                 <Grid Grid.Row="2" Grid.ColumnSpan="10">
                     <Grid.RowDefinitions>

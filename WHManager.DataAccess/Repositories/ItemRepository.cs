@@ -53,7 +53,12 @@ namespace WHManager.DataAccess.Repositories
 			{
                 try
                 {
-					IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList();
+					IEnumerable<Item> items = context.Items.Include(p => p.Product)
+															.Include(i => i.IncomingDocument)
+															.Include(p => p.Provider)
+															.Include(o => o.OutgoingDocument)
+															.Include(i => i.Invoice)
+															.ToList();
 					return items;
 				}
                 catch
@@ -68,7 +73,10 @@ namespace WHManager.DataAccess.Repositories
 			{
                 try
                 {
-					return context.Items.Include(p => p.Product).SingleOrDefault(x => x.Id == id);
+					return context.Items.Include(p => p.Product).Include(i => i.IncomingDocument)
+																.Include(p => p.Provider)
+																.Include(o => o.OutgoingDocument)
+																.Include(i => i.Invoice).SingleOrDefault(x => x.Id == id);
 				}
 				catch
 				{
@@ -133,7 +141,12 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList().FindAll(p => p.Product.Id == productId && p.IsInStock==false);
+						IEnumerable<Item> items = context.Items.Include(p => p.Product)
+																.Include(i => i.IncomingDocument)
+																.Include(p => p.Provider)
+																.Include(o => o.OutgoingDocument)
+																.Include(i => i.Invoice)
+																.ToList().FindAll(p => p.Product.Id == productId && p.IsInStock==false);
 						return items;
 					}
 				}
@@ -148,7 +161,12 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList().FindAll(p => p.Product.Name.StartsWith(productName) && p.IsInStock == false);
+						IEnumerable<Item> items = context.Items.Include(p => p.Product)
+																.Include(i => i.IncomingDocument)
+																.Include(p => p.Provider)
+																.Include(o => o.OutgoingDocument)
+																.Include(i => i.Invoice)
+																.ToList().FindAll(p => p.Product.Name.StartsWith(productName) && p.IsInStock == false);
 						return items;
 					}
 				}
@@ -170,7 +188,12 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList().FindAll(p => p.Product.Id == productId && p.IsInStock == true);
+						IEnumerable<Item> items = context.Items.Include(p => p.Product)
+																.Include(i => i.IncomingDocument)
+																.Include(p => p.Provider)
+																.Include(o => o.OutgoingDocument)
+																.Include(i => i.Invoice)
+																.ToList().FindAll(p => p.Product.Id == productId && p.IsInStock == true);
 						return items;
 					}
 				}
@@ -185,7 +208,12 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList().FindAll(p => p.Product.Name.StartsWith(productName) && p.IsInStock == true);
+						IEnumerable<Item> items = context.Items.Include(p => p.Product)
+																.Include(i => i.IncomingDocument)
+																.Include(p => p.Provider)
+																.Include(o => o.OutgoingDocument)
+																.Include(i => i.Invoice)
+																.ToList().FindAll(p => p.Product.Name.StartsWith(productName) && p.IsInStock == true);
 						return items;
 					}
 				}
@@ -207,7 +235,12 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList().FindAll(x => x.DateOfAdmission >= earlierDate && x.DateOfAdmission <= laterDate && x.IsInStock == true);
+						IEnumerable<Item> items = context.Items.Include(p => p.Product)
+																.Include(i => i.IncomingDocument)
+																.Include(p => p.Provider)
+																.Include(o => o.OutgoingDocument)
+																.Include(i => i.Invoice)
+																.ToList().FindAll(x => x.DateOfAdmission >= earlierDate && x.DateOfAdmission <= laterDate && x.IsInStock == true);
 						return items;
 					}
 				}
@@ -222,7 +255,12 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList().FindAll(x => x.DateOfAdmission >= earlierDate && x.IsInStock == true);
+						IEnumerable<Item> items = context.Items.Include(p => p.Product)
+																.Include(i => i.IncomingDocument)
+																.Include(p => p.Provider)
+																.Include(o => o.OutgoingDocument)
+																.Include(i => i.Invoice)
+																.ToList().FindAll(x => x.DateOfAdmission >= earlierDate && x.IsInStock == true);
 						return items;
 					}
 				}
@@ -237,7 +275,12 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList().FindAll(x => x.DateOfAdmission <= laterDate && x.IsInStock == true);
+						IEnumerable<Item> items = context.Items.Include(p => p.Product)
+																.Include(i => i.IncomingDocument)
+																.Include(p => p.Provider)
+																.Include(o => o.OutgoingDocument)
+																.Include(i => i.Invoice)
+																.ToList().FindAll(x => x.DateOfAdmission <= laterDate && x.IsInStock == true);
 						return items;
 					}
 				}
@@ -252,7 +295,11 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList();
+						IEnumerable<Item> items = context.Items.Include(p => p.Product)
+																.Include(i => i.IncomingDocument)
+																.Include(o => o.OutgoingDocument)
+																.Include(i => i.Invoice)
+																.Include(p => p.Provider).ToList();
 						return items;
 					}
 				}
@@ -274,7 +321,12 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList().FindAll(x => x.DateOfEmission >= earlierDate && x.DateOfEmission <= laterDate && x.IsInStock == false);
+						IEnumerable<Item> items = context.Items.Include(p => p.Product)
+																.Include(i => i.IncomingDocument)
+																.Include(p => p.Provider)
+																.Include(o => o.OutgoingDocument)
+																.Include(i => i.Invoice)
+																.ToList().FindAll(x => x.DateOfEmission >= earlierDate && x.DateOfEmission <= laterDate && x.IsInStock == false);
 						return items;
 					}
 				}
@@ -289,7 +341,12 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList().FindAll(x => x.DateOfEmission >= earlierDate && x.IsInStock == false);
+						IEnumerable<Item> items = context.Items.Include(p => p.Product)
+																.Include(i => i.IncomingDocument)
+																.Include(p => p.Provider)
+																.Include(o => o.OutgoingDocument)
+																.Include(i => i.Invoice)
+																.ToList().FindAll(x => x.DateOfEmission >= earlierDate && x.IsInStock == false);
 						return items;
 					}
 				}
@@ -304,7 +361,12 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList().FindAll(x => x.DateOfEmission <= laterDate && x.IsInStock == false);
+						IEnumerable<Item> items = context.Items.Include(p => p.Product)
+																.Include(i => i.IncomingDocument)
+																.Include(p => p.Provider)
+																.Include(o => o.OutgoingDocument)
+																.Include(i => i.Invoice)
+																.ToList().FindAll(x => x.DateOfEmission <= laterDate && x.IsInStock == false);
 						return items;
 					}
 				}
@@ -319,7 +381,11 @@ namespace WHManager.DataAccess.Repositories
 				{
 					using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 					{
-						IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList();
+						IEnumerable<Item> items = context.Items.Include(p => p.Product)
+																.Include(i => i.IncomingDocument)
+																.Include(p => p.Provider)
+																.Include(o => o.OutgoingDocument)
+																.Include(i => i.Invoice).ToList();
 						return items;
 					}
 				}
@@ -338,7 +404,8 @@ namespace WHManager.DataAccess.Repositories
         {
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList().FindAll(x => x.IsInStock == true && x.IsInOrder == false);
+				IEnumerable<Item> items = context.Items.Include(p => p.Product).Include(o => o.OutgoingDocument)
+															.Include(i => i.Invoice).Include(i => i.IncomingDocument).Include(p => p.Provider).ToList().FindAll(x => x.IsInStock == true && x.IsInOrder == false);
 				return items;
 			}
 		}
@@ -407,7 +474,8 @@ namespace WHManager.DataAccess.Repositories
         {
 			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
 			{
-				IEnumerable<Item> items = context.Items.Include(p => p.Product).ToList().FindAll(x=>x.OrderId == orderId);
+				IEnumerable<Item> items = context.Items.Include(p => p.Product).Include(o => o.OutgoingDocument)
+															.Include(i => i.Invoice).Include(i => i.IncomingDocument).Include(p => p.Provider).ToList().FindAll(x=>x.OrderId == orderId);
 				return items;
 			}
 		}

@@ -15,5 +15,6 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
         public IList<OutgoingDocument> SearchDocuments(IList<string>criteria);
         public OutgoingDocument GetDocumentByOrderId(int orderId);
         public void GeneratePdf(string filename, Order order);
+        public IList<OutgoingDocument>GetDocumentsByClient(int contrahentId, DateTime? dateFrom, DateTime? dateTo);
     }
 }

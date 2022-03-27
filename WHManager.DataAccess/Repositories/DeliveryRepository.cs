@@ -98,6 +98,167 @@ namespace WHManager.DataAccess.Repositories
             }
         }
 
+        public IEnumerable<Delivery> GetDeliveriesByManufacturer(int manufacturerId, DateTime? datefrom, DateTime? dateTo)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                if (!datefrom.HasValue && !dateTo.HasValue)
+                {
+                    IEnumerable<Delivery> deliveries = context.Deliveries.AsQueryable()
+                                                              .Include(x => x.Provider)
+                                                              .Include(x => x.Items)
+                                                              .Where(i => i.Items.Any(x => x.Product.Manufacturer.Id == manufacturerId));
+
+                    IEnumerable<Delivery> deliveryList = deliveries.ToList();
+                    return deliveryList;
+
+
+                }
+
+                if (datefrom.HasValue && !dateTo.HasValue)
+                {
+                    IEnumerable<Delivery> deliveries = context.Deliveries.AsQueryable()
+                                                              .Include(x => x.Provider)
+                                                              .Include(x => x.Items)
+                                                              .Where(i => i.Items.Any(x => x.Product.Manufacturer.Id == manufacturerId) && i.DateRealized >= datefrom);
+
+                    IEnumerable<Delivery> deliveryList = deliveries.ToList();
+                    return deliveryList;
+                }
+
+                if (!datefrom.HasValue && dateTo.HasValue)
+                {
+                    IEnumerable<Delivery> deliveries = context.Deliveries.AsQueryable()
+                                                              .Include(x => x.Provider)
+                                                              .Include(x => x.Items)
+                                                              .Where(i => i.Items.Any(x => x.Product.Manufacturer.Id == manufacturerId) && i.DateRealized <= dateTo);
+
+                    IEnumerable<Delivery> deliveryList = deliveries.ToList();
+                    return deliveryList;
+                }
+
+                if (datefrom.HasValue && dateTo.HasValue)
+                {
+                    IEnumerable<Delivery> deliveries = context.Deliveries.AsQueryable()
+                                                              .Include(x => x.Provider)
+                                                              .Include(x => x.Items)
+                                                              .Where(i => i.Items.Any(x => x.Product.Manufacturer.Id == manufacturerId) && i.DateRealized >= datefrom && i.DateRealized <= dateTo);
+
+                    IEnumerable<Delivery> deliveryList = deliveries.ToList();
+                    return deliveryList;
+                }
+                return null;
+            }
+        }
+
+        public IEnumerable<Delivery> GetDeliveriesByProduct(int productId, DateTime? datefrom, DateTime? dateTo)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                if (!datefrom.HasValue && !dateTo.HasValue)
+                {
+                    IEnumerable<Delivery> deliveries = context.Deliveries.AsQueryable()
+                                                              .Include(x => x.Provider)
+                                                              .Include(x => x.Items)
+                                                              .Where(i => i.Items.Any(x => x.Product.Id == productId));
+
+                    IEnumerable<Delivery> deliveryList = deliveries.ToList();
+                    return deliveryList;
+
+
+                }
+
+                if (datefrom.HasValue && !dateTo.HasValue)
+                {
+                    IEnumerable<Delivery> deliveries = context.Deliveries.AsQueryable()
+                                                              .Include(x => x.Provider)
+                                                              .Include(x => x.Items)
+                                                              .Where(i => i.Items.Any(x => x.Product.Id == productId) && i.DateRealized >= datefrom);
+
+                    IEnumerable<Delivery> deliveryList = deliveries.ToList();
+                    return deliveryList;
+                }
+
+                if (!datefrom.HasValue && dateTo.HasValue)
+                {
+                    IEnumerable<Delivery> deliveries = context.Deliveries.AsQueryable()
+                                                              .Include(x => x.Provider)
+                                                              .Include(x => x.Items)
+                                                              .Where(i => i.Items.Any(x => x.Product.Id == productId) && i.DateRealized <= dateTo);
+
+                    IEnumerable<Delivery> deliveryList = deliveries.ToList();
+                    return deliveryList;
+                }
+
+                if (datefrom.HasValue && dateTo.HasValue)
+                {
+                    IEnumerable<Delivery> deliveries = context.Deliveries.AsQueryable()
+                                                              .Include(x => x.Provider)
+                                                              .Include(x => x.Items)
+                                                              .Where(i => i.Items.Any(x => x.Product.Id == productId) && i.DateRealized >= datefrom && i.DateRealized <= dateTo);
+
+                    IEnumerable<Delivery> deliveryList = deliveries.ToList();
+                    return deliveryList;
+                }
+                return null;
+            }
+
+        }
+
+        public IEnumerable<Delivery> GetDeliveriesByProductType(int productTypeId, DateTime? datefrom, DateTime? dateTo)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                if (!datefrom.HasValue && !dateTo.HasValue)
+                {
+                    IEnumerable<Delivery> deliveries = context.Deliveries.AsQueryable()
+                                                              .Include(x => x.Provider)
+                                                              .Include(x => x.Items)
+                                                              .Where(i => i.Items.Any(x => x.Product.Type.Id == productTypeId));
+
+                    IEnumerable<Delivery> deliveryList = deliveries.ToList();
+                    return deliveryList;
+
+
+                }
+
+                if (datefrom.HasValue && !dateTo.HasValue)
+                {
+                    IEnumerable<Delivery> deliveries = context.Deliveries.AsQueryable()
+                                                              .Include(x => x.Provider)
+                                                              .Include(x => x.Items)
+                                                              .Where(i => i.Items.Any(x => x.Product.Type.Id == productTypeId) && i.DateRealized >= datefrom);
+
+                    IEnumerable<Delivery> deliveryList = deliveries.ToList();
+                    return deliveryList;
+                }
+
+                if (!datefrom.HasValue && dateTo.HasValue)
+                {
+                    IEnumerable<Delivery> deliveries = context.Deliveries.AsQueryable()
+                                                              .Include(x => x.Provider)
+                                                              .Include(x => x.Items)
+                                                              .Where(i => i.Items.Any(x => x.Product.Type.Id == productTypeId) && i.DateRealized <= dateTo);
+
+                    IEnumerable<Delivery> deliveryList = deliveries.ToList();
+                    return deliveryList;
+                }
+
+                if (datefrom.HasValue && dateTo.HasValue)
+                {
+                    IEnumerable<Delivery> deliveries = context.Deliveries.AsQueryable()
+                                                              .Include(x => x.Provider)
+                                                              .Include(x => x.Items)
+                                                              .Where(i => i.Items.Any(x => x.Product.Type.Id == productTypeId) && i.DateRealized >= datefrom && i.DateRealized <= dateTo);
+
+                    IEnumerable<Delivery> deliveryList = deliveries.ToList();
+                    return deliveryList;
+                }
+                return null;
+            }
+
+        }
+
         public Delivery GetDelivery(int id)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())
@@ -117,6 +278,49 @@ namespace WHManager.DataAccess.Repositories
 
             }
 
+        }
+
+        public IEnumerable<Delivery> GetRealizedDeliveriesByProviderWithinDateRanges(int contrahentId, DateTime? dateFrom, DateTime? dateTo)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                if (!dateFrom.HasValue && !dateTo.HasValue)
+                {
+                    IEnumerable<Delivery> deliveries = context.Deliveries.Include(x => x.Provider)
+                                                                         .Include(x => x.Items)
+                                                                         .ToList()
+                                                                         .FindAll(x => x.Provider.Id == contrahentId);
+                    return deliveries;
+                }
+
+                if (dateFrom.HasValue && !dateTo.HasValue)
+                {
+                    IEnumerable<Delivery> deliveries = context.Deliveries.Include(x => x.Provider)
+                                                                         .Include(x => x.Items)
+                                                                         .ToList()
+                                                                         .FindAll(x => x.Provider.Id == contrahentId && x.DateRealized >= dateFrom.Value);
+                    return deliveries;
+                }
+
+                if (!dateFrom.HasValue && dateTo.HasValue)
+                {
+                    IEnumerable<Delivery> deliveries = context.Deliveries.Include(x => x.Provider)
+                                                                         .Include(x => x.Items)
+                                                                         .ToList()
+                                                                         .FindAll(x => x.Provider.Id == contrahentId && x.DateRealized <= dateTo.Value);
+                    return deliveries;
+                }
+
+                if (dateFrom.HasValue && dateTo.HasValue)
+                {
+                    IEnumerable<Delivery> deliveries = context.Deliveries.Include(x => x.Provider)
+                                                                         .Include(x => x.Items)
+                                                                         .ToList()
+                                                                         .FindAll(x => x.Provider.Id == contrahentId && x.DateRealized >= dateFrom.Value && x.DateRealized <= dateTo.Value);
+                    return deliveries;
+                }
+                return null;
+            }
         }
 
         public IEnumerable<Delivery> SearchDeliveries(IList<string> criteria)

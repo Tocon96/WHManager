@@ -52,7 +52,7 @@ namespace WHManager.BusinessLogic.Services
                 {
                     for (int i = 0; i < element.Count; i++)
                     {
-                        price += product.PriceSell;
+                        price += product.PriceSell + (product.Tax.Value / 100 * product.PriceSell);
                     }
                 }
                 else
@@ -368,33 +368,132 @@ namespace WHManager.BusinessLogic.Services
             return elements;
         }
 
-        public IList<Order> GetRealizedOrdersByClient(int clientId)
+        public IList<Order> GetRealizedOrdersByClient(int clientId, DateTime? dateFrom, DateTime? dateTo)
         {
-            var orders = _orderRepository.GetOrdersByClient(clientId);
+            var orders = _orderRepository.GetRealizedOrdersByClientWithinDateRanges(clientId, dateFrom, dateTo);
             IList<Order> ordersList = new List<Order>();
             foreach (var order in orders)
             {
-                if(order.IsRealized == true)
+                IList<Item> itemsList = new List<Item>();
+                foreach (var item in order.Items)
                 {
-                    IList<Item> itemsList = new List<Item>();
-                    foreach (var item in order.Items)
-                    {
-                        itemsList.Add(itemService.GetItem(item.Id));
-                    }
-                    Order newOrder = new Order
-                    {
-                        Id = order.Id,
-                        Client = clientService.GetClient(order.Client.Id)[0],
-                        Items = itemsList,
-                        IsRealized = order.IsRealized,
-                        DateOrdered = order.DateOrdered.Date,
-                        DateRealized = order.DateRealized,
-                        Price = order.Price
-                    };
-                    ordersList.Add(newOrder);
+                    itemsList.Add(itemService.GetItem(item.Id));
                 }
+                Order newOrder = new Order
+                {
+                    Id = order.Id,
+                    Client = clientService.GetClient(order.Client.Id)[0],
+                    Items = itemsList,
+                    IsRealized = order.IsRealized,
+                    DateOrdered = order.DateOrdered.Date,
+                    DateRealized = order.DateRealized,
+                    Price = order.Price,
+                    ItemCount = itemsList.Count
+                };
+                ordersList.Add(newOrder);
             }
             return ordersList;
+        }
+
+        public IList<Item> GetAllItemsFromOrders(List<Order> orders)
+        {
+            IList<Item> items = new List<Item>();
+            foreach (Order order in orders)
+            {
+                foreach (Item item in order.Items)
+                {
+                    items.Add(item);
+                }
+            }
+
+            return items;
+        }
+
+        public IList<Order> GetOrdersByManufacturer(ManufacturerReports report)
+        {
+            var orders = _orderRepository.GetOrdersByManufacturer(report.Manufacturer.Id, report.DateRealizedFrom, report.DateRealizedTo);
+            IList<Order> ordersList = new List<Order>();
+            foreach (var order in orders)
+            {
+                IList<Item> itemsList = new List<Item>();
+                foreach (var item in order.Items)
+                {
+                    itemsList.Add(itemService.GetItem(item.Id));
+                }
+                decimal price = itemsList.Where(x => x.Product.Manufacturer.Id == report.Manufacturer.Id).Sum(item => item.Product.PriceSell);
+                Order newOrder = new Order
+                {
+                    Id = order.Id,
+                    Client = clientService.GetClient(order.Client.Id)[0],
+                    Items = itemsList,
+                    IsRealized = order.IsRealized,
+                    DateOrdered = order.DateOrdered.Date,
+                    DateRealized = order.DateRealized,
+                    Price = price,
+                    ItemCount = itemsList.Count(x => x.Product.Manufacturer.Id == report.Manufacturer.Id)
+                };
+                ordersList.Add(newOrder);
+            }
+            return ordersList;
+
+        }
+
+        public IList<Order> GetOrdersByProductType(TypeReports report)
+        {
+            var orders = _orderRepository.GetOrdersByProductType(report.Type.Id, report.DateRealizedFrom, report.DateRealizedTo);
+            IList<Order> ordersList = new List<Order>();
+            foreach (var order in orders)
+            {
+                IList<Item> itemsList = new List<Item>();
+                foreach (var item in order.Items)
+                {
+                    itemsList.Add(itemService.GetItem(item.Id));
+                }
+                decimal price = itemsList.Where(x => x.Product.Manufacturer.Id == report.Type.Id).Sum(item => item.Product.PriceSell);
+                Order newOrder = new Order
+                {
+                    Id = order.Id,
+                    Client = clientService.GetClient(order.Client.Id)[0],
+                    Items = itemsList,
+                    IsRealized = order.IsRealized,
+                    DateOrdered = order.DateOrdered.Date,
+                    DateRealized = order.DateRealized,
+                    Price = price,
+                    ItemCount = itemsList.Count(x => x.Product.Manufacturer.Id == report.Type.Id)
+                };
+                ordersList.Add(newOrder);
+            }
+            return ordersList;
+
+        }
+
+        public IList<Order> GetOrdersByProduct(ProductReports report)
+        {
+            var orders = _orderRepository.GetOrdersByProduct(report.Product.Id, report.DateRealizedFrom, report.DateRealizedTo);
+            IList<Order> ordersList = new List<Order>();
+            foreach (var order in orders)
+            {
+                IList<Item> itemsList = new List<Item>();
+                foreach (var item in order.Items)
+                {
+                    itemsList.Add(itemService.GetItem(item.Id));
+                }
+                decimal price = itemsList.Where(x => x.Product.Id == report.Product.Id).Sum(item => item.Product.PriceSell);
+                Order newOrder = new Order
+                {
+                    Id = order.Id,
+                    Client = clientService.GetClient(order.Client.Id)[0],
+                    Items = itemsList,
+                    IsRealized = order.IsRealized,
+                    DateOrdered = order.DateOrdered.Date,
+                    DateRealized = order.DateRealized,
+                    Price = price,
+                    ItemCount = itemsList.Count(x => x.Product.Id == report.Product.Id)
+                };
+                ordersList.Add(newOrder);
+            }
+            return ordersList;
+
         }
     }
 }

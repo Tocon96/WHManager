@@ -224,11 +224,11 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             }
             else if (comboBoxRealized.SelectedIndex == 1)
             {
-                criteria.Add("1");
+                criteria.Add("true");
             }
             else if (comboBoxRealized.SelectedIndex == 2)
             {
-                criteria.Add("0");
+                criteria.Add("false");
             }
             IList<Order> orders = orderService.SearchOrders(criteria.ToList());
             return orders;
@@ -289,7 +289,6 @@ namespace WHManager.DesktopUI.Views.BusinessViews
                     }
                 }
             }
-
         }
 
         private void gridOrderGenerateInvoice(object sender, RoutedEventArgs e)

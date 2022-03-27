@@ -185,4 +185,12 @@ E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\LiveCharts
 E:\visualstudio\WHManager\WHManager.DesktopUI\bin\Debug\netcoreapp3.1\LiveCharts.Wpf.dll
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ReportDisplayViews\ContrahentReportDisplayView.g.cs
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ReportDisplayViews\ContrahentReportDisplayView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ReportDisplayViews\ProviderReportDisplayView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ReportDisplayViews\ProviderReportDisplayView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ReportDisplayViews\ManufacturerReportDisplayView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ReportDisplayViews\ProductReportDisplayView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ReportDisplayViews\ProductTypeReportDisplayView.g.cs
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ReportDisplayViews\ManufacturerReportDisplayView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ReportDisplayViews\ProductReportDisplayView.baml
+E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ReportDisplayViews\ProductTypeReportDisplayView.baml
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\WHManager.DesktopUI.csproj.CopyComplete

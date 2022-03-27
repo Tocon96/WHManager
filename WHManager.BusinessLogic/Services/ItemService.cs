@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WHManager.BusinessLogic.Models;
+using WHManager.BusinessLogic.Services.DocumentServices.Interfaces;
 using WHManager.BusinessLogic.Services.Interfaces;
 using WHManager.DataAccess.Repositories;
 using WHManager.DataAccess.Repositories.Interfaces;
@@ -14,6 +15,7 @@ namespace WHManager.BusinessLogic.Services
     {
         private readonly IItemRepository _itemRepository = new ItemRepository(new DataAccess.WHManagerDBContextFactory());
         private IProductService productService = new ProductService();
+
         public IList<int> CreateNewItems(List<Item> items)
         {
             try
@@ -29,7 +31,7 @@ namespace WHManager.BusinessLogic.Services
                         dateofemission = item.DateOfEmission.Value.Date;
                     }
                     bool isinstock = item.IsInStock;
-                    int id = _itemRepository.AddItem(productId, dateofadmission, dateofemission, isinstock, item.IncomingDocument.Id, item.DeliveryId, item.Provider.Id);
+                    int id = _itemRepository.AddItem(productId, dateofadmission, dateofemission, isinstock, item.IncomingDocumentId, item.DeliveryId, item.ProviderId);
                     itemIds.Add(id);
                 }
                 IList<Product> prodList = productService.GetProduct(items[0].Product.Id);
@@ -63,7 +65,8 @@ namespace WHManager.BusinessLogic.Services
                         Id = item.Id,
                         DateOfAdmission = item.DateOfAdmission.Date,
                         Product = product,
-                        IsInStock = item.IsInStock
+                        IsInStock = item.IsInStock,
+                        IsInOrder = item.IsInOrder
                         
                     };
                     if (item.DateOfEmission.HasValue)
@@ -82,30 +85,34 @@ namespace WHManager.BusinessLogic.Services
 		
 		public Item GetItem(int id)
 		{
-            try
+            var item = _itemRepository.GetItem(id);
+            IList<Product> prodList = productService.GetProduct(item.Product.Id);
+            Product product = prodList[0];
+            Item currentItem = new Item
             {
-                var item = _itemRepository.GetItem(id);
-                IList<Product> prodList = productService.GetProduct(item.Product.Id);
-                Product product = prodList[0];
-                Item currentItem = new Item
-                {
-                    Id = item.Id,
-                    DateOfAdmission = item.DateOfAdmission.Date,
-                    Product = product,
-                    IsInStock = item.IsInStock
-                };
+                Id = item.Id,
+                DateOfAdmission = item.DateOfAdmission.Date,
+                Product = product,
+                IsInStock = item.IsInStock,
+                IsInOrder = item.IsInOrder,
+                DeliveryId = item.DeliveryId,
+                IncomingDocumentId = item.IncomingDocument.Id,
+                ProviderId = item.Provider.Id,
+            };
 
-                if (item.DateOfEmission.HasValue)
-                {
-                    currentItem.DateOfEmission = item.DateOfEmission.Value.Date;
-                }
-
-                return currentItem;
-            }
-			catch
+            if (item.OrderId.HasValue)
             {
-                throw new Exception("B³¹d pobierania przedmiotu: ");
+                currentItem.OrderId = item.OrderId;
             }
+
+            if (item.DateOfEmission.HasValue)
+            {
+                currentItem.DateOfEmission = item.DateOfEmission.Value.Date;
+                currentItem.OutgoingDocumentId = item.OutgoingDocument.Id;
+                currentItem.InvoiceId = item.Invoice.Id;
+            }
+
+            return currentItem;
 		}
 		
 		public void UpdateItem(Item item)
@@ -117,9 +124,9 @@ namespace WHManager.BusinessLogic.Services
                 DateTime dateofadmission = item.DateOfAdmission.Date;
                 bool isinstock = item.IsInStock;
                 DateTime? dateofemission = null;
-                int providerId = item.Provider.Id;
+                int providerId = item.ProviderId;
                 int deliveryId = item.DeliveryId;
-                int incomingDocumentId = item.IncomingDocument.Id;
+                int incomingDocumentId = item.IncomingDocumentId;
                 int? orderId = null;
                 int? outgoingDocumentId = null;
                 if (item.DateOfEmission.HasValue)
@@ -127,13 +134,13 @@ namespace WHManager.BusinessLogic.Services
                     dateofemission = item.DateOfEmission.Value.Date;
 
                 }
-                if (item.Order != null)
+                if (item.OrderId != null)
                 {
-                    orderId = item.Order.Id;
+                    orderId = item.OrderId;
                 }
-                if(item.OutgoingDocument != null)
+                if(item.OutgoingDocumentId != null)
                 {
-                    outgoingDocumentId = item.OutgoingDocument.Id;
+                    outgoingDocumentId = item.OutgoingDocumentId;
                 }
                 _itemRepository.UpdateItem(id, product, dateofadmission, dateofemission, isinstock, incomingDocumentId, outgoingDocumentId, deliveryId, providerId, orderId);
             }
@@ -172,12 +179,22 @@ namespace WHManager.BusinessLogic.Services
                             Id = item.Id,
                             Product = product,
                             DateOfAdmission = item.DateOfAdmission,
-                            IsInStock = item.IsInStock
-                           
+                            IsInStock = item.IsInStock,
+                            IsInOrder = item.IsInOrder,
+                            DeliveryId = item.DeliveryId,
+                            IncomingDocumentId = item.IncomingDocument.Id,
+                            ProviderId = item.Provider.Id
                         };
+                        if (item.OrderId.HasValue)
+                        {
+                            currentItem.OrderId = item.OrderId;
+                        }
+
                         if (item.DateOfEmission.HasValue)
                         {
                             currentItem.DateOfEmission = item.DateOfEmission.Value.Date;
+                            currentItem.OutgoingDocumentId = item.OutgoingDocument.Id;
+                            currentItem.InvoiceId = item.Invoice.Id;
                         }
                         itemsList.Add(currentItem);
                     }
@@ -202,8 +219,16 @@ namespace WHManager.BusinessLogic.Services
                         {
                             Id = item.Id,
                             Product = product,
-                            DateOfAdmission = item.DateOfAdmission.Date,
-                            IsInStock = item.IsInStock
+                            DateOfAdmission = item.DateOfAdmission,
+                            IsInStock = item.IsInStock,
+                            IsInOrder = item.IsInOrder,
+                            DeliveryId = item.DeliveryId,
+                            IncomingDocumentId = item.IncomingDocument.Id,
+                            ProviderId = item.Provider.Id,
+                            OrderId = item.OrderId,
+                            InvoiceId = item.Invoice.Id,
+                            DateOfEmission = item.DateOfEmission,
+                            OutgoingDocumentId = item.OutgoingDocument.Id
                         };
                         if (item.DateOfEmission.HasValue)
                         {
@@ -240,7 +265,8 @@ namespace WHManager.BusinessLogic.Services
                             Id = item.Id,
                             Product = product,
                             DateOfAdmission = item.DateOfAdmission.Date,
-                            IsInStock = item.IsInStock
+                            IsInStock = item.IsInStock,
+                            IsInOrder = item.IsInOrder
 
                         };
                         if (item.DateOfEmission.HasValue)
@@ -271,7 +297,8 @@ namespace WHManager.BusinessLogic.Services
                             Id = item.Id,
                             Product = product,
                             DateOfAdmission = item.DateOfAdmission.Date,
-                            IsInStock = item.IsInStock
+                            IsInStock = item.IsInStock,
+                            IsInOrder = item.IsInOrder
                         };
                         if (item.DateOfEmission.HasValue)
                         {
@@ -305,7 +332,8 @@ namespace WHManager.BusinessLogic.Services
                     Id = item.Id,
                     DateOfAdmission = item.DateOfAdmission.Date,
                     Product = product,
-                    IsInStock = item.IsInStock
+                    IsInStock = item.IsInStock,
+                    IsInOrder = item.IsInOrder
 
                 };
                 itemsList.Add(currentItem);

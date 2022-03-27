@@ -53,9 +53,9 @@ namespace WHManager.BusinessLogic.Services
                         Product = product,
                         DateOfAdmission = delivery.DateCreated,
                         DateOfEmission = null,
-                        Provider = provider,
+                        ProviderId = provider.Id,
                         DeliveryId = delivery.Id,
-                        IncomingDocument = documentService.GetDocument(documentId),
+                        IncomingDocumentId = documentId,
                         IsInStock = true
                     };
                     items.Add(item);
@@ -229,13 +229,16 @@ namespace WHManager.BusinessLogic.Services
                     {
                         itemsList.Add(itemService.GetItem(item.Id));
                     }
+                    decimal totalPrice = itemsList.Sum(item => item.Product.PriceBuy);
                     Delivery newDelivery = new Delivery
                     {
                         Id = delivery.Id,
                         DateCreated = delivery.DateCreated,
                         Items = itemsList,
                         Provider = providerService.GetProvider(delivery.Provider.Id),
-                        Realized = delivery.Realized
+                        Realized = delivery.Realized,
+                        ItemCount = itemsList.Count,
+                        TotalPrice = totalPrice
                     };
                     if (delivery.DateRealized != null)
                     {
@@ -244,6 +247,137 @@ namespace WHManager.BusinessLogic.Services
                     deliveriesList.Add(newDelivery);
 
                 }
+            }
+            return deliveriesList;
+        }
+
+        public IList<Item> GetAllItemsFromDeliveries(List<Delivery> deliveries)
+        {
+            IList<Item> items = new List<Item>();
+            foreach(Delivery delivery in deliveries)
+            {
+                foreach(Item item in delivery.Items)
+                {
+                    items.Add(item);
+                }
+            }
+
+            return items;
+        }
+
+        public IList<Delivery> GetRealizedDeliveriesByProvider(int contrahentId, DateTime? dateFrom, DateTime? dateTo)
+        {
+            var deliveries = deliveryRepository.GetRealizedDeliveriesByProviderWithinDateRanges(contrahentId, dateFrom, dateTo);
+            IList<Delivery> deliveriesList = new List<Delivery>();
+            foreach (var delivery in deliveries)
+            {
+                IList<Item> itemsList = new List<Item>();
+                foreach (var item in delivery.Items)
+                {
+                    itemsList.Add(itemService.GetItem(item.Id));
+                }
+                decimal totalPrice = itemsList.Sum(item => item.Product.PriceBuy);
+                Delivery newDelivery = new Delivery
+                {
+                    Id = delivery.Id,
+                    Provider = providerService.GetProvider(delivery.Provider.Id),
+                    Items = itemsList,
+                    Realized = delivery.Realized,
+                    DateCreated = delivery.DateCreated.Date,
+                    DateRealized = delivery.DateRealized,
+                    ItemCount = itemsList.Count,
+                    TotalPrice = totalPrice
+
+                };
+                deliveriesList.Add(newDelivery);
+            }
+            return deliveriesList;
+        }
+
+        public IList<Delivery> GetDeliveriesByManufacturer(ManufacturerReports report)
+        {
+            var deliveries = deliveryRepository.GetDeliveriesByManufacturer(report.Manufacturer.Id, report.DateRealizedFrom, report.DateRealizedTo);
+            IList<Delivery> deliveriesList = new List<Delivery>();
+            foreach (var delivery in deliveries)
+            {
+                IList<Item> itemsList = new List<Item>();
+                foreach (var item in delivery.Items)
+                {
+                    itemsList.Add(itemService.GetItem(item.Id));
+                }
+                decimal totalPrice = itemsList.Where(x => x.Product.Manufacturer.Id == report.Manufacturer.Id).Sum(item => item.Product.PriceBuy);
+                Delivery newDelivery = new Delivery
+                {
+                    Id = delivery.Id,
+                    Provider = providerService.GetProvider(delivery.Provider.Id),
+                    Items = itemsList,
+                    Realized = delivery.Realized,
+                    DateCreated = delivery.DateCreated.Date,
+                    DateRealized = delivery.DateRealized,
+                    ItemCount = itemsList.Count(x => x.Product.Manufacturer.Id == report.Manufacturer.Id),
+                    TotalPrice = totalPrice
+
+                };
+                deliveriesList.Add(newDelivery);
+            }
+            return deliveriesList;
+        }
+
+        public IList<Delivery> GetDeliveriesByProductType(TypeReports report)
+        {
+            var deliveries = deliveryRepository.GetDeliveriesByProductType(report.Type.Id, report.DateRealizedFrom, report.DateRealizedTo);
+            IList<Delivery> deliveriesList = new List<Delivery>();
+            foreach (var delivery in deliveries)
+            {
+                IList<Item> itemsList = new List<Item>();
+                foreach (var item in delivery.Items)
+                {
+                    itemsList.Add(itemService.GetItem(item.Id));
+                }
+                decimal totalPrice = itemsList.Where(x => x.Product.Type.Id == report.Type.Id).Sum(item => item.Product.PriceBuy);
+                Delivery newDelivery = new Delivery
+                {
+                    Id = delivery.Id,
+                    Provider = providerService.GetProvider(delivery.Provider.Id),
+                    Items = itemsList,
+                    Realized = delivery.Realized,
+                    DateCreated = delivery.DateCreated.Date,
+                    DateRealized = delivery.DateRealized,
+                    ItemCount = itemsList.Count(x => x.Product.Type.Id == report.Type.Id),
+                    TotalPrice = totalPrice
+
+                };
+                deliveriesList.Add(newDelivery);
+            }
+            return deliveriesList;
+
+        }
+
+        public IList<Delivery> GetDeliveriesByProduct(ProductReports report)
+        {
+            var deliveries = deliveryRepository.GetDeliveriesByProduct(report.Product.Id, report.DateRealizedFrom, report.DateRealizedTo);
+            IList<Delivery> deliveriesList = new List<Delivery>();
+            foreach (var delivery in deliveries)
+            {
+                IList<Item> itemsList = new List<Item>();
+                foreach (var item in delivery.Items)
+                {
+                    itemsList.Add(itemService.GetItem(item.Id));
+                }
+                decimal totalPrice = itemsList.Where(x => x.Product.Id == report.Product.Id).Sum(item => item.Product.PriceBuy);
+                Delivery newDelivery = new Delivery
+                {
+                    Id = delivery.Id,
+                    Provider = providerService.GetProvider(delivery.Provider.Id),
+                    Items = itemsList,
+                    Realized = delivery.Realized,
+                    DateCreated = delivery.DateCreated.Date,
+                    DateRealized = delivery.DateRealized,
+                    ItemCount = itemsList.Count(x => x.Product.Id == report.Product.Id),
+                    TotalPrice = totalPrice
+
+                };
+                deliveriesList.Add(newDelivery);
             }
             return deliveriesList;
 

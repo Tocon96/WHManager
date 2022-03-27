@@ -13,8 +13,8 @@ namespace WHManager.BusinessLogic.Services.ReportsServices.Interfaces
         public ContrahentReports GetReport(int id);
         public IList<ContrahentReports> GetClientReports();
         public IList<ContrahentReports> GetProviderReports();
-        public IDictionary<string, double> ParseDeliveryList(List<Delivery> deliveries);
-        public IDictionary<string, double> ParseOrderList(List<Order> orders);
+        public IDictionary<string, decimal> ParseDeliveryList(List<ProviderReportRecord> records);
+        public IDictionary<string, decimal> ParseOrderList(List<ClientReportRecord> records);
         public IList<ContrahentReports> SearchReports(List<string> criteria);
     }
 }

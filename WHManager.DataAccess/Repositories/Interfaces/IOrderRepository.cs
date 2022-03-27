@@ -17,5 +17,9 @@ namespace WHManager.DataAccess.Repositories.Interfaces
         IEnumerable<Order> GetOrdersByClient(int clientId);
         IEnumerable<Order> SearchOrders(List<string> criteria);
         void RealizeOrder(int orderId, DateTime dateRealized);
+        IEnumerable<Order> GetRealizedOrdersByClientWithinDateRanges(int clientId, DateTime? dateFrom, DateTime? dateTo);
+        IEnumerable<Order> GetOrdersByManufacturer(int manufacturerId, DateTime? dateRealizedFrom, DateTime? dateRealizedTo);
+        IEnumerable<Order> GetOrdersByProductType(int typeId, DateTime? dateRealizedFrom, DateTime? dateRealizedTo);
+        IEnumerable<Order> GetOrdersByProduct(int productId, DateTime? dateRealizedFrom, DateTime? dateRealizedTo);
     }
 }

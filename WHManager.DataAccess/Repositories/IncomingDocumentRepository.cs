@@ -103,6 +103,45 @@ namespace WHManager.DataAccess.Repositories
             
         }
 
+        public IEnumerable<IncomingDocument> GetDocumentsByProvider(int contrahentId, DateTime? dateFrom, DateTime? dateTo)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                if (!dateFrom.HasValue && !dateTo.HasValue)
+                {
+                    IEnumerable<IncomingDocument> documents = context.IncomingDocuments.Include(x => x.Provider)
+                                                                                        .ToList()
+                                                                                        .FindAll(x => x.Provider.Id == contrahentId);
+                    return documents;
+                }
+
+                if (dateFrom.HasValue && !dateTo.HasValue)
+                {
+                    IEnumerable<IncomingDocument> documents = context.IncomingDocuments.Include(x => x.Provider)
+                                                                                                 .ToList()
+                                                                                                 .FindAll(x => x.Provider.Id == contrahentId && x.DateReceived >= dateFrom.Value);
+                    return documents;
+                }
+
+                if (!dateFrom.HasValue && dateTo.HasValue)
+                {
+                    IEnumerable<IncomingDocument> documents = context.IncomingDocuments.Include(x => x.Provider)
+                                                                         .ToList()
+                                                                         .FindAll(x => x.Provider.Id == contrahentId && x.DateReceived <= dateTo.Value);
+                    return documents;
+                }
+
+                if (dateFrom.HasValue && dateTo.HasValue)
+                {
+                    IEnumerable<IncomingDocument> documents = context.IncomingDocuments.Include(x => x.Provider)
+                                                                         .ToList()
+                                                                         .FindAll(x => x.Provider.Id == contrahentId && x.DateReceived >= dateFrom.Value && x.DateReceived <= dateTo.Value);
+                    return documents;
+                }
+                return null;
+            }
+        }
+
         public IEnumerable<IncomingDocument> SearchDocuments(IList<string> criteria)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())

@@ -7,10 +7,11 @@ namespace WHManager.DataAccess.Repositories.Interfaces
 {
     public interface IProductReportRepository
     {
-        public int CreateReport(string name, int? productId, int? manufacturerId, int? typeId, DateTime? dateDeliveredFrom, DateTime? dateDeliveredTo, DateTime? dateOrderedFrom, DateTime? dateOrderedTo);
+        public int CreateReport(string name, int productId,  DateTime? dateRealizedFrom, DateTime? dateRealizedTo);
         public void DeleteReport(int reportId);
         public ProductReports GetReport(int id);
         public IEnumerable<ProductReports> GetReports();
         public IEnumerable<ProductReports> SearchReports(List<string> criteria);
+        public void DeleteReportsByProduct(int productId);
     }
 }

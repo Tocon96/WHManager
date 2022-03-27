@@ -36,6 +36,35 @@ namespace WHManager.BusinessLogic.Services.DocumentServices
             dataRepository.DeleteRecords(documentId, documentType);
         }
 
+        public IList<DocumentData> GetDocumentData(IList<IncomingDocument> incomingDocuments)
+        {
+            IList<DocumentData> documentDataList = new List<DocumentData>();
+            foreach(IncomingDocument document in incomingDocuments)
+            {
+                IList <DocumentData> data = GetRecordsByDocument(document.Id, "IncomingDocument");
+                foreach(DocumentData record in data)
+                {
+                    documentDataList.Add(record);
+                }
+            }
+            return documentDataList;
+        }
+
+        public IList<DocumentData> GetOutgoingDocumentData(IList<OutgoingDocument> outgoingDocuments)
+        {
+            IList<DocumentData> documentDataList = new List<DocumentData>();
+            foreach (OutgoingDocument document in outgoingDocuments)
+            {
+                IList<DocumentData> data = GetRecordsByDocument(document.Id, "OutgoingDocument");
+                foreach (DocumentData record in data)
+                {
+                    documentDataList.Add(record);
+                }
+            }
+            return documentDataList;
+        }
+
+
         public DocumentData GetRecord(int id)
         {
             var record = dataRepository.GetRecord(id);

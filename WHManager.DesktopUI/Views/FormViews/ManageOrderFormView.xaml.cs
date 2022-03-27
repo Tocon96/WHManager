@@ -224,7 +224,7 @@ namespace WHManager.DesktopUI.Views.FormViews
 
         private void CreateNewTableContent(Product product)
         {
-            if (double.TryParse(textBoxDeliveryProductCount.Text, out double result))
+            if (double.TryParse(textBoxDeliveryProductCount.Text, out double result) && result >= 1)
             {
                 DeliveryOrderTableContent content = new DeliveryOrderTableContent(null, product.Id, product.Name, result);
                 var existingElement = ExistingElements.SingleOrDefault(x => x.ProductId == product.Id);
@@ -249,22 +249,28 @@ namespace WHManager.DesktopUI.Views.FormViews
             var element = Elements.SingleOrDefault(x => x.ProductId == product.Id);
             double previousCount = element.Count;
             double newCount = double.Parse(textBoxDeliveryProductCount.Text);
-            var existingElement = ExistingElements.SingleOrDefault(x => x.ProductId == product.Id);
-            if(existingElement.Count + previousCount >= newCount)
+            if(newCount >= 1)
             {
-                element.Count = newCount;
-                existingElement.Count = existingElement.Count + previousCount - element.Count;
+                var existingElement = ExistingElements.SingleOrDefault(x => x.ProductId == product.Id);
+                if (existingElement.Count + previousCount >= newCount)
+                {
+                    element.Count = newCount;
+                    existingElement.Count = existingElement.Count + previousCount - element.Count;
+                }
+                else
+                {
+                    MessageBox.Show("Ilość produktów w zamówieniu nie może byc wieksza od ilości egzemplarzy w magazynie.");
+                }
             }
             else
             {
-                MessageBox.Show("Ilość produktów w zamówieniu nie może byc wieksza od ilości egzemplarzy w magazynie.");
+                MessageBox.Show("Podaj poprawną ilość elementów.");
             }
         }
 
         private void EmptyInputs()
         {
             comboBoxOrdersProducts.SelectedItem = Products[0];
-            comboBoxOrdersClients.SelectedItem = Clients[0];
             textBoxDeliveryProductCount.Text = "";
         }
 

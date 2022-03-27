@@ -33,6 +33,10 @@ FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\ReportViews\ClientReportVie
 FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\ReportViews\ProductReportView.xaml;;
 FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\ReportViews\ProviderReportView.xaml;;
 FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\ReportViews\ReportDisplayViews\ContrahentReportDisplayView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\ReportViews\ReportDisplayViews\ManufacturerReportDisplayView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\ReportViews\ReportDisplayViews\ProductReportDisplayView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\ReportViews\ReportDisplayViews\ProductTypeReportDisplayView.xaml;;
+FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\ReportViews\ReportDisplayViews\ProviderReportDisplayView.xaml;;
 FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\WarehouseViews\DeliveryItemsView.xaml;;
 FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\WarehouseViews\EmittedItemsView.xaml;;
 FE:\visualstudio\WHManager\WHManager.DesktopUI\Views\WarehouseViews\ItemView.xaml;;

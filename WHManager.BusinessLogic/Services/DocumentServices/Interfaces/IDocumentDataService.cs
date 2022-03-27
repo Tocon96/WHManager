@@ -15,6 +15,8 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
         IList<DocumentData> GetRecordsByDocument(int documentId, string documentType);
         bool CheckIfDocumentRecordsExist(int documentId, string documentType);
         bool CheckIfRecordExist(int id);
+        IList<DocumentData> GetDocumentData(IList<IncomingDocument>incomingDocuments);
+        IList<DocumentData> GetOutgoingDocumentData(IList<OutgoingDocument> outgoingDocuments);
 
     }
 }

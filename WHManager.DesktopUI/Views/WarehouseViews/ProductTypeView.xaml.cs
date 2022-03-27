@@ -54,12 +54,13 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
 
         private void DeleteProductTypeClick(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie typu produktu spowoduje usunięcie wszystkich produktów należących do tego typu. \nCzy na pewno chcesz usunąć wybrany typ produktów?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie typu produktu spowoduje usunięcie wszystkich produktów i raportów należących do tego typu. \nCzy na pewno chcesz usunąć wybrany typ produktów?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
             {
                 if (messageBoxResult == MessageBoxResult.Yes)
                 {
                     ProductType productType = gridProductTypes.SelectedItem as ProductType;
                     productTypeService.DeleteProductType(productType.Id);
+                    gridProductTypes.ItemsSource = LoadData();
                 }
             }
         }
@@ -137,25 +138,11 @@ namespace WHManager.DesktopUI.Views.WarehouseViews
         private void DeleteMultipleProductTypesClick(object sender, RoutedEventArgs e)
         {
             List<ProductType> selectedProductTypes = gridProductTypes.SelectedItems.Cast<ProductType>().ToList();
-            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie typów produktów spowoduje usunięcie wszystkich produktów należących do tego typu. \nCzy na pewno chcesz usunąć wybrane typy produktów?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie typów produktów spowoduje usunięcie wszystkich produktów i raportów należących do tego typu. \nCzy na pewno chcesz usunąć wybrane typy produktów?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
             {
                 if (messageBoxResult == MessageBoxResult.Yes)
                 {
                     foreach (ProductType productType in selectedProductTypes)
-                    {
-                        productTypeService.DeleteProductType(productType.Id);
-                    }
-                    gridProductTypes.ItemsSource = LoadData();
-                }
-            }
-        }
-        private void DeleteAllProductTypesClick(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult messageBoxResult = MessageBox.Show("Usunięcie typów produktów spowoduje usunięcie wszystkich produktów należących do tego typu. \nCzy na pewno chcesz usunąć wszystkie typy produktów?", "Potwierdź usunięcie", MessageBoxButton.YesNo);
-            {
-                if (messageBoxResult == MessageBoxResult.Yes)
-                {
-                    foreach (ProductType productType in ProductTypes)
                     {
                         productTypeService.DeleteProductType(productType.Id);
                     }

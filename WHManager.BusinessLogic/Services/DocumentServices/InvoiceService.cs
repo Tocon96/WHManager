@@ -178,17 +178,19 @@ namespace WHManager.BusinessLogic.Services
             Document document = new Document(pdf);
             document.SetFont(font);
             IList<DocumentData> documentData = dataService.GetRecordsByDocument(invoice.Id, "Invoice");
-            Table initialTable = GenerateInitialTable(documentData[0]);
-            Table clientTable = GenerateClientTable(documentData[0]);
-            Table itemTable = GenerateItemTable(documentData);
-            Table signatureTable = GenerateSignatureTable();
-            document.Add(initialTable);
-            document.Add(clientTable);
-            document.Add(itemTable);
-            document.Add(new Paragraph("").SetHeight(50));
-            document.Add(signatureTable);
-
-            document.Close();
+            if(documentData.Count > 0)
+            {
+                Table initialTable = GenerateInitialTable(documentData[0]);
+                Table clientTable = GenerateClientTable(documentData[0]);
+                Table itemTable = GenerateItemTable(documentData);
+                Table signatureTable = GenerateSignatureTable();
+                document.Add(initialTable);
+                document.Add(clientTable);
+                document.Add(itemTable);
+                document.Add(new Paragraph("").SetHeight(50));
+                document.Add(signatureTable);
+                document.Close();
+            }
         }
 
         Table GenerateInitialTable(DocumentData documentData)

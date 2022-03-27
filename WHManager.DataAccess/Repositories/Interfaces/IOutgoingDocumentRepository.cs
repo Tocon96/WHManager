@@ -14,5 +14,6 @@ namespace WHManager.DataAccess.Repositories.Interfaces
         public OutgoingDocument GetDocumentByOrderId(int id);
         public IEnumerable<OutgoingDocument> GetDocuments();
         public IEnumerable<OutgoingDocument> SearchDocuments(IList<string> criteria);
+        public IEnumerable<OutgoingDocument> GetDocumentsByProvider(int clientId, DateTime? dateFrom, DateTime? dateTo);
     }
 }

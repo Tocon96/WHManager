@@ -47,12 +47,6 @@ namespace WHManager.DesktopUI.Views.FormViews.ReportForms
             data.Add("Producent");
             comboBoxType.ItemsSource = data;
             comboBoxType.SelectedIndex = 0;
-
-            ObservableCollection<string> dataDate = new ObservableCollection<string>();
-            dataDate.Add("Dostawa");
-            dataDate.Add("Realizacji zamówienia");
-            comboBoxDateType.ItemsSource = dataDate;
-            comboBoxDateType.SelectedIndex = 0;
         }
 
         private void comboBoxTypeSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -82,22 +76,6 @@ namespace WHManager.DesktopUI.Views.FormViews.ReportForms
             }
         }
 
-        private void comboBoxDateTypeSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (comboBoxDateType.SelectedIndex == 0)
-            {
-                textBlockDateFrom.Text = "Od: (Data dostawy)";
-                textBlockDateTo.Text = "Do: (Data dostawy)";
-            }
-
-            if(comboBoxDateType.SelectedIndex == 1)
-            {
-                textBlockDateFrom.Text = "Od: (Data realizacji zamówienia)";
-                textBlockDateTo.Text = "Do: (Data realizacji zamówienia)";
-            }
-        }
-
-
         private void buttonConfirmClick(object sender, RoutedEventArgs e)
         {
             ProductReports report = new ProductReports();
@@ -108,47 +86,23 @@ namespace WHManager.DesktopUI.Views.FormViews.ReportForms
             else
             {
                 report.Name = textBoxName.Text;
-                if(comboBoxDateType.SelectedIndex == 0)
+                if (datePickerDateFrom.SelectedDate.HasValue)
                 {
-                    if (datePickerDateFrom.SelectedDate.HasValue)
-                    {
-                        report.DateDeliveredFrom = datePickerDateFrom.SelectedDate.Value.Date;
-                    }
-                    else
-                    {
-                        report.DateDeliveredFrom = null;
-                    }
-
-                    if (datePickerDateTo.SelectedDate.HasValue)
-                    {
-                        report.DateDeliveredTo = datePickerDateTo.SelectedDate.Value.Date;
-                    }
-                    else
-                    {
-                        report.DateDeliveredTo = null;
-                    }
+                    report.DateRealizedFrom = datePickerDateFrom.SelectedDate.Value.Date;
                 }
                 else
                 {
-                    if (datePickerDateFrom.SelectedDate.HasValue)
-                    {
-                        report.DateOrderedFrom = datePickerDateFrom.SelectedDate.Value.Date;
-                    }
-                    else
-                    {
-                        report.DateOrderedFrom = null;
-                    }
-
-                    if (datePickerDateTo.SelectedDate.HasValue)
-                    {
-                        report.DateOrderedTo = datePickerDateTo.SelectedDate.Value.Date;
-                    }
-                    else
-                    {
-                        report.DateOrderedTo = null;
-                    }
+                    report.DateRealizedFrom = null;
                 }
 
+                if (datePickerDateTo.SelectedDate.HasValue)
+                {
+                    report.DateRealizedTo = datePickerDateTo.SelectedDate.Value.Date;
+                }
+                else
+                {
+                    report.DateRealizedTo = null;
+                }
                 report.ProductId = null;
                 report.ManufacturerId = null;
                 report.TypeId = null;

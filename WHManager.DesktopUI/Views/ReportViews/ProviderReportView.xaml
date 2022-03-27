@@ -149,6 +149,11 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Generuj raport" Click="gridReportGenerateRaport"></MenuItem>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
                 </DataGrid>
                 <Grid Grid.Row="2" Grid.ColumnSpan="10">
                     <Grid.RowDefinitions>

@@ -16,5 +16,6 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         IList<Tax> GetTaxesByName(string name);
         IList<Tax> GetTaxesByValue(int value);
         IList<Tax> SearchTaxes(List<string> criteria);
+        bool CheckIfTaxIsUsed(int id);
     }
 }

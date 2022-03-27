@@ -37,6 +37,23 @@ namespace WHManager.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ContrahentReports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ReportOrigin = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContrahentId = table.Column<int>(type: "int", nullable: false),
+                    ContrahentName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateTo = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContrahentReports", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DeliveryElements",
                 columns: table => new
                 {
@@ -53,6 +70,32 @@ namespace WHManager.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DocumentData",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DocumentId = table.Column<int>(type: "int", nullable: false),
+                    DocumentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DocumentType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContrahentName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContrahentNip = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContrahentPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProductNumber = table.Column<int>(type: "int", nullable: false),
+                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProductCount = table.Column<int>(type: "int", nullable: false),
+                    TaxType = table.Column<int>(type: "int", nullable: false),
+                    ProductPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TaxValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    GrossValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    NetValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DocumentData", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Manufacturers",
                 columns: table => new
                 {
@@ -64,6 +107,24 @@ namespace WHManager.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Manufacturers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductReports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProductId = table.Column<int>(type: "int", nullable: true),
+                    ManufacturerId = table.Column<int>(type: "int", nullable: true),
+                    TypeId = table.Column<int>(type: "int", nullable: true),
+                    DateRealizedFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateRealizedTo = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductReports", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -105,7 +166,8 @@ namespace WHManager.DataAccess.Migrations
                     Business = table.Column<bool>(type: "bit", nullable: false),
                     Contractors = table.Column<bool>(type: "bit", nullable: false),
                     Documents = table.Column<bool>(type: "bit", nullable: false),
-                    Warehouse = table.Column<bool>(type: "bit", nullable: false)
+                    Warehouse = table.Column<bool>(type: "bit", nullable: false),
+                    Report = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -274,7 +336,7 @@ namespace WHManager.DataAccess.Migrations
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Invoices_Orders_OrderId",
                         column: x => x.OrderId,
@@ -478,10 +540,19 @@ namespace WHManager.DataAccess.Migrations
                 name: "Config");
 
             migrationBuilder.DropTable(
+                name: "ContrahentReports");
+
+            migrationBuilder.DropTable(
                 name: "DeliveryElements");
 
             migrationBuilder.DropTable(
+                name: "DocumentData");
+
+            migrationBuilder.DropTable(
                 name: "Items");
+
+            migrationBuilder.DropTable(
+                name: "ProductReports");
 
             migrationBuilder.DropTable(
                 name: "Users");

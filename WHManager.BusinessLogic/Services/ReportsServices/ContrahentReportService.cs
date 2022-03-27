@@ -87,28 +87,6 @@ namespace WHManager.BusinessLogic.Services.ReportsServices
 
             return newReport;
         }
-
-        private decimal CalculateTotalPrice(Order order = null, Delivery delivery = null)
-        {
-            IList<decimal> priceList = new List<decimal>();
-            if (order != null)
-            {
-                foreach (Item item in order.Items)
-                {
-                    priceList.Add(item.Product.PriceSell);
-                }
-                return priceList.Sum();
-            }
-            else
-            {
-                foreach (Item item in delivery.Items)
-                {
-                    priceList.Add(item.Product.PriceBuy);
-                }
-                return priceList.Sum();
-            }
-        }
-
         public IList<ContrahentReports> SearchReports(List<string> criteria)
         {
             var clientReports = reportRepository.SearchReports(criteria);
@@ -131,51 +109,28 @@ namespace WHManager.BusinessLogic.Services.ReportsServices
 
         }
 
-        public IDictionary<string, double> ParseDeliveryList(List<Delivery> deliveries)
+        public IDictionary<string, decimal> ParseDeliveryList(List<ProviderReportRecord> records)
         {
-            IDictionary<string, double> providerDeliveryDetails = new Dictionary<string, double>();
+            IDictionary<string, decimal> providerDeliveryDetails = new Dictionary<string, decimal>();
 
-            providerDeliveryDetails["elementCount"] = deliveries.Count();
-            providerDeliveryDetails["itemCount"] = 0;
-            providerDeliveryDetails["totalValue"] = 0;
-
-            foreach(Delivery delivery in deliveries)
-            {
-                if(delivery.Realized == true)
-                {
-                    providerDeliveryDetails["itemCount"] += delivery.Items.Count;
-                    foreach (Item item in delivery.Items)
-                    {
-                        providerDeliveryDetails["totalValue"] += (double)item.Product.PriceBuy;
-                    }
-                }
-            }
+            providerDeliveryDetails["elementCount"] = records.Count();
+            providerDeliveryDetails["itemCount"] = records.Sum(x => x.ItemCount);
+            providerDeliveryDetails["totalValueNet"] = records.Sum(x => x.PriceNet);
+            providerDeliveryDetails["totalValueGross"] = records.Sum(x => x.PriceGross);
 
             return providerDeliveryDetails;
         }
 
-        public IDictionary<string, double> ParseOrderList(List<Order> orders)
+        public IDictionary<string, decimal> ParseOrderList(List<ClientReportRecord> records)
         {
-            IDictionary<string, double> clientOrdersDetails = new Dictionary<string, double>();
+            IDictionary<string, decimal> clientOrderDetails = new Dictionary<string, decimal>();
 
-            clientOrdersDetails["elementCount"] = orders.Count();
-            clientOrdersDetails["itemCount"] = 0;
-            clientOrdersDetails["totalValue"] = 0;
+            clientOrderDetails["elementCount"] = records.Count();
+            clientOrderDetails["itemCount"] = records.Sum(x => x.ItemCount);
+            clientOrderDetails["totalValueNet"] = records.Sum(x => x.PriceNet);
+            clientOrderDetails["totalValueGross"] = records.Sum(x => x.PriceGross);
 
-            foreach (Order order in orders)
-            {
-                if(order.IsRealized == true)
-                {
-                    clientOrdersDetails["itemCount"] += order.Items.Count;
-                    foreach (Item item in order.Items)
-                    {
-                        clientOrdersDetails["totalValue"] += (double)item.Product.PriceBuy;
-                    }
-                }
-            }
-
-            return clientOrdersDetails;
-
+            return clientOrderDetails;
         }
     }
 }

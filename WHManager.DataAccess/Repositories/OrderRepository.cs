@@ -219,6 +219,12 @@ namespace WHManager.DataAccess.Repositories
                     orders = orders.Where(x => x.DateRealized >= earlierDate && x.DateRealized <= laterDate);
                 }
 
+
+                if (!string.IsNullOrEmpty(criteria[6]))
+                {
+                    orders = orders.Where(x => x.IsRealized == bool.Parse(criteria[6]));
+                }
+
                 IEnumerable<Order> ordersList = orders.ToList();
 
                 return ordersList;
@@ -237,6 +243,212 @@ namespace WHManager.DataAccess.Repositories
                 order.IsRealized = true;
                 context.SaveChanges();
             }            
+        }
+
+        public IEnumerable<Order> GetRealizedOrdersByClientWithinDateRanges(int clientId, DateTime? dateFrom, DateTime? dateTo)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                if(!dateFrom.HasValue && !dateTo.HasValue)
+                {
+                    IEnumerable<Order> orders = context.Orders.AsQueryable()
+                                                              .Include(i => i.Items)
+                                                              .Include(c => c.Client)
+                                                              .ToList()
+                                                              .FindAll(c => c.Client.Id == clientId);
+                    return orders;
+                }
+
+                if(dateFrom.HasValue && !dateTo.HasValue)
+                {
+                    IEnumerable<Order> orders = context.Orders.AsQueryable()
+                                                              .Include(i => i.Items)
+                                                              .Include(c => c.Client)
+                                                              .ToList()
+                                                              .FindAll(c => c.Client.Id == clientId && c.DateRealized >= dateFrom.Value);
+                    return orders;
+                }
+
+                if (!dateFrom.HasValue && dateTo.HasValue)
+                {
+                    IEnumerable<Order> orders = context.Orders.AsQueryable()
+                                                              .Include(i => i.Items)
+                                                              .Include(c => c.Client)
+                                                              .ToList()
+                                                              .FindAll(c => c.Client.Id == clientId && c.DateRealized <= dateTo.Value);
+                    return orders;
+                }
+
+                if (dateFrom.HasValue && dateTo.HasValue)
+                {
+                    IEnumerable<Order> orders = context.Orders.AsQueryable()
+                                                              .Include(i => i.Items)
+                                                              .Include(c => c.Client)
+                                                              .ToList()
+                                                              .FindAll(c => c.Client.Id == clientId && c.DateRealized >= dateFrom.Value && c.DateRealized <= dateTo.Value);
+                    return orders;
+                }
+                return null;
+            }
+        }
+
+        public IEnumerable<Order> GetOrdersByManufacturer(int manufacturerId, DateTime? dateRealizedFrom, DateTime? dateRealizedTo)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                if (!dateRealizedFrom.HasValue && !dateRealizedTo.HasValue)
+                {
+                    IEnumerable<Order> orders = context.Orders.AsQueryable()
+                                                              .Include(i => i.Items)
+                                                              .Include(c => c.Client)
+                                                              .Where(i => i.Items.Any(x => x.Product.Manufacturer.Id == manufacturerId));
+
+                    IEnumerable<Order> orderList =  orders.ToList();
+                    return orderList;
+
+
+                }
+
+                if (dateRealizedFrom.HasValue && !dateRealizedTo.HasValue)
+                {
+                    IEnumerable<Order> orders = context.Orders.AsQueryable()
+                                                              .Include(i => i.Items)
+                                                              .Include(c => c.Client)
+                                                              .Where(i => i.Items.Any(x => x.Product.Manufacturer.Id == manufacturerId) && i.DateRealized >= dateRealizedFrom);
+
+                    IEnumerable<Order> orderList = orders.ToList();
+                    return orderList;
+                }
+
+                if (!dateRealizedFrom.HasValue && dateRealizedTo.HasValue)
+                {
+                    IEnumerable<Order> orders = context.Orders.AsQueryable()
+                                                              .Include(i => i.Items)
+                                                              .Include(c => c.Client)
+                                                              .Where(i => i.Items.Any(x => x.Product.Manufacturer.Id == manufacturerId) && i.DateRealized <= dateRealizedTo);
+
+                    IEnumerable<Order> orderList = orders.ToList();
+                    return orderList;
+                }
+
+                if (dateRealizedFrom.HasValue && dateRealizedTo.HasValue)
+                {
+                    IEnumerable<Order> orders = context.Orders.AsQueryable()
+                                                              .Include(i => i.Items)
+                                                              .Include(c => c.Client)
+                                                              .Where(i => i.Items.Any(x => x.Product.Manufacturer.Id == manufacturerId) && i.DateRealized >= dateRealizedFrom && i.DateRealized <= dateRealizedTo);
+
+                    IEnumerable<Order> orderList = orders.ToList();
+                    return orderList;
+                }
+                return null;
+            }
+        }
+
+        public IEnumerable<Order> GetOrdersByProductType(int typeId, DateTime? dateRealizedFrom, DateTime? dateRealizedTo)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                if (!dateRealizedFrom.HasValue && !dateRealizedTo.HasValue)
+                {
+                    IEnumerable<Order> orders = context.Orders.AsQueryable()
+                                                              .Include(i => i.Items)
+                                                              .Include(c => c.Client)
+                                                              .Where(i => i.Items.Any(x => x.Product.Type.Id == typeId));
+
+                    IEnumerable<Order> orderList = orders.ToList();
+                    return orderList;
+
+
+                }
+
+                if (dateRealizedFrom.HasValue && !dateRealizedTo.HasValue)
+                {
+                    IEnumerable<Order> orders = context.Orders.AsQueryable()
+                                                              .Include(i => i.Items)
+                                                              .Include(c => c.Client)
+                                                              .Where(i => i.Items.Any(x => x.Product.Type.Id == typeId) && i.DateRealized >= dateRealizedFrom);
+
+                    IEnumerable<Order> orderList = orders.ToList();
+                    return orderList;
+                }
+
+                if (!dateRealizedFrom.HasValue && dateRealizedTo.HasValue)
+                {
+                    IEnumerable<Order> orders = context.Orders.AsQueryable()
+                                                              .Include(i => i.Items)
+                                                              .Include(c => c.Client)
+                                                              .Where(i => i.Items.Any(x => x.Product.Type.Id == typeId) && i.DateRealized <= dateRealizedTo);
+
+                    IEnumerable<Order> orderList = orders.ToList();
+                    return orderList;
+                }
+
+                if (dateRealizedFrom.HasValue && dateRealizedTo.HasValue)
+                {
+                    IEnumerable<Order> orders = context.Orders.AsQueryable()
+                                                              .Include(i => i.Items)
+                                                              .Include(c => c.Client)
+                                                              .Where(i => i.Items.Any(x => x.Product.Type.Id == typeId) && i.DateRealized >= dateRealizedFrom && i.DateRealized <= dateRealizedTo);
+
+                    IEnumerable<Order> orderList = orders.ToList();
+                    return orderList;
+                }
+                return null;
+            }
+        }
+
+        public IEnumerable<Order> GetOrdersByProduct(int productId, DateTime? dateRealizedFrom, DateTime? dateRealizedTo)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                if (!dateRealizedFrom.HasValue && !dateRealizedTo.HasValue)
+                {
+                    IEnumerable<Order> orders = context.Orders.AsQueryable()
+                                                              .Include(i => i.Items)
+                                                              .Include(c => c.Client)
+                                                              .Where(i => i.Items.Any(x => x.Product.Id == productId));
+
+                    IEnumerable<Order> orderList = orders.ToList();
+                    return orderList;
+
+
+                }
+
+                if (dateRealizedFrom.HasValue && !dateRealizedTo.HasValue)
+                {
+                    IEnumerable<Order> orders = context.Orders.AsQueryable()
+                                                              .Include(i => i.Items)
+                                                              .Include(c => c.Client)
+                                                              .Where(i => i.Items.Any(x => x.Product.Id == productId) && i.DateRealized >= dateRealizedFrom);
+
+                    IEnumerable<Order> orderList = orders.ToList();
+                    return orderList;
+                }
+
+                if (!dateRealizedFrom.HasValue && dateRealizedTo.HasValue)
+                {
+                    IEnumerable<Order> orders = context.Orders.AsQueryable()
+                                                              .Include(i => i.Items)
+                                                              .Include(c => c.Client)
+                                                              .Where(i => i.Items.Any(x => x.Product.Id == productId) && i.DateRealized <= dateRealizedTo);
+
+                    IEnumerable<Order> orderList = orders.ToList();
+                    return orderList;
+                }
+
+                if (dateRealizedFrom.HasValue && dateRealizedTo.HasValue)
+                {
+                    IEnumerable<Order> orders = context.Orders.AsQueryable()
+                                                              .Include(i => i.Items)
+                                                              .Include(c => c.Client)
+                                                              .Where(i => i.Items.Any(x => x.Product.Id == productId) && i.DateRealized >= dateRealizedFrom && i.DateRealized <= dateRealizedTo);
+
+                    IEnumerable<Order> orderList = orders.ToList();
+                    return orderList;
+                }
+                return null;
+            }
         }
     }
 }

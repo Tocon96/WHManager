@@ -12,5 +12,7 @@ namespace WHManager.BusinessLogic.Models
         public DateTime? DateRealized { get; set; }
         public bool Realized { get; set; }
         public IList<Item> Items { get; set; }
+        public int ItemCount {get; set;}
+        public decimal TotalPrice {get; set;}
     }
 }

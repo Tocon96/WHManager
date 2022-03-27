@@ -16,6 +16,7 @@ using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services.ReportsServices;
 using WHManager.BusinessLogic.Services.ReportsServices.Interfaces;
 using WHManager.DesktopUI.Views.FormViews.ReportForms;
+using WHManager.DesktopUI.Views.ReportViews.ReportDisplayViews;
 
 namespace WHManager.DesktopUI.Views.ReportViews
 {
@@ -45,8 +46,6 @@ namespace WHManager.DesktopUI.Views.ReportViews
         {
             textBoxReportId.Text = "";
             datePickerEarlierDateDelivered.SelectedDate = null;
-            datePickerEarlierDateOrdered.SelectedDate = null;
-            datePickerLaterDateOrdered.SelectedDate = null;
             datePickerLaterDateDelivered.SelectedDate = null;
             LoadData();
         }
@@ -78,22 +77,6 @@ namespace WHManager.DesktopUI.Views.ReportViews
             {
                 criteria.Add(null);
             }
-            if (datePickerEarlierDateOrdered.SelectedDate.HasValue)
-            {
-                criteria.Add(datePickerEarlierDateOrdered.SelectedDate.Value.ToShortDateString());
-            }
-            else
-            {
-                criteria.Add(null);
-            }
-            if (datePickerLaterDateOrdered.SelectedDate.HasValue)
-            {
-                criteria.Add(datePickerLaterDateOrdered.SelectedDate.Value.ToShortDateString());
-            }
-            else
-            {
-                criteria.Add(null);
-            }
 
             IList<ProductReports> reports = reportsService.SearchReports(criteria.ToList());
             Reports = new ObservableCollection<ProductReports>(reports);
@@ -117,7 +100,6 @@ namespace WHManager.DesktopUI.Views.ReportViews
             }
 
         }
-
         private void DeleteMultipleReportsClick(object sender, RoutedEventArgs e)
         {
             if (gridReports.SelectedItems != null)
@@ -137,7 +119,20 @@ namespace WHManager.DesktopUI.Views.ReportViews
             }
 
         }
-
+        private void gridReportsGenerateRaport(object sender, RoutedEventArgs e)
+        {
+            if (gridReports.SelectedItem != null)
+            {
+                ProductReports report = gridReports.SelectedItem as ProductReports;
+                foreach (System.Windows.Window window in Application.Current.Windows)
+                {
+                    if (window.GetType() == typeof(MainWindow))
+                    {
+                        (window as MainWindow).mainContent.Navigate(new ProductReportDisplayView(report));
+                    }
+                }
+            }
+        }
         private void AddReportClick(object sender, RoutedEventArgs e)
         {
             ManageProductFormPhaseIView manageProductFormPhaseIView = new ManageProductFormPhaseIView(this);

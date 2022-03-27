@@ -1,0 +1,176 @@
+﻿<UserControl x:Class="WHManager.DesktopUI.Views.ReportViews.ProductTypeReportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WHManager.DesktopUI.Views.ReportViews"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Arrow" />
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Silver"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="DataGridStyle" TargetType="DataGrid">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="ColumnWidth" Value="*"/>
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style x:Key="Body_Content_DataGrid_Centering"
+        TargetType="{x:Type DataGridCell}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                        <Grid Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Center" />
+                            <ContentPresenter HorizontalAlignment="Center"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="100"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Button Click="SearchClearClick" Grid.Row="0" Width="75" Style="{StaticResource ButtonStyle}">Wyczyść</Button>
+                </Grid>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="10"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <!--Textblocks-->
+                    <TextBlock Grid.Row="0" Grid.Column="1">ID/Nazwa raportu:</TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="2">ID/Nazwa typu:</TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="1">Od:</TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="2">Do:</TextBlock>
+                    <!--Controls-->
+                    <TextBox Name="textBoxReportId" Grid.Row="1" Grid.Column="1"></TextBox>
+                    <TextBox Name="textBoxTypeId" Grid.Row="1" Grid.Column="2"></TextBox>
+                    <TextBox Grid.Row="3" Grid.Column="1"  Visibility="Hidden"></TextBox>
+                    <DatePicker Grid.Column="1" Grid.Row="3" x:Name="datePickerEarlierDateDelivered"></DatePicker>
+                    <DatePicker Grid.Column="2" Grid.Row="3" x:Name="datePickerLaterDateDelivered"></DatePicker>
+                </Grid>
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Button Click="SearchClick" Grid.Row="1" Width="75" Style="{StaticResource ButtonStyle}">Wyszukaj</Button>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <DataGrid Style="{StaticResource DataGridStyle}" 
+                      CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
+                      Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" x:Name="gridReports">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="25" Header="ID" Binding="{Binding Id}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Nazwa" Binding="{Binding Name}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Nazwa typu" Binding="{Binding Type.Name}"></DataGridTextColumn>
+                        <DataGridTextColumn Width="100" Header="Od:" Binding="{Binding DateRealizedFrom, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
+                        <DataGridTextColumn Width="100" Header="Do:" Binding="{Binding DateRealizedTo, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
+                        <DataGridTemplateColumn Width="50">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Click="DeleteReportClick" Width="50" Style="{StaticResource ButtonStyle}">Usuń</Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Generuj raport" Click="gridReportsGenerateRaport"></MenuItem>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+                <Grid Grid.Row="2" Grid.ColumnSpan="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Row="0" Grid.RowSpan="3" Height="60" Grid.Column="1" Width="200" Click="AddReportClick" Style="{StaticResource ButtonStyle}">Dodaj</Button>
+                    <Button Grid.Row="1" Grid.Column="2" Width="100" HorizontalAlignment="Right" Click="DeleteMultipleReportsClick" Style="{StaticResource ButtonStyle}">Usuń wybrane</Button>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

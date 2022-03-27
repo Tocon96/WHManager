@@ -112,14 +112,16 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
             Document document = new Document(pdf);
             document.SetFont(font);
             IList<DocumentData> documentData = dataService.GetRecordsByDocument(outgoingDocument.Id, "OutgoingDocument");
-            Table initialTable = GenerateInitialTable(documentData[0]);
-            Table providerTable = GenerateProviderTable(documentData[0]);
-            Table itemTable = GenerateItemTable(documentData);
-            document.Add(initialTable);
-            document.Add(providerTable);
-            document.Add(itemTable);
-            document.Close();
-
+            if(documentData.Count > 0)
+            {
+                Table initialTable = GenerateInitialTable(documentData[0]);
+                Table providerTable = GenerateProviderTable(documentData[0]);
+                Table itemTable = GenerateItemTable(documentData);
+                document.Add(initialTable);
+                document.Add(providerTable);
+                document.Add(itemTable);
+                document.Close();
+            }
         }
 
         Table GenerateInitialTable(DocumentData documentData)
@@ -199,6 +201,25 @@ namespace WHManager.BusinessLogic.Services.DocumentServices.Interfaces
             table.AddCell(new Cell().Add(new Paragraph(totalBruttoDelivery.Sum().ToString())));
 
             return table;
+        }
+
+        public IList<OutgoingDocument> GetDocumentsByClient(int contrahentId, DateTime? dateFrom, DateTime? dateTo)
+        {
+            IList<OutgoingDocument> documentsList = new List<OutgoingDocument>();
+            var documents = outgoingDocumentRepository.GetDocumentsByProvider(contrahentId, dateFrom, dateTo);
+            foreach (var document in documents)
+            {
+                OutgoingDocument newDocument = new OutgoingDocument
+                {
+                    Id = document.Id,
+                    Contrahent = clientService.GetClient(document.Contrahent.Id)[0],
+                    OrderId = document.OrderId,
+                    DateSent = document.DateSent
+                };
+                documentsList.Add(newDocument);
+            }
+            return documentsList;
+
         }
     }
 }

@@ -14,5 +14,6 @@ namespace WHManager.BusinessLogic.Models
         public Invoice Invoice { get; set; }
         public bool IsRealized { get; set; }
         public Client Client { get; set; }
+        public int ItemCount { get; set; }
     }
 }

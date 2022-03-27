@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -15,9 +16,12 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services;
+using WHManager.BusinessLogic.Services.DocumentServices;
+using WHManager.BusinessLogic.Services.DocumentServices.Interfaces;
 using WHManager.BusinessLogic.Services.Interfaces;
 using WHManager.BusinessLogic.Services.ReportsServices;
 using WHManager.BusinessLogic.Services.ReportsServices.Interfaces;
+using WHManager.DesktopUI.Views.WarehouseViews;
 
 namespace WHManager.DesktopUI.Views.ReportViews.ReportDisplayViews
 {
@@ -26,56 +30,67 @@ namespace WHManager.DesktopUI.Views.ReportViews.ReportDisplayViews
     /// </summary>
     public partial class ContrahentReportDisplayView : UserControl
     {
-        IOrderService orderService = new OrderService();
-        IDeliveryService deliveryService = new DeliveryService();
         IContrahentReportsService reportService = new ContrahentReportService();
+        IOrderService orderService = new OrderService();
+        IOutgoingDocumentService outgoingDocumentService = new OutgoingDocumentService();
+        IInvoiceService invoiceService = new InvoiceService();
+        IDocumentDataService documentDataService = new DocumentDataService();
+        IClientReportRecordService recordService = new ClientReportRecordService();
+
         private ContrahentReports Report { get; set; }
-        private ObservableCollection<Order> Orders { get; set; }
-        private ObservableCollection<Delivery> Deliveries { get; set; }
-        private ObservableCollection<Item> Items { get; set; }
+        private ObservableCollection<ClientReportRecord> ReportRecords { get; set; }
         public ContrahentReportDisplayView(ContrahentReports report)
         {
             InitializeComponent();
             Report = report;
-            if (Report.ReportOrigin == "Clients")
-            {
-                IList<Order> orders = orderService.GetRealizedOrdersByClient(report.ContrahentId);
-                Orders = new ObservableCollection<Order>(orders);
-                gridOrders.ItemsSource = Orders;
-                gridOrders.Visibility = Visibility.Visible;
-                AssignValuesToLabels(reportService.ParseOrderList(orders.ToList()));
-            }
+            IList<OutgoingDocument> outgoingDocuments = outgoingDocumentService.GetDocumentsByClient(report.ContrahentId, report.DateFrom, report.DateTo);
+            IList<DocumentData> data = documentDataService.GetOutgoingDocumentData(outgoingDocuments);
+            IList<ClientReportRecord> records = recordService.CreateRecords(data, outgoingDocuments);
 
-            if (Report.ReportOrigin == "Providers")
-            {
-                IList<Delivery> deliveries = deliveryService.GetRealizedDeliveriesByProvider(report.ContrahentId);
-                Deliveries = new ObservableCollection<Delivery>(deliveries);
-                gridOrders.ItemsSource = Deliveries;
-                gridOrders.Visibility = Visibility.Visible;
-                AssignValuesToLabels(reportService.ParseDeliveryList(deliveries.ToList()));
-            }
-            
+            ReportRecords = new ObservableCollection<ClientReportRecord>(records);
+            gridOrders.ItemsSource = ReportRecords;
+
+            AssignValuesToLabels(reportService.ParseOrderList(records.ToList()));
         }
 
-        private void AssignValuesToLabels(IDictionary<string, double> dictionary)
+        private void AssignValuesToLabels(IDictionary<string, decimal> dictionary)
         {
+            labelClientName.Content = Report.ContrahentName;
             labelItemCount.Content = dictionary["itemCount"];
             labelOrderCount.Content = dictionary["elementCount"];
-            labelTotalValue.Content = dictionary["totalValue"];
+            labelTotalValueNet.Content = dictionary["totalValueNet"];
+            labelTotalValueGross.Content = dictionary["totalValueGross"];
         }
 
-        private void DisplayElementsClick(object sender, RoutedEventArgs e)
+        private void gridOrderGenerateWz(object sender, RoutedEventArgs e)
         {
+            if (gridOrders.SelectedItem != null)
+            {
+                Order order = gridOrders.SelectedItem as Order;
+                SaveFileDialog svg = new SaveFileDialog();
+                svg.Filter = "Documents (*.pdf)|*.pdf|All files (*.*)|*.*";
+                Nullable<bool> result = svg.ShowDialog();
+                if (result == true)
+                {
+                    outgoingDocumentService.GeneratePdf(svg.FileName, order);
+                }
+            }
 
-            gridOrders.Visibility = Visibility.Hidden;
-            gridElements.Visibility = Visibility.Visible;
         }
 
-        private void DisplayOrdersClick(object sender, RoutedEventArgs e)
+        private void gridOrderGenerateInvoice(object sender, RoutedEventArgs e)
         {
-            gridOrders.Visibility = Visibility.Visible;
-            gridElements.Visibility = Visibility.Hidden;    
-
+            if (gridOrders.SelectedItem != null)
+            {
+                Order order = gridOrders.SelectedItem as Order;
+                SaveFileDialog svg = new SaveFileDialog();
+                svg.Filter = "Documents (*.pdf)|*.pdf|All files (*.*)|*.*";
+                Nullable<bool> result = svg.ShowDialog();
+                if (result == true)
+                {
+                    invoiceService.GeneratePdf(svg.FileName, order);
+                }
+            }
         }
     }
 }

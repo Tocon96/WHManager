@@ -154,6 +154,7 @@
                     <DataGridTextColumn Width="100" Header="Cena kupna" Binding="{Binding PriceBuy}"></DataGridTextColumn>
                     <DataGridTextColumn Width="100" Header="Cena sprzedaży" Binding="{Binding PriceSell}"></DataGridTextColumn>
                     <DataGridCheckBoxColumn Width="75" Header="Dostępność" Binding="{Binding InStock}"></DataGridCheckBoxColumn>
+                    <DataGridTextColumn Width="150" Header="Dostępne egzemplarze" Binding="{Binding ItemInWarehouseCount}"></DataGridTextColumn>
                     <DataGridTemplateColumn Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

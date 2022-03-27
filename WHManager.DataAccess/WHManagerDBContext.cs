@@ -28,6 +28,8 @@ namespace WHManager.DataAccess
         public DbSet<Config> Config { get; set; }
         public DbSet<ContrahentReports> ContrahentReports { get; set; }
         public DbSet<ProductReports> ProductReports { get; set; }
+        public DbSet<ManufacturerReports> ManufacturerReports { get; set; }
+        public DbSet<TypeReports> TypeReports { get; set; }
         public DbSet<DocumentData> DocumentData { get; set; }
         public WHManagerDBContext(DbContextOptions options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,6 +38,9 @@ namespace WHManager.DataAccess
             modelBuilder.Entity<Product>().HasOne(p => p.Type).WithMany(p => p.Products).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Product>().HasOne(t => t.Tax).WithMany(p => p.Products).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Item>().HasOne(p => p.Product).WithMany(i => i.Items).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<ProductReports>().HasOne(p => p.Product).WithMany(r => r.Reports).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<ManufacturerReports>().HasOne(m => m.Manufacturer).WithMany(r => r.Reports).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<TypeReports>().HasOne(t => t.Type).WithMany(r => r.Reports).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Order>().HasOne(c => c.Client).WithMany(o => o.Orders).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<User>().HasOne(r => r.Role).WithMany(u => u.Users).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Provider>().HasMany(i => i.Items).WithOne(p => p.Provider).OnDelete(DeleteBehavior.Restrict);

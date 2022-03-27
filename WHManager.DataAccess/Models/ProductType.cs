@@ -12,5 +12,6 @@ namespace WHManager.DataAccess.Models
         public string Name { get; set; }
 
         public ICollection<Product> Products { get; set; }
+        public ICollection<TypeReports> Reports { get; set; }
     }
 }

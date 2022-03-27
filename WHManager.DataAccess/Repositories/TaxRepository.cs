@@ -173,5 +173,14 @@ namespace WHManager.DataAccess.Repositories
                 }
             }
         }
+
+        public bool CheckIfTaxIsUsed(int taxId)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                bool taxExists = context.Products.Any(x => x.Tax.Id == taxId);
+                return taxExists;
+            }
+        }
     }
 }

@@ -427,16 +427,10 @@ namespace WHManager.DataAccess.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<DateTime?>("DateDeliveredFrom")
+                    b.Property<DateTime?>("DateRealizedFrom")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DateDeliveredTo")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateOrderedFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateOrderedTo")
+                    b.Property<DateTime?>("DateRealizedTo")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("ManufacturerId")

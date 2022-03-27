@@ -77,22 +77,46 @@
     <Compile Update="Views\FormViews\ReportForms\ManageClientReportFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\FormViews\ReportForms\ManageProductFormPhaseIView.xaml.cs">
+    <Compile Update="Views\FormViews\ReportForms\ManageManufacturerReportFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\FormViews\ReportForms\ManageProductReportFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\FormViews\ReportForms\ManageProviderReportFormView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\FormViews\ReportForms\ManageTypeReportFormView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\ReportViews\ClientReportView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\ReportViews\ManufacturerReportView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\ReportViews\ProductReportView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ReportViews\ProductTypeReportView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\ReportViews\ProviderReportView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\ReportViews\ReportDisplayViews\ContrahentReportDisplayView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ReportViews\ReportDisplayViews\ManufacturerReportDisplayView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ReportViews\ReportDisplayViews\ProductReportDisplayView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ReportViews\ReportDisplayViews\ProductTypeReportDisplayView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ReportViews\ReportDisplayViews\ProviderReportDisplayView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\WarehouseViews\DeliveryItemsView.xaml.cs">
@@ -184,22 +208,46 @@
     <Page Update="Views\FormViews\ReportForms\ManageClientReportFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\FormViews\ReportForms\ManageProductFormPhaseIView.xaml">
+    <Page Update="Views\FormViews\ReportForms\ManageManufacturerReportFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\FormViews\ReportForms\ManageProductReportFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\FormViews\ReportForms\ManageProviderReportFormView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\FormViews\ReportForms\ManageTypeReportFormView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\ReportViews\ClientReportView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\ReportViews\ManufacturerReportView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\ReportViews\ProductReportView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ReportViews\ProductTypeReportView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\ReportViews\ProviderReportView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\ReportViews\ReportDisplayViews\ContrahentReportDisplayView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ReportViews\ReportDisplayViews\ManufacturerReportDisplayView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ReportViews\ReportDisplayViews\ProductReportDisplayView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ReportViews\ReportDisplayViews\ProductTypeReportDisplayView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ReportViews\ReportDisplayViews\ProviderReportDisplayView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\WarehouseViews\DeliveryItemsView.xaml">

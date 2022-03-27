@@ -19,6 +19,10 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         bool RealizeOrder(Order order);
         void EmptyOrderFromItems(Order order);
         public IList<DeliveryOrderTableContent> GetElements(int orderId);
-        IList<Order> GetRealizedOrdersByClient(int clientId);
+        IList<Order> GetRealizedOrdersByClient(int clientId, DateTime? dateFrom, DateTime? dateTo);
+        IList<Item> GetAllItemsFromOrders(List<Order> orders);
+        IList<Order> GetOrdersByManufacturer(ManufacturerReports report);
+        IList<Order> GetOrdersByProductType(TypeReports report);
+        IList<Order> GetOrdersByProduct(ProductReports report);
     }
 }

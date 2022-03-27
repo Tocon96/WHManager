@@ -16,6 +16,7 @@ using WHManager.BusinessLogic.Models;
 using WHManager.BusinessLogic.Services.ReportsServices;
 using WHManager.BusinessLogic.Services.ReportsServices.Interfaces;
 using WHManager.DesktopUI.Views.FormViews.ReportForms;
+using WHManager.DesktopUI.Views.ReportViews.ReportDisplayViews;
 
 namespace WHManager.DesktopUI.Views.ReportViews
 {
@@ -140,7 +141,21 @@ namespace WHManager.DesktopUI.Views.ReportViews
             {
                 LoadData();
             }
+        }
 
+        private void gridReportGenerateRaport(object sender, RoutedEventArgs e)
+        {
+            if (gridProviders.SelectedItem != null)
+            {
+                ContrahentReports report = gridProviders.SelectedItem as ContrahentReports;
+                foreach (System.Windows.Window window in Application.Current.Windows)
+                {
+                    if (window.GetType() == typeof(MainWindow))
+                    {
+                        (window as MainWindow).mainContent.Navigate(new ProviderReportDisplayView(report));
+                    }
+                }
+            }
         }
 
     }

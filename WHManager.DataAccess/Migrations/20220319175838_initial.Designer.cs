@@ -10,7 +10,7 @@ using WHManager.DataAccess;
 namespace WHManager.DataAccess.Migrations
 {
     [DbContext(typeof(WHManagerDBContext))]
-    [Migration("20211104002034_initial")]
+    [Migration("20220319175838_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,6 +61,33 @@ namespace WHManager.DataAccess.Migrations
                     b.ToTable("Config");
                 });
 
+            modelBuilder.Entity("WHManager.DataAccess.Models.ContrahentReports", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("ContrahentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContrahentName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DateFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReportOrigin")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContrahentReports");
+                });
+
             modelBuilder.Entity("WHManager.DataAccess.Models.Delivery", b =>
                 {
                     b.Property<int>("Id")
@@ -109,6 +136,60 @@ namespace WHManager.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DeliveryElements");
+                });
+
+            modelBuilder.Entity("WHManager.DataAccess.Models.DocumentData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("ContrahentName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContrahentNip")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContrahentPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DocumentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DocumentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DocumentType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("GrossValue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("NetValue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProductCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductNumber")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("ProductPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("TaxType")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TaxValue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DocumentData");
                 });
 
             modelBuilder.Entity("WHManager.DataAccess.Models.IncomingDocument", b =>
@@ -341,6 +422,36 @@ namespace WHManager.DataAccess.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("WHManager.DataAccess.Models.ProductReports", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime?>("DateRealizedFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateRealizedTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ManufacturerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductReports");
+                });
+
             modelBuilder.Entity("WHManager.DataAccess.Models.ProductType", b =>
                 {
                     b.Property<int>("Id")
@@ -400,6 +511,9 @@ namespace WHManager.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Report")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("Warehouse")
                         .HasColumnType("bit");
@@ -473,7 +587,7 @@ namespace WHManager.DataAccess.Migrations
                     b.HasOne("WHManager.DataAccess.Models.Client", "Client")
                         .WithMany("Invoices")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WHManager.DataAccess.Models.Order", null)

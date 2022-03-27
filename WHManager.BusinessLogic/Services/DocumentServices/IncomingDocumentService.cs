@@ -115,13 +115,16 @@ namespace WHManager.BusinessLogic.Services
             Document document = new Document(pdf);
             document.SetFont(font);
             IList<DocumentData> documentData = dataService.GetRecordsByDocument(incomingDocument.Id, "IncomingDocument");
-            Table initialTable = GenerateInitialTable(documentData[0]);
-            Table providerTable = GenerateProviderTable(documentData[0]);
-            Table itemTable = GenerateItemTable(documentData);
-            document.Add(initialTable);
-            document.Add(providerTable);
-            document.Add(itemTable);
-            document.Close();
+            if(documentData.Count > 0)
+            {
+                Table initialTable = GenerateInitialTable(documentData[0]);
+                Table providerTable = GenerateProviderTable(documentData[0]);
+                Table itemTable = GenerateItemTable(documentData);
+                document.Add(initialTable);
+                document.Add(providerTable);
+                document.Add(itemTable);
+                document.Close();
+            }
         }
 
         Table GenerateInitialTable(DocumentData documentData)
@@ -201,6 +204,25 @@ namespace WHManager.BusinessLogic.Services
             table.AddCell(new Cell().Add(new Paragraph(totalBruttoDelivery.Sum().ToString())));
 
             return table;
+        }
+
+        public IList<IncomingDocument> GetDocumentsByProvider(int contrahentId, DateTime? dateFrom, DateTime? dateTo)
+        {
+            IList<IncomingDocument> documentsList = new List<IncomingDocument>();
+            var documents = incomingDocumentRepository.GetDocumentsByProvider(contrahentId, dateFrom, dateTo);
+            foreach (var document in documents)
+            {
+                IncomingDocument newDocument = new IncomingDocument
+                {
+                    Id = document.Id,
+                    Provider = providerService.GetProvider(document.Provider.Id),
+                    DateReceived = document.DateReceived,
+                    DeliveryId = document.DeliveryId
+                };
+                documentsList.Add(newDocument);
+            }
+            return documentsList;
+            
         }
     }
 }

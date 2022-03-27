@@ -54,6 +54,7 @@ namespace WHManager.DataAccess.Repositories
 														.Include(x => x.Manufacturer)
 														.Include(x => x.Tax)
 														.Include(x => x.Type)
+														.Include(x => x.Items)
 														.ToList();
 					return products;
 				}
@@ -74,6 +75,7 @@ namespace WHManager.DataAccess.Repositories
 								.Include(x => x.Manufacturer)
 								.Include(x => x.Tax)
 								.Include(x => x.Type)
+								.Include(x => x.Items)
 								.ToList()
 								.FindAll(x => x.Id == id);
 					return products;
@@ -136,6 +138,7 @@ namespace WHManager.DataAccess.Repositories
 																.Include(x => x.Manufacturer)
 																.Include(x => x.Tax)
 																.Include(x => x.Type)
+																.Include(x => x.Items)
 																.ToList()
 																.FindAll(x => x.Manufacturer.Name.StartsWith(manufacturerName));
 						return products;
@@ -156,6 +159,7 @@ namespace WHManager.DataAccess.Repositories
 																.Include(x => x.Manufacturer)
 																.Include(x => x.Tax)
 																.Include(x => x.Type)
+																.Include(x => x.Items)
 																.ToList()
 																.FindAll(x => x.Manufacturer.Id == manufacturerId);
 						return products;
@@ -176,6 +180,7 @@ namespace WHManager.DataAccess.Repositories
 																.Include(x => x.Manufacturer)
 																.Include(x => x.Tax)
 																.Include(x => x.Type)
+																.Include(x => x.Items)
 																.ToList()
 																.FindAll(x => x.Manufacturer.Nip == manufacturerNip);
 						return products;
@@ -505,7 +510,8 @@ namespace WHManager.DataAccess.Repositories
 					IQueryable<Product> products = context.Products.AsQueryable()
 																   .Include(x => x.Manufacturer)
 																   .Include(x => x.Tax)
-																   .Include(x => x.Type);
+																   .Include(x => x.Type)
+																   .Include(x => x.Items);
                     if (!string.IsNullOrEmpty(criteria[0]))
                     {
 						if(int.TryParse(criteria[0], out int result))

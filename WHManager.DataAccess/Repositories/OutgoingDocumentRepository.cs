@@ -151,6 +151,45 @@ namespace WHManager.DataAccess.Repositories
             }            
         }
 
+        public IEnumerable<OutgoingDocument> GetDocumentsByProvider(int contrahentId, DateTime? dateFrom, DateTime? dateTo)
+        {
+            using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+            {
+                if (!dateFrom.HasValue && !dateTo.HasValue)
+                {
+                    IEnumerable<OutgoingDocument> documents = context.OutgoingDocuments.Include(x => x.Contrahent)
+                                                                                        .ToList()
+                                                                                        .FindAll(x => x.Contrahent.Id == contrahentId);
+                    return documents;
+                }
+
+                if (dateFrom.HasValue && !dateTo.HasValue)
+                {
+                    IEnumerable<OutgoingDocument> documents = context.OutgoingDocuments.Include(x => x.Contrahent)
+                                                                                                 .ToList()
+                                                                                                 .FindAll(x => x.Contrahent.Id == contrahentId && x.DateSent >= dateFrom.Value);
+                    return documents;
+                }
+
+                if (!dateFrom.HasValue && dateTo.HasValue)
+                {
+                    IEnumerable<OutgoingDocument> documents = context.OutgoingDocuments.Include(x => x.Contrahent)
+                                                                         .ToList()
+                                                                         .FindAll(x => x.Contrahent.Id == contrahentId && x.DateSent <= dateTo.Value);
+                    return documents;
+                }
+
+                if (dateFrom.HasValue && dateTo.HasValue)
+                {
+                    IEnumerable<OutgoingDocument> documents = context.OutgoingDocuments.Include(x => x.Contrahent)
+                                                                         .ToList()
+                                                                         .FindAll(x => x.Contrahent.Id == contrahentId && x.DateSent >= dateFrom.Value && x.DateSent <= dateTo.Value);
+                    return documents;
+                }
+                return null;
+            }
+        }
+
         public int UpdateDocument(int id, int clientId, int orderId, DateTime dateSent)
         {
             using (WHManagerDBContext context = _contextFactory.CreateDbContext())

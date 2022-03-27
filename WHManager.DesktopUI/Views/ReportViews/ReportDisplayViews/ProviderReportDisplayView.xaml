@@ -1,0 +1,131 @@
+﻿<UserControl x:Class="WHManager.DesktopUI.Views.ReportViews.ReportDisplayViews.ProviderReportDisplayView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WHManager.DesktopUI.Views.ReportViews.ReportDisplayViews"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="DataGridStyle" TargetType="DataGrid">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="ColumnWidth" Value="*"/>
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style x:Key="Body_Content_DataGrid_Centering"
+         TargetType="{x:Type DataGridCell}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                        <Grid Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Center" />
+                            <ContentPresenter HorizontalAlignment="Center"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+        <Style x:Key="labelHeaderCentering" TargetType="{x:Type Label}">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style x:Key="labelCentering" TargetType="{x:Type Label}">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="18"></Setter>
+        </Style>
+        <Style x:Key="rowBackground" TargetType="{x:Type Rectangle}">
+            <Setter Property="Fill" Value="#1565c0"/>
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Arrow" />
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Background" Value="#1565c0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Silver"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" 
+                  x:Name="gridOverview">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Rectangle Grid.Column="0" Style="{StaticResource rowBackground}"></Rectangle>
+            <Rectangle Grid.Column="1" Style="{StaticResource rowBackground}"></Rectangle>
+            <Rectangle Grid.Column="2" Style="{StaticResource rowBackground}"></Rectangle>
+            <Rectangle Grid.Column="3" Style="{StaticResource rowBackground}"></Rectangle>
+            <Rectangle Grid.Column="4" Style="{StaticResource rowBackground}"></Rectangle>
+
+            <Label Content="Dostawca" Style="{StaticResource labelHeaderCentering}" Grid.Row="0" Grid.Column="0"></Label>
+            <Label Content="Ilość dostaw" Style="{StaticResource labelHeaderCentering}" Grid.Row="0" Grid.Column="1"></Label>
+            <Label Content="Ilość egzemplarzy" Style="{StaticResource labelHeaderCentering}" Grid.Row="0" Grid.Column="2"></Label>
+            <Label Content="Łączna kwota netto(PLN)" Style="{StaticResource labelHeaderCentering}" Grid.Row="0" Grid.Column="3"></Label>
+            <Label Content="Łączna kwota brutto(PLN)" Style="{StaticResource labelHeaderCentering}" Grid.Row="0" Grid.Column="4"></Label>
+
+            <Label Name="labelProviderName" Style="{StaticResource labelCentering}" Grid.Row="1" Grid.Column="0"></Label>
+            <Label Name="labelDeliveryCount" Style="{StaticResource labelCentering}" Grid.Row="1" Grid.Column="1"></Label>
+            <Label Name="labelItemCount" Style="{StaticResource labelCentering}" Grid.Row="1" Grid.Column="2"></Label>
+            <Label Name="labelTotalValueNet" Style="{StaticResource labelCentering}" Grid.Row="1" Grid.Column="3"></Label>
+            <Label Name="labelTotalValueGross" Style="{StaticResource labelCentering}" Grid.Row="1" Grid.Column="4"></Label>
+        </Grid>
+        <DataGrid Grid.Row="1" 
+                  Style="{StaticResource DataGridStyle}" 
+                  CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
+                  x:Name="gridDeliveries">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Width="50" Binding="{Binding DeliveryId}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Ilość egzemplarzy" Binding="{Binding ItemCount}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Cena Netto" Binding="{Binding PriceNet}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Cena Brutto" Binding="{Binding PriceGross}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Data Realizacji" Width="100" Binding="{Binding DateRealized, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
+            </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Wyświetl dokument przychodzący" Click="gridDeliveriesGenerateWz"></MenuItem>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+    </Grid>
+</UserControl>
