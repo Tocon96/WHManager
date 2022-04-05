@@ -109,8 +109,8 @@ namespace WHManager.DesktopUI.Views.FormViews.ReportForms {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;V1.0.0.0;component/views/formviews/reportforms/manageclientr" +
-                    "eportformview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;component/views/formviews/reportforms/manageclientreportform" +
+                    "view.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Views\FormViews\ReportForms\ManageClientReportFormView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

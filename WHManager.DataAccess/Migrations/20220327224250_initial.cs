@@ -110,24 +110,6 @@ namespace WHManager.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductReports",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProductId = table.Column<int>(type: "int", nullable: true),
-                    ManufacturerId = table.Column<int>(type: "int", nullable: true),
-                    TypeId = table.Column<int>(type: "int", nullable: true),
-                    DateRealizedFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DateRealizedTo = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductReports", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ProductTypes",
                 columns: table => new
                 {
@@ -186,6 +168,50 @@ namespace WHManager.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Taxes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ManufacturerReports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ManufacturerId = table.Column<int>(type: "int", nullable: true),
+                    DateRealizedFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateRealizedTo = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ManufacturerReports", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ManufacturerReports_Manufacturers_ManufacturerId",
+                        column: x => x.ManufacturerId,
+                        principalTable: "Manufacturers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TypeReports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TypeId = table.Column<int>(type: "int", nullable: true),
+                    DateRealizedFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateRealizedTo = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TypeReports", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TypeReports_ProductTypes_TypeId",
+                        column: x => x.TypeId,
+                        principalTable: "ProductTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -316,6 +342,28 @@ namespace WHManager.DataAccess.Migrations
                         principalTable: "IncomingDocuments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductReports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProductId = table.Column<int>(type: "int", nullable: true),
+                    DateRealizedFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateRealizedTo = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductReports", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductReports_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -493,6 +541,11 @@ namespace WHManager.DataAccess.Migrations
                 column: "ProviderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ManufacturerReports_ManufacturerId",
+                table: "ManufacturerReports",
+                column: "ManufacturerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_ClientId",
                 table: "Orders",
                 column: "ClientId");
@@ -514,6 +567,11 @@ namespace WHManager.DataAccess.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductReports_ProductId",
+                table: "ProductReports",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_ManufacturerId",
                 table: "Products",
                 column: "ManufacturerId");
@@ -526,6 +584,11 @@ namespace WHManager.DataAccess.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Products_TypeId",
                 table: "Products",
+                column: "TypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TypeReports_TypeId",
+                table: "TypeReports",
                 column: "TypeId");
 
             migrationBuilder.CreateIndex(
@@ -552,7 +615,13 @@ namespace WHManager.DataAccess.Migrations
                 name: "Items");
 
             migrationBuilder.DropTable(
+                name: "ManufacturerReports");
+
+            migrationBuilder.DropTable(
                 name: "ProductReports");
+
+            migrationBuilder.DropTable(
+                name: "TypeReports");
 
             migrationBuilder.DropTable(
                 name: "Users");

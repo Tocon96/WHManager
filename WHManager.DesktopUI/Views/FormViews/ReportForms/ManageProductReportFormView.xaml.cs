@@ -22,7 +22,7 @@ namespace WHManager.DesktopUI.Views.FormViews.ReportForms
     /// <summary>
     /// Interaction logic for ManageProductFormPhaseIView.xaml
     /// </summary>
-    public partial class ManageProductFormPhaseIView : Window
+    public partial class ManageProductReportFormView : Window
     {
 
         private ProductReportView ReportView { get; set; }
@@ -32,48 +32,19 @@ namespace WHManager.DesktopUI.Views.FormViews.ReportForms
         IProductTypeService typeService = new ProductTypeService();
         IProductReportsService reportService = new ProductReportsService();
         
-        public ManageProductFormPhaseIView(ProductReportView reportView)
+        public ManageProductReportFormView(ProductReportView reportView)
         {
             InitializeComponent();
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            ReportView = reportView;
             CreateComboBoxData();
         }
 
         private void CreateComboBoxData()
         {
-            ObservableCollection<string> data = new ObservableCollection<string>();
-            data.Add("Produkt");
-            data.Add("Typ");
-            data.Add("Producent");
-            comboBoxType.ItemsSource = data;
-            comboBoxType.SelectedIndex = 0;
-        }
-
-        private void comboBoxTypeSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (comboBoxType.SelectedIndex == 0)
-            {
-                IList<Product> products = productService.GetProducts();
-                comboBoxElementType.ItemsSource = products;
-                comboBoxElementType.SelectedIndex = 0;
-                textBlockElementType.Text = "Produkty";
-            }
-
-            if (comboBoxType.SelectedIndex == 1)
-            {
-                IList<ProductType> types = typeService.GetProductTypes();
-                comboBoxElementType.ItemsSource = types;
-                comboBoxElementType.SelectedIndex = 0;
-                textBlockElementType.Text = "Typy";
-            }
-
-            if (comboBoxType.SelectedIndex == 2)
-            {
-                IList<Manufacturer> manufacturers = manufacturerService.GetManufacturers();
-                comboBoxElementType.ItemsSource = manufacturers;
-                comboBoxElementType.SelectedIndex = 0;
-                textBlockElementType.Text = "Producenci";
-            }
+            IList<Product> products = productService.GetProducts();
+            comboBoxProduct.ItemsSource = products;
+            comboBoxProduct.SelectedIndex = 0;
         }
 
         private void buttonConfirmClick(object sender, RoutedEventArgs e)
@@ -103,28 +74,7 @@ namespace WHManager.DesktopUI.Views.FormViews.ReportForms
                 {
                     report.DateRealizedTo = null;
                 }
-                report.ProductId = null;
-                report.ManufacturerId = null;
-                report.TypeId = null;
-                Type type = comboBoxElementType.SelectedItem.GetType();
-                if (type == typeof(Product))
-                {
-                    Product product = comboBoxElementType.SelectedItem as Product;
-                    report.ProductId = product.Id;
-                }
-
-                if (type == typeof(Manufacturer))
-                {
-                    Manufacturer manufacturer = comboBoxElementType.SelectedItem as Manufacturer;
-                    report.ManufacturerId = manufacturer.Id;
-                }
-
-                if (type == typeof(ProductType))
-                {
-                    ProductType productType = comboBoxElementType.SelectedItem as ProductType;
-                    report.TypeId = productType.Id;
-                }
-
+                report.Product = comboBoxProduct.SelectedItem as Product;
                 reportService.CreateReport(report);
                 DialogResult = true;
                 this.Close();

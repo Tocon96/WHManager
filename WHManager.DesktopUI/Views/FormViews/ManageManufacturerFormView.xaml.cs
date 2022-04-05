@@ -54,75 +54,79 @@ namespace WHManager.DesktopUI.Views.FormViews
 
         }
 
-        private void AddManufacturer()
+        private bool AddManufacturer()
         {
-            try
+            Manufacturer manufacturer = new Manufacturer
             {
-                Manufacturer manufacturer = new Manufacturer
-                {
-                    Name = textBoxName.Text,
-                    Nip = double.Parse(textBoxNip.Text)
-                };
+                Name = textBoxName.Text,
+            };
+
+            if(manufacturer.Name.Length < 1)
+            {
+                return false;
+            } 
+
+            if (double.TryParse(textBoxNip.Text, out double result) == true || result == 0)
+            {
+                manufacturer.Nip = result;
                 manufacturerService.CreateNewManufacturer(manufacturer);
+                return true;
             }
-            catch (Exception e)
+            else
             {
-                MessageBox.Show("Błąd dodawania: " + e);
+                return false;
             }
         }
 
-        private void UpdateManufacturer()
+        private bool UpdateManufacturer()
         {
-            try
+            Manufacturer manufacturer = new Manufacturer
             {
-                Manufacturer manufacturer = new Manufacturer
-                {
-                    Id = Manufacturer.Id,
-                    Name = textBoxName.Text,
-                    Nip = double.Parse(textBoxNip.Text)
-                };
-                manufacturerService.UpdateManufacturer(manufacturer);
+                Id = Manufacturer.Id,
+                Name = textBoxName.Text,
+            };
+            if (manufacturer.Name.Length < 1)
+            {
+                return false;
             }
-            catch (Exception e)
+
+            if (double.TryParse(textBoxNip.Text, out double result) == true || result == 0)
             {
-                MessageBox.Show("Błąd aktualizacji: " + e);
+                manufacturer.Nip = result;
+                manufacturerService.UpdateManufacturer(manufacturer);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
         private void buttonConfirmClick(object sender, RoutedEventArgs e)
         {
-            if (double.TryParse(textBoxNip.Text, out double result))
+            if (Manufacturer == null)
             {
-                if (Manufacturer == null)
+                if(AddManufacturer() == true)
                 {
-                    try
-                    {
-                        AddManufacturer();
-                        DialogResult = true;
-                        this.Close();
-                    }
-                    catch (Exception x)
-                    {
-                        MessageBox.Show("Błąd dodawania: " + x);
-                    }
+                    DialogResult = true;
+                    this.Close();
                 }
                 else
                 {
-                    try
-                    {
-                        UpdateManufacturer();
-                        DialogResult = true;
-                        this.Close();
-                    }
-                    catch (Exception x)
-                    {
-                        MessageBox.Show("Błąd aktualizacji: " + x);
-                    }
+                    MessageBox.Show("Podaj poprawne wartości");
                 }
             }
             else
             {
-                MessageBox.Show("Proszę podać poprawny NIP");
+                if (UpdateManufacturer() == true)
+                {
+                    DialogResult = true;
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Podaj poprawne wartości");
+                }
             }
         }
         private void CancelClick(object sender, RoutedEventArgs e)

@@ -15,7 +15,6 @@ namespace WHManager.BusinessLogic.Services
     public class ManufacturerService : IManufacturerService
     {
         private readonly IManufacturerRepository _manufacturerRepository = new ManufacturerRepository(new DataAccess.WHManagerDBContextFactory());
-        IProductReportsService reportService = new ProductReportsService();
 
         public void CreateNewManufacturer(Manufacturer manufacturer)
         {

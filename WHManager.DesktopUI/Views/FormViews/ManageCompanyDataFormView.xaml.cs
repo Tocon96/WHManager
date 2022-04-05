@@ -52,11 +52,17 @@ namespace WHManager.DesktopUI.Views.FormViews
             }
             else
             {
-                configService.UpdateCompanyData(data.ToList());
-                DialogResult = true;
-                this.Close();
+                if (double.TryParse(data[1], out double result) == false || double.TryParse(data[2], out double result2) == false)
+                {
+                    MessageBox.Show("Numer telefonu oraz NIP muszą być numeryczne.");
+                }
+                else
+                {
+                    configService.UpdateCompanyData(data.ToList());
+                    DialogResult = true;
+                    this.Close();
+                }
             }
-            
         }
     }
 }

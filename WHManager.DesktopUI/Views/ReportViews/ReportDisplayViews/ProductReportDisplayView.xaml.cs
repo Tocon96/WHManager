@@ -61,7 +61,7 @@ namespace WHManager.DesktopUI.Views.ReportViews.ReportDisplayViews
             Orders = new ObservableCollection<Order>(orders);
             gridOrders.ItemsSource = Orders;
 
-            IList<Item> items = itemService.GetItemsByProduct(Report.Product.Id);
+            IList<Item> items = itemService.GetAllItemsByProduct(Report.Product.Id);
             Items = new ObservableCollection<Item>(items);
             gridElements.ItemsSource = Items;
 

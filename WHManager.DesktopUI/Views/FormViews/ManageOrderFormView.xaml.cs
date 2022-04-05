@@ -228,14 +228,21 @@ namespace WHManager.DesktopUI.Views.FormViews
             {
                 DeliveryOrderTableContent content = new DeliveryOrderTableContent(null, product.Id, product.Name, result);
                 var existingElement = ExistingElements.SingleOrDefault(x => x.ProductId == product.Id);
-                if(result <= existingElement.Count)
+                if(existingElement != null)
                 {
-                    existingElement.Count = existingElement.Count - result;
-                    Elements.Add(content);
+                    if (result <= existingElement.Count)
+                    {
+                        existingElement.Count = existingElement.Count - result;
+                        Elements.Add(content);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Ilość produktów w zamówieniu nie może byc wieksza od ilości egzemplarzy w magazynie.");
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Ilość produktów w zamówieniu nie może byc wieksza od ilości egzemplarzy w magazynie.");
+                    MessageBox.Show("Brak egzemplarzy w magazynie.");
                 }
             }
             else

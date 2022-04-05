@@ -15,6 +15,7 @@ namespace WHManager.BusinessLogic.Services.Interfaces
         void DeleteItem(int id);
         IList<Item> GetItemsByProduct(int? productId = null, string productName = null);
         IList<Item> GetEmittedItemsByProducts(int? productId = null, string productName = null);
+        IList<Item> GetAllItemsByProduct(int productId);
         IList<Item> GetAllAvailableItems();
         IList<DeliveryOrderTableContent> GroupItems();
         void SetItemInOrder(Item item, int orderId, int count);

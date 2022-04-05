@@ -17,7 +17,6 @@ namespace WHManager.BusinessLogic.Services
     public class ProductTypeService : IProductTypeService
     {
         private readonly IProductTypeRepository _productTypeRepository = new ProductTypeRepository(new DataAccess.WHManagerDBContextFactory());
-        IProductReportsService productReportService = new ProductReportsService();
 
         public void CreateNewProductType(ProductType productType)
         {

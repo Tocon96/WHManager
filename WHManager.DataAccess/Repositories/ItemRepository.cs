@@ -516,5 +516,19 @@ namespace WHManager.DataAccess.Repositories
 				context.SaveChanges();
 			}
 		}
-    }
+
+        public IEnumerable<Item> GetAllItemsByProduct(int productId)
+        {
+			using (WHManagerDBContext context = _contextFactory.CreateDbContext())
+			{
+				IEnumerable<Item> items = context.Items.Include(p => p.Product)
+														.Include(i => i.IncomingDocument)
+														.Include(p => p.Provider)
+														.Include(o => o.OutgoingDocument)
+														.Include(i => i.Invoice)
+														.ToList().FindAll(p => p.Product.Id == productId);
+				return items;
+			}
+		}
+	}
 }

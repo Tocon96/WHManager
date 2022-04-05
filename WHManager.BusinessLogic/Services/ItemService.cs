@@ -433,5 +433,41 @@ namespace WHManager.BusinessLogic.Services
                 _itemRepository.EmitItem(item.Id, dateTime, documentId, invoiceId);
             }
         }
+
+        public IList<Item> GetAllItemsByProduct(int productId)
+        {
+            IList<Item> itemsList = new List<Item>();
+            var items = _itemRepository.GetAllItemsByProduct(productId);
+            foreach (var item in items)
+            {
+                IList<Product> prodList = productService.GetProduct(item.Product.Id);
+                Product product = prodList[0];
+                Item currentItem = new Item
+                {
+                    Id = item.Id,
+                    Product = product,
+                    DateOfAdmission = item.DateOfAdmission,
+                    IsInStock = item.IsInStock,
+                    IsInOrder = item.IsInOrder,
+                    DeliveryId = item.DeliveryId,
+                    IncomingDocumentId = item.IncomingDocument.Id,
+                    ProviderId = item.Provider.Id,
+                };
+                if (item.OrderId.HasValue)
+                {
+                    currentItem.OrderId = item.OrderId;
+                }
+
+                if (item.DateOfEmission.HasValue)
+                {
+                    currentItem.DateOfEmission = item.DateOfEmission.Value.Date;
+                    currentItem.OutgoingDocumentId = item.OutgoingDocument.Id;
+                    currentItem.InvoiceId = item.Invoice.Id;
+                }
+                itemsList.Add(currentItem);
+            }
+            return itemsList;
+
+        }
     }
 }

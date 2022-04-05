@@ -319,6 +319,32 @@ namespace WHManager.DataAccess.Migrations
                     b.ToTable("Manufacturers");
                 });
 
+            modelBuilder.Entity("WHManager.DataAccess.Models.ManufacturerReports", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime?>("DateRealizedFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateRealizedTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ManufacturerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ManufacturerId");
+
+                    b.ToTable("ManufacturerReports");
+                });
+
             modelBuilder.Entity("WHManager.DataAccess.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -433,19 +459,15 @@ namespace WHManager.DataAccess.Migrations
                     b.Property<DateTime?>("DateRealizedTo")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ManufacturerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductReports");
                 });
@@ -542,6 +564,32 @@ namespace WHManager.DataAccess.Migrations
                     b.ToTable("Taxes");
                 });
 
+            modelBuilder.Entity("WHManager.DataAccess.Models.TypeReports", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime?>("DateRealizedFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateRealizedTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("TypeReports");
+                });
+
             modelBuilder.Entity("WHManager.DataAccess.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -631,6 +679,14 @@ namespace WHManager.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("WHManager.DataAccess.Models.ManufacturerReports", b =>
+                {
+                    b.HasOne("WHManager.DataAccess.Models.Manufacturer", "Manufacturer")
+                        .WithMany("Reports")
+                        .HasForeignKey("ManufacturerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("WHManager.DataAccess.Models.Order", b =>
                 {
                     b.HasOne("WHManager.DataAccess.Models.Client", "Client")
@@ -676,6 +732,22 @@ namespace WHManager.DataAccess.Migrations
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WHManager.DataAccess.Models.ProductReports", b =>
+                {
+                    b.HasOne("WHManager.DataAccess.Models.Product", "Product")
+                        .WithMany("Reports")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WHManager.DataAccess.Models.TypeReports", b =>
+                {
+                    b.HasOne("WHManager.DataAccess.Models.ProductType", "Type")
+                        .WithMany("Reports")
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WHManager.DataAccess.Models.User", b =>

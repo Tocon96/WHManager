@@ -60,7 +60,7 @@
         <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3">Numer telefonu firmy</TextBlock>
         <TextBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4" Name="textBoxCompanyPhoneNumber"></TextBox>
         <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="5">NIP firmy</TextBlock>
-        <TextBox Grid.Column="0" Grid.Row="6" Name="textBoxCompanyNip"></TextBox>
+        <TextBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="6" Name="textBoxCompanyNip"></TextBox>
         <!--Buttons-->
         <Button x:Name="buttonCancel" Click="CancelClick" Grid.Column="0" Grid.Row="7" Width="150" Style="{StaticResource ButtonStyle}">Anuluj</Button>
         <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">

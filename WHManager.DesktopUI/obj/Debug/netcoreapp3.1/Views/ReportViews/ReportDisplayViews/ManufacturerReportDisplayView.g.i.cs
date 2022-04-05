@@ -125,8 +125,8 @@ namespace WHManager.DesktopUI.Views.ReportViews.ReportDisplayViews {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;V1.0.0.0;component/views/reportviews/reportdisplayviews/manu" +
-                    "facturerreportdisplayview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;component/views/reportviews/reportdisplayviews/manufacturerr" +
+                    "eportdisplayview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Views\ReportViews\ReportDisplayViews\ManufacturerReportDisplayView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

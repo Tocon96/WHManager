@@ -109,8 +109,8 @@ namespace WHManager.DesktopUI.Views.ReportViews.ReportDisplayViews {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;V1.0.0.0;component/views/reportviews/reportdisplayviews/cont" +
-                    "rahentreportdisplayview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;component/views/reportviews/reportdisplayviews/contrahentrep" +
+                    "ortdisplayview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Views\ReportViews\ReportDisplayViews\ContrahentReportDisplayView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

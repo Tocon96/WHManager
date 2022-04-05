@@ -19,7 +19,6 @@ namespace WHManager.BusinessLogic.Services
         private IProductTypeService productTypeService = new ProductTypeService();
         private IManufacturerService manufacturerService = new ManufacturerService();
         private ITaxService taxService = new TaxService();
-        private IProductReportsService reportService = new ProductReportsService();
 
         public void CreateNewProduct(Product product)
         {
@@ -124,7 +123,6 @@ namespace WHManager.BusinessLogic.Services
             try
             {
                 _productRepository.DeleteProduct(id);
-                reportService.DeleteReportsByProduct(id);
             }
             catch (Exception)
             {

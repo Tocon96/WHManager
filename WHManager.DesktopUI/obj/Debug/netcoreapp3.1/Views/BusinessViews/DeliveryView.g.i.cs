@@ -125,7 +125,7 @@ namespace WHManager.DesktopUI.Views.BusinessViews {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;V1.0.0.0;component/views/businessviews/deliveryview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;component/views/businessviews/deliveryview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\BusinessViews\DeliveryView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

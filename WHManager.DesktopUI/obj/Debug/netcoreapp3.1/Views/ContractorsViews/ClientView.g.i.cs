@@ -85,7 +85,7 @@ namespace WHManager.DesktopUI.Views.ContractorsViews {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;V1.0.0.0;component/views/contractorsviews/clientview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WHManager.DesktopUI;component/views/contractorsviews/clientview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\ContractorsViews\ClientView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

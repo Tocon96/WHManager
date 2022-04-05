@@ -99,22 +99,22 @@ namespace WHManager.DesktopUI.Views.FormViews.LoginForm
                 MessageBox.Show("Podaj nazwę firmy.");
                 return false;
             }
-            if (textBoxCompanyPhoneNumber.Text != "")
+            if (textBoxCompanyPhoneNumber.Text != "" && double.TryParse(textBoxCompanyNip.Text, out _) == true)
             {
                 data.Add(textBoxCompanyPhoneNumber.Text);
             }
             else
             {
-                MessageBox.Show("Podaj numer telefonu.");
+                MessageBox.Show("Podaj poprawny numer telefonu.");
                 return false;
             }
-            if (textBoxCompanyNip.Text != "")
+            if (textBoxCompanyNip.Text != "" && double.TryParse(textBoxCompanyNip.Text, out _) == true)
             {
                 data.Add(textBoxCompanyNip.Text);
             }
             else
             {
-                MessageBox.Show("Podaj NIP firmy.");
+                MessageBox.Show("Podaj poprawny NIP firmy.");
                 return false;
             }
 

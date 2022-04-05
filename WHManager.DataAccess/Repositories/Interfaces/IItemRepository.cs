@@ -19,7 +19,9 @@ namespace WHManager.DataAccess.Repositories.Interfaces
         IEnumerable<Item> GetEmittedItemsByProducts(int? productId = null, string productName = null);
         IEnumerable<Item> GetAllAvailableItems();
         IEnumerable<Item> GetItemsByOrder(int orderId);
-		void SetItemInOrder(int productId, int orderId);
+        IEnumerable<Item> GetAllItemsByProduct(int productId);
+
+        void SetItemInOrder(int productId, int orderId);
         void AddItemToOrder(int id, int orderId);
 		void RemoveItemFromOrder(int id);
         void EmitItem(int id, DateTime dateTime, int documentId, int invoiceId);

@@ -61,6 +61,14 @@ namespace WHManager.DesktopUI.Views.ReportViews
             {
                 criteria.Add("");
             }
+            if (!string.IsNullOrEmpty(textBoxProductId.Text))
+            {
+                criteria.Add(textBoxProductId.Text);
+            }
+            else
+            {
+                criteria.Add("");
+            }
             if (datePickerEarlierDateDelivered.SelectedDate.HasValue)
             {
                 criteria.Add(datePickerEarlierDateDelivered.SelectedDate.Value.ToShortDateString());
@@ -135,7 +143,7 @@ namespace WHManager.DesktopUI.Views.ReportViews
         }
         private void AddReportClick(object sender, RoutedEventArgs e)
         {
-            ManageProductFormPhaseIView manageProductFormPhaseIView = new ManageProductFormPhaseIView(this);
+            ManageProductReportFormView manageProductFormPhaseIView = new ManageProductReportFormView(this);
             manageProductFormPhaseIView.ShowDialog();
 
             if (manageProductFormPhaseIView.DialogResult.Value == true)

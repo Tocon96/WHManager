@@ -55,35 +55,61 @@ namespace WHManager.DesktopUI.Views.FormViews
         {
             if (ProductType == null)
             {
-                AddProductType();
-                DialogResult = true;
-                this.Close();
+                
+                if(AddProductType() == true)
+                {
+                    DialogResult = true;
+                    this.Close();
+                }
             }
             else
             {
-                UpdateProductType();
-                DialogResult = true;
-                this.Close();
+                if(UpdateProductType() == true)
+                {
+                    DialogResult = true;
+                    this.Close();
+                }
             }
            
         }
 
-        public void AddProductType()
+        public bool AddProductType()
         {
             ProductType productType = new ProductType
             {
                 Name = textBoxProductTypeName.Text
             };
-            productTypeService.CreateNewProductType(productType);
+            if(productType.Name.Length > 0)
+            {
+                productTypeService.CreateNewProductType(productType);
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("Podaj poprawną nazwę typu.");
+                return false;
+            }
+            
         }
 
-        public void UpdateProductType()
+        public bool UpdateProductType()
         {
             ProductType productType = new ProductType
             {
                 Id = ProductType.Id,
                 Name = textBoxProductTypeName.Text
             };
+            if (productType.Name.Length > 0)
+            {
+                productTypeService.CreateNewProductType(productType);
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("Podaj poprawną nazwę typu.");
+                return false;
+            }
+
             productTypeService.UpdateProductType(productType);
         }
 

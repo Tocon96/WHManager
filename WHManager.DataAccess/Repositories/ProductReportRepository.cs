@@ -87,22 +87,34 @@ namespace WHManager.DataAccess.Repositories
                         reports = reports.Where(x => x.Name.StartsWith(criteria[0]));
                     }
                 }
-                if (!string.IsNullOrEmpty(criteria[1]) && string.IsNullOrEmpty(criteria[2]))
+                if (!string.IsNullOrEmpty(criteria[1]))
                 {
-                    DateTime earlierDate = Convert.ToDateTime(criteria[1]);
+                    if (int.TryParse(criteria[1], out int result))
+                    {
+                        reports = reports.Where(x => x.Id == result);
+                    }
+                    else
+                    {
+                        reports = reports.Where(x => x.Name.StartsWith(criteria[1]));
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(criteria[2]) && string.IsNullOrEmpty(criteria[3]))
+                {
+                    DateTime earlierDate = Convert.ToDateTime(criteria[2]);
                     reports = reports.Where(x => x.DateRealizedFrom >= earlierDate);
                 }
 
-                if (string.IsNullOrEmpty(criteria[1]) && !string.IsNullOrEmpty(criteria[2]))
+                if (string.IsNullOrEmpty(criteria[2]) && !string.IsNullOrEmpty(criteria[3]))
                 {
-                    DateTime laterDate = Convert.ToDateTime(criteria[2]);
+                    DateTime laterDate = Convert.ToDateTime(criteria[3]);
                     reports = reports.Where(x => x.DateRealizedTo <= laterDate);
                 }
 
-                if (!string.IsNullOrEmpty(criteria[1]) && !string.IsNullOrEmpty(criteria[2]))
+                if (!string.IsNullOrEmpty(criteria[2]) && !string.IsNullOrEmpty(criteria[3]))
                 {
-                    DateTime earlierDate = Convert.ToDateTime(criteria[1]);
-                    DateTime laterDate = Convert.ToDateTime(criteria[2]);
+                    DateTime earlierDate = Convert.ToDateTime(criteria[2]);
+                    DateTime laterDate = Convert.ToDateTime(criteria[3]);
                     reports = reports.Where(x => x.DateRealizedFrom >= earlierDate && x.DateRealizedTo <= laterDate);
                 }
 
