@@ -69,7 +69,7 @@ namespace WHManager.BusinessLogic.Services.ReportsServices
 
         public IDictionary<string, decimal> ParseLists(IList<Delivery> deliveries, IList<Order> orders, IList<Product> products)
         {
-                        IDictionary<string, decimal> parsedList = new Dictionary<string, decimal>();
+            IDictionary<string, decimal> parsedList = new Dictionary<string, decimal>();
             parsedList["itemCount"] = products.Count;
             parsedList["orderElementCount"] = orders.Count;
             parsedList["deliveryElementCount"] = deliveries.Count;

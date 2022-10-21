@@ -324,6 +324,15 @@ namespace WHManager.DesktopUI.Views.BusinessViews
             }
         }
 
+        private void gridOrderPrepareReturn(object sender, RoutedEventArgs e)
+        {
+            if (gridOrders.SelectedItem != null)
+            {
+                Order order = gridOrders.SelectedItem as Order;
+                OrderItemsView itemsView = new OrderItemsView(order);
+                itemsView.Show();
+            }
+        }
 
         private int? AddInvoice()
         {

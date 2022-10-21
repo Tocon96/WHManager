@@ -132,11 +132,11 @@
                 <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <DataGrid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" x:Name="gridItems" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+            <DataGrid Style="{StaticResource DataGridStyle}" CellStyle="{StaticResource Body_Content_DataGrid_Centering}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" x:Name="gridItems" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID" Width="*" Binding="{Binding Id}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="ID" Width="50" Binding="{Binding Id}"></DataGridTextColumn>
                     <DataGridTextColumn Header="Produkt" Width="*" Binding="{Binding Product.Name}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Data Przyjęcia" Width="*" Binding="{Binding DateOfAdmission}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Data Przyjęcia" Width="100" Binding="{Binding DateOfAdmission, StringFormat=\{0:yyyy-MM-dd\}}"></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
             <Grid Grid.Row="2" Grid.ColumnSpan="10">

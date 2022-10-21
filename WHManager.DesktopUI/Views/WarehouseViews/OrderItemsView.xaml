@@ -132,7 +132,7 @@
                 <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <DataGrid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" x:Name="gridItems" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+            <DataGrid Style="{StaticResource DataGridStyle}" CellStyle="{StaticResource Body_Content_DataGrid_Centering}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" x:Name="gridItems" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Width="50" Binding="{Binding Id}"></DataGridTextColumn>
                     <DataGridTextColumn Header="Produkt" Width="*" Binding="{Binding Product.Name}"></DataGridTextColumn>
