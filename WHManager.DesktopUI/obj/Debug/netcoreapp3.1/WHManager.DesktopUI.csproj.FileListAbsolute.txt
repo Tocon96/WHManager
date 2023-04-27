@@ -201,3 +201,9 @@ E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\Form
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\FormViews\ReportForms\ManageTypeReportFormView.baml
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ManufacturerReportView.baml
 E:\visualstudio\WHManager\WHManager.DesktopUI\obj\Debug\netcoreapp3.1\Views\ReportViews\ProductTypeReportView.baml
+C:\Users\Tocon\Desktop\netcoreapp3.1\WHManager.DesktopUI.exe
+C:\Users\Tocon\Desktop\netcoreapp3.1\WHManager.DesktopUI.deps.json
+C:\Users\Tocon\Desktop\netcoreapp3.1\WHManager.DesktopUI.runtimeconfig.json
+C:\Users\Tocon\Desktop\netcoreapp3.1\WHManager.DesktopUI.runtimeconfig.dev.json
+C:\Users\Tocon\Desktop\netcoreapp3.1\WHManager.DesktopUI.dll
+C:\Users\Tocon\Desktop\netcoreapp3.1\WHManager.DesktopUI.pdb

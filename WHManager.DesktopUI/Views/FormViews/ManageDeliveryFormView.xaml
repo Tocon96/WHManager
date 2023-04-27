@@ -109,7 +109,7 @@
         </Grid.RowDefinitions>
 
         <!--TextBlocks-->
-        <TextBlock x:Name="textBlockManageDelivery" Grid.ColumnSpan="4" Grid.Row="0" Height="30" FontSize="18">Dodaj Nowe Zamówienie</TextBlock>
+        <TextBlock x:Name="textBlockManageDelivery" Grid.ColumnSpan="4" Grid.Row="0" Height="30" FontSize="18">Dodaj Nową Dostawę</TextBlock>
         <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">Data złożenia</TextBlock>
         <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">Dostawca</TextBlock>
         <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3">Produkt</TextBlock>

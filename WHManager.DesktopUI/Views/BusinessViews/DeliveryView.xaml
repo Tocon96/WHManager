@@ -202,7 +202,7 @@
                 </DataGrid.Columns>
                 <DataGrid.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Zrealizuj zamówienie" Click="gridDeliveryRealizeDelivery"></MenuItem>
+                        <MenuItem Header="Zrealizuj dostawę" Click="gridDeliveryRealizeDelivery"></MenuItem>
                         <MenuItem Header="Wyświetl przedmioty" Click="gridDeliveryDisplayItems"></MenuItem>
                         <MenuItem Header="Wyświetl dokument przychodzący" Click="gridDeliveryGeneratePz"></MenuItem>
                     </ContextMenu>
